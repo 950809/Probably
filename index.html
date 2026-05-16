@@ -326,4 +326,105 @@
         let coincidencia;
         let insertados = 0;
 
-        while ((coincidencia = regexPDF.exec(rawText))
+        while ((coincidencia = regexPDF.exec(rawText)) !== null) {
+            let fechaOriginal = coincidencia[1]; 
+            let turnoLetra = coincidencia[2].toLowerCase(); 
+            let turnoMapeado = (turnoLetra === 'm') ? 't' : 'n';
+            let tiroTresDigitos = coincidencia[3]; 
+            
+            let partesFecha = fechaOriginal.split('/');
+            let mes = partesFecha[0]; let dia = partesFecha[1]; let añoCorto = partesFecha[2];
+            let añoCompleto = parseInt(añoCorto) < 80 ? "20" + añoCorto : "19" + añoCorto; 
+            let claveFechaBD = `${añoCompleto}-${mes}-${dia}`;
+
+            let fijoDosDigitos = tiroTresDigitos.slice(-2);
+
+            if(!db[claveFechaBD]) db[claveFechaBD] = {};
+            db[claveFechaBD][turnoMapeado] = fijoDosDigitos;
+            insertados++;
+        }
+
+        if(insertados === 0) return alert("Formato incorrecto.");
+        localStorage.setItem('bolita_master_db', JSON.stringify(db));
+        alert(`¡Mapeo Exitoso! Guardados ${insertados} fijos.`);
+        document.getElementById('import_raw_text').value = ""; renderCal();
+    }
+
+    function generarTodo(esModoAdmin) {
+        const prefijo = esModoAdmin ? 'admin_' : '';
+        const val = document.getElementById(`${prefijo}fijo_base`).value;
+        if(!val) return alert("Ingresa el último fijo");
+        
+        const cantRequerida = parseInt(document.getElementById(`${prefijo}cant_final`).value);
+        let arrayDiferentes = [];
+        let f = val.padStart(2, '0');
+
+        let p = f, punta = "";
+        while(p.length > 1) {
+            let n = "";
+            for(let i=0; i<p.length-1; i++) n += (parseInt(p[i]) + parseInt(p[i+1])) % 10;
+            punta = n.slice(-2).padStart(2, '0'); p = n;
+        }
+        let c2 = ((parseInt(f[0])+5)%10).toString() + ((parseInt(f[1])+5)%10).toString();
+        
+        let baseCompletaHistorial = Object.values(db).filter(v => typeof v === 'object' && v !== null).flatMap(o => Object.values(o));
+        let numAtrasado = "00"; 
+        for(let i=1; i<=100; i++) {
+            let nBusqueda = ((parseInt(f) + i * 17) % 100).toString().padStart(2,'0');
+            if(!baseCompletaHistorial.includes(nBusqueda)) { numAtrasado = nBusqueda; break; }
+        }
+
+        document.getElementById(`${prefijo}c1`).innerText = punta;
+        document.getElementById(`${prefijo}c2`).innerText = c2;
+        document.getElementById(`${prefijo}c3`).innerText = numAtrasado;
+
+        if(!arrayDiferentes.includes(punta)) arrayDiferentes.push(punta);
+        if(!arrayDiferentes.includes(c2)) arrayDiferentes.push(c2);
+        if(!arrayDiferentes.includes(numAtrasado)) arrayDiferentes.push(numAtrasado);
+
+        let jalesTradicionales = [
+            ((parseInt(f) + 20) % 100).toString().padStart(2, '0'),
+            ((parseInt(f) + 50) % 100).toString().padStart(2, '0'),
+            ((parseInt(f) + 82) % 100).toString().padStart(2, '0'), 
+            ((parseInt(f) + 11) % 100).toString().padStart(2, '0'),
+            ((parseInt(f) + 44) % 100).toString().padStart(2, '0')
+        ];
+        jalesTradicionales.forEach(j => { if(!arrayDiferentes.includes(j) && arrayDiferentes.length < cantRequerida) { arrayDiferentes.push(j); } });
+
+        let m = 100, a = 21, c = 37; 
+        let semilla = (parseInt(f) * 11 + new Date().getDate() * 17) % m;
+        let resguardo = 0;
+        while(arrayDiferentes.length < cantRequerida && resguardo < 8000) {
+            resguardo++; semilla = (a * semilla + c) % m;
+            let candidato = semilla.toString().padStart(2, '0');
+            if(!arrayDiferentes.includes(candidato)) { arrayDiferentes.push(candidato); }
+        }
+        let aux = 0;
+        while(arrayDiferentes.length < cantRequerida) { aux = (aux + 43) % 100; let relleno = aux.toString().padStart(2, '0'); if(!arrayDiferentes.includes(relleno)) arrayDiferentes.push(relleno); }
+
+        // BUSCADOR EN TIEMPO REAL DEL FIJO DE HOY PARA PINTAR DE AMARILLO
+        let hoy = new Date();
+        let hMes = (hoy.getMonth() + 1).toString().padStart(2, '0');
+        let hDia = hoy.getDate().toString().padStart(2, '0');
+        let hAño = hoy.getFullYear();
+        let claveHoy = `${hAño}-${hMes}-${hDia}`;
+        let fijosGanadoresDeHoy = db[claveHoy] ? Object.values(db[claveHoy]) : [];
+
+        document.getElementById(`${prefijo}display_resultados`).style.display = 'block';
+        const panel = document.getElementById(`${prefijo}panel_res`); panel.innerHTML = "";
+        
+        for(let i=0; i < cantRequerida; i++) {
+            let numeroCandidato = arrayDiferentes[i];
+            let claseCelda = i < 10 ? 'box hot' : 'box';
+            
+            // Si el número generado coincide con el tiro real de hoy que ingresó el admin, se pinta de oro
+            if(fijosGanadoresDeHoy.includes(numeroCandidato)) {
+                claseCelda = 'box ganador-oro';
+            }
+            
+            panel.innerHTML += `<div class="${claseCelda}">${numeroCandidato}</div>`;
+        }
+    }
+</script>
+</body>
+</html>

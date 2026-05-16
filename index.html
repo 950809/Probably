@@ -135,7 +135,7 @@
     let usuariosBD = JSON.parse(localStorage.getItem('bolita_users_db')) || {};
     let usuarioActivo = null;
 
-    // CREDENCIALES NUEVAS ACTUALIZADAS
+    // CREDENCIALES
     const ADMIN_USER = "yohnny95";
     const ADMIN_PASS = "Elmatatan95*"; 
 
@@ -147,7 +147,6 @@
             if(i === 50) opt.selected = true;
             select.appendChild(opt);
         }
-        // CRITICAL: Se eliminó la verificación automática al cargar para obligar a pedir contraseña siempre.
     };
 
     function mostrarRegistro() { document.getElementById('view-login').style.display='none'; document.getElementById('view-register').style.display='block'; }
@@ -172,7 +171,10 @@
         const errBox = document.getElementById('login-error');
         errBox.style.display = 'none';
 
-        if(user === ADMIN_USER && pass === ADMIN_PASS) return abrirAdmin();
+        if(user === ADMIN_USER && pass === ADMIN_PASS) {
+            abrirAdmin();
+            return;
+        }
 
         if(!usuariosBD[user] || usuariosBD[user].password !== pass) {
             errBox.innerText = "Datos incorrectos o no tienes acceso."; errBox.style.display = 'block'; return;
@@ -246,29 +248,18 @@
         localStorage.setItem('bolita_master_db', JSON.stringify(db)); alert("Calendario sincronizado."); renderCal();
     }
 
-    /* FUNCIÓN DE LOGICA DE IMPORTACION MASIVA DESDE TEXTO COPIADO DE .TXT O .DOC */
     function procesarTextoImportado() {
         const rawText = document.getElementById('import_raw_text').value;
         if(!rawText) return alert("El cuadro de texto está vacío.");
-        
-        // Expresión regular para separar por comas, guiones, espacios o saltos de línea
         const númerosEncontrados = rawText.split(/[\s,.\-\n\r]+/).map(n => n.trim().padStart(2, '0')).filter(n => n.length === 2 && !isNaN(n));
-        
-        if(númerosEncontrados.length === 0) return alert("No se encontraron números de 2 dígitos válidos en el texto.");
-        
-        // Guardar en un índice histórico de la base de datos general para que el algoritmo lo lea
+        if(númerosEncontrados.length === 0) return alert("No se encontraron números válidos.");
         if(!db["masivo_historico"]) db["masivo_historico"] = [];
-        
-        númerosEncontrados.forEach(num => {
-            db["masivo_historico"].push(num);
-        });
-        
+        númerosEncontrados.forEach(num => { db["masivo_historico"].push(num); });
         localStorage.setItem('bolita_master_db', JSON.stringify(db));
-        alert(`¡Éxito! Se han procesado y acomodado ${númerosEncontrados.length} números de tu archivo en la base de datos.`);
+        alert(`¡Éxito! Procesados ${númerosEncontrados.length} números.`);
         document.getElementById('import_raw_text').value = "";
     }
 
-    /* ALGORITMO INTEGRADO DE COBERTURA TOTAL */
     function generarTodo() {
         const val = document.getElementById('fijo_base').value;
         if(!val) return alert("Ingresa el último fijo");
@@ -277,7 +268,6 @@
         let arrayDiferentes = [];
         let f = val.padStart(2, '0');
 
-        // 1. LOS 3 CERTEROS
         let p = f, punta = "";
         while(p.length > 1) {
             let n = "";
@@ -286,11 +276,8 @@
         }
         let c2 = ((parseInt(f[0])+5)%10).toString() + ((parseInt(f[1])+5)%10).toString();
         
-        // Cruzar con el historial cargado por calendario o por bloque de texto
         let baseCompletaHistorial = Object.values(db).filter(v => typeof v === 'object' && v !== null).flatMap(o => Object.values(o));
-        if(db["masivo_historico"]) {
-            baseCompletaHistorial = baseCompletaHistorial.concat(db["masivo_historico"]);
-        }
+        if(db["masivo_historico"]) { baseCompletaHistorial = baseCompletaHistorial.concat(db["masivo_historico"]); }
         
         let numAtrasado = "00"; 
         for(let i=1; i<=100; i++) {
@@ -306,44 +293,41 @@
         if(!arrayDiferentes.includes(c2)) arrayDiferentes.push(c2);
         if(!arrayDiferentes.includes(numAtrasado)) arrayDiferentes.push(numAtrasado);
 
-        // 2. RED DE ARRASTRE TÉCNICO DE LA APK (Inyección directa anti-fallos)
         let jalesTradicionales = [
             ((parseInt(f) + 20) % 100).toString().padStart(2, '0'),
             ((parseInt(f) + 50) % 100).toString().padStart(2, '0'),
-            ((parseInt(f) + 82) % 100).toString().padStart(2, '0'), // Arrastre directo para jales como el del 00 al 82
+            ((parseInt(f) + 82) % 100).toString().padStart(2, '0'), 
             ((parseInt(f) + 11) % 100).toString().padStart(2, '0'),
             ((parseInt(f) + 44) % 100).toString().padStart(2, '0')
         ];
 
         jalesTradicionales.forEach(j => {
-            if(!arrayDiferentes.includes(j) && arrayDiferentes.length < cantRequerida) {
-                arrayDiferentes.push(j);
-            }
+            if(!arrayDiferentes.includes(j) && arrayDiferentes.length < cantRequerida) { arrayDiferentes.push(j); }
         });
 
-        // 3. GENERADOR DE AZAR LCG ULTRA-DISPERSO
         let m = 100, a = 21, c = 37; 
         let semilla = (parseInt(f) * 11 + new Date().getDate() * 17) % m;
         let resguardo = 0;
 
         while(arrayDiferentes.length < cantRequerida && resguardo < 8000) {
-            resguardo++;
-            semilla = (a * semilla + c) % m;
+            resguardo++; semilla = (a * semilla + c) % m;
             let candidato = semilla.toString().padStart(2, '0');
-            if(!arrayDiferentes.includes(candidato)) {
-                arrayDiferentes.push(candidato);
-            }
+            if(!arrayDiferentes.includes(candidato)) { arrayDiferentes.push(candidato); }
         }
 
-        // Relleno secuencial final para garantizar consistencia absoluta
         let aux = 0;
         while(arrayDiferentes.length < cantRequerida) {
-            aux = (aux + 43) % 100;
-            let relleno = aux.toString().padStart(2, '0');
+            aux = (aux + 43) % 100; let relleno = aux.toString().padStart(2, '0');
             if(!arrayDiferentes.includes(relleno)) arrayDiferentes.push(relleno);
         }
 
-        // 4. RENDERIZADO FINAL IMPLACABLE
         document.getElementById('display_resultados').style.display = 'block';
         const panel = document.getElementById('panel_res'); panel.innerHTML = "";
-        for(let i=0; i < cant
+        for(let i=0; i < cantRequerida; i++) {
+            const clase = i < 10 ? 'box hot' : 'box';
+            panel.innerHTML += `<div class="${clase}">${arrayDiferentes[i]}</div>`;
+        }
+    }
+</script>
+</body>
+</html>

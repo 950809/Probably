@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bolita Pro Elite - Sistema de Accesos</title>
+    <title>Bolita Pro Elite - Azar Avanzado</title>
     <style>
         :root { --neon: #00ff41; --dark: #050505; --panel: #0d1117; --win: #ffeb3b; --error: #ff3333; }
         body { font-family: 'Segoe UI', monospace; background: var(--dark); color: var(--neon); margin: 0; padding: 10px; }
@@ -25,7 +25,6 @@
         .box { border: 1px solid var(--neon); padding: 10px; text-align: center; font-weight: bold; font-size: 1rem; height: 45px; display: flex; align-items: center; justify-content: center; }
         .hot { background: var(--neon); color: var(--dark); }
 
-        /* MODALES Y PANELES */
         #modal-db, #panel-admin { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 1000; padding: 20px; box-sizing: border-box; overflow-y: auto; }
         .modal-body { max-width: 500px; margin: auto; border: 1px solid var(--neon); padding: 15px; background: var(--dark); }
         .grid-cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; font-size: 0.6rem; text-align: center; }
@@ -124,11 +123,9 @@
 <script>
     let fechaFoco = new Date();
     let db = JSON.parse(localStorage.getItem('bolita_master_db')) || {};
-    // Base de datos local de usuarios
     let usuariosBD = JSON.parse(localStorage.getItem('bolita_users_db')) || {};
     let usuarioActivo = null;
 
-    // CREDENCIALES DEL ADMINISTRADOR MAESTRO
     const ADMIN_USER = "admin";
     const ADMIN_PASS = "admin123"; 
 
@@ -143,7 +140,6 @@
         verificarSesionGuardada();
     };
 
-    /* SISTEMA DE LOGICA DE ACCESOS */
     function mostrarRegistro() { document.getElementById('view-login').style.display='none'; document.getElementById('view-register').style.display='block'; }
     function mostrarLogin() { document.getElementById('view-register').style.display='none'; document.getElementById('view-login').style.display='block'; }
 
@@ -151,21 +147,13 @@
         const nom = document.getElementById('reg-nombre').value.trim();
         const ape = document.getElementById('reg-apellido').value.trim();
         const pass = document.getElementById('reg-pass').value;
-
         if(!nom || !ape || !pass) return alert("Por favor, llena todos los campos.");
-        
         let username = nom + "_" + ape;
-        if(usuariosBD[username]) return alert("Este nombre de usuario ya solicitó cupo o ya existe.");
-
-        if(Object.keys(usuariosBD).length >= 1000) return alert("Lo sentimos, se han agotado los 1000 cupos disponibles.");
-
-        usuariosBD[username] = {
-            password: pass,
-            status: "pendiente",
-            fechaActivacion: null
-        };
+        if(usuariosBD[username]) return alert("Este usuario ya existe.");
+        if(Object.keys(usuariosBD).length >= 1000) return alert("Cupos agotados.");
+        usuariosBD[username] = { password: pass, status: "pendiente", fechaActivacion: null };
         localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD));
-        alert("¡Solicitud enviada con éxito! Dile al administrador que active tu cuenta.");
+        alert("¡Solicitud enviada con éxito!");
         mostrarLogin();
     }
 
@@ -175,45 +163,31 @@
         const errBox = document.getElementById('login-error');
         errBox.style.display = 'none';
 
-        if(user === ADMIN_USER && pass === ADMIN_PASS) {
-            abrirAdmin();
-            return;
-        }
+        if(user === ADMIN_USER && pass === ADMIN_PASS) return abrirAdmin();
 
         if(!usuariosBD[user] || usuariosBD[user].password !== pass) {
             errBox.innerText = "Usuario o contraseña incorrectos."; errBox.style.display = 'block'; return;
         }
-
         let datosUser = usuariosBD[user];
         if(datosUser.status === "pendiente") {
-            errBox.innerText = "Tu cuenta está pendiente de aprobación por el administrador."; errBox.style.display = 'block'; return;
+            errBox.innerText = "Tu cuenta está pendiente de aprobación."; errBox.style.display = 'block'; return;
         }
-
-        // Verificar caducidad de 30 días
         let díasRestantes = calcularDiasRestantes(datosUser.fechaActivacion);
         if(díasRestantes <= 0) {
-            datosUser.status = "pendiente"; // Bloquear de nuevo
+            datosUser.status = "pendiente";
             localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD));
-            errBox.innerText = "Tu acceso de 1 mes ha expirado. Contacta al administrador para renovar."; errBox.style.display = 'block'; return;
+            errBox.innerText = "Tu acceso ha expirado."; errBox.style.display = 'block'; return;
         }
-
-        // Login correcto
-        usuarioActivo = user;
-        sessionStorage.setItem('sesion_activa', user);
-        entrarAApp(díasRestantes);
+        usuarioActivo = user; sessionStorage.setItem('sesion_activa', user); entrarAApp(díasRestantes);
     }
 
     function calcularDiasRestantes(fechaAct) {
-        let fAct = new Date(fechaAct);
-        let fHoy = new Date();
-        let diferenciaTiempo = fHoy.getTime() - fAct.getTime();
-        let diasPasados = Math.floor(diferenciaTiempo / (1000 * 60 * 60 * 24));
-        return 30 - diasPasados;
+        let fAct = new Date(fechaAct); let fHoy = new Date();
+        return 30 - Math.floor((fHoy.getTime() - fAct.getTime()) / (1000 * 60 * 60 * 24));
     }
 
     function entrarAApp(dias) {
-        document.getElementById('view-login').style.display = 'none';
-        document.getElementById('view-app').style.display = 'block';
+        document.getElementById('view-login').style.display = 'none'; document.getElementById('view-app').style.display = 'block';
         document.getElementById('user-display').innerText = "Usuario: " + usuarioActivo;
         document.getElementById('expire-display').innerText = "Expira en: " + dias + " días";
     }
@@ -222,58 +196,31 @@
         let guardada = sessionStorage.getItem('sesion_activa');
         if(guardada && usuariosBD[guardada]) {
             let dias = calcularDiasRestantes(usuariosBD[guardada].fechaActivacion);
-            if(dias > 0 && usuariosBD[guardada].status === "activo") {
-                usuarioActivo = guardada; entrarAApp(dias);
-            }
+            if(dias > 0 && usuariosBD[guardada].status === "activo") { usuarioActivo = guardada; entrarAApp(dias); }
         }
     }
 
     function cerrarSesion() { sessionStorage.clear(); usuarioActivo = null; location.reload(); }
 
-    /* PANEL ADMINISTRADOR SECRETO */
     function abrirAdmin() {
         document.getElementById('panel-admin').style.display = 'block';
         const tbody = document.getElementById('tabla-usuarios');
         const stats = document.getElementById('admin-stats');
         tbody.innerHTML = "";
-        
-        let total = Object.keys(usuariosBD).length;
-        stats.innerText = `Cupos Solicitados: ${total} / 1000`;
-
+        stats.innerText = `Cupos Solicitados: ${Object.keys(usuariosBD).length} / 1000`;
         for(let u in usuariosBD) {
-            let uData = usuariosBD[u];
-            let dias = uData.fechaActivacion ? calcularDiasRestantes(uData.fechaActivacion) : 0;
-            if(dias < 0) dias = 0;
-
-            tbody.innerHTML += `
-                <tr>
-                    <td><b>${u}</b></td>
-                    <td class="${uData.status === 'activo' ? 'status-active' : 'status-pending'}">${uData.status.toUpperCase()}</td>
-                    <td>${uData.status === 'activo' ? dias + ' días' : '---'}</td>
-                    <td>
-                        <button style="padding:5px; font-size:0.7rem; background:${uData.status === 'activo' ? 'var(--error)' : 'var(--neon)'}; color:#000;" 
-                            onclick="conmutarUsuario('${u}')">
-                            ${uData.status === 'activo' ? 'Bloquear/Reset' : 'Permitir'}
-                        </button>
-                    </td>
-                </tr>`;
+            let uData = usuariosBD[u]; let dias = uData.fechaActivacion ? calcularDiasRestantes(uData.fechaActivacion) : 0;
+            tbody.innerHTML += `<tr><td><b>${u}</b></td><td class="${uData.status === 'activo' ? 'status-active' : 'status-pending'}">${uData.status.toUpperCase()}</td><td>${uData.status === 'activo' ? dias + ' días' : '---'}</td><td><button style="padding:5px; font-size:0.7rem; background:${uData.status === 'activo' ? 'var(--error)' : 'var(--neon)'}; color:#000;" onclick="conmutarUsuario('${u}')">${uData.status === 'activo' ? 'Bloquear' : 'Permitir'}</button></td></tr>`;
         }
     }
 
     function conmutarUsuario(u) {
-        if(usuariosBD[u].status === "pendiente") {
-            usuariosBD[u].status = "activo";
-            usuariosBD[u].fechaActivacion = new Date().toISOString();
-        } else {
-            usuariosBD[u].status = "pendiente";
-            usuariosBD[u].fechaActivacion = null;
-        }
-        localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD));
-        abrirAdmin();
+        if(usuariosBD[u].status === "pendiente") { usuariosBD[u].status = "activo"; usuariosBD[u].fechaActivacion = new Date().toISOString(); }
+        else { usuariosBD[u].status = "pendiente"; usuariosBD[u].fechaActivacion = null; }
+        localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD)); abrirAdmin();
     }
     function cerrarAdmin() { document.getElementById('panel-admin').style.display = 'none'; }
 
-    /* GESTIÓN DE CONFIGURACIÓN DEL CALENDARIO OCULTO */
     function abrirConfig() { document.getElementById('modal-db').style.display='block'; renderCal(); }
     function cerrarConfig() { document.getElementById('modal-db').style.display='none'; }
 
@@ -281,17 +228,12 @@
         const y = fechaFoco.getFullYear(), m = fechaFoco.getMonth();
         const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
         document.getElementById('mes_label').innerText = `${meses[m]} ${y}`;
-        const primerDia = new Date(y, m, 1).getDay();
-        const ultimoDia = new Date(y, m + 1, 0).getDate();
-        const contenedor = document.getElementById('cuerpo_cal');
-        contenedor.innerHTML = "";
+        const primerDia = new Date(y, m, 1).getDay(); const ultimoDia = new Date(y, m + 1, 0).getDate();
+        const contenedor = document.getElementById('cuerpo_cal'); contenedor.innerHTML = "";
         for(let i=0; i<primerDia; i++) contenedor.innerHTML += `<div></div>`;
         for(let d=1; d<=ultimoDia; d++) {
             const id = `${y}-${(m+1).toString().padStart(2,'0')}-${d.toString().padStart(2,'0')}`;
-            contenedor.innerHTML += `<div class="day">${d}<br>
-                <input type="text" id="T-${id}" value="${db[id]?.t || ''}" maxlength="2">
-                <input type="text" id="N-${id}" value="${db[id]?.n || ''}" maxlength="2">
-            </div>`;
+            contenedor.innerHTML += `<div class="day">${d}<br><input type="text" id="T-${id}" value="${db[id]?.t || ''}" maxlength="2"><input type="text" id="N-${id}" value="${db[id]?.n || ''}" maxlength="2"></div>`;
         }
     }
 
@@ -300,84 +242,80 @@
     function guardarDB() {
         document.querySelectorAll('.day input').forEach(i => {
             const [turno, fecha] = i.id.split('-');
-            if(i.value) {
-                if(!db[fecha]) db[fecha] = {};
-                db[fecha][turno === 'T' ? 't' : 'n'] = i.value.padStart(2, '0');
-            }
+            if(i.value) { if(!db[fecha]) db[fecha] = {}; db[fecha][turno === 'T' ? 't' : 'n'] = i.value.padStart(2, '0'); }
         });
-        localStorage.setItem('bolita_master_db', JSON.stringify(db));
-        cerrarConfig();
+        localStorage.setItem('bolita_master_db', JSON.stringify(db)); cerrarConfig();
     }
 
-    /* MOTOR MATEMÁTICO SIN NÚMEROS REPETIDOS */
+    /* MOTOR MAESTRO DE AZAR DE ALTA DISPERSIÓN */
     function generarTodo() {
         const val = document.getElementById('fijo_base').value;
         if(!val) return alert("Ingresa el último fijo");
         
         const cantRequerida = parseInt(document.getElementById('cant_final').value);
-        let arrayDiferentes = []; // Cambiamos a array controlado para forzar elementos únicos
+        let arrayDiferentes = [];
         let f = val.padStart(2, '0');
 
-        // 1. LOS 3 CERTEROS ORIGINALES
+        // 1. LOS 3 CERTEROS REALES
         let p = f, punta = "";
         while(p.length > 1) {
             let n = "";
             for(let i=0; i<p.length-1; i++) n += (parseInt(p[i]) + parseInt(p[i+1])) % 10;
-            punta = n.slice(-2).padStart(2, '0');
-            p = n;
+            punta = n.slice(-2).padStart(2, '0'); p = n;
         }
         let c2 = ((parseInt(f[0])+5)%10).toString() + ((parseInt(f[1])+5)%10).toString();
         
         let todosLosSalidores = Object.values(db).flatMap(o => Object.values(o));
         let numAtrasado = "00"; 
-        for(let i=0; i<100; i++) {
-            let nBusqueda = i.toString().padStart(2,'0');
+        for(let i=1; i<=100; i++) {
+            let nBusqueda = ((parseInt(f) + i * 17) % 100).toString().padStart(2,'0');
             if(!todosLosSalidores.includes(nBusqueda)) { numAtrasado = nBusqueda; break; }
         }
 
         document.getElementById('c1').innerText = punta;
-        document.getElementById('c2').innerText = t1 = c2;
+        document.getElementById('c2').innerText = c2;
         document.getElementById('c3').innerText = numAtrasado;
 
-        // Añadir los certeros asegurando que no se repitan entre ellos
         if(!arrayDiferentes.includes(punta)) arrayDiferentes.push(punta);
         if(!arrayDiferentes.includes(c2)) arrayDiferentes.push(c2);
         if(!arrayDiferentes.includes(numAtrasado)) arrayDiferentes.push(numAtrasado);
 
-        // 2. BUCLE FILTRADO - EVITA REPETICIONES TOTALES
-        const recientes = todosLosSalidores.slice(-15); 
-        let semilla = parseInt(val) + new Date().getDate();
+        // 2. BUCLE LCG (ALTA DISPERSIÓN MATEMÁTICA)
+        const recientes = todosLosSalidores.slice(-15);
+        
+        // Multiplicadores primos grandes para romper secuencias lineales (Evita el 01, 02, 03...)
+        let m = 100;
+        let a = 21;  // Multiplicador robusto para saltos grandes
+        let c = 37;  // Incremento primo
+        let semilla = (parseInt(f) * 7 + new Date().getDate() * 13) % m;
         let resguardo = 0;
 
-        // El bucle SOLO avanza si el número generado NO existe en arrayDiferentes
-        while(arrayDiferentes.length < cantRequerida && resguardo < 5000) {
+        while(arrayDiferentes.length < cantRequerida && resguardo < 8000) {
             resguardo++;
-            semilla = (semilla * 23 + 17) % 100; // Multiplicador ampliado para mayor dispersión
+            // LCG: (a * X + c) % m
+            semilla = (a * semilla + c) % m;
             let candidato = semilla.toString().padStart(2, '0');
             
-            // Regla estricta: No debe existir en la lista actual
             if(!arrayDiferentes.includes(candidato)) {
-                // Filtro secundario: evitar los que salieron en los últimos 15 días en el calendario
-                if(!recientes.includes(candidato) || resguardo > 1500) {
+                if(!recientes.includes(candidato) || resguardo > 2000) {
                     arrayDiferentes.push(candidato);
                 }
             }
         }
 
-        // Si por dispersión faltaran números para la cantidad exacta, metemos de forma secuencial únicos
-        let aux = 0;
+        // Relleno seguro de alta dispersión si se necesita completar
+        let auxSeed = parseInt(f);
         while(arrayDiferentes.length < cantRequerida) {
-            let relleno = aux.toString().padStart(2, '0');
+            auxSeed = (auxSeed + 43) % 100; // Salto grande de 43 en 43 para mezclar decenas
+            let relleno = auxSeed.toString().padStart(2, '0');
             if(!arrayDiferentes.includes(relleno)) {
                 arrayDiferentes.push(relleno);
             }
-            aux++;
         }
 
-        // 3. RENDERIZADO IMPLACABLE DE NÚMEROS ÚNICOS
+        // 3. RENDERIZADO
         document.getElementById('display_resultados').style.display = 'block';
-        const panel = document.getElementById('panel_res');
-        panel.innerHTML = "";
+        const panel = document.getElementById('panel_res'); panel.innerHTML = "";
         
         for(let i=0; i < cantRequerida; i++) {
             const clase = i < 10 ? 'box hot' : 'box';
@@ -386,4 +324,4 @@
     }
 </script>
 </body>
-</html>
+    </html>

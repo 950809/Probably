@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bolita Pro Elite - Inteligencia de Memoria</title>
+    <style>
+        :root { --neon: #00ff41; --dark: #050505; --panel: #0d1117; --win: #ffeb3b; }
+        body { font-family: 'Segoe UI', monospace; background: var(--dark); color: var(--neon); margin: 0; padding: 10px; }
+        .container { max-width: 480px; margin: auto; border: 1px solid var(--neon); padding: 15px; border-radius: 8px; box-sizing: border-box; }
+        h2 { font-size: 0.8rem; text-align: center; border-bottom: 1px solid var(--neon); padding-bottom: 8px; text-transform: uppercase; margin-bottom: 15px; }
+        
+        .main-form { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        input, select { background: #000; border: 1px solid var(--neon); color: var(--neon); padding: 12px; text-align: center; border-radius: 4px; font-size: 1.1rem; outline: none; width: 100%; box-sizing: border-box; }
+        
+        button.execute { background: var(--neon); color: var(--dark); border: none; width: 100%; padding: 16px; font-weight: bold; cursor: pointer; border-radius: 4px; font-size: 1rem; text-transform: uppercase; box-shadow: 0 4px 10px rgba(0,255,65,0.3); }
+
+        .top-section { margin: 15px 0; border: 1px solid var(--win); padding: 10px; border-radius: 4px; background: rgba(255, 235, 59, 0.05); }
+        .top-grid { display: flex; justify-content: space-around; text-align: center; }
+        .top-box span { display: block; font-size: 1.6rem; font-weight: bold; color: var(--win); text-shadow: 0 0 8px var(--win); }
+
+        .grid-res { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 15px; border-top: 1px solid #222; padding-top: 10px; }
+        .box { border: 1px solid var(--neon); padding: 10px; text-align: center; font-weight: bold; font-size: 1rem; height: 45px; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+        .hot { background: var(--neon); color: var(--dark); }
+
+        #modal-db { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 1000; padding: 20px; box-sizing: border-box; overflow-y: auto; }
+        .modal-body { max-width: 500px; margin: auto; border: 1px solid var(--neon); padding: 15px; background: var(--dark); }
+        .grid-cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; font-size: 0.6rem; text-align: center; }
+        .day { border: 1px solid #222; padding: 4px; background: #000; min-height: 55px; }
+        .day input { font-size: 0.8rem; padding: 2px; border:none; border-bottom: 1px solid #333; background:transparent; color:var(--win); width:90%; text-align:center;}
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Probabilidades e Inteligencia</h2>
+    <div class="main-form">
+        <input type="number" id="fijo_base" placeholder="FIJO" maxlength="2">
+        <select id="cant_final"></select>
+    </div>
+    <button class="execute" onclick="generarTodo()">Analizar y Generar Jugada</button>
+
+    <div id="display_resultados" style="display:none;">
+        <div class="top-section">
+            <div style="font-size:0.7rem; color:var(--win); text-align:center; margin-bottom:8px;">★ PREVISIÓN DE ALTA CERTEZA APK ★</div>
+            <div class="top-grid">
+                <div class="top-box"><small>Punta</small><span id="c1">--</span></div>
+                <div class="top-box"><small>Terminal</small><span id="c2">--</span></div>
+                <div class="top-box"><small>Atrasado</small><span id="c3">--</span></div>
+            </div>
+        </div>
+        <div id="panel_res" class="grid-res"></div>
+    </div>
+    <button style="background:transparent; color:#666; border:1px solid #222; width:100%; padding:8px; margin-top:15px; font-size:0.7rem; cursor:pointer;" onclick="abrirConfig()">📂 Abrir Históricos y Calendario</button>
+</div>
+
+<div id="modal-db">
+    <div class="modal-body">
+        <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+            <button onclick="moverMes(-1)" style="background:var(--neon); border:none; padding:5px;">◀</button>
+            <span id="mes_label" style="color:var(--win); font-weight:bold;"></span>
+            <button onclick="moverMes(1)" style="background:var(--neon); border:none; padding:5px;">▶</button>
+        </div>
+        <div class="grid-cal" id="cuerpo_cal"></div>
+        <button onclick="guardarDB()" style="margin-top:20px; background:var(--win); color:#000; width:100%; padding:15px; border:none; font-weight:bold;">GUARDAR HISTORIAL</button>
+        <button onclick="cerrarConfig()" style="margin-top:10px; background:#333; color:#fff; width:100%; border:none; padding:10px;">CERRAR</button>
+    </div>
+</div>
+
+<script>
+    let fechaFoco = new Date();
+    let db = JSON.parse(localStorage.getItem('bolita_master_db')) || {};
+
+    window.onload = () => {
+        const select = document.getElementById('cant_final');
+        for(let i=5; i<=100; i+=5) {
+            let opt = document.createElement('option');
+            opt.value = i;
+            opt.innerHTML = i + " NÚMEROS";
+            if(i === 50) opt.selected = true;
+            select.appendChild(opt);
+        }
+    };
+
+    function abrirConfig() { document.getElementById('modal-db').style.display='block'; renderCal(); }
+    function cerrarConfig() { document.getElementById('modal-db').style.display='none'; }
+
+    function renderCal() {
+        const y = fechaFoco.getFullYear(), m = fechaFoco.getMonth();
+        const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+        document.getElementById('mes_label').innerText = `${meses[m]} ${y}`;
+        const primerDia = new Date(y, m, 1).getDay();
+        const ultimoDia = new Date(y, m + 1, 0).getDate();
+        const contenedor = document.getElementById('cuerpo_cal');
+        contenedor.innerHTML = "";
+        for(let i=0; i<primerDia; i++) contenedor.innerHTML += `<div></div>`;
+        for(let d=1; d<=ultimoDia; d++) {
+            const id = `${y}-${(m+1).toString().padStart(2,'0')}-${d.toString().padStart(2,'0')}`;
+            contenedor.innerHTML += `<div class="day">${d}<br>
+                <input type="text" id="T-${id}" value="${db[id]?.t || ''}" maxlength="2">
+                <input type="text" id="N-${id}" value="${db[id]?.n || ''}" maxlength="2">
+            </div>`;
+        }
+    }
+
+    function moverMes(n) { fechaFoco.setMonth(fechaFoco.getMonth() + n); renderCal(); }
+
+    function guardarDB() {
+        document.querySelectorAll('.day input').forEach(i => {
+            const [turno, fecha] = i.id.split('-');
+            if(i.value) {
+                if(!db[fecha]) db[fecha] = {};
+                db[fecha][turno === 'T' ? 't' : 'n'] = i.value.padStart(2, '0');
+            }
+        });
+        localStorage.setItem('bolita_master_db', JSON.stringify(db));
+        cerrarConfig();
+    }
+
+    function generarTodo() {
+        const val = document.getElementById('fijo_base').value;
+        if(!val) return;
+        const cant = parseInt(document.getElementById('cant_final').value);
+        let f = val.padStart(2, '0');
+
+        // --- LÓGICA DE LOS 3 CERTEROS ---
+        let p = f, punta = "";
+        while(p.length > 1) {
+            let n = "";
+            for(let i=0; i<p.length-1; i++) n += (parseInt(p[i]) + parseInt(p[i+1])) % 10;
+            punta = n.slice(-2).padStart(2, '0');
+            p = n;
+        }
+        
+        // Terminal (+5 Espejo)
+        let t1 = ((parseInt(f[0])+5)%10).toString() + ((parseInt(f[1])+5)%10).toString();
+        
+        // Atrasado: Busca en el calendario el número que más tiempo lleva sin salir
+        let todosLosSalidores = Object.values(db).flatMap(o => Object.values(o));
+        let numAtrasado = "00"; 
+        for(let i=0; i<100; i++) {
+            let nBusqueda = i.toString().padStart(2,'0');
+            if(!todosLosSalidores.includes(nBusqueda)) {
+                numAtrasado = nBusqueda;
+                break;
+            }
+        }
+
+        document.getElementById('c1').innerText = punta;
+        document.getElementById('c2').innerText = t1;
+        document.getElementById('c3').innerText = numAtrasado;
+
+        // --- BUCLE DE GENERACIÓN GARANTIZADA ---
+        let finalSet = new Set();
+        finalSet.add(punta);
+        finalSet.add(t1);
+        finalSet.add(numAtrasado);
+
+        // Obtenemos los últimos salidores para evitar repetición inmediata
+        const recientes = todosLosSalidores.slice(-15); 
+        let semilla = parseInt(val) + new Date().getDate();
+        let loops = 0;
+
+        while(finalSet.size < cant && loops < 5000) {
+            loops++;
+            semilla = (semilla * 19 + 7) % 100;
+            let nStr = semilla.toString().padStart(2, '0');
+            
+            // FILTRO: No agregar si salió hace poco, a menos que ya no queden más opciones
+            if(!recientes.includes(nStr) || loops > 1000) {
+                finalSet.add(nStr);
+            }
+        }
+
+        // --- RENDERIZADO EXACTO ---
+        document.getElementById('display_resultados').style.display = 'block';
+        const panel = document.getElementById('panel_res');
+        panel.innerHTML = "";
+        
+        const arrayResultados = Array.from(finalSet);
+        for(let i=0; i < cant; i++) {
+            let num = arrayResultados[i] || Math.floor(Math.random()*100).toString().padStart(2,'0');
+            panel.innerHTML += `<div class="box ${i < 10 ? 'hot' : ''}">${num}</div>`;
+        }
+    }
+</script>
+</body>
+  </html>

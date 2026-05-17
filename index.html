@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bolita Pro Master - Consola Global Elite v7.0</title>
+    <title>Bolita Pro Master - Consola Global Elite v7.2</title>
     <style>
         :root { --neon: #00ff41; --dark: #050505; --panel: #0d1117; --win: #ffeb3b; --error: #ff3333; }
         body { font-family: 'Segoe UI', monospace; background: var(--dark); color: var(--neon); margin: 0; padding: 10px; -webkit-user-select: none; user-select: none; }
@@ -41,7 +41,7 @@
 
         .admin-section-box { border: 1px dashed var(--neon); padding: 12px; margin-top: 15px; border-radius: 4px; }
         .btn-table { padding: 4px 8px; font-size: 0.65rem; border: none; font-weight: bold; cursor: pointer; border-radius: 3px; display: block; width: 100%; margin: 2px 0; text-transform: uppercase; }
-        .charada-box { background: #000; border: 1px solid var(--neon); padding: 10px; margin-top: 5px; font-size: 0.85rem; color: #fff; max-height: 140px; overflow-y: auto; text-align: left; border-radius: 4px; display: block; width: 100%; box-sizing: border-box;}
+        .charada-box { background: #000; border: 1px solid var(--neon); padding: 10px; margin-top: 5px; font-size: 0.85rem; color: #fff; max-height: 120px; overflow-y: auto; text-align: left; border-radius: 4px; display: block; width: 100%; box-sizing: border-box;}
         .contact-footer { margin-top: 15px; text-align: center; font-size: 0.75rem; color: #aaa; border-top: 1px dashed #333; padding-top: 10px; }
         .contact-footer a { color: var(--win); text-decoration: none; font-weight: bold; }
     </style>
@@ -54,7 +54,7 @@
         <input type="text" id="login-user" placeholder="USUARIO (Nombre_Apellido)">
         <input type="password" id="login-pass" placeholder="CONTRASEÑA">
         <button onclick="intentarLogin()">ENTRAR AL SISTEMA</button>
-        <button class="secondary" onclick="mostrarRegistro()">SOLICITAR NUEVO REGISTRO</button>
+        <button class="secondary" onclick="mostrarRegistroForm(true)">SOLICITAR NUEVO REGISTRO</button>
     </div>
     <p id="login-error" style="color:var(--error); text-align:center; font-size:0.8rem; display:none;"></p>
     <div class="contact-footer">
@@ -70,7 +70,7 @@
         <input type="text" id="reg-apellido" placeholder="APELLIDO">
         <input type="password" id="reg-pass" placeholder="CREA TU CONTRASEÑA">
         <button onclick="enviarSolicitud()">ENVIAR SOLICITUD A REVISIÓN</button>
-        <button class="secondary" onclick="mostrarLogin()">VOLVER AL INICIO</button>
+        <button class="secondary" onclick="mostrarRegistroForm(false)">VOLVER AL INICIO</button>
     </div>
 </div>
 
@@ -187,13 +187,6 @@
         <div style="margin-top: 20px; border-top: 1px dashed var(--neon); padding-top: 15px;">
             <h3 style="font-size: 0.75rem; text-align: center; color: var(--win);">📥 IMPORTADOR EN BRUTO DESDE PDF</h3>
             <textarea id="import_raw_text" placeholder="Pega el bloque bruto del PDF aquí..."></textarea>
-            <div style="font-size: 0.65rem; color: #aaa; margin: 5px 0;">
-                Turno por defecto:
-                <select id="turno_defecto" style="display:inline-block; width:auto; font-size:0.7rem; padding:3px; margin-left:5px;">
-                    <option value="n">Noche (N)</option>
-                    <option value="t">Tiro Mediodía (T)</option>
-                </select>
-            </div>
             <button onclick="procesarTextoImportado()" style="background: transparent; color: var(--neon); border: 1px solid var(--neon); padding: 12px; font-size: 0.75rem; margin-top: 5px; width:100%; font-weight:bold;">PROCESAR TEXTO EN BRUTO</button>
         </div>
         <button onclick="cerrarConfig()" style="margin-top:20px; background:#333; color:#fff; width:100%; border:none; padding:10px; border-radius:4px;">VOLVER AL PANEL MASTER</button>
@@ -221,17 +214,26 @@
         }
     }
 
-    function buscarEnCharada() {
-        let q = document.getElementById('search_charada').value.trim().toLowerCase();
-        let box = document.getElementById('charada_result');
-        if(!q) { box.innerText = "Escribe arriba para buscar jales..."; return; }
-        let encontrados = [];
-        for(let k in charadaDiccionario) {
-            if(k === q || charadaDiccionario[k].toLowerCase().includes(q)) {
-                encontrados.push(`<b>${k.padStart(2,'0')}:</b> ${charadaDiccionario[k]}`);
-            }
+    function mostrarRegistroForm(mostrar) {
+        if(mostrar) {
+            document.getElementById('view-login').style.display = 'none';
+            document.getElementById('view-register').style.display = 'block';
+        } else {
+            document.getElementById('view-register').style.display = 'none';
+            document.getElementById('view-login').style.display = 'block';
         }
-        box.innerHTML = encontrados.length > 0 ? encontrados.join('<br>') : "No hay coincidencias.";
+    }
+    
+    function enviarSolicitud() {
+        let nom = document.getElementById('reg-nombre').value.trim();
+        let ape = document.getElementById('reg-apellido').value.trim();
+        let p = document.getElementById('reg-pass').value;
+        if(!nom || !ape || !p) return alert("Llena todos los campos.");
+        let uKey = `${nom}_${ape}`;
+        if(usuariosBD[uKey]) return alert("Ese nombre ya existe.");
+        usuariosBD[uKey] = { password: p, status: "pendiente", fechaActivacion: null };
+        localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD));
+        alert("Solicitud enviada a Yohnny95 de forma exitosa."); mostrarRegistroForm(false);
     }
 
     function intentarLogin() {
@@ -239,11 +241,13 @@
         const pass = document.getElementById('login-pass').value;
         const err = document.getElementById('login-error'); err.style.display = 'none';
 
-        if(user === _0xAdmin && pass === _0xPass) { abrirAdmin(); return; }
+        if(user === _0xAdmin && pass === _0xPass) {
+            localStorage.setItem('bolita_logged_user', _0xAdmin); abrirAdmin(); return;
+        }
         if(!usuariosBD[user] || usuariosBD[user].password !== pass) { err.innerText = "Datos incorrectos."; err.style.display = 'block'; return; }
-        if(usuariosBD[user].status !== "activo") { err.innerText = "Cuenta pendiente."; err.style.display = 'block'; return; }
+        if(usuariosBD[user].status !== "activo") { err.innerText = "Cuenta pendiente de activación."; err.style.display = 'block'; return; }
         
-        usuarioActivo = user; entrarAApp(30);
+        usuarioActivo = user; localStorage.setItem('bolita_logged_user', user); entrarAApp(30);
     }
 
     function abrirAdmin() {
@@ -260,7 +264,7 @@
 
     function conmutarUsuario(u) { if(usuariosBD[u].status === "pendiente") { usuariosBD[u].status = "activo"; } else { usuariosBD[u].status = "pendiente"; } localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD)); abrirAdmin(); }
     function eliminarUsuario(u) { if(confirm(`¿Eliminar a ${u}?`)) { delete usuariosBD[u]; localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD)); abrirAdmin(); } }
-    function cerrarAdmin() { document.getElementById('panel-admin').style.display = 'none'; document.getElementById('view-login').style.display = 'block'; }
+    function cerrarAdmin() { localStorage.removeItem('bolita_logged_user'); document.getElementById('panel-admin').style.display = 'none'; document.getElementById('view-login').style.display = 'block'; }
 
     function guardarFijosDeHoy() {
         let t = document.getElementById('fijo_hoy_tarde').value.trim();
@@ -268,30 +272,40 @@
         let hoy = new Date();
         let fKey = `${hoy.getFullYear()}-${(hoy.getMonth()+1).toString().padStart(2,'0')}-${hoy.getDate().toString().padStart(2,'0')}`;
         if(!t && !n) return alert("Escribe un fijo.");
+        
+        let viejoDB = JSON.parse(localStorage.getItem('bolita_master_db')) || {};
         if(!db[fKey]) db[fKey] = {};
-        if(t) { db[fKey]['t'] = t.padStart(2, '0'); auditarTiro(fKey, 't', t.padStart(2, '0')); }
-        if(n) { db[fKey]['n'] = n.padStart(2, '0'); auditarTiro(fKey, 'n', n.padStart(2, '0')); }
-        localStorage.setItem('bolita_master_db', JSON.stringify(db)); alert("Sincronizado."); location.reload();
+        
+        if(t) { db[fKey]['t'] = t.padStart(2, '0'); registrarAuditoriaReal(fKey, 't', t.padStart(2, '0')); }
+        if(n) { db[fKey]['n'] = n.padStart(2, '0'); registrarAuditoriaReal(fKey, 'n', n.padStart(2, '0')); }
+        
+        localStorage.setItem('bolita_master_db', JSON.stringify(db));
+        alert("Fijos guardados y auditados contra el pronóstico del fijo anterior.");
+        location.reload();
     }
 
-    function auditarTiro(fe, tu, num) {
-        let k = `${fe}_${tu}`; if(auditoriaBD.some(l => l.key === k)) return;
-        auditoriaBD.push({ key: k, fecha: fe, turno: tu === 't' ? 'Mediodía' : 'Noche', ganador: num, acierto: false });
+    // SISTEMA DE AUDITORÍA REAL DE ACIERTOS BASADO EN EL FIJO ANTERIOR
+    function registrarAuditoriaReal(fecha, turno, numGanador) {
+        let keyLog = `${fecha}_${turno}`;
+        if (auditoriaBD.some(l => l.key === keyLog)) return;
+
+        // Buscar cuál fue la tirada anterior cargada en el sistema para ver si la predicción era correcta
+        let todasLasFechas = Object.keys(db).sort();
+        let idx = todasLasFechas.indexOf(fecha);
+        let fijoAnteriorBase = "46"; // Resguardo base estándar
+        
+        if (idx > 0) {
+            let diaPrevio = db[todasLasFechas[idx-1]];
+            fijoAnteriorBase = turno === 'n' ? (diaPrevio.t || "46") : (diaPrevio.n || "46");
+        }
+
+        // Simular los 50 números generados a partir de ese fijo anterior
+        let setPrediccion = simularSetMatematico(fijoAnteriorBase, 50);
+        let huboAcierto = setPrediccion.includes(numGanador);
+
+        auditoriaBD.push({ key: keyLog, fecha: fecha, turno: turno === 't' ? 'Mediodía' : 'Noche', ganador: numGanador, acierto: huboAcierto });
         localStorage.setItem('bolita_aud_logs_db', JSON.stringify(auditoriaBD));
     }
-
-    function abrirAuditoria() {
-        document.getElementById('modal-auditoria').style.display = 'block';
-        let box = document.getElementById('lista_auditoria_logs'); if(auditoriaBD.length === 0) { box.innerHTML = "Sin registros."; return; }
-        let html = "", hits = 0;
-        auditoriaBD.forEach(l => { if(l.acierto) hits++; html += `<div style="border-bottom:1px solid #222; padding:5px 0;">📅 ${l.fecha} (${l.turno}) -> Ganador: <b>${l.ganador}</b> | ${l.acierto ? '<span style="color:var(--neon)">★ ACERTADO</span>':'<span style="color:#666">Fallo</span>'}</div>`; });
-        box.innerHTML = html; document.getElementById('aud_num_modal').innerText = `${hits}/${auditoriaBD.length}`;
-        document.getElementById('aud_pct_modal').innerText = Math.round((hits/auditoriaBD.length)*100 || 0) + "%";
-    }
-    function cerrarAuditoria() { document.getElementById('modal-auditoria').style.display = 'none'; }
-
-    function entrarAApp(d) { document.getElementById('view-login').style.display = 'none'; document.getElementById('view-app').style.display = 'block'; document.getElementById('user-display').innerText = "Usuario: " + usuarioActivo; document.getElementById('expire-display').innerText = "Expira en: " + d + " días"; }
-    function cerrarSesionEfectiva() { location.reload(); }
 
     function abrirConfig() { document.getElementById('modal-db').style.display = 'block'; renderCal(); }
     function cerrarConfig() { document.getElementById('modal-db').style.display = 'none'; }
@@ -354,41 +368,84 @@
         if(!val) return alert("Falta el fijo base.");
 
         btn.disabled = true;
-        let pasos = ["Analizando histórico masivo...", "Cruzando frecuencias de datos...", "Mapeando Charada y Ley de Balance...", "Sincronizando pronóstico..."];
+        let pasos = ["Analizando histórico masivo...", "Cruzando secuencias tarde/noche...", "Aplicando arrastre por vecindad...", "Sincronizando pronóstico..."];
         let i = 0;
 
         let intervalo = setInterval(() => {
-            if(i < pasos.length) {
-                btn.innerText = pasos[i]; i++;
-            } else {
-                clearInterval(intervalo);
-                btn.disabled = false;
+            if(i < pasos.length) { btn.innerText = pasos[i]; i++; } 
+            else {
+                clearInterval(intervalo); btn.disabled = false;
                 btn.innerText = esAdmin ? "PROCESAR JUGADA ADMIN" : "Analizar y Generar Jugada";
                 ejecutarMotorCalculo(esAdmin, pref, val);
             }
         }, 800);
     }
 
+    // ALGORITMO AVANZADO EXTRAE-SET CON CONEXIÓN CONSECUTIVA VECINA
+    function simularSetMatematico(fijoBase, cant) {
+        let list = []; let f = fijoBase.padStart(2, '0');
+        
+        // Vecinos directos por decena (Lógica de aproximación consecutiva 70 -> 71 -> 36 -> 69)
+        let v1 = ((parseInt(f) + 1) % 100).toString().padStart(2, '0');
+        let v2 = ((parseInt(f) - 1 + 100) % 100).toString().padStart(2, '0');
+        let v3 = (Math.floor(parseInt(f) / 2)).toString().padStart(2, '0'); // Mitad exacta
+        
+        if(!list.includes(v1)) list.push(v1);
+        if(!list.includes(v2)) list.push(v2);
+        if(!list.includes(v3)) list.push(v3);
+
+        // Inversos Complementarios de tu Abuela
+        let invFijo = (101 - parseInt(f) % 100).toString().padStart(2, '0');
+        if(f === "00") invFijo = "00"; 
+        if(!list.includes(invFijo)) list.push(invFijo);
+
+        // RASTREO CONSECUTIVO REAL DE CADENA EN LA BASE DE DATOS (Tarde -> Noche -> Tarde)
+        let frecuenciasConsecutivas = {};
+        let keysBD = Object.keys(db).sort();
+        for (let idx = 0; idx < keysBD.length; idx++) {
+            let actual = db[keysBD[idx]];
+            if (actual.t === f && actual.n) frecuenciasConsecutivas[actual.n] = (frecuenciasConsecutivas[actual.n] || 0) + 1;
+            
+            // Si coincide la noche, busca qué salió en la tarde del día siguiente
+            if (actual.n === f && keysBD[idx+1] && db[keysBD[idx+1]].t) {
+                let sigTarde = db[keysBD[idx+1]].t;
+                frecuenciasConsecutivas[sigTarde] = (frecuenciasConsecutivas[sigTarde] || 0) + 1;
+            }
+        }
+        let salidoresSiguientes = Object.keys(frecuenciasConsecutivas).sort((a,b) => frecuenciasConsecutivas[b] - frecuenciasConsecutivas[a]);
+        salidoresSiguientes.forEach(num => { if(!list.includes(num) && list.length < cant) list.push(num); });
+
+        // Jales de la Charada Cubana
+        let fInt = parseInt(f).toString();
+        if(charadaDiccionario[fInt]) {
+            let words = charadaDiccionario[fInt].toLowerCase().split(', ');
+            for(let key in charadaDiccionario) {
+                let text = charadaDiccionario[key].toLowerCase();
+                words.forEach(w => { if(text.includes(w) && !list.includes(key.padStart(2,'0')) && list.length < cant) list.push(key.padStart(2,'0')); });
+            }
+        }
+
+        // Relleno secuencial controlado LCG
+        let seed = (parseInt(f) * 17 + 31) % 100;
+        while(list.length < cant) {
+            seed = (21 * seed + 43) % 100;
+            let cand = seed.toString().padStart(2, '0');
+            if(!list.includes(cand)) list.push(cand);
+        }
+        return list;
+    }
+
     function ejecutarMotorCalculo(esAdmin, pref, val) {
         const cant_final = parseInt(document.getElementById(`${pref}cant_final`).value);
-        let list = []; let f = val.padStart(2, '0');
+        let f = val.padStart(2, '0');
 
+        // Calcular c1, c2, c3 para la cabecera visual
         let p = f, punta = "";
         while(p.length > 1) {
             let n = ""; for(let i=0; i<p.length-1; i++) n += (parseInt(p[i]) + parseInt(p[i+1])) % 10;
             punta = n.slice(-2).padStart(2, '0'); p = n;
         }
         let esp = ((parseInt(f[0])+5)%10).toString() + ((parseInt(f[1])+5)%10).toString();
-        
-        let frecuencias = {};
-        let keysBD = Object.keys(db).sort();
-        for (let i = 0; i < keysBD.length - 1; i++) {
-            let diaActual = db[keysBD[i]]; let diaSiguiente = db[keysBD[i+1]];
-            if (diaActual.t === f && diaSiguiente.t) frecuencias[diaSiguiente.t] = (frecuencias[diaSiguiente.t] || 0) + 1;
-            if (diaActual.n === f && diaSiguiente.n) frecuencias[diaSiguiente.n] = (frecuencias[diaSiguiente.n] || 0) + 1;
-        }
-        let compañerosMasFrecuentes = Object.keys(frecuencias).sort((a,b) => frecuencias[b] - frecuencias[a]);
-
         let hist = Object.values(db).filter(v => typeof v === 'object').flatMap(o => Object.values(o));
         let atr = "00";
         for(let i=1; i<=100; i++) {
@@ -396,54 +453,37 @@
             if(!hist.includes(c)) { atr = c; break; }
         }
 
-        document.getElementById(`${pref}c1`).innerText = punta; document.getElementById(`${pref}c2`).innerText = esp; document.getElementById(`${pref}c3`).innerText = atr;
-        const add = n => { if(!list.includes(n) && list.length < cant_final) list.push(n); };
-        
-        add(punta); add(esp); add(atr);
+        document.getElementById(`${pref}c1`).innerText = punta; 
+        document.getElementById(`${pref}c2`).innerText = esp; 
+        document.getElementById(`${pref}c3`).innerText = atr;
 
-        let invFijo = (101 - parseInt(f) % 100).toString().padStart(2, '0');
-        if(f === "00") invFijo = "00"; add(invFijo);
-
-        compañerosMasFrecuentes.forEach(num => add(num));
-
-        let fInt = parseInt(f).toString();
-        if(charadaDiccionario[fInt]) {
-            let words = charadaDiccionario[fInt].toLowerCase().split(', ');
-            for(let k in charadaDiccionario) {
-                let text = charadaDiccionario[k].toLowerCase();
-                words.forEach(w => { if(text.includes(w)) add(k.padStart(2, '0')); });
-            }
-        }
-
-        let j = [((parseInt(f)+20)%100).toString().padStart(2,'0'), ((parseInt(f)+50)%100).toString().padStart(2,'0'), ((parseInt(f)+82)%100).toString().padStart(2,'0'), ((parseInt(f)+11)%100).toString().padStart(2,'0')];
-        j.forEach(n => add(n));
-
-        let seed = (parseInt(f) * 13 + new Date().getDate() * 7) % 100; let loop = 0;
-        while(list.length < cant_final && loop < 5000) { loop++; seed = (21 * seed + 37) % 100; add(seed.toString().padStart(2, '0')); }
-        let rel = 0; while(list.length < cant_final) { add(rel.toString().padStart(2, '0')); rel++; }
+        // Generar la lista con el nuevo algoritmo de encadenamiento vecinal
+        let listadoFinalPronostico = simularSetMatematico(f, cant_final);
 
         let hoy = new Date();
         let kHoy = `${hoy.getFullYear()}-${(hoy.getMonth()+1).toString().padStart(2,'0')}-${hoy.getDate().toString().padStart(2,'0')}`;
         let gHoy = db[kHoy] ? Object.values(db[kHoy]) : [];
 
-        auditoriaBD.forEach((l, idx) => {
-            if(l.fecha === kHoy && list.includes(l.ganador)) { auditoriaBD[idx].acierto = true; localStorage.setItem('bolita_aud_logs_db', JSON.stringify(auditoriaBD)); }
-        });
-
         document.getElementById(`${pref}display_resultados`).style.display = 'block';
         const panel = document.getElementById(`${pref}panel_res`); panel.innerHTML = "";
+        
         for(let i=0; i < cant_final; i++) {
-            let n = list[i]; let css = i < 10 ? 'box hot' : 'box';
-            if(gHoy.includes(n)) css = 'box ganador-oro';
+            let n = listadoFinalPronostico[i]; 
+            let css = i < 10 ? 'box hot' : 'box';
+            
+            // SOLO pintar de amarillo oro si el número real de hoy está capturado DENTRO de la lista
+            if(gHoy.includes(n)) { css = 'box ganador-oro'; }
             panel.innerHTML += `<div class="${css}">${n}</div>`;
         }
     }
+
+    function entrarAApp(d) { document.getElementById('view-login').style.display = 'none'; document.getElementById('view-app').style.display = 'block'; document.getElementById('user-display').innerText = "Usuario: " + usuarioActivo; document.getElementById('expire-display').innerText = "Expira en: " + d + " días"; }
+    function cerrarSesionEfectiva() { localStorage.removeItem('bolita_logged_user'); location.reload(); }
 
     window.addEventListener('DOMContentLoaded', () => {
         inicializarSelectores();
         let sessionUser = localStorage.getItem('bolita_logged_user');
         if (sessionUser === _0xAdmin) { abrirAdmin(); }
-        // Se quitó la verificación de usuarios comunes vieja que causaba los cuelgues
     });
 
     document.addEventListener('contextmenu', e => e.preventDefault());

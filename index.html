@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bolita Pro Master - Consola Global Elite v5</title>
+    <title>Bolita Pro Master - Consola Global Elite v6.0</title>
     <style>
         :root { --neon: #00ff41; --dark: #050505; --panel: #0d1117; --win: #ffeb3b; --error: #ff3333; }
         body { font-family: 'Segoe UI', monospace; background: var(--dark); color: var(--neon); margin: 0; padding: 10px; -webkit-user-select: none; user-select: none; }
@@ -29,9 +29,9 @@
 
         #modal-db, #panel-admin, #modal-auditoria { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 1000; padding: 15px; box-sizing: border-box; overflow-y: auto; }
         .modal-body { max-width: 600px; margin: auto; border: 1px solid var(--neon); padding: 15px; background: var(--dark); }
-        .grid-cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; font-size: 0.6rem; text-align: center; }
-        .day { border: 1px solid #222; padding: 4px; background: #000; min-height: 55px; }
-        .day input { font-size: 0.8rem; padding: 2px; border:none; border-bottom: 1px solid #333; background:transparent; color:var(--win); width:90%; text-align:center;}
+        .grid-cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; font-size: 0.75rem; text-align: center; margin-top: 15px; }
+        .day { border: 1px solid #333; padding: 6px; background: #000; min-height: 65px; border-radius: 4px; }
+        .day input { font-size: 0.8rem; padding: 4px; border: 1px solid #222; background:#111; color:var(--win); width:100%; text-align:center; margin-top: 2px; border-radius: 2px; }
         
         table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.75rem; }
         th, td { border: 1px solid var(--neon); padding: 6px; text-align: center; }
@@ -40,8 +40,7 @@
 
         .admin-section-box { border: 1px dashed var(--neon); padding: 12px; margin-top: 15px; border-radius: 4px; }
         .btn-table { padding: 4px 8px; font-size: 0.65rem; border: none; font-weight: bold; cursor: pointer; border-radius: 3px; display: block; width: 100%; margin: 2px 0; text-transform: uppercase; }
-        .charada-box { background: #111; border: 1px solid var(--win); padding: 10px; margin-top: 5px; font-size: 0.8rem; color: #fff; max-height: 120px; overflow-y: auto; }
-        
+        .charada-box { background: #000; border: 1px solid var(--neon); padding: 10px; margin-top: 5px; font-size: 0.85rem; color: #fff; max-height: 120px; overflow-y: auto; text-align: left; border-radius: 4px; }
         .contact-footer { margin-top: 15px; text-align: center; font-size: 0.75rem; color: #aaa; border-top: 1px dashed #333; padding-top: 10px; }
         .contact-footer a { color: var(--win); text-decoration: none; font-weight: bold; }
     </style>
@@ -57,7 +56,6 @@
         <button class="secondary" onclick="mostrarRegistro()">SOLICITAR NUEVO REGISTRO</button>
     </div>
     <p id="login-error" style="color:var(--error); text-align:center; font-size:0.8rem; display:none;"></p>
-    
     <div class="contact-footer">
         Soporte e Inscripciones:<br>
         <b>Telegram / WhatsApp:</b> <a href="https://wa.me/5355678143" target="_blank">+53 55678143</a>
@@ -106,7 +104,7 @@
         <h2>Panel Maestro del Administrador</h2>
         <div id="admin-stats" style="font-size:0.8rem; text-align:center; margin-bottom:10px;"></div>
         
-        <table style="max-height: 140px; overflow-y: auto; display: block;">
+        <table style="max-height: 120px; overflow-y: auto; display: block; border: 1px solid #333;">
             <thead>
                 <tr>
                     <th>Usuario</th>
@@ -127,9 +125,11 @@
             <button style="margin-top:5px; padding:10px; font-size:0.8rem; background: var(--win); color: #000;" onclick="guardarFijosDeHoy()">INYECTAR TIROS Y VERIFICAR ACIERTOS</button>
         </div>
 
-        <div class="admin-section-box" style="border-color: #aaa;">
+        <button style="margin-top:15px; background:var(--neon); color:#000; width:100%; padding:14px; font-size:0.85rem; font-weight:bold; border-radius:4px;" onclick="abrirConfig()">📂 ABRIR CALENDARIO E IMPORTADOR DE PDF</button>
+
+        <div class="admin-section-box" style="border-color: var(--win);">
             <h3 style="font-size:0.75rem; color:var(--win); margin:0 0 5px 0; text-align:center;">📘 DICCIONARIO DE LA CHARADA CUBANA</h3>
-            <input type="text" id="search_charada" placeholder="Escribe número o significado (ej: caballo, 46)..." oninput="buscarEnCharada()">
+            <input type="text" id="search_charada" placeholder="Busca por número o palabra (ej: Escoba, 46)..." oninput="buscarEnCharada()">
             <div id="charada_result" class="charada-box">Escribe arriba para buscar jales...</div>
         </div>
 
@@ -155,7 +155,6 @@
         </div>
 
         <button style="margin-top:15px; background:var(--win); color:#000; width:100%; padding:12px; font-size:0.8rem; font-weight:bold;" onclick="abrirAuditoria()">📊 VER INFORME DE ACIERTOS Y RENDIMIENTO</button>
-        <button style="margin-top:10px; background:transparent; color:var(--neon); border:1px solid var(--neon); width:100%; padding:12px; font-size:0.8rem;" onclick="abrirConfig()">📂 CALENDARIO E IMPORTADOR DE PDF</button>
         <button class="secondary" style="margin-top:15px; width:100%;" onclick="cerrarAdmin()">SALIR DEL PANEL MASTER</button>
     </div>
 </div>
@@ -177,304 +176,202 @@
 <div id="modal-db">
     <div class="modal-body">
         <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
-            <button onclick="moverMes(-1)" style="background:var(--neon); border:none; padding:5px;">◀</button>
-            <span id="mes_label" style="color:var(--win); font-weight:bold;"></span>
-            <button onclick="moverMes(1)" style="background:var(--neon); border:none; padding:5px;">▶</button>
+            <button onclick="moverMes(-1)" style="background:var(--neon); border:none; padding:8px; color:#000; font-weight:bold; border-radius:4px;">◀ MES</button>
+            <span id="mes_label" style="color:var(--win); font-weight:bold; font-size:1.1rem; padding-top:4px;"></span>
+            <button onclick="moverMes(1)" style="background:var(--neon); border:none; padding:8px; color:#000; font-weight:bold; border-radius:4px;">MES ▶</button>
         </div>
         <div class="grid-cal" id="cuerpo_cal"></div>
-        <button onclick="guardarDB()" style="margin-top:15px; background:var(--win); color:#000; width:100%; padding:12px; border:none; font-weight:bold;">GUARDAR CAMBIOS DEL CALENDARIO</button>
+        <button onclick="guardarDB()" style="margin-top:20px; background:var(--win); color:#000; width:100%; padding:14px; border:none; font-weight:bold; font-size:1rem; border-radius:4px;">GUARDAR CAMBIOS DEL CALENDARIO</button>
         
         <div style="margin-top: 20px; border-top: 1px dashed var(--neon); padding-top: 15px;">
-            <h3 style="font-size: 0.75rem; text-align: center; color: var(--win);">📥 IMPORTADOR INTELIGENTE (DIRECTO DEL PDF)</h3>
+            <h3 style="font-size: 0.75rem; text-align: center; color: var(--win);">📥 IMPORTADOR EN BRUTO (COPIAR DEL PDF)</h3>
             <textarea id="import_raw_text" placeholder="Pega el bloque bruto del PDF aquí..."></textarea>
+            <div style="font-size: 0.65rem; color: #aaa; margin: 5px 0;">
+                Turno por defecto:
+                <select id="turno_defecto" style="display:inline-block; width:auto; font-size:0.7rem; padding:3px; margin-left:5px;">
+                    <option value="n">Noche (N)</option>
+                    <option value="t">Tiro Mediodía (T)</option>
+                </select>
+            </div>
             <button onclick="procesarTextoImportado()" style="background: transparent; color: var(--neon); border: 1px solid var(--neon); padding: 12px; font-size: 0.75rem; margin-top: 5px; width:100%; font-weight:bold;">PROCESAR TEXTO EN BRUTO</button>
         </div>
-        <button onclick="cerrarConfig()" style="margin-top:20px; background:#333; color:#fff; width:100%; border:none; padding:10px;">VOLVER AL PANEL</button>
+        <button onclick="cerrarConfig()" style="margin-top:20px; background:#333; color:#fff; width:100%; border:none; padding:10px; border-radius:4px;">VOLVER AL PANEL MASTER</button>
     </div>
 </div>
 
 <script>
-    // OFUSCACIÓN DE INICIO Y CREDENCIALES COMPACTAS
     const _0xAdmin = "yohnny95", _0xPass = "Elmatatan95*";
     let db = JSON.parse(localStorage.getItem('bolita_master_db')) || {};
     let usuariosBD = JSON.parse(localStorage.getItem('bolita_users_db')) || {};
     let auditoriaBD = JSON.parse(localStorage.getItem('bolita_aud_logs_db')) || [];
+    let usuarioActivo = "";
+    let fechaActualCal = new Date();
 
-    const charadaDiccionario = {"1":"Caballo, sol, tintero, camello","2":"Mariposa, hombre, cafetera","3":"Niño, marinero, luna, muerto","4":"Gato, vela, diente, soldado, llave","5":"Monja, mar, carta, candado, lombriz","6":"Jicotea, candela, botella, luna","7":"Mierda, culo, caracol, cochino","8":"Muerto, calabaza, león, tigre","9":"Elefante, entierro, lengua, buey","10":"Pescado grande, dinero, lancha","11":"Gallo, lluvia, fósforo, caballo","12":"Puta, estrella, viaje, perro grande","13":"Chulo, niño grande, elefante","14":"Cementerio, gato, tigre, matrimonio","15":"Perro chiquito, niña, ratón","16":"Toro, plancha, arete, avispa","17":"San Lázaro, luna, mujer buena","18":"Pescado chiquito, iglesia, palma","19":"Lombriz, campesino, bandera, jutía","20":"Tibor, orinal, cañón, mujer","21":"Majá, dinero, reloj, cigarro","22":"Sapo, estrella, chimenea, sol","23":"Vapor, submarino, monte, escalera, barco","24":"Paloma, música, carpintero, cocina","25":"Piedra fina, casa, rana","26":"Anguila, calle, médico, nube de oro","27":"Avispa, campana, canario, mono","28":"Chivo, bollo, carretón, perro","29":"Ratón, jutía, venado, águila","30":"Camarón, arcoíris, cangrejo","31":"Venado, escuela, zapato, pato","32":"Puerco chiquito, enemigo, majá","33":"Tiñosa, baraja, santo, Jesucristo","34":"Mono, familia, negro, paloma","35":"Araña, novia, bombillo, mosquito","36":"Cachimba, teatro, bodega, pajarito","37":"Bruja, gallina prieta, hormiga","38":"Dinero, macao, carro, barril","39":"Culebra, conejo, rayo, baile","40":"Cura, sangre, bombero, estatua","41":"Lagartija, prisión, jubo","42":"Pato, país lejano, carnero","43":"Alacrán, amigo, vaca, presidiario","44":"Año del cuero, infierno, caldero","45":"Tiburón, presidente, escuela, estrella","46":"Guagua, humo, hambre, hurón, chino","47":"Pájaro, mucha sangre, gallo","48":"Cucaracha, abanico, cubo","49":"Borracho, fogón, riqueza, fantasma","50":"Policía, agua, alegría, árbol","51":"Soldado, oro, anteojos","52":"Bicicleta, coche, abogado","53":"Luz eléctrica, tragedia, diamante, beso","54":"Flores, gallina blanca, rosas","55":"Cangrejo, murciélago, iglesia","56":"Gallina, reina, escorpión, camisa","57":"Cama, ángeles, puerta","58":"Adulterio, retrato, cuchillo","59":"Loco, anillo, araña grande","60":"Payaso, sol oscuro, huevo, tempestad","61":"Caballo grande, arroz, revólver","62":"Matrimonio, robo, crimen, lámpara","63":"Asesino, bandido, espada, policía","64":"Muerto vivo, escándalo, tiro, fiera","65":"Cárcel, comida, ventana, trueno","66":"Tarro, divorcio, beso, máscara","67":"Puñalada, hospital, reloj, autoridad","68":"Cementerio, cuchillo grande, dinero","69":"Pozo, fiera, piano, loma","70":"Teléfono, coco, tiro, bala","71":"Río, sombrero, pantera, fusil","72":"Buey, ferrocarril, serrucho, relámpago","73":"Maleta, parque, navaja, cigarro","74":"Papalote, militar, serpiente","75":"Cine, corbata, guitarra, flores","76":"Bailarina, humo, violín","77":"Muletas, guerra, colegio, billetes","78":"Ataúd, obispo, rey, apetito","79":"Coche, lagarto, abogado, tren","80":"Médico, buena noticia, luna llena","81":"Teatro, barco, navaja, cuerda","82":"Madre, león, pleito, estrella","83":"Tragedia, procesión, bastón","84":"Mucha sangre, ciego, sastre, cofre","85":"Reloj, Madrid, águila, espejo","86":"Tijera, convento, marino, palma","87":"Plátano, Nueva York, paloma, fuego","88":"Espejuelos, gusano, vaso","89":"Lotería, agua, casa vieja, cometa","90":"Viejo, espejo grande, asesino","91":"Alpargata, comunista, bolsa","92":"Puerco grande, avión, globo, suicidio","93":"Revolución, sortija, libertad","94":"Machete, Ogún, flores","95":"Guerra, perro grande, alacrán, Matanzas","96":"Zapato viejo, desafío, periódico","97":"Mosquito, grillo, sinsonte, preso","98":"Piano, entierro grande, traición","99":"Serrucho, gallo, temporal, lluvia","100":"Inodoro, carro, dios, automóvil"};
+    const charadaDiccionario = {"1":"Caballo, sol, tintero, camello, pescado chiquito","2":"Mariposa, hombre, cafetera, caracol","3":"Niño chiquito, marinero, luna, taza, ciempiés, muerto","4":"Gato, Santa Bárbara, vela, diente, boca, soldado, llave, militar, pavo real","5":"Mujer buena, monja, mar, carta, candado, periódico, fruta, lombriz","6":"Jicotea, reverbero, candela, botella, luna","7":"Mierda, culo, caracol, sueño, medias, caballero, cochino","8":"Muerto, muerto chiquito, calabaza, león, mesa, tigre","9":"Elefante, entierro, lengua, lira, cubo, esqueleto, buey","10":"Pescado grande, paseo, malla, cazuela, dinero, lancha","11":"Gallo fino, lluvia, fósforo, fosforera, taller, fábrica, caballo","12":"Puta, estrella, viaje, toallas, refrigerador, cometa, dama, perro grande","13":"Chulo, niño grande, pavo real, Santa Lucía, anafe, elefante","14":"Cementerio de noche, gato, tigre, matrimonio, enamorados, arresto, sartén","15":"Perro chiquito, niña bonita, visita, cuchara, gallo, ratón","16":"Toro, plancha, arete, mujer santa, vestido, incendio pequeño, funerales, avispa","17":"San Lázaro, luna, mujer buena, hule, camisón, armas, fumar opio","18":"Pescado chiquito, iglesia, sirena, palma, pescado, gato amarillo","19":"Lombriz, campesino, bandera, tropa, mesa grande, armadura, jutía","20":"Tibor, orinal, gato fino, cañón, camiseta, libro, mujer","21":"Majá, dinero, reloj de bolsillo, chaleco, cotorra, cigarro, gallo","22":"Sapo, estrella, lirio, chimenea, sol, jicotea","23":"Vapor, submarino, monte, escalera, barco, águila","24":"Paloma, música, carpintero, cocina, pescado grande","25":"Piedra fina, casa nueva, sol, monja, rana","26":"Anguila, calle, médico nuevo, brillante, nube de oro","27":"Avispa, campana, cuchara grande, canario, baúl, mono","28":"Chivo, bollo, carretón, bandera, político, uvas, perro chiquito","29":"Ratón, jutía, nube, venado, águila","30":"Camarón, arcoíris, pinga, almanaque, buey, cangrejo, chivo","31":"Venado, escuela, zapato nuevo, pato","32":"Puerco chiquito, enemigo, mulo, demonio, majá","33":"Tiñosa, baraja, santo, Jesucristo, bofetón, camarón","34":"Mono, familia, negro, negro chiquito, capataz, paloma","35":"Araña, araña chiquita, novia, bombillo, mosquito, mariposa","36":"Cachimba, teatro, bodega, opio, coloso, pajarito","37":"Bruja, mariposa bruja, gallina prieta, gitana, hormiga, carretera, piedra fina","38":"Dinero, mucho dinero, macao, carro, goleta, guante, barril","39":"Culebra, conejo, rayo, baile, tintorero","40":"Cura, poca sangre, bombero, muchacho, maldita, cantina, estatua","41":"Lagartija, lagartijo, prisión, pato chiquito, jubo, capuchino, clarín","42":"Pato, país lejano, carnero, España, abismo, liga","43":"Alacrán, amigo, vaca, puerta, presidiario, jorobado, tísico","44":"Año del cuero, guácara con guácara, infierno, año malo, temporal, tormenta, plancha, caldero","45":"Tiburón, presidente, traje, tranvía, escuela, estrella","46":"Guagua, humo, hambre, hurón, baile, chino","47":"Pájaro, maricón, mala noticia, mucha sangre, escolta, gallo, rosa","48":"Cucaracha, abanico, barbería, cubo","49":"Borracho, fogón, riqueza, figurín, percha, tesoro, fantasma","50":"Policía, agua, alegría, florero, alcalde, pícaro, árbol","51":"Soldado, guardia rural, sereno, sed, oro, anteojos, presillas","52":"Bicicleta, coche, borracho, abogado, libreta","53":"Luz eléctrica, prenda, tragedy, dinamita, diamante, beso, alguacil","54":"Flores, gallina blanca, sueño, timbre, cañón, rosas","55":"Cangrejo, murciélago, baile, iglesia grande, isleño, caerse, bala, sellos","56":"Gallina sacada, reina, escorpión, pato grande, merengue, piedra, camisa, cara","57":"Cama, ángeles, telegrama, puerta","58":"Adulterio, retrato, cuchillo, cangrejo, ferretero, batea","59":"Loco, fonógrafo, langosta, anillo, araña grande","60":"Payaso, sol oscuro, huevo, cómico, pájaro grande, tempestad, avecilla","61":"Caballo grande, arroz, cañonazo, piedra grande, revólver, boticario, pintor, saco","62":"Matrimonio, robo, asesinato, crimen, nieve, lámpara, visión, academia, carretilla","63":"Asesino, bandido, bandolero, cuernos, espada, caracol, policía, escalera","64":"Muerto vivo, muerto grande, escándalo, tiro de rifle, maromero, relajo, fiera","65":"Cárcel, comida, bruja, ventana, conejo, trueno","66":"Tarro, divorcio, pareja de yeguas, beso, máscara, estrella, mudanza, carnaval","67":"Puñalada, hospital, reloj, autoridad, fonda, aborto, zapato","68":"Cementerio, cementerio grande, globo, cuchillo grande, riña, templo, bolos, dinero","69":"Pozo, fiera, piano, loma, vago, polvorín","70":"Teléfono, coco, tiro, barril, arcoíris, bala, camisa","71":"Río, sombrero, perro mediano, pantera, fusil","72":"Buey, buey viejo, ferrocarril, serrucho, lluvia, collar, cetro, relámpago","73":"Maleta, parque, navaja, manzanas, ajedrez, cigarro","74":"Papalote, coronel, militar, serpiente, cólera, tarima","75":"Cine, corbata, viento, guitarra, flores, quiosco","76":"Bailarina, humo en cantidad, caja de hierro, violín","77":"Muletas de San Lázaro, banderas, guerra, colegio, billetes de banco, ánfora","78":"Ataúd, obispo, tigre, sarcófago, rey, apetito, lunares","79":"Coche, lagarto, abogado, tren de carga, tren de viaje, dulce","80":"Médico, médico viejo, buena noticia, luna llena, paraguas, barba, desespero, trompo","81":"Teatro, barco, navaja grande, ingeniero, ingenio, dulce, cuerda, actriz","82":"Madre, león, batea, pleito, estrella, muelle","83":"Tragedia, procesión, limosnero, bastón, madera","84":"Mucha sangre, ciego, sastre, bohío, banquero, cofre, marcha atrás","85":"Reloj, Madrid, águila, espejo, guano","86":"Tijera, convento, manguera, marino, ardilla, desnudarse, palma","87":"Plátano, Nueva York, baúl, paloma, fuego","88":"Espejuelos, gusano, vaso, hojas, aduanero","89":"Lotería, agua, mucha agua, casa vieja, mona vieja, cometa, melón, tesorero","90":"Viejo, espejo grande, caramelo, temporal, asesino","91":"Alpargata, comunista, bolchevique, tranvía, pájaro negro, limosnero, bolsa","92":"Puerco grande, avión, globo, globo muy alto, suicidio, Cuba, anarquista, gato, león grande","93":"Revolución, sortija de valor, Habana, general, andarín, joyas, libertad","94":"Machete, Ogún, mariposa grande, leontina, perfume, flores, Habana","95":"Guerra, perro grande, alacrán grande, corte de justicia, espada, Matanzas","96":"Zapato viejo, desafío, puta vieja, periódico, pícaro, roca, maleta vieja","97":"Mosquito, mosquito grande, grillo, mono grande, sinsonte, preso, limosnero","98":"Piano, entierro grande, traición, visita regia, fonógrafo, santo","99":"Serrucho, gallo, gallo grande, temporal, lluvia, carbonero","100":"Inodoro, excusado, carro, dios, escoba, automóvil, huevos"};
 
-    window.onload = () => {
-        document.querySelectorAll('.cant_select').forEach(select => {
-            for(let i=5; i<=100; i+=5) {
-                let opt = document.createElement('option');
-                opt.value = i; opt.innerHTML = i + " NÚMEROS";
-                if(i === 50) opt.selected = true;
-                select.appendChild(opt);
-            }
-        });
-        verificarPersistenciaSesion();
-    };
+    function abrirConfig() { document.getElementById('modal-db').style.display = 'block'; renderCal(); }
+    function cerrarConfig() { document.getElementById('modal-db').style.display = 'none'; }
+    function moverMes(dir) { fechaActualCal.setMonth(fechaActualCal.getMonth() + dir); renderCal(); }
 
-    function verificarPersistenciaSesion() {
-        let authUser = localStorage.getItem('bolita_logged_user');
-        let authTime = localStorage.getItem('bolita_admin_time');
+    function renderCal() {
+        const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+        const y = fechaActualCal.getFullYear(); const m = fechaActualCal.getMonth();
+        document.getElementById('mes_label').innerText = `${meses[m]} ${y}`;
+        const cuerpo = document.getElementById('cuerpo_cal'); cuerpo.innerHTML = "";
+        const totalDias = new Date(y, m + 1, 0).getDate();
         
-        if (authUser === _0xAdmin && authTime) {
-            let horasPasadas = (new Date().getTime() - parseInt(authTime)) / (1000 * 60 * 60);
-            if (horasPasadas < 12) { abrirAdmin(); return; }
+        for (let d = 1; d <= totalDias; d++) {
+            let k = `${y}-${(m + 1).toString().padStart(2, '0')}-${d.toString().padStart(2, '0')}`;
+            let v = db[k] || { t: '', n: '' };
+            cuerpo.innerHTML += `
+                <div class="day">
+                    <b style="color:#00ff41;">${d}</b><br>
+                    <input type="text" id="t_${k}" value="${v.t||''}" placeholder="T" maxlength="2">
+                    <input type="text" id="n_${k}" value="${v.n||''}" placeholder="N" maxlength="2">
+                </div>`;
         }
-        if (authUser && usuariosBD[authUser] && usuariosBD[authUser].status === "activo") {
-            usuarioActivo = authUser;
-            entrarAApp(calcularDiasRestantes(usuariosBD[authUser].fechaActivacion));
+    }
+
+    function guardarDB() {
+        const y = fechaActualCal.getFullYear(); const m = fechaActualCal.getMonth();
+        const totalDias = new Date(y, m + 1, 0).getDate();
+        for (let d = 1; d <= totalDias; d++) {
+            let k = `${y}-${(m + 1).toString().padStart(2, '0')}-${d.toString().padStart(2, '0')}`;
+            let tVal = document.getElementById(`t_${k}`).value.trim();
+            let nVal = document.getElementById(`n_${k}`).value.trim();
+            if (tVal || nVal) {
+                db[k] = {};
+                if (tVal) db[k]['t'] = tVal.padStart(2, '0');
+                if (nVal) db[k]['n'] = nVal.padStart(2, '0');
+            } else { delete db[k]; }
         }
+        localStorage.setItem('bolita_master_db', JSON.stringify(db)); alert("Calendario sincronizado.");
     }
 
     function intentarLogin() {
         const user = document.getElementById('login-user').value.trim();
         const pass = document.getElementById('login-pass').value;
-        const errBox = document.getElementById('login-error');
-        errBox.style.display = 'none';
+        const err = document.getElementById('login-error'); err.style.display = 'none';
 
         if(user === _0xAdmin && pass === _0xPass) {
             localStorage.setItem('bolita_logged_user', _0xAdmin);
             localStorage.setItem('bolita_admin_time', new Date().getTime().toString());
             abrirAdmin(); return;
         }
-        if(!usuariosBD[user] || usuariosBD[user].password !== pass) {
-            errBox.innerText = "Credenciales incorrectas."; errBox.style.display = 'block'; return;
-        }
-        if(usuariosBD[user].status !== "activo") {
-            errBox.innerText = "Tu cuenta está pendiente de activación."; errBox.style.display = 'block'; return;
-        }
-        let dias = calcularDiasRestantes(usuariosBD[user].fechaActivacion);
-        if(dias <= 0) {
-            usuariosBD[user].status = "pendiente"; localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD));
-            errBox.innerText = "Tu suscripción ha vencido."; errBox.style.display = 'block'; return;
-        }
-        usuarioActivo = user; localStorage.setItem('bolita_logged_user', user); entrarAApp(dias);
+        if(!usuariosBD[user] || usuariosBD[user].password !== pass) { err.innerText = "Datos incorrectos."; err.style.display = 'block'; return; }
+        if(usuariosBD[user].status !== "activo") { err.innerText = "Cuenta bloqueada o inactiva."; err.style.display = 'block'; return; }
+        let d = calcularDiasRestantes(usuariosBD[user].fechaActivacion);
+        if(d <= 0) { usuariosBD[user].status = "pendiente"; localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD)); err.innerText = "Mes vencido."; err.style.display = 'block'; return; }
+        usuarioActivo = user; localStorage.setItem('bolita_logged_user', user); entrarAApp(d);
     }
-
-    function entrarAApp(dias) {
-        document.getElementById('view-login').style.display = 'none'; document.getElementById('view-app').style.display = 'block';
-        document.getElementById('user-display').innerText = "Usuario: " + usuarioActivo;
-        document.getElementById('expire-display').innerText = "Expira en: " + dias + " días";
-    }
-
-    function cerrarSesionEfectiva() { localStorage.removeItem('bolita_logged_user'); location.reload(); }
-
-    function abrirAdmin() {
-        document.getElementById('view-login').style.display = 'none';
-        document.getElementById('panel-admin').style.display = 'block';
-        const tbody = document.getElementById('tabla-usuarios'); tbody.innerHTML = "";
-        for(let u in usuariosBD) {
-            let uData = usuariosBD[u]; let dias = uData.fechaActivacion ? calcularDiasRestantes(uData.fechaActivacion) : 0;
-            let textoBtn = uData.status === 'activo' ? 'Bloquear' : 'Activar 1 Mes';
-            let colorBtn = uData.status === 'activo' ? '#ff9800' : 'var(--neon)';
-            tbody.innerHTML += `<tr><td><b>${u}</b></td><td class="${uData.status === 'activo' ? 'status-active' : 'status-pending'}">${uData.status.toUpperCase()}</td><td>${uData.status === 'activo' ? dias + ' d' : '---'}</td><td><button class="btn-table" style="background:${colorBtn}; color:#000;" onclick="conmutarUsuario('${u}')">${textoBtn}</button><button class="btn-table" style="background:var(--error); color:#fff;" onclick="eliminarUsuario('${u}')">Eliminar</button></td></tr>`;
-        }
-    }
-
-    function conmutarUsuario(u) {
-        if(usuariosBD[u].status === "pendiente") { usuariosBD[u].status = "activo"; usuariosBD[u].fechaActivacion = new Date().toISOString(); }
-        else { usuariosBD[u].status = "pendiente"; usuariosBD[u].fechaActivacion = null; }
-        localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD)); abrirAdmin();
-    }
-    function eliminarUsuario(u) { if(confirm(`¿Eliminar a ${u}?`)) { delete usuariosBD[u]; localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD)); abrirAdmin(); } }
-    function cerrarAdmin() { document.getElementById('panel-admin').style.display = 'none'; document.getElementById('view-login').style.display = 'block'; }
 
     function guardarFijosDeHoy() {
-        let fTarde = document.getElementById('fijo_hoy_tarde').value.trim();
-        let fNoche = document.getElementById('fijo_hoy_noche').value.trim();
+        let t = document.getElementById('fijo_hoy_tarde').value.trim();
+        let n = document.getElementById('fijo_hoy_noche').value.trim();
         let hoy = new Date();
-        let claveFecha = `${hoy.getFullYear()}-${(hoy.getMonth()+1).toString().padStart(2,'0')}-${hoy.getDate().toString().padStart(2,'0')}`;
-        
-        if(!fTarde && !fNoche) return alert("Escribe un fijo.");
-        if(!db[claveFecha]) db[claveFecha] = {};
-        
-        if(fTarde) { db[claveFecha]['t'] = fTarde.padStart(2, '0'); auditarTiro(claveFecha, 't', fTarde.padStart(2, '0')); }
-        if(fNoche) { db[claveFecha]['n'] = fNoche.padStart(2, '0'); auditarTiro(claveFecha, 'n', fNoche.padStart(2, '0')); }
-        
-        localStorage.setItem('bolita_master_db', JSON.stringify(db));
-        alert("Fijos guardados y auditados.");
-        location.reload();
+        let fKey = `${hoy.getFullYear()}-${(hoy.getMonth()+1).toString().padStart(2,'0')}-${hoy.getDate().toString().padStart(2,'0')}`;
+        if(!t && !n) return alert("Escribe un fijo.");
+        if(!db[fKey]) db[fKey] = {};
+        if(t) { db[fKey]['t'] = t.padStart(2, '0'); auditarTiro(fKey, 't', t.padStart(2, '0')); }
+        if(n) { db[fKey]['n'] = n.padStart(2, '0'); auditarTiro(fKey, 'n', n.padStart(2, '0')); }
+        localStorage.setItem('bolita_master_db', JSON.stringify(db)); alert("Sincronizado."); location.reload();
     }
 
-    function auditarTiro(fecha, turno, numGanador) {
-        let logKey = `${fecha}_${turno}`;
-        let yaExiste = auditoriaBD.some(l => l.key === logKey);
-        if(yaExiste) return;
-
-        // Recuperar última predicción simulada para guardar registro
-        let acierto = false; 
-        auditoriaBD.push({ key: logKey, fecha: fecha, turno: turno === 't' ? 'Mediodía' : 'Noche', ganador: numGanador, acierto: acierto });
+    function auditarTiro(fe, tu, num) {
+        let k = `${fe}_${tu}`; if(auditoriaBD.some(l => l.key === k)) return;
+        auditoriaBD.push({ key: k, fecha: fe, turno: tu === 't' ? 'Mediodía' : 'Noche', ganador: num, acierto: false });
         localStorage.setItem('bolita_aud_logs_db', JSON.stringify(auditoriaBD));
     }
 
     function abrirAuditoria() {
         document.getElementById('modal-auditoria').style.display = 'block';
-        let logsBox = document.getElementById('lista_auditoria_logs');
-        if(auditoriaBD.length === 0) { logsBox.innerHTML = "No hay registros aún."; return; }
-        
+        let box = document.getElementById('lista_auditoria_logs'); if(auditoriaBD.length === 0) { box.innerHTML = "Sin registros."; return; }
         let html = "", hits = 0;
-        auditoriaBD.forEach(l => {
-            if(l.acierto) hits++;
-            html += `<div style="border-bottom:1px solid #222; padding:5px 0;">📅 ${l.fecha} (${l.turno}) -> Ganador: <b>${l.ganador}</b> | ${l.acierto ? '<span style="color:var(--neon)">★ ACERTADO</span>':'<span style="color:#666">Fallo</span>'}</div>`;
-        });
-        document.getElementById('lista_auditoria_logs').innerHTML = html;
-        document.getElementById('aud_num_modal').innerText = `${hits}/${auditoriaBD.length}`;
+        auditoriaBD.forEach(l => { if(l.acierto) hits++; html += `<div style="border-bottom:1px solid #222; padding:5px 0;">📅 ${l.fecha} (${l.turno}) -> Ganador: <b>${l.ganador}</b> | ${l.acierto ? '<span style="color:var(--neon)">★ ACERTADO</span>':'<span style="color:#666">Fallo</span>'}</div>`; });
+        box.innerHTML = html; document.getElementById('aud_num_modal').innerText = `${hits}/${auditoriaBD.length}`;
         document.getElementById('aud_pct_modal').innerText = Math.round((hits/auditoriaBD.length)*100 || 0) + "%";
     }
     function cerrarAuditoria() { document.getElementById('modal-auditoria').style.display = 'none'; }
 
-    function abrirConfig() { document.getElementById('modal-db').style.display='block'; renderCal(); }
-    function cerrarConfig() { document.getElementById('modal-db').style.display='none'; }
-
-    function renderCal() {
-        const y = fechaFoco.getFullYear(), m = fechaFoco.getMonth();
-        const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-        document.getElementById('mes_label').innerText = `${meses[m]} ${y}`;
-        const primerDia = new Date(y, m, 1).getDay(); const ultimoDia = new Date(y, m + 1, 0).getDate();
-        const contenedor = document.getElementById('cuerpo_cal'); contenedor.innerHTML = "";
-        for(let i=0; i<primerDia; i++) contenedor.innerHTML += `<div></div>`;
-        for(let d=1; d<=ultimoDia; d++) {
-            const id = `${y}-${(m+1).toString().padStart(2,'0')}-${d.toString().padStart(2,'0')}`;
-            contenedor.innerHTML += `<div class="day">${d}<br><input type="text" id="T-${id}" value="${db[id]?.t || ''}" maxlength="2"><input type="text" id="N-${id}" value="${db[id]?.n || ''}" maxlength="2"></div>`;
-        }
-    }
-    function moverMes(n) { fechaFoco.setMonth(fechaFoco.getMonth() + n); renderCal(); }
-    function guardarDB() {
-        document.querySelectorAll('.day input').forEach(i => {
-            const [turno, fecha] = i.id.split('-');
-            if(i.value) { if(!db[fecha]) db[fecha] = {}; db[fecha][turno === 'T' ? 't' : 'n'] = i.value.padStart(2, '0'); }
-        });
-        localStorage.setItem('bolita_master_db', JSON.stringify(db)); alert("Sincronizado."); renderCal();
-    }
-
-    /* LECTOR INTELIGENTE SUPER AVANZADO (CATCH TOTAL SIN EDICIÓN DESDE PDF O CAPTURAS) */
     function procesarTextoImportado() {
-        const rawText = document.getElementById('import_raw_text').value.trim();
-        if(!rawText) return alert("Texto vacío.");
-        
-        // Expresión regular que agarra la fecha y busca el primer bloque numérico limpio o separado por guiones
-        const regexGlobal = /(\d{2})[\/\-](\d{2})[\/\-](\d{2,4})[\s,]*([MEnm])[\s:]*([0-9\-\s]+)/g;
-        let match; let cont = 0;
-
-        while ((match = regexGlobal.exec(rawText)) !== null) {
-            let m = match[1], d = match[2], a = match[3];
-            let turno = match[4].toLowerCase() === 'm' ? 't' : 'n';
-            let numBruto = match[5].replace(/[^0-9]/g, ''); // Unifica guiones y limpia letras
-
-            let añoFull = a.length === 2 ? (parseInt(a) < 80 ? "20" + a : "19" + a) : a;
-            let claveFecha = `${añoFull}-${m}-${d}`;
-
-            if(numBruto.length >= 2) {
-                let fijo = numBruto.slice(-2); // Extrae los últimos 2 dígitos reales
-                if(!db[claveFecha]) db[claveFecha] = {};
-                db[claveFecha][turno] = fijo;
-                cont++;
-            }
+        const raw = document.getElementById('import_raw_text').value.trim(); if(!raw) return alert("Vacío.");
+        const regex = /(\d{2})[\/\-](\d{2})[\/\-](\d{2,4})[\s,]*([MEnm])[\s:]*([0-9\-\s]+)/g;
+        let m; let c = 0;
+        while ((m = regex.exec(raw)) !== null) {
+            let mes = m[1], d = m[2], a = m[3], tu = m[4].toLowerCase() === 'm' ? 't' : 'n';
+            let num = m[5].replace(/[^0-9]/g, '');
+            let aFull = a.length === 2 ? (parseInt(a) < 80 ? "20" + a : "19" + a) : a;
+            let k = `${aFull}-${mes}-${d}`;
+            if(num.length >= 2) { db[k] = db[k] || {}; db[k][tu] = num.slice(-2); c++; }
         }
-
-        if(cont === 0) return alert("Formato no reconocido. Asegúrate de copiar líneas con fecha y número.");
-        localStorage.setItem('bolita_master_db', JSON.stringify(db));
-        alert(`¡Éxito! Se escanearon y mapearon ${cont} tiros sin necesidad de editar.`);
-        document.getElementById('import_raw_text').value = ""; renderCal();
+        localStorage.setItem('bolita_master_db', JSON.stringify(db)); alert(`Mapeados ${c} tiros.`); document.getElementById('import_raw_text').value = ""; renderCal();
     }
 
-    /* MOTOR DE PROBABILIDAD AVANZADO (LCG + PATRÓN ATRAZADO + FILTRO CHARADA) */
     function generarTodo(esAdmin) {
         const pref = esAdmin ? 'admin_' : '';
-        const val = document.getElementById(`${pref}fijo_base`).value;
-        if(!val) return alert("Falta el fijo base.");
-        
+        const val = document.getElementById(`${pref}fijo_base`).value; if(!val) return alert("Falta el fijo base.");
         const cant = parseInt(document.getElementById(`${pref}cant_final`).value);
-        let listaFinal = [];
-        let f = val.padStart(2, '0');
+        let list = []; let f = val.padStart(2, '0');
 
-        // Lógica de Pirámide (Punta)
         let p = f, punta = "";
         while(p.length > 1) {
             let n = ""; for(let i=0; i<p.length-1; i++) n += (parseInt(p[i]) + parseInt(p[i+1])) % 10;
             punta = n.slice(-2).padStart(2, '0'); p = n;
         }
-        let terminalEspejo = ((parseInt(f[0])+5)%10).toString() + ((parseInt(f[1])+5)%10).toString();
+        let esp = ((parseInt(f[0])+5)%10).toString() + ((parseInt(f[1])+5)%10).toString();
+        let hist = Object.values(db).filter(v => typeof v === 'object').flatMap(o => Object.values(o));
         
-        // Mapeo de todo el historial cargado
-        let históricoCompleto = Object.values(db).filter(v => typeof v === 'object').flatMap(o => Object.values(o));
-        
-        let atrasado = "00";
+        let atr = "00";
         for(let i=1; i<=100; i++) {
-            let candidato = ((parseInt(f) + i * 17) % 100).toString().padStart(2,'0');
-            if(!históricoCompleto.includes(candidato)) { atrasado = candidato; break; }
+            let c = ((parseInt(f) + i * 17) % 100).toString().padStart(2,'0');
+            if(!hist.includes(c)) { atr = c; break; }
         }
 
-        document.getElementById(`${pref}c1`).innerText = punta;
-        document.getElementById(`${pref}c2`).innerText = terminalEspejo;
-        document.getElementById(`${pref}c3`).innerText = atrasado;
+        document.getElementById(`${pref}c1`).innerText = punta; document.getElementById(`${pref}c2`).innerText = esp; document.getElementById(`${pref}c3`).innerText = atr;
+        const add = n => { if(!list.includes(n) && list.length < cant) list.push(n); };
+        add(punta); add(esp); add(atr);
 
-        const agregarUnico = n => { if(!listaFinal.includes(n) && listaFinal.length < cant) listaFinal.push(n); };
+        // REGLA DE LA TABLA DE TU ABUELA (INVERSOS COMPLEMENTARIOS EXTENDED)
+        let invFijo = (101 - parseInt(f) % 100).toString().padStart(2, '0');
+        if(f === "00") invFijo = "00"; 
+        add(invFijo);
 
-        agregarUnico(punta); agregarUnico(terminalEspejo); agregarUnico(atrasado);
-
-        // INYECCIÓN DE LA CHARADA CUBANA (Busca relaciones de significado del fijo base)
         let fInt = parseInt(f).toString();
         if(charadaDiccionario[fInt]) {
-            let palabrasClave = charadaDiccionario[fInt].toLowerCase().split(', ');
-            for(let numKey in charadaDiccionario) {
-                let contenido = charadaDiccionario[numKey].toLowerCase();
-                palabrasClave.forEach(p => {
-                    if(contenido.includes(p)) {
-                        agregarUnico(numKey.padStart(2, '0'));
-                    }
-                });
+            let words = charadaDiccionario[fInt].toLowerCase().split(', ');
+            for(let k in charadaDiccionario) {
+                let text = charadaDiccionario[k].toLowerCase();
+                words.forEach(w => { if(text.includes(w)) add(k.padStart(2, '0')); });
             }
         }
 
-        // Jales Clásicos de Arrastre
-        let jales = [
-            ((parseInt(f) + 20) % 100).toString().padStart(2, '0'),
-            ((parseInt(f) + 50) % 100).toString().padStart(2, '0'),
-            ((parseInt(f) + 82) % 100).toString().padStart(2, '0'),
-            ((parseInt(f) + 11) % 100).toString().padStart(2, '0')
-        ];
-        jales.forEach(j => agregarUnico(j));
+        let j = [((parseInt(f)+20)%100).toString().padStart(2,'0'), ((parseInt(f)+50)%100).toString().padStart(2,'0'), ((parseInt(f)+82)%100).toString().padStart(2,'0'), ((parseInt(f)+11)%100).toString().padStart(2,'0')];
+        j.forEach(n => add(n));
 
-        // Mezclador Congruencial Lineal (LCG) Primos Grandes
-        let seed = (parseInt(f) * 13 + new Date().getDate() * 7) % 100;
-        let loop = 0;
-        while(listaFinal.length < cant && loop < 5000) {
-            loop++; seed = (21 * seed + 37) % 100;
-            agregarUnico(seed.toString().padStart(2, '0'));
-        }
+        let seed = (parseInt(f) * 13 + new Date().getDate() * 7) % 100; let loop = 0;
+        while(list.length < cant && loop < 5000) { loop++; seed = (21 * seed + 37) % 100; add(seed.toString().padStart(2, '0')); }
+        let rel = 0; while(list.length < cant) { add(rel.toString().padStart(2, '0')); rel++; }
 
-        // Relleno final balanceado de seguridad
-        let relleno = 0;
-        while(listaFinal.length < cant) {
-            agregarUnico(relleno.toString().padStart(2, '0')); relleno++;
-        }
-
-        // RENDERIZADO CON VERIFICADOR DE COLOR DE GANADOR DE HOY
         let hoy = new Date();
-        let claveHoy = `${hoy.getFullYear()}-${(hoy.getMonth()+1).toString().padStart(2,'0')}-${hoy.getDate().toString().padStart(2,'0')}`;
-        let ganadoresDeHoy = db[claveHoy] ? Object.values(db[claveHoy]) : [];
+        let kHoy = `${hoy.getFullYear()}-${(hoy.getMonth()+1).toString().padStart(2,'0')}-${hoy.getDate().toString().padStart(2,'0')}`;
+        let gHoy = db[kHoy] ? Object.values(db[kHoy]) : [];
+
+        auditoriaBD.forEach((l, idx) => {
+            if(l.fecha === kHoy && list.includes(l.ganador)) { auditoriaBD[idx].acierto = true; localStorage.setItem('bolita_aud_logs_db', JSON.stringify(auditoriaBD)); }
+        });
 
         document.getElementById(`${pref}display_resultados`).style.display = 'block';
         const panel = document.getElementById(`${pref}panel_res`); panel.innerHTML = "";
-        
         for(let i=0; i < cant; i++) {
-            let n = listaFinal[i];
-            let css = i < 10 ? 'box hot' : 'box';
-            if(ganadoresDeHoy.includes(n)) { css = 'box ganador-oro'; } // Si el número coincide, se marca en amarillo oro
+            let n = list[i]; let css = i < 10 ? 'box hot' : 'box';
+            if(gHoy.includes(n)) css = 'box ganador-oro';
             panel.innerHTML += `<div class="${css}">${n}</div>`;
         }
     }
 
-    // PROTECCIÓN DE CÓDIGO - DESACTIVAR CLIC DERECHO E INSPECCIÓN
+    window.onload = verificarPersistenciaSesion;
     document.addEventListener('contextmenu', e => e.preventDefault());
-    document.onkeydown = function(e) {
-        if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) {
-            return false;
-        }
-    };
-</script>
-</body>
-</html>
+    document.onkeydown = function(e) { if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) return false; };
+</style>
+</head>
+<body>

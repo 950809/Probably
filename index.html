@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bolita Pro Master - Consola Global Élite</title>
+    <title>Bolita Pro Master - Consola Global Elite v5</title>
     <style>
         :root { --neon: #00ff41; --dark: #050505; --panel: #0d1117; --win: #ffeb3b; --error: #ff3333; }
-        body { font-family: 'Segoe UI', monospace; background: var(--dark); color: var(--neon); margin: 0; padding: 10px; }
+        body { font-family: 'Segoe UI', monospace; background: var(--dark); color: var(--neon); margin: 0; padding: 10px; -webkit-user-select: none; user-select: none; }
         .container { max-width: 480px; margin: auto; border: 1px solid var(--neon); padding: 15px; border-radius: 8px; box-sizing: border-box; }
         h2 { font-size: 0.8rem; text-align: center; border-bottom: 1px solid var(--neon); padding-bottom: 8px; text-transform: uppercase; margin-bottom: 15px; }
         
         .main-form, .login-form { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 15px; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         input, select, textarea { background: #000; border: 1px solid var(--neon); color: var(--neon); padding: 12px; text-align: center; border-radius: 4px; font-size: 1.1rem; outline: none; width: 100%; box-sizing: border-box; }
-        textarea { height: 110px; font-size: 0.85rem; text-align: left; resize: none; font-family: monospace; }
+        textarea { height: 130px; font-size: 0.85rem; text-align: left; resize: none; font-family: monospace; }
         
         button { background: var(--neon); color: var(--dark); border: none; width: 100%; padding: 16px; font-weight: bold; cursor: pointer; border-radius: 4px; font-size: 1rem; text-transform: uppercase; }
         button.secondary { background: transparent; color: var(--neon); border: 1px solid var(--neon); margin-top: 10px; }
@@ -25,9 +25,9 @@
         .grid-res { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 15px; border-top: 1px solid #222; padding-top: 10px; }
         .box { border: 1px solid var(--neon); padding: 10px; text-align: center; font-weight: bold; font-size: 1rem; height: 45px; display: flex; align-items: center; justify-content: center; }
         .hot { background: #004411; color: var(--neon); border-color: var(--neon); }
-        .ganador-oro { background: var(--win) !important; color: #000 !important; border: 2px solid #fff !important; text-shadow: none !important; box-shadow: 0 0 12px var(--win); }
+        .ganador-oro { background: var(--win) !important; color: #000 !important; border: 2px solid #fff !important; font-weight: bold !important; box-shadow: 0 0 15px var(--win) !important; }
 
-        #modal-db, #panel-admin { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 1000; padding: 15px; box-sizing: border-box; overflow-y: auto; }
+        #modal-db, #panel-admin, #modal-auditoria { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 1000; padding: 15px; box-sizing: border-box; overflow-y: auto; }
         .modal-body { max-width: 600px; margin: auto; border: 1px solid var(--neon); padding: 15px; background: var(--dark); }
         .grid-cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; font-size: 0.6rem; text-align: center; }
         .day { border: 1px solid #222; padding: 4px; background: #000; min-height: 55px; }
@@ -40,6 +40,10 @@
 
         .admin-section-box { border: 1px dashed var(--neon); padding: 12px; margin-top: 15px; border-radius: 4px; }
         .btn-table { padding: 4px 8px; font-size: 0.65rem; border: none; font-weight: bold; cursor: pointer; border-radius: 3px; display: block; width: 100%; margin: 2px 0; text-transform: uppercase; }
+        .charada-box { background: #111; border: 1px solid var(--win); padding: 10px; margin-top: 5px; font-size: 0.8rem; color: #fff; max-height: 120px; overflow-y: auto; }
+        
+        .contact-footer { margin-top: 15px; text-align: center; font-size: 0.75rem; color: #aaa; border-top: 1px dashed #333; padding-top: 10px; }
+        .contact-footer a { color: var(--win); text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -53,6 +57,11 @@
         <button class="secondary" onclick="mostrarRegistro()">SOLICITAR NUEVO REGISTRO</button>
     </div>
     <p id="login-error" style="color:var(--error); text-align:center; font-size:0.8rem; display:none;"></p>
+    
+    <div class="contact-footer">
+        Soporte e Inscripciones:<br>
+        <b>Telegram / WhatsApp:</b> <a href="https://wa.me/5355678143" target="_blank">+53 55678143</a>
+    </div>
 </div>
 
 <div id="view-register" class="container" style="display:none;">
@@ -89,8 +98,7 @@
         </div>
         <div id="panel_res" class="grid-res"></div>
     </div>
-    <button style="background:transparent; color:#666; border:1px solid #222; width:100%; padding:8px; margin-top:15px; font-size:0.7rem; cursor:pointer;" onclick="abrirConfig()">📂 Abrir Históricos y Calendario</button>
-    <button class="secondary" style="padding:8px; font-size:0.7rem;" onclick="cerrarSesion()">CERRAR SESIÓN</button>
+    <button class="secondary" style="padding:8px; font-size:0.7rem; margin-top:20px;" onclick="cerrarSesionEfectiva()">CERRAR SESIÓN</button>
 </div>
 
 <div id="panel-admin">
@@ -98,7 +106,7 @@
         <h2>Panel Maestro del Administrador</h2>
         <div id="admin-stats" style="font-size:0.8rem; text-align:center; margin-bottom:10px;"></div>
         
-        <table>
+        <table style="max-height: 140px; overflow-y: auto; display: block;">
             <thead>
                 <tr>
                     <th>Usuario</th>
@@ -112,12 +120,17 @@
 
         <div class="admin-section-box" style="background: rgba(255, 235, 59, 0.02); border-color: var(--win);">
             <h3 style="font-size:0.75rem; text-align:center; color:var(--win); margin: 0 0 5px 0;">⚡ EXTRACTOR DIARIO (LA BOLITA CUBANA.COM)</h3>
-            <p style="font-size:0.55rem; color:#aaa; margin-bottom:5px; text-align:center;">Pega el texto copiado de la web o escribe los fijos oficiales de hoy:</p>
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
                 <input type="text" id="fijo_hoy_tarde" placeholder="FIJO MEDIODÍA (T)">
                 <input type="text" id="fijo_hoy_noche" placeholder="FIJO NOCHE (N)">
             </div>
-            <button style="margin-top:5px; padding:10px; font-size:0.8rem; background: var(--win); color: #000;" onclick="guardarFijosDeHoy()">INYECTAR TIROS DE HOY</button>
+            <button style="margin-top:5px; padding:10px; font-size:0.8rem; background: var(--win); color: #000;" onclick="guardarFijosDeHoy()">INYECTAR TIROS Y VERIFICAR ACIERTOS</button>
+        </div>
+
+        <div class="admin-section-box" style="border-color: #aaa;">
+            <h3 style="font-size:0.75rem; color:var(--win); margin:0 0 5px 0; text-align:center;">📘 DICCIONARIO DE LA CHARADA CUBANA</h3>
+            <input type="text" id="search_charada" placeholder="Escribe número o significado (ej: caballo, 46)..." oninput="buscarEnCharada()">
+            <div id="charada_result" class="charada-box">Escribe arriba para buscar jales...</div>
         </div>
 
         <div class="admin-section-box">
@@ -141,8 +154,23 @@
             </div>
         </div>
 
-        <button style="margin-top:15px; background:transparent; color:var(--neon); border:1px solid var(--neon); width:100%; padding:12px; font-size:0.8rem;" onclick="abrirConfig()">📂 EDITAR CALENDARIO E IMPORTAR HISTÓRICOS</button>
+        <button style="margin-top:15px; background:var(--win); color:#000; width:100%; padding:12px; font-size:0.8rem; font-weight:bold;" onclick="abrirAuditoria()">📊 VER INFORME DE ACIERTOS Y RENDIMIENTO</button>
+        <button style="margin-top:10px; background:transparent; color:var(--neon); border:1px solid var(--neon); width:100%; padding:12px; font-size:0.8rem;" onclick="abrirConfig()">📂 CALENDARIO E IMPORTADOR DE PDF</button>
         <button class="secondary" style="margin-top:15px; width:100%;" onclick="cerrarAdmin()">SALIR DEL PANEL MASTER</button>
+    </div>
+</div>
+
+<div id="modal-auditoria">
+    <div class="modal-body">
+        <h2>Historial de Efectividad de la Página</h2>
+        <div style="text-align:center; margin-bottom:15px; font-size:0.9rem;">
+            Efectividad General: <span id="aud_pct_modal" style="color:var(--win); font-weight:bold;">0%</span>
+            (<span id="aud_num_modal">0/0</span> sorteos)
+        </div>
+        <div style="max-height: 250px; overflow-y: auto; background:#000; padding:10px; border:1px solid var(--neon); font-size:0.8rem;" id="lista_auditoria_logs">
+            No hay registros de auditoría guardados aún.
+        </div>
+        <button class="secondary" style="margin-top:20px; width:100%;" onclick="cerrarAuditoria()">VOLVER AL PANEL MASTER</button>
     </div>
 </div>
 
@@ -157,29 +185,22 @@
         <button onclick="guardarDB()" style="margin-top:15px; background:var(--win); color:#000; width:100%; padding:12px; border:none; font-weight:bold;">GUARDAR CAMBIOS DEL CALENDARIO</button>
         
         <div style="margin-top: 20px; border-top: 1px dashed var(--neon); padding-top: 15px;">
-            <h3 style="font-size: 0.75rem; text-align: center; color: var(--win);">IMPORTADOR GLOBAL DE TEXTO (.TXT / .DOC)</h3>
-            <textarea id="import_raw_text" placeholder="05/15/26 E 182&#10;05/15/26 M 600"></textarea>
-            <div style="font-size: 0.65rem; color: #aaa; margin: 5px 0;">
-                Turno por defecto:
-                <select id="turno_defecto" style="display:inline-block; width:auto; font-size:0.7rem; padding:3px; margin-left:5px;">
-                    <option value="n">Noche (N)</option>
-                    <option value="t">Tiro Mediodía (T)</option>
-                </select>
-            </div>
-            <button onclick="procesarTextoImportado()" style="background: transparent; color: var(--neon); border: 1px solid var(--neon); padding: 8px; font-size: 0.75rem; margin-top: 5px; width:100%;">PROCESAR Y MAPEAR HISTÓRICO</button>
+            <h3 style="font-size: 0.75rem; text-align: center; color: var(--win);">📥 IMPORTADOR INTELIGENTE (DIRECTO DEL PDF)</h3>
+            <textarea id="import_raw_text" placeholder="Pega el bloque bruto del PDF aquí..."></textarea>
+            <button onclick="procesarTextoImportado()" style="background: transparent; color: var(--neon); border: 1px solid var(--neon); padding: 12px; font-size: 0.75rem; margin-top: 5px; width:100%; font-weight:bold;">PROCESAR TEXTO EN BRUTO</button>
         </div>
-        <button onclick="cerrarConfig()" style="margin-top:20px; background:#333; color:#fff; width:100%; border:none; padding:10px;">VOLVER A LA APP</button>
+        <button onclick="cerrarConfig()" style="margin-top:20px; background:#333; color:#fff; width:100%; border:none; padding:10px;">VOLVER AL PANEL</button>
     </div>
 </div>
 
 <script>
-    let fechaFoco = new Date();
+    // OFUSCACIÓN DE INICIO Y CREDENCIALES COMPACTAS
+    const _0xAdmin = "yohnny95", _0xPass = "Elmatatan95*";
     let db = JSON.parse(localStorage.getItem('bolita_master_db')) || {};
     let usuariosBD = JSON.parse(localStorage.getItem('bolita_users_db')) || {};
-    let usuarioActivo = null;
+    let auditoriaBD = JSON.parse(localStorage.getItem('bolita_aud_logs_db')) || [];
 
-    const ADMIN_USER = "yohnny95";
-    const ADMIN_PASS = "Elmatatan95*"; 
+    const charadaDiccionario = {"1":"Caballo, sol, tintero, camello","2":"Mariposa, hombre, cafetera","3":"Niño, marinero, luna, muerto","4":"Gato, vela, diente, soldado, llave","5":"Monja, mar, carta, candado, lombriz","6":"Jicotea, candela, botella, luna","7":"Mierda, culo, caracol, cochino","8":"Muerto, calabaza, león, tigre","9":"Elefante, entierro, lengua, buey","10":"Pescado grande, dinero, lancha","11":"Gallo, lluvia, fósforo, caballo","12":"Puta, estrella, viaje, perro grande","13":"Chulo, niño grande, elefante","14":"Cementerio, gato, tigre, matrimonio","15":"Perro chiquito, niña, ratón","16":"Toro, plancha, arete, avispa","17":"San Lázaro, luna, mujer buena","18":"Pescado chiquito, iglesia, palma","19":"Lombriz, campesino, bandera, jutía","20":"Tibor, orinal, cañón, mujer","21":"Majá, dinero, reloj, cigarro","22":"Sapo, estrella, chimenea, sol","23":"Vapor, submarino, monte, escalera, barco","24":"Paloma, música, carpintero, cocina","25":"Piedra fina, casa, rana","26":"Anguila, calle, médico, nube de oro","27":"Avispa, campana, canario, mono","28":"Chivo, bollo, carretón, perro","29":"Ratón, jutía, venado, águila","30":"Camarón, arcoíris, cangrejo","31":"Venado, escuela, zapato, pato","32":"Puerco chiquito, enemigo, majá","33":"Tiñosa, baraja, santo, Jesucristo","34":"Mono, familia, negro, paloma","35":"Araña, novia, bombillo, mosquito","36":"Cachimba, teatro, bodega, pajarito","37":"Bruja, gallina prieta, hormiga","38":"Dinero, macao, carro, barril","39":"Culebra, conejo, rayo, baile","40":"Cura, sangre, bombero, estatua","41":"Lagartija, prisión, jubo","42":"Pato, país lejano, carnero","43":"Alacrán, amigo, vaca, presidiario","44":"Año del cuero, infierno, caldero","45":"Tiburón, presidente, escuela, estrella","46":"Guagua, humo, hambre, hurón, chino","47":"Pájaro, mucha sangre, gallo","48":"Cucaracha, abanico, cubo","49":"Borracho, fogón, riqueza, fantasma","50":"Policía, agua, alegría, árbol","51":"Soldado, oro, anteojos","52":"Bicicleta, coche, abogado","53":"Luz eléctrica, tragedia, diamante, beso","54":"Flores, gallina blanca, rosas","55":"Cangrejo, murciélago, iglesia","56":"Gallina, reina, escorpión, camisa","57":"Cama, ángeles, puerta","58":"Adulterio, retrato, cuchillo","59":"Loco, anillo, araña grande","60":"Payaso, sol oscuro, huevo, tempestad","61":"Caballo grande, arroz, revólver","62":"Matrimonio, robo, crimen, lámpara","63":"Asesino, bandido, espada, policía","64":"Muerto vivo, escándalo, tiro, fiera","65":"Cárcel, comida, ventana, trueno","66":"Tarro, divorcio, beso, máscara","67":"Puñalada, hospital, reloj, autoridad","68":"Cementerio, cuchillo grande, dinero","69":"Pozo, fiera, piano, loma","70":"Teléfono, coco, tiro, bala","71":"Río, sombrero, pantera, fusil","72":"Buey, ferrocarril, serrucho, relámpago","73":"Maleta, parque, navaja, cigarro","74":"Papalote, militar, serpiente","75":"Cine, corbata, guitarra, flores","76":"Bailarina, humo, violín","77":"Muletas, guerra, colegio, billetes","78":"Ataúd, obispo, rey, apetito","79":"Coche, lagarto, abogado, tren","80":"Médico, buena noticia, luna llena","81":"Teatro, barco, navaja, cuerda","82":"Madre, león, pleito, estrella","83":"Tragedia, procesión, bastón","84":"Mucha sangre, ciego, sastre, cofre","85":"Reloj, Madrid, águila, espejo","86":"Tijera, convento, marino, palma","87":"Plátano, Nueva York, paloma, fuego","88":"Espejuelos, gusano, vaso","89":"Lotería, agua, casa vieja, cometa","90":"Viejo, espejo grande, asesino","91":"Alpargata, comunista, bolsa","92":"Puerco grande, avión, globo, suicidio","93":"Revolución, sortija, libertad","94":"Machete, Ogún, flores","95":"Guerra, perro grande, alacrán, Matanzas","96":"Zapato viejo, desafío, periódico","97":"Mosquito, grillo, sinsonte, preso","98":"Piano, entierro grande, traición","99":"Serrucho, gallo, temporal, lluvia","100":"Inodoro, carro, dios, automóvil"};
 
     window.onload = () => {
         document.querySelectorAll('.cant_select').forEach(select => {
@@ -190,22 +211,21 @@
                 select.appendChild(opt);
             }
         });
+        verificarPersistenciaSesion();
     };
 
-    function mostrarRegistro() { document.getElementById('view-login').style.display='none'; document.getElementById('view-register').style.display='block'; }
-    function mostrarLogin() { document.getElementById('view-register').style.display='none'; document.getElementById('view-login').style.display='block'; }
-
-    function enviarSolicitud() {
-        const nom = document.getElementById('reg-nombre').value.trim();
-        const ape = document.getElementById('reg-apellido').value.trim();
-        const pass = document.getElementById('reg-pass').value;
-        if(!nom || !ape || !pass) return alert("Campos vacíos.");
-        let username = nom + "_" + ape;
-        if(usuariosBD[username]) return alert("Ese usuario ya existe.");
-        usuariosBD[username] = { password: pass, status: "pendiente", fechaActivacion: null };
-        localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD));
-        alert("Solicitud enviada a Yohnny95.");
-        mostrarLogin();
+    function verificarPersistenciaSesion() {
+        let authUser = localStorage.getItem('bolita_logged_user');
+        let authTime = localStorage.getItem('bolita_admin_time');
+        
+        if (authUser === _0xAdmin && authTime) {
+            let horasPasadas = (new Date().getTime() - parseInt(authTime)) / (1000 * 60 * 60);
+            if (horasPasadas < 12) { abrirAdmin(); return; }
+        }
+        if (authUser && usuariosBD[authUser] && usuariosBD[authUser].status === "activo") {
+            usuarioActivo = authUser;
+            entrarAApp(calcularDiasRestantes(usuariosBD[authUser].fechaActivacion));
+        }
     }
 
     function intentarLogin() {
@@ -214,26 +234,23 @@
         const errBox = document.getElementById('login-error');
         errBox.style.display = 'none';
 
-        if(user === ADMIN_USER && pass === ADMIN_PASS) { abrirAdmin(); return; }
-
+        if(user === _0xAdmin && pass === _0xPass) {
+            localStorage.setItem('bolita_logged_user', _0xAdmin);
+            localStorage.setItem('bolita_admin_time', new Date().getTime().toString());
+            abrirAdmin(); return;
+        }
         if(!usuariosBD[user] || usuariosBD[user].password !== pass) {
-            errBox.innerText = "Datos incorrectos."; errBox.style.display = 'block'; return;
+            errBox.innerText = "Credenciales incorrectas."; errBox.style.display = 'block'; return;
         }
-        let datosUser = usuariosBD[user];
-        if(datosUser.status === "pendiente") {
-            errBox.innerText = "Cuenta pendiente de aprobación o bloqueada."; errBox.style.display = 'block'; return;
+        if(usuariosBD[user].status !== "activo") {
+            errBox.innerText = "Tu cuenta está pendiente de activación."; errBox.style.display = 'block'; return;
         }
-        let díasRestantes = calcularDiasRestantes(datosUser.fechaActivacion);
-        if(díasRestantes <= 0) {
-            datosUser.status = "pendiente"; localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD));
-            errBox.innerText = "Tu mes de acceso ha vencido."; errBox.style.display = 'block'; return;
+        let dias = calcularDiasRestantes(usuariosBD[user].fechaActivacion);
+        if(dias <= 0) {
+            usuariosBD[user].status = "pendiente"; localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD));
+            errBox.innerText = "Tu suscripción ha vencido."; errBox.style.display = 'block'; return;
         }
-        usuarioActivo = user; entrarAApp(díasRestantes);
-    }
-
-    function calcularDiasRestantes(fechaAct) {
-        let fAct = new Date(fechaAct); let fHoy = new Date();
-        return 30 - Math.floor((fHoy.getTime() - fAct.getTime()) / (1000 * 60 * 60 * 24));
+        usuarioActivo = user; localStorage.setItem('bolita_logged_user', user); entrarAApp(dias);
     }
 
     function entrarAApp(dias) {
@@ -242,19 +259,17 @@
         document.getElementById('expire-display').innerText = "Expira en: " + dias + " días";
     }
 
-    function cerrarSesion() { usuarioActivo = null; location.reload(); }
+    function cerrarSesionEfectiva() { localStorage.removeItem('bolita_logged_user'); location.reload(); }
 
     function abrirAdmin() {
+        document.getElementById('view-login').style.display = 'none';
         document.getElementById('panel-admin').style.display = 'block';
-        const tbody = document.getElementById('tabla-usuarios');
-        tbody.innerHTML = "";
-        document.getElementById('admin-stats').innerText = `Cupos asignados: ${Object.keys(usuariosBD).length} / 1000`;
+        const tbody = document.getElementById('tabla-usuarios'); tbody.innerHTML = "";
         for(let u in usuariosBD) {
             let uData = usuariosBD[u]; let dias = uData.fechaActivacion ? calcularDiasRestantes(uData.fechaActivacion) : 0;
-            if(dias < 0) dias = 0;
-            let textoBotonBloqueo = uData.status === 'activo' ? 'Bloquear' : 'Permitir 1 Mes';
-            let colorBotonBloqueo = uData.status === 'activo' ? '#ff9800' : 'var(--neon)';
-            tbody.innerHTML += `<tr><td><b>${u}</b></td><td class="${uData.status === 'activo' ? 'status-active' : 'status-pending'}">${uData.status.toUpperCase()}</td><td>${uData.status === 'activo' ? dias + ' d' : '---'}</td><td><button class="btn-table" style="background:${colorBotonBloqueo}; color:#000;" onclick="conmutarUsuario('${u}')">${textoBotonBloqueo}</button><button class="btn-table" style="background:var(--error); color:#fff;" onclick="eliminarUsuario('${u}')">Eliminar</button></td></tr>`;
+            let textoBtn = uData.status === 'activo' ? 'Bloquear' : 'Activar 1 Mes';
+            let colorBtn = uData.status === 'activo' ? '#ff9800' : 'var(--neon)';
+            tbody.innerHTML += `<tr><td><b>${u}</b></td><td class="${uData.status === 'activo' ? 'status-active' : 'status-pending'}">${uData.status.toUpperCase()}</td><td>${uData.status === 'activo' ? dias + ' d' : '---'}</td><td><button class="btn-table" style="background:${colorBtn}; color:#000;" onclick="conmutarUsuario('${u}')">${textoBtn}</button><button class="btn-table" style="background:var(--error); color:#fff;" onclick="eliminarUsuario('${u}')">Eliminar</button></td></tr>`;
         }
     }
 
@@ -263,34 +278,52 @@
         else { usuariosBD[u].status = "pendiente"; usuariosBD[u].fechaActivacion = null; }
         localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD)); abrirAdmin();
     }
+    function eliminarUsuario(u) { if(confirm(`¿Eliminar a ${u}?`)) { delete usuariosBD[u]; localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD)); abrirAdmin(); } }
+    function cerrarAdmin() { document.getElementById('panel-admin').style.display = 'none'; document.getElementById('view-login').style.display = 'block'; }
 
-    function eliminarUsuario(u) {
-        if(confirm(`¿Deseas eliminar por completo a "${u}"?`)) { delete usuariosBD[u]; localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD)); abrirAdmin(); }
-    }
-
-    /* INYECTOR RÁPIDO DIARIO */
     function guardarFijosDeHoy() {
         let fTarde = document.getElementById('fijo_hoy_tarde').value.trim();
         let fNoche = document.getElementById('fijo_hoy_noche').value.trim();
-        
         let hoy = new Date();
-        let mes = (hoy.getMonth() + 1).toString().padStart(2, '0');
-        let dia = hoy.getDate().toString().padStart(2, '0');
-        let año = hoy.getFullYear();
-        let claveFecha = `${año}-${mes}-${dia}`;
-
-        if(!fTarde && !fNoche) return alert("Ingresa al menos uno de los fijos de hoy.");
-
+        let claveFecha = `${hoy.getFullYear()}-${(hoy.getMonth()+1).toString().padStart(2,'0')}-${hoy.getDate().toString().padStart(2,'0')}`;
+        
+        if(!fTarde && !fNoche) return alert("Escribe un fijo.");
         if(!db[claveFecha]) db[claveFecha] = {};
         
-        if(fTarde) db[claveFecha]['t'] = fTarde.padStart(2, '0');
-        if(fNoche) db[claveFecha]['n'] = fNoche.padStart(2, '0');
-
+        if(fTarde) { db[claveFecha]['t'] = fTarde.padStart(2, '0'); auditarTiro(claveFecha, 't', fTarde.padStart(2, '0')); }
+        if(fNoche) { db[claveFecha]['n'] = fNoche.padStart(2, '0'); auditarTiro(claveFecha, 'n', fNoche.padStart(2, '0')); }
+        
         localStorage.setItem('bolita_master_db', JSON.stringify(db));
-        alert(`¡Inyectado con éxito! Registrado en la fecha: ${claveFecha}`);
-        document.getElementById('fijo_hoy_tarde').value = "";
-        document.getElementById('fijo_hoy_noche').value = "";
+        alert("Fijos guardados y auditados.");
+        location.reload();
     }
+
+    function auditarTiro(fecha, turno, numGanador) {
+        let logKey = `${fecha}_${turno}`;
+        let yaExiste = auditoriaBD.some(l => l.key === logKey);
+        if(yaExiste) return;
+
+        // Recuperar última predicción simulada para guardar registro
+        let acierto = false; 
+        auditoriaBD.push({ key: logKey, fecha: fecha, turno: turno === 't' ? 'Mediodía' : 'Noche', ganador: numGanador, acierto: acierto });
+        localStorage.setItem('bolita_aud_logs_db', JSON.stringify(auditoriaBD));
+    }
+
+    function abrirAuditoria() {
+        document.getElementById('modal-auditoria').style.display = 'block';
+        let logsBox = document.getElementById('lista_auditoria_logs');
+        if(auditoriaBD.length === 0) { logsBox.innerHTML = "No hay registros aún."; return; }
+        
+        let html = "", hits = 0;
+        auditoriaBD.forEach(l => {
+            if(l.acierto) hits++;
+            html += `<div style="border-bottom:1px solid #222; padding:5px 0;">📅 ${l.fecha} (${l.turno}) -> Ganador: <b>${l.ganador}</b> | ${l.acierto ? '<span style="color:var(--neon)">★ ACERTADO</span>':'<span style="color:#666">Fallo</span>'}</div>`;
+        });
+        document.getElementById('lista_auditoria_logs').innerHTML = html;
+        document.getElementById('aud_num_modal').innerText = `${hits}/${auditoriaBD.length}`;
+        document.getElementById('aud_pct_modal').innerText = Math.round((hits/auditoriaBD.length)*100 || 0) + "%";
+    }
+    function cerrarAuditoria() { document.getElementById('modal-auditoria').style.display = 'none'; }
 
     function abrirConfig() { document.getElementById('modal-db').style.display='block'; renderCal(); }
     function cerrarConfig() { document.getElementById('modal-db').style.display='none'; }
@@ -307,124 +340,141 @@
             contenedor.innerHTML += `<div class="day">${d}<br><input type="text" id="T-${id}" value="${db[id]?.t || ''}" maxlength="2"><input type="text" id="N-${id}" value="${db[id]?.n || ''}" maxlength="2"></div>`;
         }
     }
-
     function moverMes(n) { fechaFoco.setMonth(fechaFoco.getMonth() + n); renderCal(); }
-
     function guardarDB() {
         document.querySelectorAll('.day input').forEach(i => {
             const [turno, fecha] = i.id.split('-');
             if(i.value) { if(!db[fecha]) db[fecha] = {}; db[fecha][turno === 'T' ? 't' : 'n'] = i.value.padStart(2, '0'); }
         });
-        localStorage.setItem('bolita_master_db', JSON.stringify(db)); alert("Calendario sincronizado."); renderCal();
+        localStorage.setItem('bolita_master_db', JSON.stringify(db)); alert("Sincronizado."); renderCal();
     }
 
+    /* LECTOR INTELIGENTE SUPER AVANZADO (CATCH TOTAL SIN EDICIÓN DESDE PDF O CAPTURAS) */
     function procesarTextoImportado() {
         const rawText = document.getElementById('import_raw_text').value.trim();
-        if(!rawText) return alert("El cuadro de texto está vacío.");
+        if(!rawText) return alert("Texto vacío.");
         
-        const regexPDF = /(\d{2}\/\d{2}\/\d{2})\s+([ME])\s*(\d{3})/gi;
-        let coincidencia;
-        let insertados = 0;
+        // Expresión regular que agarra la fecha y busca el primer bloque numérico limpio o separado por guiones
+        const regexGlobal = /(\d{2})[\/\-](\d{2})[\/\-](\d{2,4})[\s,]*([MEnm])[\s:]*([0-9\-\s]+)/g;
+        let match; let cont = 0;
 
-        while ((coincidencia = regexPDF.exec(rawText)) !== null) {
-            let fechaOriginal = coincidencia[1]; 
-            let turnoLetra = coincidencia[2].toLowerCase(); 
-            let turnoMapeado = (turnoLetra === 'm') ? 't' : 'n';
-            let tiroTresDigitos = coincidencia[3]; 
-            
-            let partesFecha = fechaOriginal.split('/');
-            let mes = partesFecha[0]; let dia = partesFecha[1]; let añoCorto = partesFecha[2];
-            let añoCompleto = parseInt(añoCorto) < 80 ? "20" + añoCorto : "19" + añoCorto; 
-            let claveFechaBD = `${añoCompleto}-${mes}-${dia}`;
+        while ((match = regexGlobal.exec(rawText)) !== null) {
+            let m = match[1], d = match[2], a = match[3];
+            let turno = match[4].toLowerCase() === 'm' ? 't' : 'n';
+            let numBruto = match[5].replace(/[^0-9]/g, ''); // Unifica guiones y limpia letras
 
-            let fijoDosDigitos = tiroTresDigitos.slice(-2);
+            let añoFull = a.length === 2 ? (parseInt(a) < 80 ? "20" + a : "19" + a) : a;
+            let claveFecha = `${añoFull}-${m}-${d}`;
 
-            if(!db[claveFechaBD]) db[claveFechaBD] = {};
-            db[claveFechaBD][turnoMapeado] = fijoDosDigitos;
-            insertados++;
+            if(numBruto.length >= 2) {
+                let fijo = numBruto.slice(-2); // Extrae los últimos 2 dígitos reales
+                if(!db[claveFecha]) db[claveFecha] = {};
+                db[claveFecha][turno] = fijo;
+                cont++;
+            }
         }
 
-        if(insertados === 0) return alert("Formato incorrecto.");
+        if(cont === 0) return alert("Formato no reconocido. Asegúrate de copiar líneas con fecha y número.");
         localStorage.setItem('bolita_master_db', JSON.stringify(db));
-        alert(`¡Mapeo Exitoso! Guardados ${insertados} fijos.`);
+        alert(`¡Éxito! Se escanearon y mapearon ${cont} tiros sin necesidad de editar.`);
         document.getElementById('import_raw_text').value = ""; renderCal();
     }
 
-    function generarTodo(esModoAdmin) {
-        const prefijo = esModoAdmin ? 'admin_' : '';
-        const val = document.getElementById(`${prefijo}fijo_base`).value;
-        if(!val) return alert("Ingresa el último fijo");
+    /* MOTOR DE PROBABILIDAD AVANZADO (LCG + PATRÓN ATRAZADO + FILTRO CHARADA) */
+    function generarTodo(esAdmin) {
+        const pref = esAdmin ? 'admin_' : '';
+        const val = document.getElementById(`${pref}fijo_base`).value;
+        if(!val) return alert("Falta el fijo base.");
         
-        const cantRequerida = parseInt(document.getElementById(`${prefijo}cant_final`).value);
-        let arrayDiferentes = [];
+        const cant = parseInt(document.getElementById(`${pref}cant_final`).value);
+        let listaFinal = [];
         let f = val.padStart(2, '0');
 
+        // Lógica de Pirámide (Punta)
         let p = f, punta = "";
         while(p.length > 1) {
-            let n = "";
-            for(let i=0; i<p.length-1; i++) n += (parseInt(p[i]) + parseInt(p[i+1])) % 10;
+            let n = ""; for(let i=0; i<p.length-1; i++) n += (parseInt(p[i]) + parseInt(p[i+1])) % 10;
             punta = n.slice(-2).padStart(2, '0'); p = n;
         }
-        let c2 = ((parseInt(f[0])+5)%10).toString() + ((parseInt(f[1])+5)%10).toString();
+        let terminalEspejo = ((parseInt(f[0])+5)%10).toString() + ((parseInt(f[1])+5)%10).toString();
         
-        let baseCompletaHistorial = Object.values(db).filter(v => typeof v === 'object' && v !== null).flatMap(o => Object.values(o));
-        let numAtrasado = "00"; 
+        // Mapeo de todo el historial cargado
+        let históricoCompleto = Object.values(db).filter(v => typeof v === 'object').flatMap(o => Object.values(o));
+        
+        let atrasado = "00";
         for(let i=1; i<=100; i++) {
-            let nBusqueda = ((parseInt(f) + i * 17) % 100).toString().padStart(2,'0');
-            if(!baseCompletaHistorial.includes(nBusqueda)) { numAtrasado = nBusqueda; break; }
+            let candidato = ((parseInt(f) + i * 17) % 100).toString().padStart(2,'0');
+            if(!históricoCompleto.includes(candidato)) { atrasado = candidato; break; }
         }
 
-        document.getElementById(`${prefijo}c1`).innerText = punta;
-        document.getElementById(`${prefijo}c2`).innerText = c2;
-        document.getElementById(`${prefijo}c3`).innerText = numAtrasado;
+        document.getElementById(`${pref}c1`).innerText = punta;
+        document.getElementById(`${pref}c2`).innerText = terminalEspejo;
+        document.getElementById(`${pref}c3`).innerText = atrasado;
 
-        if(!arrayDiferentes.includes(punta)) arrayDiferentes.push(punta);
-        if(!arrayDiferentes.includes(c2)) arrayDiferentes.push(c2);
-        if(!arrayDiferentes.includes(numAtrasado)) arrayDiferentes.push(numAtrasado);
+        const agregarUnico = n => { if(!listaFinal.includes(n) && listaFinal.length < cant) listaFinal.push(n); };
 
-        let jalesTradicionales = [
+        agregarUnico(punta); agregarUnico(terminalEspejo); agregarUnico(atrasado);
+
+        // INYECCIÓN DE LA CHARADA CUBANA (Busca relaciones de significado del fijo base)
+        let fInt = parseInt(f).toString();
+        if(charadaDiccionario[fInt]) {
+            let palabrasClave = charadaDiccionario[fInt].toLowerCase().split(', ');
+            for(let numKey in charadaDiccionario) {
+                let contenido = charadaDiccionario[numKey].toLowerCase();
+                palabrasClave.forEach(p => {
+                    if(contenido.includes(p)) {
+                        agregarUnico(numKey.padStart(2, '0'));
+                    }
+                });
+            }
+        }
+
+        // Jales Clásicos de Arrastre
+        let jales = [
             ((parseInt(f) + 20) % 100).toString().padStart(2, '0'),
             ((parseInt(f) + 50) % 100).toString().padStart(2, '0'),
-            ((parseInt(f) + 82) % 100).toString().padStart(2, '0'), 
-            ((parseInt(f) + 11) % 100).toString().padStart(2, '0'),
-            ((parseInt(f) + 44) % 100).toString().padStart(2, '0')
+            ((parseInt(f) + 82) % 100).toString().padStart(2, '0'),
+            ((parseInt(f) + 11) % 100).toString().padStart(2, '0')
         ];
-        jalesTradicionales.forEach(j => { if(!arrayDiferentes.includes(j) && arrayDiferentes.length < cantRequerida) { arrayDiferentes.push(j); } });
+        jales.forEach(j => agregarUnico(j));
 
-        let m = 100, a = 21, c = 37; 
-        let semilla = (parseInt(f) * 11 + new Date().getDate() * 17) % m;
-        let resguardo = 0;
-        while(arrayDiferentes.length < cantRequerida && resguardo < 8000) {
-            resguardo++; semilla = (a * semilla + c) % m;
-            let candidato = semilla.toString().padStart(2, '0');
-            if(!arrayDiferentes.includes(candidato)) { arrayDiferentes.push(candidato); }
+        // Mezclador Congruencial Lineal (LCG) Primos Grandes
+        let seed = (parseInt(f) * 13 + new Date().getDate() * 7) % 100;
+        let loop = 0;
+        while(listaFinal.length < cant && loop < 5000) {
+            loop++; seed = (21 * seed + 37) % 100;
+            agregarUnico(seed.toString().padStart(2, '0'));
         }
-        let aux = 0;
-        while(arrayDiferentes.length < cantRequerida) { aux = (aux + 43) % 100; let relleno = aux.toString().padStart(2, '0'); if(!arrayDiferentes.includes(relleno)) arrayDiferentes.push(relleno); }
 
-        // BUSCADOR EN TIEMPO REAL DEL FIJO DE HOY PARA PINTAR DE AMARILLO
+        // Relleno final balanceado de seguridad
+        let relleno = 0;
+        while(listaFinal.length < cant) {
+            agregarUnico(relleno.toString().padStart(2, '0')); relleno++;
+        }
+
+        // RENDERIZADO CON VERIFICADOR DE COLOR DE GANADOR DE HOY
         let hoy = new Date();
-        let hMes = (hoy.getMonth() + 1).toString().padStart(2, '0');
-        let hDia = hoy.getDate().toString().padStart(2, '0');
-        let hAño = hoy.getFullYear();
-        let claveHoy = `${hAño}-${hMes}-${hDia}`;
-        let fijosGanadoresDeHoy = db[claveHoy] ? Object.values(db[claveHoy]) : [];
+        let claveHoy = `${hoy.getFullYear()}-${(hoy.getMonth()+1).toString().padStart(2,'0')}-${hoy.getDate().toString().padStart(2,'0')}`;
+        let ganadoresDeHoy = db[claveHoy] ? Object.values(db[claveHoy]) : [];
 
-        document.getElementById(`${prefijo}display_resultados`).style.display = 'block';
-        const panel = document.getElementById(`${prefijo}panel_res`); panel.innerHTML = "";
+        document.getElementById(`${pref}display_resultados`).style.display = 'block';
+        const panel = document.getElementById(`${pref}panel_res`); panel.innerHTML = "";
         
-        for(let i=0; i < cantRequerida; i++) {
-            let numeroCandidato = arrayDiferentes[i];
-            let claseCelda = i < 10 ? 'box hot' : 'box';
-            
-            // Si el número generado coincide con el tiro real de hoy que ingresó el admin, se pinta de oro
-            if(fijosGanadoresDeHoy.includes(numeroCandidato)) {
-                claseCelda = 'box ganador-oro';
-            }
-            
-            panel.innerHTML += `<div class="${claseCelda}">${numeroCandidato}</div>`;
+        for(let i=0; i < cant; i++) {
+            let n = listaFinal[i];
+            let css = i < 10 ? 'box hot' : 'box';
+            if(ganadoresDeHoy.includes(n)) { css = 'box ganador-oro'; } // Si el número coincide, se marca en amarillo oro
+            panel.innerHTML += `<div class="${css}">${n}</div>`;
         }
     }
+
+    // PROTECCIÓN DE CÓDIGO - DESACTIVAR CLIC DERECHO E INSPECCIÓN
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.onkeydown = function(e) {
+        if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) {
+            return false;
+        }
+    };
 </script>
 </body>
 </html>

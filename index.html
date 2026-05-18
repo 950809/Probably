@@ -414,7 +414,6 @@
         return alert("Error: El cuadro de texto está completamente vacío. Pega las notas primero.");
     }
 
-    // Aseguramos que la base de datos exista. Si se borró el localStorage, creamos un objeto vacío limpio
     let db = {};
     try {
         db = JSON.parse(localStorage.getItem('bolita_master_db')) || {};
@@ -424,13 +423,11 @@
     
     let c = 0;
 
-    // NORMALIZACIÓN AGRESIVA: Quitamos saltos de línea, espacios locos y unificamos cualquier tipo de guión
     let textoLimpio = rawInput
-        .replace(/[\u2014\u2013]/g, '-') // Convierte guiones largos de notas a normales
-        .replace(/\s+/g, ' ')           // Colapsa espacios y saltos de línea en un solo espacio
+        .replace(/[\u2014\u2013]/g, '-') 
+        .replace(/\s+/g, ' ')           
         .trim();
 
-    // REGEX ULTRA-FLEXIBLE: Busca la fecha, la letra (M/E) y captura TODO lo que venga después hasta el próximo espacio
     const regex = /(\d{1,2})\/(\d{1,2})\/(\d{2,4})\s+([MEme])([0-9\-]+)/g;
     let m;
 
@@ -439,33 +436,29 @@
         let d   = m[2].padStart(2, '0');
         let a   = m[3];
         let letraTurno = m[4].toLowerCase();
-        let bloqueNumeros = m[5]; // Captura el bloque numérico, ej: "0-2-4" o "0-7-0"
+        let bloqueNumeros = m[5]; 
 
         let tu = (letraTurno === 'm') ? 't' : 'n';
         let aFull = a.length === 2 ? (parseInt(a) < 80 ? "20" + a : "19" + a) : a;
         
         if (parseInt(aFull) <= 2009) { tu = 't'; }
 
-        // EXTRACCIÓN DIRECTA DE LOS DOS ÚLTIMOS DÍGITOS (EL FIJO REAL)
-        // Limpiamos el bloque de cualquier cosa que no sea números o guiones
         let limpioBloque = bloqueNumeros.replace(/[^0-9\-]/g, '');
         let partes = limpioBloque.split('-');
         
         let num = '';
         
-        // Si tiene el formato estándar (Centena-Decena-Unidad, ej: 0-2-4)
         if (partes.length >= 3 && partes[1] !== '' && partes[2] !== '') {
             num = partes[1].trim() + partes[2].trim();
         } 
-        // Si por alguna razón viene compacto o mal cortado, agarramos los últimos dos números válidos
         else {
-            let digitos p = limpioBloque.replace(/-/g, '');
+            // CORREGIDO: Eliminada la 'p' intrusa que colgaba el navegador
+            let digitos = limpioBloque.replace(/-/g, '');
             if (digitos.length >= 2) {
                 num = digitos.slice(-2);
             }
         }
 
-        // Si logramos extraer un número válido de dos dígitos
         if (num && num.length === 2) {
             let k = `${aFull}-${mes}-${d}`;
             if (!db[k]) { db[k] = {}; }
@@ -474,12 +467,10 @@
         }
     }
 
-    // SI NO PUDO PROCESAR NADA, TE MANDA UN AVISO EN PANTALLA EXPLICANDO EL PORQUÉ
     if (c === 0) {
         return alert("Error de Lectura: El sistema no pudo extraer fijos. Asegúrate de que el formato sea exactamente: 12/14/20 M0-2-4");
     }
 
-    // Guardamos la base de datos actualizada de forma segura
     localStorage.setItem('bolita_master_db', JSON.stringify(db));
     
     alert(`¡Procesado con Éxito! Se guardaron ${c} fijos exactos en el calendario.`);

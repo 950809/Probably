@@ -409,49 +409,59 @@
     }
 
     function procesarTextoImportado() {
-    const raw = document.getElementById('import_raw_text').value.trim(); 
-    if(!raw) return alert("Vacío.");
-    
-    // RegEx ultra-flexible calibrada para capturar Mes/Día/Año y el bloque de tiro
-    const regex = /(\d{1,2})\/(\d{1,2})\/(\d{2,4})[\s\n\r]+([MEme])([0-9\-]+)/g;
-    let m; 
-    let c = 0;
-    
-    // Traemos la base de datos actual para actualizarla sin perder los otros meses
-    db = JSON.parse(localStorage.getItem('bolita_master_db')) || {};
+    const rawInput = document.getElementById('import_raw_text').value;
+    if (!rawInput || !rawInput.trim()) return alert("Vacío.");
 
-    while ((m = regex.exec(raw)) !== null) {
+    // 1. Traemos el histórico existente para NO borrar nada de lo guardado antes
+    let db = JSON.parse(localStorage.getItem('bolita_master_db')) || {};
+    let c = 0;
+
+    // 2. Normalizamos el texto bruto: unificamos guiones y colapsamos espacios/saltos de línea
+    // Esto evita que la RegEx se rompa si la jugada se corta a la mitad en un renglón
+    let textoLimpio = rawInput
+        .replace(/[\u2014\u2013]/g, '-') // Convierte guiones largos de notas a guiones normales
+        .replace(/\s+/g, ' ');          // Convierte saltos de línea y múltiples espacios en un espacio simple
+
+    // 3. RegEx ultra-precisa para buscar la estructura en la cadena lineal
+    const regex = /(\d{1,2})\/(\d{1,2})\/(\d{2,4})\s+([MEme])([0-9\-]+)/g;
+    let m;
+
+    while ((m = regex.exec(textoLimpio)) !== null) {
         let mes = m[1].padStart(2, '0');
         let d = m[2].padStart(2, '0');
         let a = m[3];
         let letraTurno = m[4].toLowerCase();
-        let bloqueNumeros = m[5]; 
+        let bloqueNumeros = m[5];
 
         let tu = (letraTurno === 'm') ? 't' : 'n';
         let aFull = a.length === 2 ? (parseInt(a) < 80 ? "20" + a : "19" + a) : a;
         
         if (parseInt(aFull) <= 2009) { tu = 't'; }
-        
-        // Separamos el Fijo picando por el primer guión de forma limpia
+
+        // Extraemos el primer número (el Fijo) rompiendo por el guión
         let partes = bloqueNumeros.split('-');
         let num = partes[0] ? partes[0].trim() : '';
-        
+
         if (num !== '') {
             let k = `${aFull}-${mes}-${d}`;
             
-            // Si el día no existe en el acumulador actual, lo creamos vacío
+            // Si el día no existe en el registro, lo creamos sin tocar el resto de la base de datos
             if (!db[k]) { db[k] = {}; }
             
-            // Guardamos estrictamente el número formateado a dos dígitos (ej: "0" -> "00", "4" -> "04")
+            // Guardamos el fijo exacto formateado siempre a 2 dígitos
             db[k][tu] = num.padStart(2, '0');
             c++;
         }
     }
-    
-    // Guardamos el bloque consolidado en el almacenamiento local
-    localStorage.setItem('bolita_master_db', JSON.stringify(db)); 
-    alert(`Mapeados ${c} fijos procesando el histórico de forma consecutiva.`); 
-    document.getElementById('import_raw_text').value = ""; 
+
+    if (c === 0) {
+        return alert("No se encontraron jugadas válidas. Revisa el formato del texto.");
+    }
+
+    // 4. Guardamos la base de datos combinada (lo viejo + lo nuevo)
+    localStorage.setItem('bolita_master_db', JSON.stringify(db));
+    alert(`Se agregaron/actualizaron ${c} fijos de forma exitosa sin alterar tu historial.`);
+    document.getElementById('import_raw_text').value = "";
     renderCal();
 }
 

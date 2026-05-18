@@ -412,55 +412,64 @@
     const rawInput = document.getElementById('import_raw_text').value;
     if (!rawInput || !rawInput.trim()) return alert("Vacío.");
 
-    // 1. Traemos el histórico existente para NO borrar nada de lo guardado antes
     let db = JSON.parse(localStorage.getItem('bolita_master_db')) || {};
     let c = 0;
 
-    // 2. Normalizamos el texto bruto: unificamos guiones y colapsamos espacios/saltos de línea
-    // Esto evita que la RegEx se rompa si la jugada se corta a la mitad en un renglón
+    // Normalizamos el texto bruto colapsando espacios y saltos de línea
     let textoLimpio = rawInput
-        .replace(/[\u2014\u2013]/g, '-') // Convierte guiones largos de notas a guiones normales
-        .replace(/\s+/g, ' ');          // Convierte saltos de línea y múltiples espacios en un espacio simple
+        .replace(/[\u2014\u2013]/g, '-')
+        .replace(/\s+/g, ' ');
 
-    // 3. RegEx ultra-precisa para buscar la estructura en la cadena lineal
+    // 1. DETECTOR AUTOMÁTICO DE FORMATO DE FECHA
+    // Buscamos la primera fecha del texto para analizarla
+    const primeraFechaMatch = textoLimpio.match(/(\d{1,2})\/(\d{1,2})\/\d{2,4}/);
+    let esFormatoInvertido = false; // Por defecto: Mes/Día/Año
+
+    if (primeraFechaMatch) {
+        let primerNumero = parseInt(primeraFechaMatch[1]);
+        // Si el primer número es mayor que 12, obligatoriamente es el DÍA (Formato: Día/Mes/Año)
+        if (primerNumero > 12) {
+            esFormatoInvertido = true;
+        }
+    }
+
     const regex = /(\d{1,2})\/(\d{1,2})\/(\d{2,4})\s+([MEme])([0-9\-]+)/g;
     let m;
 
     while ((m = regex.exec(textoLimpio)) !== null) {
-        let mes = m[1].padStart(2, '0');
-        let d = m[2].padStart(2, '0');
+        let num1 = m[1].padStart(2, '0');
+        let num2 = m[2].padStart(2, '0');
         let a = m[3];
         let letraTurno = m[4].toLowerCase();
         let bloqueNumeros = m[5];
+
+        // Aplicamos la detección automática del formato
+        let mes = esFormatoInvertido ? num2 : num1;
+        let d   = esFormatoInvertido ? num1 : num2;
 
         let tu = (letraTurno === 'm') ? 't' : 'n';
         let aFull = a.length === 2 ? (parseInt(a) < 80 ? "20" + a : "19" + a) : a;
         
         if (parseInt(aFull) <= 2009) { tu = 't'; }
 
-        // Extraemos el primer número (el Fijo) rompiendo por el guión
         let partes = bloqueNumeros.split('-');
         let num = partes[0] ? partes[0].trim() : '';
 
         if (num !== '') {
             let k = `${aFull}-${mes}-${d}`;
             
-            // Si el día no existe en el registro, lo creamos sin tocar el resto de la base de datos
             if (!db[k]) { db[k] = {}; }
-            
-            // Guardamos el fijo exacto formateado siempre a 2 dígitos
             db[k][tu] = num.padStart(2, '0');
             c++;
         }
     }
 
     if (c === 0) {
-        return alert("No se encontraron jugadas válidas. Revisa el formato del texto.");
+        return alert("No se encontraron jugadas válidas. Revisa el formato.");
     }
 
-    // 4. Guardamos la base de datos combinada (lo viejo + lo nuevo)
     localStorage.setItem('bolita_master_db', JSON.stringify(db));
-    alert(`Se agregaron/actualizaron ${c} fijos de forma exitosa sin alterar tu historial.`);
+    alert(`Mapeados ${c} fijos. Formato detectado automáticamente: ${esFormatoInvertido ? "Día/Mes/Año" : "Mes/Día/Año"}.`);
     document.getElementById('import_raw_text').value = "";
     renderCal();
 }

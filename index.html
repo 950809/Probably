@@ -412,62 +412,61 @@
     const rawInput = document.getElementById('import_raw_text').value;
     if (!rawInput || !rawInput.trim()) return alert("El cuadro de texto está vacío.");
 
-    // Recuperamos el histórico existente para no borrar tus otros meses guardados
     let db = JSON.parse(localStorage.getItem('bolita_master_db')) || {};
     let c = 0;
 
-    // Limpiamos el texto de saltos de línea raros para dejarlo en una sola cadena limpia
+    // Normalizamos el texto colapsando espacios y saltos de línea
     let textoLimpio = rawInput
         .replace(/[\u2014\u2013]/g, '-')
         .replace(/\s+/g, ' ');
 
-    // REGEX Directa: Captura Mes/Día/Año (m[1]/m[2]/m[3]), Letra (m[4]) y los números siguientes (m[5])
+    // REGEX: Captura Mes/Día/Año, espacio, Letra y el bloque de números completo (ej: "0-2-4")
     const regex = /(\d{1,2})\/(\d{1,2})\/(\d{2,4})\s+([MEme])([0-9\-]+)/g;
     let m;
 
     while ((m = regex.exec(textoLimpio)) !== null) {
-        // Formato Estricto: Mes / Día / Año
         let mes = m[1].padStart(2, '0');
         let d   = m[2].padStart(2, '0');
         let a   = m[3];
         let letraTurno = m[4].toLowerCase();
         let bloqueNumeros = m[5];
 
-        // Identificamos el turno: M = Tarde, E = Noche
         let tu = (letraTurno === 'm') ? 't' : 'n';
-        
-        // Convertimos el año a 4 dígitos de forma segura (ej: "20" -> "2020")
         let aFull = a.length === 2 ? (parseInt(a) < 80 ? "20" + a : "19" + a) : a;
         
-        // Filtro para años anteriores a 2009 (solo tarde)
         if (parseInt(aFull) <= 2009) { tu = 't'; }
 
-        // Extraemos el Fijo rompiendo por el guión (ej: de "0-2-4" saca el "0")
-        let partes = bloqueNumeros.split('-');
-        let numRaw = partes[0] ? partes[0].trim() : '';
+        // LÓGICA DE EXTRACCIÓN DEL FIJO REAL (Ignora centena y une decena-unidad)
+        let partes = bloqueNumeros.split('-'); // De "0-2-4" saca partes = ["0", "2", "4"]
+        let num = '';
 
-        // VALIDACIÓN BLINDADA: Guardamos si es cualquier número, incluido el cero "0"
-        if (numRaw !== undefined && numRaw !== null && numRaw !== '') {
-            let num = numRaw.padStart(2, '0'); // Convierte "0" en "00", "4" en "04"
-            let k = `${aFull}-${mes}-${d}`;   // Llave exacta: AAAA-MM-DD
+        if (partes.length >= 3) {
+            // Caso estándar de 3 dígitos (ej: 0-2-4 -> agarra "2" y "4" = "24")
+            num = (partes[1].trim() + partes[2].trim()).slice(-2);
+        } else if (partes.length === 2) {
+            // Caso de resguardo si viene solo con un guión
+            num = partes[1].trim().padStart(2, '0');
+        } else {
+            // Si viene el número directo pegado
+            num = partes[0].replace(/[^0-9]/g, '').slice(-2);
+        }
+
+        if (num !== '') {
+            let k = `${aFull}-${mes}-${d}`;
             
             if (!db[k]) { db[k] = {}; }
-            db[k][tu] = num;
+            db[k][tu] = num.padStart(2, '0');
             c++;
         }
     }
 
     if (c === 0) {
-        return alert("No se pudo procesar ningún dato. Revisa que el formato sea 12/14/20 M0-2-4");
+        return alert("No se pudo procesar ningún dato. Revisa la estructura.");
     }
 
-    // Guardamos la combinación en el almacenamiento local
     localStorage.setItem('bolita_master_db', JSON.stringify(db));
-    
-    alert(`¡Perfecto! Se procesaron y guardaron ${c} fijos correctamente.`);
+    alert(`¡Ahora sí! Se importaron ${c} fijos exactos de forma correcta.`);
     document.getElementById('import_raw_text').value = "";
-    
-    // Forzamos al calendario a redibujarse con los datos nuevos
     renderCal();
 }
 

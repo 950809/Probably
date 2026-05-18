@@ -410,34 +410,45 @@
 
     function procesarTextoImportado() {
     const raw = document.getElementById('import_raw_text').value.trim(); if(!raw) return alert("Vacío.");
-    // Expresión regular ajustada para captar: Mes/Día/Año (M o E) Fijo-Punta-Centena
-    const regex = /(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})[\s,]*([MEmne])[\s:]*([0-9\-\s]+)/g;
+    // Expresión regular ajustada para leer estricto: Mes/Día/Año (Letra)(Fijo)-(Punta)-(Centena)
+    const regex = /(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})[\s,]*([MEmne])(\d+)[\-\s]*/g;
     let m; let c = 0;
+    
+    // Limpiamos la caché visual antes de inyectar para que no se te queden los "12" viejos trabados
+    db = JSON.parse(localStorage.getItem('bolita_master_db')) || {};
+
     while ((m = regex.exec(raw)) !== null) {
-        let mes = m[1].padStart(2, '0'), d = m[2].padStart(2, '0'), a = m[3], letraTurno = m[4].toLowerCase();
-        let bloqueNumeros = m[5].replace(/[\s]/g, ''); // Quita espacios intermedios
-        
-        // Mapeamos el turno: 'm' es Tarde (Mediodía), 'e' es Noche
+        let mes = m[1].padStart(2, '0');
+        let d = m[2].padStart(2, '0');
+        let a = m[3];
+        let letraTurno = m[4].toLowerCase();
+        let numeroCompleto = m[5]; // Captura el bloque numérico pegado a la letra (ej: 8 de M8)
+
+        // Asignación correcta del turno: 'm' es Tarde, 'e' es Noche
         let tu = (letraTurno === 'm') ? 't' : 'n';
         
-        // Formateamos el año a 4 dígitos
+        // Convertimos el año de 2 a 4 dígitos
         let aFull = a.length === 2 ? (parseInt(a) < 80 ? "20" + a : "19" + a) : a;
         let anioInt = parseInt(aFull);
         
-        // Control histórico: Si es del 2009 para atrás, todo va directo al tiro de la Tarde ('t')
+        // Filtro histórico: Del 2009 hacia atrás solo existe el tiro de la tarde
         if (anioInt <= 2009) { tu = 't'; }
         
-        // Extraemos el Fijo (los primeros dos dígitos antes del primer guión o del bloque completo)
-        let partes = bloqueNumeros.split('-');
-        let num = partes[0] ? partes[0].replace(/[^0-9]/g, '') : '';
+        // Extraemos estrictamente el FIJO (el primer dígito si vino suelto o el bloque correspondiente)
+        let num = numeroCompleto.padStart(2, '0');
         
         let k = `${aFull}-${mes}-${d}`;
-        if(num.length >= 1) { 
-            db[k] = db[k] || {}; 
-            db[k][tu] = num.padStart(2, '0'); 
-            c++; 
-        }
+        
+        db[k] = db[k] || {};
+        db[k][tu] = num;
+        c++;
     }
+    
+    localStorage.setItem('bolita_master_db', JSON.stringify(db)); 
+    alert(`Mapeados ${c} fijos de forma exacta.`); 
+    document.getElementById('import_raw_text').value = ""; 
+    renderCal();
+}
     localStorage.setItem('bolita_master_db', JSON.stringify(db)); 
     alert(`Mapeados ${c} fijos exitosamente con el formato detectado.`); 
     document.getElementById('import_raw_text').value = ""; renderCal();

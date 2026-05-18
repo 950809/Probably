@@ -409,18 +409,39 @@
     }
 
     function procesarTextoImportado() {
-        const raw = document.getElementById('import_raw_text').value.trim(); if(!raw) return alert("Vacío.");
-        const regex = /(\d{2})[\/\-](\d{2})[\/\-](\d{2,4})[\s,]*([MEnm])[\s:]*([0-9\-\s]+)/g;
-        let m; let c = 0;
-        while ((m = regex.exec(raw)) !== null) {
-            let mes = m[1], d = m[2], a = m[3], tu = m[4].toLowerCase() === 'm' ? 't' : 'n';
-            let num = m[5].replace(/[^0-9]/g, '');
-            let aFull = a.length === 2 ? (parseInt(a) < 80 ? "20" + a : "19" + a) : a;
-            let k = `${aFull}-${mes}-${d}`;
-            if(num.length >= 2) { db[k] = db[k] || {}; db[k][tu] = num.slice(-2); c++; }
+    const raw = document.getElementById('import_raw_text').value.trim(); if(!raw) return alert("Vacío.");
+    // Expresión regular ajustada para captar: Mes/Día/Año (M o E) Fijo-Punta-Centena
+    const regex = /(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})[\s,]*([MEmne])[\s:]*([0-9\-\s]+)/g;
+    let m; let c = 0;
+    while ((m = regex.exec(raw)) !== null) {
+        let mes = m[1].padStart(2, '0'), d = m[2].padStart(2, '0'), a = m[3], letraTurno = m[4].toLowerCase();
+        let bloqueNumeros = m[5].replace(/[\s]/g, ''); // Quita espacios intermedios
+        
+        // Mapeamos el turno: 'm' es Tarde (Mediodía), 'e' es Noche
+        let tu = (letraTurno === 'm') ? 't' : 'n';
+        
+        // Formateamos el año a 4 dígitos
+        let aFull = a.length === 2 ? (parseInt(a) < 80 ? "20" + a : "19" + a) : a;
+        let anioInt = parseInt(aFull);
+        
+        // Control histórico: Si es del 2009 para atrás, todo va directo al tiro de la Tarde ('t')
+        if (anioInt <= 2009) { tu = 't'; }
+        
+        // Extraemos el Fijo (los primeros dos dígitos antes del primer guión o del bloque completo)
+        let partes = bloqueNumeros.split('-');
+        let num = partes[0] ? partes[0].replace(/[^0-9]/g, '') : '';
+        
+        let k = `${aFull}-${mes}-${d}`;
+        if(num.length >= 1) { 
+            db[k] = db[k] || {}; 
+            db[k][tu] = num.padStart(2, '0'); 
+            c++; 
         }
-        localStorage.setItem('bolita_master_db', JSON.stringify(db)); alert(`Mapeados ${c} fijos.`); document.getElementById('import_raw_text').value = ""; renderCal();
     }
+    localStorage.setItem('bolita_master_db', JSON.stringify(db)); 
+    alert(`Mapeados ${c} fijos exitosamente con el formato detectado.`); 
+    document.getElementById('import_raw_text').value = ""; renderCal();
+}
 
     function generarTodo(esAdmin) {
         const btnId = esAdmin ? 'btn_generar_admin' : 'btn_generar_user';

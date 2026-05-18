@@ -412,8 +412,8 @@
     const raw = document.getElementById('import_raw_text').value.trim(); 
     if(!raw) return alert("Vacío.");
     
-    // RegEx limpia y directa sin caracteres raros que cuelguen el script
-    const regex = /(\d+)\/(\d+)\/(\d+)\s+([MEme])([0-9\-]+)/g;
+    // RegEx ultra-precisa para capturar: Mes/Día/Año, espacio, Letra y bloque de números
+    const regex = /(\d{1,2})\/(\d{1,2})\/(\d{2,4})\s+([MEme])([0-9\-]+)/g;
     let m; 
     let c = 0;
     
@@ -431,11 +431,12 @@
         
         if (parseInt(aFull) <= 2009) { tu = 't'; }
         
-        // Saca el Fijo limpio picando por el primer guión (ej: de "8-1-2" se queda con el "8")
+        // Pica por el guión para separar el Fijo (ej: de "0-2-4" saca "0", de "8-1-2" saca "8")
         let partes = bloqueNumeros.split('-');
         let num = partes[0] ? partes[0].trim() : '';
         
-        if (num) {
+        // Validamos que se extraiga el número real y lo formateamos a dos dígitos strictly
+        if (num !== '') {
             let k = `${aFull}-${mes}-${d}`;
             db[k] = db[k] || {};
             db[k][tu] = num.padStart(2, '0');

@@ -410,11 +410,10 @@
 
     function procesarTextoImportado() {
     const raw = document.getElementById('import_raw_text').value.trim(); if(!raw) return alert("Vacío.");
-    // Expresión regular ajustada para leer estricto: Mes/Día/Año (Letra)(Fijo)-(Punta)-(Centena)
-    const regex = /(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})[\s,]*([MEmne])(\d+)[\-\s]*/g;
+    // RegEx corregida y simplificada para evitar cuelgues en el navegador
+    const regex = /(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})[\s,]*([MEmne])([0-9\-]+)/g;
     let m; let c = 0;
     
-    // Limpiamos la caché visual antes de inyectar para que no se te queden los "12" viejos trabados
     db = JSON.parse(localStorage.getItem('bolita_master_db')) || {};
 
     while ((m = regex.exec(raw)) !== null) {
@@ -422,27 +421,31 @@
         let d = m[2].padStart(2, '0');
         let a = m[3];
         let letraTurno = m[4].toLowerCase();
-        let numeroCompleto = m[5]; // Captura el bloque numérico pegado a la letra (ej: 8 de M8)
+        let bloqueNumeros = m[5]; 
 
-        // Asignación correcta del turno: 'm' es Tarde, 'e' es Noche
         let tu = (letraTurno === 'm') ? 't' : 'n';
-        
-        // Convertimos el año de 2 a 4 dígitos
         let aFull = a.length === 2 ? (parseInt(a) < 80 ? "20" + a : "19" + a) : a;
         let anioInt = parseInt(aFull);
         
-        // Filtro histórico: Del 2009 hacia atrás solo existe el tiro de la tarde
         if (anioInt <= 2009) { tu = 't'; }
         
-        // Extraemos estrictamente el FIJO (el primer dígito si vino suelto o el bloque correspondiente)
-        let num = numeroCompleto.padStart(2, '0');
+        // Picamos por el primer guión para sacar el Fijo limpio (ej: de "8-1-2" saca el "8")
+        let partes = bloqueNumeros.split('-');
+        let num = partes[0] ? partes[0].trim() : '';
         
-        let k = `${aFull}-${mes}-${d}`;
-        
-        db[k] = db[k] || {};
-        db[k][tu] = num;
-        c++;
+        if (num) {
+            let k = `${aFull}-${mes}-${d}`;
+            db[k] = db[k] || {};
+            db[k][tu] = num.padStart(2, '0');
+            c++;
+        }
     }
+    
+    localStorage.setItem('bolita_master_db', JSON.stringify(db)); 
+    alert(`Mapeados ${c} fijos de forma exacta.`); 
+    document.getElementById('import_raw_text').value = ""; 
+    renderCal();
+}
     
     localStorage.setItem('bolita_master_db', JSON.stringify(db)); 
     alert(`Mapeados ${c} fijos de forma exacta.`); 

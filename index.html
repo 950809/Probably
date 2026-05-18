@@ -605,24 +605,27 @@
 
     document.addEventListener('contextmenu', e => e.preventDefault());
     document.onkeydown = function(e) { if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) return false; };
-    // ========================================================
-// FUNCIONES DE COPIA DE SEGURIDAD (EXPORTAR E IMPORTAR)
+// ========================================================
+// COPIA DE SEGURIDAD ACTUALIZADA (FIJOS + HISTÓRICO DE ACIERTOS)
 // ========================================================
 
 function exportarBaseDatos() {
     let db = localStorage.getItem('bolita_master_db');
-    if (!db || db === "{}") {
-        return alert("Error: No tienes ningún dato guardado todavía para exportar.");
-    }
+    let aciertos = localStorage.getItem('bolita_aciertos_log') || "[]";
+    
+    if (!db || db === "{}") return alert("No hay datos para exportar.");
 
-    // Creamos el archivo plano con el contenido de tu localStorage
-    let blob = new Blob([db], { type: "application/json" });
+    let paqueteCompleto = {
+        historialFijos: JSON.parse(db),
+        historicoAciertos: JSON.parse(aciertos)
+    };
+
+    let blob = new Blob([JSON.stringify(paqueteCompleto)], { type: "application/json" });
     let url = URL.createObjectURL(blob);
     
     let a = document.createElement('a');
     a.href = url;
-    // Te guarda el archivo con la fecha del día para que no te confundas
-    a.download = `bolita_backup_${new Date().toISOString().split('T')[0]}.json`;
+    a.download = `bolita_master_backup_${new Date().toISOString().split('T')[0]}.json`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -638,27 +641,22 @@ function importarBaseDatos(event) {
         try {
             let datos = JSON.parse(e.target.result);
             
-            // Validamos que el archivo sea un objeto real y no esté corrupto
-            if (typeof datos === 'object' && datos !== null) {
-                // Guardamos en el almacenamiento local del teléfono que lee
-                localStorage.setItem('bolita_master_db', JSON.stringify(datos));
-                alert("¡Éxito! Base de datos restaurada. El historial se actualizó por completo.");
-                
-                // Forzamos al calendario a redibujarse para ver los números al momento
-                if (typeof renderCal === 'function') {
-                    renderCal();
-                } else {
-                    location.reload(); // Si no encuentra la función, refresca la página solo
-                }
+            if (datos.historialFijos) {
+                localStorage.setItem('bolita_master_db', JSON.stringify(datos.historialFijos));
+                localStorage.setItem('bolita_aciertos_log', JSON.stringify(datos.historicoAciertos || []));
             } else {
-                alert("Error: El archivo no tiene el formato correcto de la aplicación.");
+                localStorage.setItem('bolita_master_db', JSON.stringify(datos));
             }
+            
+            alert("¡Todo importado con éxito! Historial y registro de aciertos sincronizados.");
+            if (typeof renderCal === 'function') renderCal();
+            if (typeof mostrarTablaAciertos === 'function') mostrarTablaAciertos();
         } catch (err) {
-            alert("Error crítico al procesar el archivo de copia de seguridad.");
+            alert("Error al leer el archivo de copia de seguridad.");
         }
     };
     reader.readAsText(file);
-    }
+}
     // ========================================================
 // SISTERMA DE AUDITORÍA Y REGISTRO DE ACIERTOS PERMANENTES
 // ========================================================
@@ -742,8 +740,89 @@ function mostrarTablaAciertos() {
     html += `</tbody></table>`;
     contenedor.innerHTML = html;
 }
+    <div style="margin-top: 30px; padding: 15px; background: #ffffff; border-radius: 8px; border-left: 5px solid #ffc107;">
+    <h3 style="margin-top: 0; color: #333;">🎯 Histórico Permanente de Aciertos</h3>
+    <p style="font-size: 13px; color: #666;">Cada vez que agregues un número real que coincida con tus pronósticos, se guardará aquí automáticamente.</p>
+    <div id="tabla_historico_aciertos"></div>
+</div>
 
 // Aseguramos que la tabla se dibuje en cuanto cargue la página por primera vez
+document.addEventListener("DOMContentLoaded", function() {
+    mostrarTablaAciertos();
+});
+    // ========================================================
+// SISTEMA DE AUDITORÍA Y REGISTRO DE ACIERTOS PERMANENTES
+// ========================================================
+
+function verificarYRegistrarAcierto(fecha, turno, numeroReal, arrayPronosticos) {
+    if (!arrayPronosticos || arrayPronosticos.length === 0) return;
+
+    let casillaGanadora = arrayPronosticos.indexOf(numeroReal);
+
+    if (casillaGanadora !== -1) {
+        let numeroCasilla = casillaGanadora + 1;
+        let aciertosLog = JSON.parse(localStorage.getItem('bolita_aciertos_log')) || [];
+        let yaExiste = aciertosLog.some(log => log.fecha === fecha && log.turno === turno);
+
+        if (!yaExiste) {
+            let nuevoAcierto = {
+                fecha: fecha,
+                turno: turno === 't' ? 'Tarde' : 'Noche',
+                numero: numeroReal,
+                casilla: numeroCasilla,
+                registroTimestamp: new Date().toLocaleString()
+            };
+
+            aciertosLog.push(nuevoAcierto);
+            localStorage.setItem('bolita_aciertos_log', JSON.stringify(aciertosLog));
+            mostrarTablaAciertos();
+        }
+    }
+}
+
+function mostrarTablaAciertos() {
+    let contenedor = document.getElementById('tabla_historico_aciertos');
+    if (!contenedor) return;
+
+    let aciertosLog = JSON.parse(localStorage.getItem('bolita_aciertos_log')) || [];
+
+    if (aciertosLog.length === 0) {
+        contenedor.innerHTML = `<p style="color: #666; font-style: italic;">No hay aciertos registrados en este dispositivo todavía.</p>`;
+        return;
+    }
+
+    // Copiamos y volteamos para que el más nuevo salga arriba sin modificar el original
+    let logInvertido = [...aciertosLog].reverse();
+
+    let html = `
+        <table style="width: 100%; border-collapse: collapse; margin-top: 10px; text-align: center; background-color: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+            <thead>
+                <tr style="background-color: #f8f9fa; border-bottom: 2px solid #dee2e6;">
+                    <th style="padding: 10px;">Fecha</th>
+                    <th style="padding: 10px;">Turno</th>
+                    <th style="padding: 10px;">Fijo Ganador</th>
+                    <th style="padding: 10px; background-color: #ffeb3b; color: #000;">Casilla</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+    logInvertido.forEach(log => {
+        html += `
+            <tr style="border-bottom: 1px solid #dee2e6;">
+                <td style="padding: 10px;">${log.fecha}</td>
+                <td style="padding: 10px;">${log.turno}</td>
+                <td style="padding: 10px; font-weight: bold; color: #d32f2f;">${log.numero}</td>
+                <td style="padding: 10px; font-weight: bold; background-color: #fffde7;">#${log.casilla}</td>
+            </tr>
+        `;
+    });
+
+    html += `</tbody></table>`;
+    contenedor.innerHTML = html;
+}
+
+// Esto hace que la tabla cargue al iniciar la web
 document.addEventListener("DOMContentLoaded", function() {
     mostrarTablaAciertos();
 });

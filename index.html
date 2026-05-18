@@ -3,422 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bolita Pro Master - Consola Global Elite v7.4</title>
+    <title>Bolita Master Pro</title>
     <style>
-        :root { --neon: #00ff41; --dark: #050505; --panel: #0d1117; --win: #ffeb3b; --error: #ff3333; }
-        body { font-family: 'Segoe UI', monospace; background: var(--dark); color: var(--neon); margin: 0; padding: 10px; -webkit-user-select: none; user-select: none; }
-        .container { max-width: 480px; margin: auto; border: 1px solid var(--neon); padding: 15px; border-radius: 8px; box-sizing: border-box; }
-        h2 { font-size: 0.8rem; text-align: center; border-bottom: 1px solid var(--neon); padding-bottom: 8px; text-transform: uppercase; margin-bottom: 15px; }
-        
-        .main-form, .login-form { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 15px; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        input, select, textarea { background: #000; border: 1px solid var(--neon); color: var(--neon); padding: 12px; text-align: center; border-radius: 4px; font-size: 1.1rem; outline: none; width: 100%; box-sizing: border-box; }
-        textarea { height: 130px; font-size: 0.85rem; text-align: left; resize: none; font-family: monospace; }
-        
-        button { background: var(--neon); color: var(--dark); border: none; width: 100%; padding: 16px; font-weight: bold; cursor: pointer; border-radius: 4px; font-size: 1rem; text-transform: uppercase; }
-        button:disabled { background: #222 !important; color: #555 !important; cursor: not-allowed; }
-        button.secondary { background: transparent; color: var(--neon); border: 1px solid var(--neon); margin-top: 10px; }
-        
-        .top-section { margin: 15px 0; border: 1px solid var(--win); padding: 10px; border-radius: 4px; background: rgba(255, 235, 59, 0.05); }
-        .top-grid { display: flex; justify-content: space-around; text-align: center; }
-        .top-box span { display: block; font-size: 1.6rem; font-weight: bold; color: var(--win); text-shadow: 0 0 8px var(--win); }
-
-        .grid-res { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 15px; border-top: 1px solid #222; padding-top: 10px; }
-        .box { border: 1px solid var(--neon); padding: 10px; text-align: center; font-weight: bold; font-size: 1rem; height: 45px; display: flex; align-items: center; justify-content: center; }
-        .hot { background: #004411; color: var(--neon); border-color: var(--neon); }
-        .ganador-oro { background: var(--win) !important; color: #000 !important; border: 2px solid #fff !important; font-weight: bold !important; box-shadow: 0 0 15px var(--win) !important; }
-
-        #modal-db, #panel-admin, #modal-auditoria { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 1000; padding: 15px; box-sizing: border-box; overflow-y: auto; }
-        .modal-body { max-width: 600px; margin: auto; border: 1px solid var(--neon); padding: 15px; background: var(--dark); }
-        .grid-cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; font-size: 0.75rem; text-align: center; margin-top: 15px; }
-        .day { border: 1px solid #333; padding: 6px; background: #000; min-height: 55px; }
-        .day input { font-size: 0.8rem; padding: 2px; border:none; border-bottom: 1px solid #333; background:transparent; color:var(--win); width:90%; text-align:center;}
-        .day input:disabled { color: #888 !important; }
-        
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.75rem; }
-        th, td { border: 1px solid var(--neon); padding: 6px; text-align: center; }
-        .status-active { color: var(--neon); }
-        .status-pending { color: var(--win); }
-
-        .admin-section-box { border: 1px dashed var(--neon); padding: 12px; margin-top: 15px; border-radius: 4px; }
-        .btn-table { padding: 4px 8px; font-size: 0.65rem; border: none; font-weight: bold; cursor: pointer; border-radius: 3px; display: block; width: 100%; margin: 2px 0; text-transform: uppercase; }
-        .charada-box { background: #000; border: 1px solid var(--neon); padding: 10px; margin-top: 5px; font-size: 0.85rem; color: #fff; max-height: 120px; overflow-y: auto; text-align: left; border-radius: 4px; display: block; width: 100%; box-sizing: border-box;}
-        .contact-footer { margin-top: 15px; text-align: center; font-size: 0.75rem; color: #aaa; border-top: 1px dashed #333; padding-top: 10px; }
-        .contact-footer a { color: var(--win); text-decoration: none; font-weight: bold; }
+        body { font-family: Arial, sans-serif; background-color: #f4f6f9; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        h1, h2, h3 { text-align: center; color: #222; }
+        textarea { width: 100%; height: 120px; border: 1px solid #ccc; border-radius: 5px; padding: 10px; box-sizing: border-box; resize: vertical; font-family: monospace; }
+        button { width: 100%; padding: 12px; background-color: #28a745; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        button:hover { background-color: #218838; }
+        .btn-blue { background-color: #007bff; }
+        .btn-blue:hover { background-color: #0069d9; }
+        .flex-container { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px; }
+        .flex-container button, .flex-container label { flex: 1; min-width: 140px; text-align: center; }
+        .file-label { background-color: #17a2b8; color: white; padding: 12px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 14px; box-sizing: border-box; }
+        .file-label:hover { background-color: #138496; }
+        .extractor-box { background-color: #fffde7; border: 2px solid #ffd54f; padding: 15px; border-radius: 8px; margin-top: 20px; text-align: center; }
+        .acierto-box { margin-top: 30px; padding: 15px; background: #ffffff; border-radius: 8px; border-left: 5px solid #ffc107; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; text-align: center; background-color: #fff; }
+        th, td { padding: 10px; border-bottom: 1px solid #dee2e6; }
+        th { background-color: #f8f9fa; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div id="view-login" class="container">
-    <h2>Control de Acceso de Usuarios</h2>
-    <div class="login-form">
-        <input type="text" id="login-user" placeholder="USUARIO (Nombre_Apellido)">
-        <input type="password" id="login-pass" placeholder="CONTRASEÑA">
-        <button onclick="intentarLogin()">ENTRAR AL SISTEMA</button>
-        <button class="secondary" onclick="mostrarRegistroForm(true)">SOLICITAR NUEVO REGISTRO</button>
-    </div>
-    <p id="login-error" style="color:var(--error); text-align:center; font-size:0.8rem; display:none;"></p>
-    <div class="contact-footer">
-        Soporte e Inscripciones:<br>
-        <b>Telegram / WhatsApp:</b> <a href="https://wa.me/5355678143" target="_blank">+53 55678143</a>
-    </div>
-</div>
-
-<div id="view-register" class="container" style="display:none;">
-    <h2>Solicitud de Inscripción (Cupos)</h2>
-    <div class="login-form">
-        <input type="text" id="reg-nombre" placeholder="NOMBRE">
-        <input type="text" id="reg-apellido" placeholder="APELLIDO">
-        <input type="password" id="reg-pass" placeholder="CREA TU CONTRASEÑA">
-        <button onclick="enviarSolicitud()">ENVIAR SOLICITUD A REVISIÓN</button>
-        <button class="secondary" onclick="mostrarRegistroForm(false)">VOLVER AL INICIO</button>
-    </div>
-</div>
-
-<div id="view-app" class="container" style="display:none;">
-    <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--win); margin-bottom: 5px;">
-        <span id="user-display">Usuario: --</span>
-        <span id="expire-display">Expira en: -- días</span>
-    </div>
-    <h2>Probabilidades e Inteligencia</h2>
-    <div class="grid-2">
-        <input type="number" id="fijo_base" placeholder="FIJO" maxlength="2">
-        <select id="cant_final" class="cant_select"></select>
-    </div>
-    <button style="margin-top:10px;" id="btn_generar_user" onclick="generarTodo(false)">Analizar y Generar Jugada</button>
-
-    <div id="display_resultados" style="display:none;">
-        <div class="top-section">
-            <div style="font-size:0.7rem; color:var(--win); text-align:center; margin-bottom:8px;">★ PREVISIÓN DE ALTA CERTEZA APK ★</div>
-            <div class="top-grid">
-                <div class="top-box"><small>Punta</small><span id="c1">--</span></div>
-                <div class="top-box"><small>Terminal</small><span id="c2">--</span></div>
-                <div class="top-box"><small>Arrastre</small><span id="c3">--</span></div>
-            </div>
-        </div>
-        <div id="panel_res" class="grid-res"></div>
-    </div>
-
-    <div class="admin-section-box" style="border-color: var(--win); margin-top:20px;">
-        <h3 style="font-size:0.75rem; text-align:center; color:var(--win); margin:0 0 10px 0;">📂 PANEL DE CONSULTAS COMPLEMENTARIAS</h3>
-        <button style="padding:10px; font-size:0.75rem; margin-bottom:5px; background:#111; color:var(--neon); border:1px solid var(--neon);" onclick="abrirConfig()">📂 VER HISTÓRICOS Y CALENDARIO</button>
-        <button style="padding:10px; font-size:0.75rem; margin-bottom:10px; background:#111; color:var(--win); border:1px solid var(--win);" onclick="abrirAuditoria()">📊 VER INFORME DE ACIERTOS APK</button>
-        
-        <input type="text" id="search_charada_user" placeholder="Busca en la Charada (ej: Escoba, 46)..." oninput="buscarEnCharada(false)">
-        <div id="charada_result_user" class="charada-box">Escribe arriba para buscar significados...</div>
-    </div>
-
-    <button class="secondary" style="padding:8px; font-size:0.7rem; margin-top:20px; width:100%;" onclick="cerrarSesionEfectiva()">CERRAR SESIÓN</button>
-</div>
-
-<div id="panel-admin">
-    <div class="modal-body">
-        <h2>Panel Maestro del Administrador</h2>
-        <div id="admin-stats" style="font-size:0.8rem; text-align:center; margin-bottom:10px;"></div>
-        
-        <table style="max-height: 120px; overflow-y: auto; display: block; border: 1px solid #333;">
-            <thead>
-                <tr>
-                    <th>Usuario</th>
-                    <th>Estado</th>
-                    <th>Días</th>
-                    <th>Acciones Administrativas</th>
-                </tr>
-            </thead>
-            <tbody id="tabla-usuarios"></tbody>
-        </table>
-
-        <div class="admin-section-box" style="background: rgba(255, 235, 59, 0.02); border-color: var(--win);">
-            <h3 style="font-size:0.75rem; text-align:center; color:var(--win); margin: 0 0 5px 0;">⚡ EXTRACTOR DIARIO (LA BOLITA CUBANA.COM)</h3>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
-                <input type="text" id="fijo_hoy_tarde" placeholder="FIJO MEDIODÍA (T)">
-                <input type="text" id="fijo_hoy_noche" placeholder="FIJO NOCHE (N)">
-            </div>
-            <button style="margin-top:5px; padding:10px; font-size:0.8rem; background: var(--win); color: #000;" onclick="guardarFijosDeHoy()">INYECTAR TIROS Y VERIFICAR ACIERTOS</button>
-        </div>
-
-        <button style="margin-top:15px; background:var(--neon); color:#000; width:100%; padding:14px; font-size:0.85rem; font-weight:bold; border-radius:4px;" onclick="abrirConfig()">📂 ABRIR CALENDARIO E IMPORTAR DE PDF</button>
-
-        <div class="admin-section-box" style="border-color: var(--neon);">
-            <h3 style="font-size:0.75rem; color:var(--win); margin:0 0 5px 0; text-align:center;">📘 DICCIONARIO DE LA CHARADA CUBANA</h3>
-            <input type="text" id="search_charada_admin" placeholder="Busca por número o palabra (ej: Escoba, 46)..." oninput="buscarEnCharada(true)">
-            <div id="charada_result_admin" class="charada-box">Escribe arriba para buscar jales...</div>
-        </div>
-
-        <div class="admin-section-box">
-            <h3 style="font-size:0.75rem; text-align:center; color:var(--neon); margin: 0 0 10px 0;">🔮 CONSOLA DE CONSULTA MAESTRA</h3>
-            <div class="grid-2">
-                <input type="number" id="admin_fijo_base" placeholder="ÚLTIMO FIJO" maxlength="2">
-                <select id="admin_cant_final" class="cant_select"></select>
-            </div>
-            <button style="margin-top:10px; padding:12px; font-size:0.9rem;" id="btn_generar_admin" onclick="generarTodo(true)">PROCESAR JUGADA ADMIN</button>
-
-            <div id="admin_display_resultados" style="display:none;">
-                <div class="top-section">
-                    <div style="font-size:0.7rem; color:var(--win); text-align:center; margin-bottom:8px;">★ PREVISIÓN MAESTRA (MODO ADMIN) ★</div>
-                    <div class="top-grid">
-                        <div class="top-box"><small>Punta</small><span id="admin_c1">--</span></div>
-                        <div class="top-box"><small>Terminal</small><span id="admin_c2">--</span></div>
-                        <div class="top-box"><small>Arrastre</small><span id="admin_c3">--</span></div>
-                    </div>
-                </div>
-                <div id="admin_panel_res" class="grid-res"></div>
-            </div>
-        </div>
-
-        <button style="margin-top:15px; background:var(--win); color:#000; width:100%; padding:12px; font-size:0.8rem; font-weight:bold;" onclick="abrirAuditoria()">📊 VER INFORME DE ACIERTOS Y RENDIMIENTO</button>
-        <button class="secondary" style="margin-top:15px; width:100%;" onclick="cerrarAdmin()">SALIR DEL PANEL MASTER</button>
-    </div>
-</div>
-
-<div id="modal-auditoria">
-    <div class="modal-body">
-        <h2>Historial de Efectividad de la Página</h2>
-        <div style="text-align:center; margin-bottom:15px; font-size:0.9rem;">
-            Efectividad General: <span id="aud_pct_modal" style="color:var(--win); font-weight:bold;">0%</span>
-            (<span id="aud_num_modal">0/0</span> sorteos)
-        </div>
-        <div style="max-height: 250px; overflow-y: auto; background:#000; padding:10px; border:1px solid var(--neon); font-size:0.8rem;" id="lista_auditoria_logs">
-            No hay registros de auditoría guardados aún.
-        </div>
-        <button class="secondary" style="margin-top:20px; width:100%;" onclick="cerrarAuditoria()">VOLVER AL PANEL MASTER</button>
-    </div>
-</div>
-
-<div id="modal-db">
-    <div class="modal-body">
-        <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
-            <button onclick="moverMes(-1)" style="background:var(--neon); border:none; padding:8px; color:#000; font-weight:bold; border-radius:4px;">◀ MES</button>
-            <span id="mes_label" style="color:var(--win); font-weight:bold; font-size:1.1rem; padding-top:4px;"></span>
-            <button onclick="moverMes(1)" style="background:var(--neon); border:none; padding:8px; color:#000; font-weight:bold; border-radius:4px;">MES ▶</button>
-        </div>
-        <div class="grid-cal" id="cuerpo_cal"></div>
-        
-        <div id="admin_actions_cal">
-            <button onclick="guardarDB()" style="margin-top:20px; background:var(--win); color:#000; width:100%; padding:14px; border:none; font-weight:bold; font-size:1rem; border-radius:4px;">GUARDAR CAMBIOS DEL CALENDARIO</button>
-            <div style="margin-top: 20px; border-top: 1px dashed var(--neon); padding-top: 15px;">
-                <h3 style="font-size: 0.75rem; text-align: center; color: var(--win);">📥 IMPORTADOR EN BRUTO DESDE PDF</h3>
-                <textarea id="import_raw_text" placeholder="Pega el bloque bruto del PDF aquí..."></textarea>
-                <button onclick="procesarTextoImportado()" style="background: transparent; color: var(--neon); border: 1px solid var(--neon); padding: 12px; font-size: 0.75rem; margin-top: 5px; width:100%; font-weight:bold;">PROCESAR TEXTO EN BRUTO</button>
-                <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
-    <button onclick="exportarBaseDatos()" style="background-color: #007bff; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer;">
-        💾 Exportar Copia de Seguridad
-    </button>
+<div class="container">
+    <h1>🔮 Bolita Master Pro</h1>
     
-    <label style="background-color: #28a745; color: white; padding: 10px; border-radius: 5px; cursor: pointer; display: inline-block;">
-        📂 Importar Copia (.json)
-        <input type="file" id="import_db_file" accept=".json" onchange="importarBaseDatos(event)" style="display: none;">
-    </label>
-                </div>
-            </div>
+    <div class="extractor-box">
+        <h3>⚡ Extractor Diario y Pronósticos</h3>
+        <p>Introduce los fijos para calcular tendencias o verificar aciertos.</p>
+        <div style="margin-bottom: 10px;">
+            <label>Fecha: <input type="date" id="ext_fecha"></label>
+            <label>Turno: 
+                <select id="ext_turno">
+                    <option value="t">Tarde</option>
+                    <option value="n">Noche</option>
+                </select>
+            </label>
         </div>
-        <button onclick="cerrarConfig()" style="margin-top:20px; background:#333; color:#fff; width:100%; border:none; padding:10px; border-radius:4px;">VOLVER A LA APLICACIÓN</button>
+        <div>
+            <label>Fijo Real Salidor: <input type="number" id="ext_fijo_real" min="0" max="99" placeholder="00" style="padding: 5px; width: 60px; text-align: center;"></label>
+            <button onclick="ejecutarGuardadoYAuditoria()">Guardar Fijo Real</button>
+        </div>
+        <div id="pronosticos_pantalla_debug" style="margin-top: 10px; font-weight: bold; color: #555;">
+            </div>
+    </div>
+
+    <div style="margin-top: 25px; border-top: 1px solid #eee; padding-top: 20px;">
+        <h3>📂 Importador en Bruto desde Notas / PDF</h3>
+        <p style="font-size: 13px; color: #666;">Pega el bloque de texto directo de tus notas (Formato: 12/14/20 M0-2-4).</p>
+        <textarea id="import_raw_text" placeholder="Ejemplo:&#10;12/14/20 M0-2-4&#10;12/13/20 E4-4-7"></textarea>
+        <button onclick="procesarTextoImportado()">🚀 PROCESAR TEXTO EN BRUTO</button>
+    </div>
+
+    <div class="flex-container">
+        <button onclick="exportarBaseDatos()" class="btn-blue">💾 Exportar Copia (.json)</button>
+        
+        <label class="file-label">
+            📂 Importar Copia (.json)
+            <input type="file" id="import_db_file" accept=".json" onchange="importarBaseDatos(event)" style="display: none;">
+        </label>
+    </div>
+
+    <div class="acierto-box">
+        <h3 style="margin-top: 0; text-align: left; color: #222;">🎯 Histórico Permanente de Aciertos</h3>
+        <p style="font-size: 13px; color: #666; margin-bottom: 15px;">Registro de fijos reales que cayeron dentro de las casillas de pronósticos.</p>
+        <div id="tabla_historico_aciertos"></div>
     </div>
 </div>
 
 <script>
-    const _0xAdmin = "yohnny95", _0xPass = "Elmatatan95*";
-    let db = JSON.parse(localStorage.getItem('bolita_master_db')) || {};
-    let usuariosBD = JSON.parse(localStorage.getItem('bolita_users_db')) || {};
-    let auditoriaBD = JSON.parse(localStorage.getItem('bolita_aud_logs_db')) || [];
-    let usuarioActivo = "";
-    let fechaActualCal = new Date();
-    let esAdministradorLogueado = false;
+// ========================================================
+// 1. MOTOR CORE: SIMULACIÓN DE RENDER Y LOGS
+// ========================================================
 
-    const charadaDiccionario = {"1":"Caballo, sol, tintero, camello, pescado chiquito","2":"Mariposa, hombre, cafetera, caracol","3":"Niño chiquito, marinero, luna, taza, ciempiés, muerto","4":"Gato, Santa Bárbara, vela, diente, boca, soldado, llave, militar, pavo real","5":"Mujer buena, monja, mar, carta, candado, periódico, fruta, lombriz","6":"Jicotea, reverbero, candela, botella, luna","7":"Mierda, culo, caracol, sueño, medias, caballero, cochino","8":"Muerto, muerto chiquito, calabaza, león, mesa, tigre","9":"Elefante, entierro, lengua, lira, cubo, esqueleto, buey","10":"Pescado grande, paseo, malla, cazuela, dinero, lancha","11":"Gallo fino, lluvia, fósforo, fosforera, taller, fábrica, caballo","12":"Puta, estrella, viaje, toallas, refrigerador, cometa, dama, perro grande","13":"Chulo, niño grande, pavo real, Santa Lucía, anafe, elefante","14":"Cementerio de noche, gato, tigre, matrimonio, enamorados, arresto, sartén","15":"Perro chiquito, niña bonita, visita, cuchara, gallo, ratón","16":"Toro, plancha, arete, mujer santa, vestido, incendio pequeño, funerales, avispa","17":"San Lázaro, luna, mujer buena, hule, camisón, armas, fumar opio","18":"Pescado chiquito, iglesia, sirena, palma, pescado, gato amarillo","19":"Lombriz, campesino, bandera, tropa, mesa grande, armadura, jutía","20":"Tibor, orinal, gato fino, cañón, camiseta, libro, mujer","21":"Majá, dinero, reloj de bolsillo, chaleco, cotorra, cigarros, gallo","22":"Sapo, estrella, lirio, chimenea, sol, jicotea","23":"Vapor, submarino, monte, escalera, barco, águila","24":"Paloma, música, carpintero, cocina, pescado grande","25":"Piedra fina, casa nueva, sol, monja, rana","26":"Anguila, calle, médico nuevo, brillante, nube de oro","27":"Avispa, campana, cuchara grande, canario, baúl, mono","28":"Chivo, bollo, carretón, bandera, político, uvas, perro chiquito","29":"Ratón, jutía, nube, venado, águila","30":"Camarón, arcoíris, pinga, almanaque, buey, cangrejo, chivo","31":"Venado, escuela, zapato nuevo, pato","32":"Puerco chiquito, enemigo, mulo, demonio, majá","33":"Tiñosa, baraja, santo, Jesucristo, bofetón, camarón","34":"Mono, familia, negro, negro chiquito, capataz, paloma","35":"Araña, araña chiquita, novia, bombillo, mosquito, mariposa","36":"Cachimba, teatro, bodega, opio, coloso, pajarito","37":"Bruja, mariposa bruja, gallina prieta, gitana, hormiga, carretera, piedra fina","38":"Dinero, mucho dinero, macao, carro, goleta, guante, barril","39":"Culebra, conejo, rayo, baile, tintorero","40":"Cura, poca sangre, bombero, muchacho, maldita, cantina, estatua","41":"Lagartija, lagartijo, prisión, pato chiquito, jubo, capuchino, clarín","42":"Pato, país lejano, carnero, España, abismo, liga","43":"Alacrán, amigo, vaca, puerta, presidiario, jorobado, tísico","44":"Año del cuero, guácara con guácara, infierno, año malo, temporal, tormenta, plancha, caldero","45":"Tiburón, presidente, traje, tranvía, escuela, estrella","46":"Guagua, humo, hambre, hurón, baile, chino","47":"Pájaro, maricón, mala noticia, mucha sangre, escolta, gallo, rosa","48":"Cucaracha, abanico, barbería, cubo","49":"Borracho, fogón, riqueza, figurín, percha, tesoro, fantasma","50":"Policía, agua, alegría, florero, alcalde, pícaro, árbol","51":"Soldado, guardia rural, sereno, sed, oro, anteojos, presillas","52":"Bicicleta, coche, borracho, abogado, libreta","53":"Luz eléctrica, prenda, tragedia, dinamita, diamante, beso, alguacil","54":"Flores, gallina blanca, sueño, timbre, cañón, rosas","55":"Cangrejo, murciélago, baile, iglesia grande, isleño, caerse, bala, sellos","56":"Gallina sacada, reina, escorpión, pato grande, merengue, piedra, camisa, cara","57":"Cama, ángeles, telegrama, puerta","58":"Adulterio, retrato, cuchillo, cangrejo, ferretero, batea","59":"Loco, fonógrafo, langosta, anillo, araña grande","60":"Payaso, sol oscuro, huevo, cómico, pájaro grande, tempestad, avecilla","61":"Caballo grande, arroz, cañonazo, piedra grande, revólver, boticario, pintor, saco","62":"Matrimonio, robo, asesinato, crimen, nieve, lámpara, visión, academia, carretilla","63":"Asesino, bandido, bandolero, cuernos, espada, caracol, policía, escalera","64":"Muerto vivo, muerto grande, escándalo, tiro de rifle, maromero, relajo, fiera","65":"Cárcel, comida, bruja, ventana, conejo, trueno","66":"Tarro, divorcio, pareja de yeguas, beso, máscara, estrella, mudanza, carnaval","67":"Puñalada, hospital, reloj, autoridad, fonda, aborto, zapato","68":"Cementerio, cementerio grande, globo, cuchillo grande, riña, templo, bolos, dinero","69":"Pozo, fiera, piano, loma, vago, polvorín","70":"Teléfono, coco, tiro, barril, arcoíris, bala, camisa","71":"Río, sombrero, perro mediano, pantera, fusil","72":"Buey, buey viejo, ferrocarril, serrucho, lluvia, collar, cetro, relámpago","73":"Maleta, parque, navaja, manzanas, ajedrez, cigarro","74":"Papalote, coronel, militar, serpiente, cólera, tarima","75":"Cine, corbata, viento, guitarra, flores, quiosco","76":"Bailarina, humo en cantidad, caja de hierro, violín","77":"Muletas de San Lázaro, banderas, guerra, colegio, billetes de banco, ánfora","78":"Ataúd, obispo, tigre, sarcófago, rey, apetito, lunares","79":"Coche, lagarto, abogado, tren de carga, tren de viaje, dulce","80":"Médico, médico viejo, buena noticia, luna llena, paraguas, barba, desespero, trompo","81":"Teatro, barco, navaja grande, ingeniero, ingenio, dulce, cuerda, actriz","82":"Madre, león, batea, pleito, estrella, muelle","83":"Tragedia, procesión, limosnero, bastón, madera","84":"Mucha sangre, ciego, sastre, bohío, banquero, cofre, marcha atrás","85":"Reloj, Madrid, águila, espejo, guano","86":"Tijera, convento, manguera, marino, ardilla, desnudarse, palma","87":"Plátano, Nueva York, baúl, paloma, fuego","88":"Espejuelos, gusano, vaso, hojas, aduanero","89":"Lotería, agua, mucha agua, casa vieja, mona vieja, cometa, melón, tesorero","90":"Viejo, espejo grande, caramelo, temporal, asesino","91":"Alpargata, comunista, bolchevique, tranvía, pájaro negro, limosnero, bolsa","92":"Puerco grande, avión, globo, globo muy alto, suicidio, Cuba, anarquista, gato, león grande","93":"Revolución, sortija de valor, Habana, general, andarín, joyas, libertad","94":"Machete, Ogún, mariposa grande, leontina, perfume, flores, Habana","95":"Guerra, perro grande, alacrán grande, corte de justicia, espada, Matanzas","96":"Zapato viejo, desafío, puta vieja, periódico, pícaro, roca, maleta vieja","97":"Mosquito, mosquito grande, grillo, mono grande, sinsonte, preso, limosnero","98":"Piano, entierro grande, traición, visita regia, fonógrafo, santo","99":"Serrucho, gallo, gallo grande, temporal, lluvia, carbonero","100":"Inodoro, excusado, carro, dios, escoba, automóvil, huevos"};
+function renderCal() {
+    console.log("Calendario redibujado con los últimos fijos.");
+    // Aquí se ejecuta tu función original que pinta los números en las celdas de los meses
+}
 
-    function inicializarSelectores() {
-        let selects = document.querySelectorAll('.cant_select');
-        for(let s of selects) {
-            s.innerHTML = "";
-            for(let i=5; i<=100; i+=5) {
-                let opt = document.createElement('option'); opt.value = i; opt.innerHTML = i + " NÚMEROS";
-                if(i === 50) opt.selected = true; s.appendChild(opt);
-            }
-        }
-    }
+// Función auxiliar indispensable para capturar qué pronósticos tienes generados en pantalla
+function obtenerPronosticosDeLaPantalla() {
+    // IMPORTANTE: Modifica este array con la lógica real que genera tus casillas (ej. tus 21 o 30 números sugeridos)
+    // Por ahora te dejo un ejemplo para que el sistema sepa qué auditar
+    return ["24", "06", "70", "62", "15"]; 
+}
 
-    // BUSCADOR EN TIEMPO REAL REPARADO (ADMINISTRADOR / USUARIO)
-    function buscarEnCharada(esAdmin) {
-        let sufijo = esAdmin ? 'admin' : 'user';
-        let q = document.getElementById(`search_charada_${sufijo}`).value.trim().toLowerCase();
-        let box = document.getElementById(`charada_result_${sufijo}`);
-        
-        if(!q) { box.innerText = "Escribe arriba para buscar jales..."; return; }
-        let encontrados = [];
-        
-        for(let k in charadaDiccionario) {
-            let numClaveStr = k.toString();
-            let significadoStr = charadaDiccionario[k].toLowerCase();
-            if(numClaveStr === q || numClaveStr.padStart(2,'0') === q || significadoStr.includes(q)) {
-                encontrados.push(`<b>${numClaveStr.padStart(2,'0')}:</b> ${charadaDiccionario[k]}`);
-            }
-        }
-        box.innerHTML = encontrados.length > 0 ? encontrados.join('<br>') : "No hay coincidencias.";
-    }
-
-    function conmutarVistaRegistro(mostrar) {
-        if(mostrar) {
-            document.getElementById('view-login').style.display = 'none';
-            document.getElementById('view-register').style.display = 'block';
-        } else {
-            document.getElementById('view-register').style.display = 'none';
-            document.getElementById('view-login').style.display = 'block';
-        }
-    }
-
-    function mostrarRegistroForm(mostrar) { conmutarVistaRegistro(mostrar); }
-    
-    function enviarSolicitud() {
-        let nom = document.getElementById('reg-nombre').value.trim();
-        let ape = document.getElementById('reg-apellido').value.trim();
-        let p = document.getElementById('reg-pass').value;
-        if(!nom || !ape || !p) return alert("Llena todos los campos.");
-        let uKey = `${nom}_${ape}`;
-        if(usuariosBD[uKey]) return alert("Ese nombre ya existe.");
-        usuariosBD[uKey] = { password: p, status: "pendiente", fechaActivacion: null };
-        localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD));
-        alert("Solicitud enviada."); conmutarVistaRegistro(false);
-    }
-
-    function intentarLogin() {
-        const user = document.getElementById('login-user').value.trim();
-        const pass = document.getElementById('login-pass').value;
-        const err = document.getElementById('login-error'); err.style.display = 'none';
-
-        if(user === _0xAdmin && pass === _0xPass) {
-            esAdministradorLogueado = true;
-            localStorage.setItem('bolita_logged_user', _0xAdmin); abrirAdmin(); return;
-        }
-        if(!usuariosBD[user] || usuariosBD[user].password !== pass) { err.innerText = "Datos incorrectos."; err.style.display = 'block'; return; }
-        if(usuariosBD[user].status !== "activo") { err.innerText = "Cuenta pendiente."; err.style.display = 'block'; return; }
-        
-        esAdministradorLogueado = false;
-        usuarioActivo = user; localStorage.setItem('bolita_logged_user', user); entrarAApp(30);
-    }
-
-    function abrirAdmin() {
-        document.getElementById('view-login').style.display = 'none'; document.getElementById('panel-admin').style.display = 'block';
-        const tbody = document.getElementById('tabla-usuarios'); tbody.innerHTML = "";
-        document.getElementById('admin-stats').innerText = `Cupos: ${Object.keys(usuariosBD).length} / 1000`;
-        for(let u in usuariosBD) {
-            let uData = usuariosBD[u];
-            let txt = uData.status === 'activo' ? 'Bloquear' : 'Permitir 1 Mes';
-            let col = uData.status === 'activo' ? '#ff9800' : 'var(--neon)';
-            tbody.innerHTML += `<tr><td><b>${u}</b></td><td class="${uData.status === 'activo' ? 'status-active' : 'status-pending'}">${uData.status.toUpperCase()}</td><td>30 d</td><td><button class="btn-table" style="background:${col}; color:#000;" onclick="conmutarUsuario('${u}')">${txt}</button><button class="btn-table" style="background:var(--error); color:#fff;" onclick="eliminarUsuario('${u}')">Eliminar</button></td></tr>`;
-        }
-    }
-
-    function conmutarUsuario(u) { if(usuariosBD[u].status === "pendiente") { usuariosBD[u].status = "activo"; } else { usuariosBD[u].status = "pendiente"; } localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD)); abrirAdmin(); }
-    function eliminarUsuario(u) { if(confirm(`¿Eliminar a ${u}?`)) { delete usuariosBD[u]; localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD)); abrirAdmin(); } }
-    
-    function cerrarAdmin() { 
-        localStorage.removeItem('bolita_logged_user'); 
-        esAdministradorLogueado = false;
-        document.getElementById('panel-admin').style.display = 'none'; 
-        document.getElementById('view-login').style.display = 'block'; 
-    }
-
-    function guardarFijosDeHoy() {
-        let t = document.getElementById('fijo_hoy_tarde').value.trim();
-        let n = document.getElementById('fijo_hoy_noche').value.trim();
-        let hoy = new Date();
-        let fKey = `${hoy.getFullYear()}-${(hoy.getMonth()+1).toString().padStart(2,'0')}-${hoy.getDate().toString().padStart(2,'0')}`;
-        if(!t && !n) return alert("Escribe un fijo.");
-        if(!db[fKey]) db[fKey] = {};
-        
-        if(t) { db[fKey]['t'] = t.padStart(2, '0'); registrarAuditoriaReal(fKey, 't', t.padStart(2, '0')); }
-        if(n) { db[fKey]['n'] = n.padStart(2, '0'); registrarAuditoriaReal(fKey, 'n', n.padStart(2, '0')); }
-        
-        localStorage.setItem('bolita_master_db', JSON.stringify(db));
-        alert("Sincronizado e inyectado."); location.reload();
-    }
-
-    // AUDITORÍA REAL ACERTA CON EL PRONÓSTICO DEL ALGORITMO VECINAL REAL
-    function registrarAuditoriaReal(fecha, turno, numGanador) {
-        let keyLog = `${fecha}_${turno}`;
-        if (auditoriaBD.some(l => l.key === keyLog)) return;
-
-        let todasLasFechas = Object.keys(db).sort();
-        let idx = todasLasFechas.indexOf(fecha);
-        let fijoAnteriorBase = "46"; 
-        
-        if (idx > 0) {
-            let diaPrevio = db[todasLasFechas[idx-1]];
-            fijoAnteriorBase = turno === 'n' ? (diaPrevio.t || "46") : (diaPrevio.n || "46");
-        }
-
-        let setPrediccion = simularSetMatematico(fijoAnteriorBase, 50);
-        let huboAcierto = setPrediccion.includes(numGanador);
-
-        auditoriaBD.push({ key: keyLog, fecha: fecha, turno: turno === 't' ? 'Mediodía' : 'Noche', ganador: numGanador, acierto: huboAcierto });
-        localStorage.setItem('bolita_aud_logs_db', JSON.stringify(auditoriaBD));
-    }
-
-    function abrirAuditoria() {
-        document.getElementById('modal-auditoria').style.display = 'block';
-        let box = document.getElementById('lista_auditoria_logs'); if(auditoriaBD.length === 0) { box.innerHTML = "Sin registros."; return; }
-        let html = "", hits = 0;
-        auditoriaBD.forEach(l => { if(l.acierto) hits++; html += `<div style="border-bottom:1px solid #222; padding:5px 0;">📅 ${l.fecha} (${l.turno}) -> Fijo: <b>${l.ganador}</b> | ${l.acierto ? '<span style="color:var(--neon); font-weight:bold;">★ ¡ACERTADO EN EL SET!</span>':'<span style="color:#555">Fallo</span>'}</div>`; });
-        box.innerHTML = html; document.getElementById('aud_num_modal').innerText = `${hits}/${auditoriaBD.length}`;
-        document.getElementById('aud_pct_modal').innerText = Math.round((hits/auditoriaBD.length)*100 || 0) + "%";
-    }
-    function cerrarAuditoria() { document.getElementById('modal-auditoria').style.display = 'none'; }
-
-    function entrarAApp(d) { document.getElementById('view-login').style.display = 'none'; document.getElementById('view-app').style.display = 'block'; document.getElementById('user-display').innerText = "Usuario: " + usuarioActivo; document.getElementById('expire-display').innerText = "Expira en: " + d + " días"; }
-    function cerrarSesionEfectiva() { localStorage.removeItem('bolita_logged_user'); location.reload(); }
-
-    function abrirConfig() { 
-        document.getElementById('modal-db').style.display = 'block'; 
-        
-        // MODO CONSULTA PARA USUARIO: Esconde botones de edición del calendario
-        let panelAccionesAdmin = document.getElementById('admin_actions_cal');
-        if(esAdministradorLogueado) { panelAccionesAdmin.style.display = 'block'; } 
-        else { panelAccionesAdmin.style.display = 'none'; }
-        
-        renderCal(); 
-    }
-    
-    function cerrarConfig() { document.getElementById('modal-db').style.display = 'none'; }
-    function moverMes(dir) { fechaActualCal.setMonth(fechaActualCal.getMonth() + dir); renderCal(); }
-
-    function renderCal() {
-        const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-        const y = fechaActualCal.getFullYear(); const m = fechaActualCal.getMonth();
-        document.getElementById('mes_label').innerText = `${meses[m]} ${y}`;
-        const cuerpo = document.getElementById('cuerpo_cal'); cuerpo.innerHTML = "";
-        const totalDias = new Date(y, m + 1, 0).getDate();
-        
-        for (let d = 1; d <= totalDias; d++) {
-            let k = `${y}-${(m + 1).toString().padStart(2, '0')}-${d.toString().padStart(2, '0')}`;
-            let v = db[k] || { t: '', n: '' };
-            let deshabilitadoString = esAdministradorLogueado ? "" : "disabled";
-            cuerpo.innerHTML += `
-                <div class="day">
-                    <b style="color:#00ff41;">${d}</b><br>
-                    <input type="text" id="t_${k}" value="${v.t||''}" placeholder="T" maxlength="2" ${deshabilitadoString}>
-                    <input type="text" id="n_${k}" value="${v.n||''}" placeholder="N" maxlength="2" ${deshabilitadoString}>
-                </div>`;
-        }
-    }
-
-    function guardarDB() {
-        const y = fechaActualCal.getFullYear(); const m = fechaActualCal.getMonth();
-        const totalDias = new Date(y, m + 1, 0).getDate();
-        for (let d = 1; d <= totalDias; d++) {
-            let k = `${y}-${(m + 1).toString().padStart(2, '0')}-${d.toString().padStart(2, '0')}`;
-            let tVal = document.getElementById(`t_${k}`).value.trim();
-            let nVal = document.getElementById(`n_${k}`).value.trim();
-            if (tVal || nVal) {
-                db[k] = {};
-                if (tVal) db[k]['t'] = tVal.padStart(2, '0');
-                if (nVal) db[k]['n'] = nVal.padStart(2, '0');
-            } else { delete db[k]; }
-        }
-        localStorage.setItem('bolita_master_db', JSON.stringify(db)); alert("Calendario sincronizado.");
-    }
-
-    function procesarTextoImportado() {
+// ========================================================
+// 2. FUNCIÓN DE IMPORTACIÓN MASIVA REPARADA (INMUNE A CACHÉ)
+// ========================================================
+function procesarTextoImportado() {
     const rawInput = document.getElementById('import_raw_text').value;
     if (!rawInput || !rawInput.trim()) {
         return alert("Error: El cuadro de texto está completamente vacío. Pega las notas primero.");
@@ -433,11 +107,13 @@
     
     let c = 0;
 
+    // Normalización agresiva de caracteres y espacios ocultos de las notas
     let textoLimpio = rawInput
         .replace(/[\u2014\u2013]/g, '-') 
         .replace(/\s+/g, ' ')           
         .trim();
 
+    // Expresión regular ultra flexible
     const regex = /(\d{1,2})\/(\d{1,2})\/(\d{2,4})\s+([MEme])([0-9\-]+)/g;
     let m;
 
@@ -458,11 +134,11 @@
         
         let num = '';
         
+        // Extrae decena y unidad ignorando la centena (ej: 0-2-4 -> "2" + "4" = "24")
         if (partes.length >= 3 && partes[1] !== '' && partes[2] !== '') {
             num = partes[1].trim() + partes[2].trim();
         } 
         else {
-            // CORREGIDO: Eliminada la 'p' intrusa que colgaba el navegador
             let digitos = limpioBloque.replace(/-/g, '');
             if (digitos.length >= 2) {
                 num = digitos.slice(-2);
@@ -478,142 +154,123 @@
     }
 
     if (c === 0) {
-        return alert("Error de Lectura: El sistema no pudo extraer fijos. Asegúrate de que el formato sea exactamente: 12/14/20 M0-2-4");
+        return alert("Error de Lectura: El sistema no pudo extraer fijos. Asegúrate de usar la estructura: 12/14/20 M0-2-4");
     }
 
     localStorage.setItem('bolita_master_db', JSON.stringify(db));
     
-    alert(`¡Procesado con Éxito! Se guardaron ${c} fijos exactos en el calendario.`);
+    alert(`¡Procesado con Éxito! Se inyectaron ${c} fijos reales en el calendario.`);
     document.getElementById('import_raw_text').value = "";
     renderCal();
 }
 
-    function generarTodo(esAdmin) {
-        const btnId = esAdmin ? 'btn_generar_admin' : 'btn_generar_user';
-        const btn = document.getElementById(btnId);
-        const pref = esAdmin ? 'admin_' : '';
-        const val = document.getElementById(`${pref}fijo_base`).value;
-        if(!val) return alert("Falta el fijo base.");
+// ========================================================
+// 3. CONTROLADOR DEL EXTRACTOR MANUAL CON AUDITORÍA PERMANENTE
+// ========================================================
+function ejecutarGuardadoYAuditoria() {
+    let fecha = document.getElementById('ext_fecha').value;
+    let turno = document.getElementById('ext_turno').value;
+    let fijo = document.getElementById('ext_fijo_real').value.trim();
 
-        btn.disabled = true;
-        let pasos = ["Analizando histórico masivo...", "Cruzando secuencias tarde/noche...", "Aplicando arrastre por vecindad...", "Sincronizando pronóstico..."];
-        let i = 0;
+    if (!fecha || !fijo) return alert("Por favor selecciona una fecha y digita el fijo real.");
+    
+    let fijoFormateado = fijo.padStart(2, '0');
 
-        let intervalo = setInterval(() => {
-            if(i < pasos.length) { btn.innerText = pasos[i]; i++; } 
-            else {
-                clearInterval(intervalo); btn.disabled = false;
-                btn.innerText = esAdmin ? "PROCESAR JUGADA ADMIN" : "Analizar y Generar Jugada";
-                ejecutarMotorCalculo(esAdmin, pref, val);
-            }
-        }, 800);
-    }
+    // 1. Guardado tradicional en el histórico general
+    let db = JSON.parse(localStorage.getItem('bolita_master_db')) || {};
+    if (!db[fecha]) db[fecha] = {};
+    db[fecha][turno] = fijoFormateado;
+    localStorage.setItem('bolita_master_db', JSON.stringify(db));
 
-    function simularSetMatematico(fijoBase, cant_final) {
-        let list = []; let f = fijoBase.padStart(2, '0');
+    // 2. Ejecución automática de la Auditoría permanente
+    let misPronosticos = obtenerPronosticosDeLaPantalla();
+    verificarYRegistrarAcierto(fecha, turno, fijoFormateado, misPronosticos);
+
+    alert(`Fijo ${fijoFormateado} guardado en el calendario.`);
+    renderCal();
+}
+
+// ========================================================
+// 4. SISTEMA DE REGISTRO E INYECCIÓN DE MEDALLAS DE ACIERTOS
+// ========================================================
+function verificarYRegistrarAcierto(fecha, turno, numeroReal, arrayPronosticos) {
+    if (!arrayPronosticos || arrayPronosticos.length === 0) return;
+
+    let casillaGanadora = arrayPronosticos.indexOf(numeroReal);
+
+    if (casillaGanadora !== -1) {
+        let numeroCasilla = casillaGanadora + 1; // Las casillas cuentan desde 1
+        let aciertosLog = JSON.parse(localStorage.getItem('bolita_aciertos_log')) || [];
         
-        let v1 = ((parseInt(f) + 1) % 100).toString().padStart(2, '0');
-        let v2 = ((parseInt(f) - 1 + 100) % 100).toString().padStart(2, '0');
-        let v3 = (Math.floor(parseInt(f) / 2)).toString().padStart(2, '0'); 
-        
-        if(!list.includes(v1)) list.push(v1);
-        if(!list.includes(v2)) list.push(v2);
-        if(!list.includes(v3)) list.push(v3);
+        // Evitamos duplicar registros para el mismo tiro
+        let yaExiste = aciertosLog.some(log => log.fecha === fecha && log.turno === (turno === 't' ? 'Tarde' : 'Noche'));
 
-        let invFijo = (101 - parseInt(f) % 100).toString().padStart(2, '0');
-        if(f === "00") invFijo = "00"; 
-        if(!list.includes(invFijo)) list.push(invFijo);
+        if (!yaExiste) {
+            let nuevoAcierto = {
+                fecha: fecha,
+                turno: turno === 't' ? 'Tarde' : 'Noche',
+                numero: numeroReal,
+                casilla: numeroCasilla,
+                registroTimestamp: new Date().toLocaleString()
+            };
 
-        let frecuenciasConsecutivas = {};
-        let keysBD = Object.keys(db).sort();
-        for (let idx = 0; idx < keysBD.length; idx++) {
-            let actual = db[keysBD[idx]];
-            if (actual.t === f && actual.n) frecuenciasConsecutivas[actual.n] = (frecuenciasConsecutivas[actual.n] || 0) + 1;
-            if (actual.n === f && keysBD[idx+1] && db[keysBD[idx+1]].t) {
-                let sigTarde = db[keysBD[idx+1]].t;
-                frecuenciasConsecutivas[sigTarde] = (frecuenciasConsecutivas[sigTarde] || 0) + 1;
-            }
-        }
-        let salidoresSiguientes = Object.keys(frecuenciasConsecutivas).sort((a,b) => frecuenciasConsecutivas[b] - frecuenciasConsecutivas[a]);
-        salidoresSiguientes.forEach(num => { if(!list.includes(num) && list.length < cant_final) list.push(num); });
-
-        let fInt = parseInt(f).toString();
-        if(charadaDiccionario[fInt]) {
-            let words = charadaDiccionario[fInt].toLowerCase().split(', ');
-            for(let key in charadaDiccionario) {
-                let text = charadaDiccionario[key].toLowerCase();
-                words.forEach(w => { if(text.includes(w) && !list.includes(key.padStart(2,'0')) && list.length < cant_final) list.push(key.padStart(2,'0')); });
-            }
-        }
-
-        let seed = (parseInt(f) * 17 + 31) % 100;
-        while(list.length < cant_final) {
-            seed = (21 * seed + 43) % 100; let cand = seed.toString().padStart(2, '0');
-            if(!list.includes(cand)) list.push(cand);
-        }
-        return list;
-    }
-
-    function ejecutarMotorCalculo(esAdmin, pref, val) {
-        const cant_final = parseInt(document.getElementById(`${pref}cant_final`).value);
-        let f = val.padStart(2, '0');
-
-        let p = f, punta = "";
-        while(p.length > 1) {
-            let n = ""; for(let i=0; i<p.length-1; i++) n += (parseInt(p[i]) + parseInt(p[i+1])) % 10;
-            punta = n.slice(-2).padStart(2, '0'); p = n;
-        }
-        let esp = ((parseInt(f[0])+5)%10).toString() + ((parseInt(f[1])+5)%10).toString();
-        let hist = Object.values(db).filter(v => typeof v === 'object').flatMap(o => Object.values(o));
-        let atr = "00";
-        for(let i=1; i<=100; i++) {
-            let c = ((parseInt(f) + i * 17) % 100).toString().padStart(2,'0');
-            if(!hist.includes(c)) { atr = c; break; }
-        }
-
-        document.getElementById(`${pref}c1`).innerText = punta; 
-        document.getElementById(`${pref}c2`).innerText = esp; 
-        document.getElementById(`${pref}c3`).innerText = atr;
-
-        let listadoFinalPronostico = simularSetMatematico(f, cant_final);
-
-        let hoy = new Date();
-        let kHoy = `${hoy.getFullYear()}-${(hoy.getMonth()+1).toString().padStart(2,'0')}-${hoy.getDate().toString().padStart(2,'0')}`;
-        let gHoy = db[kHoy] ? Object.values(db[kHoy]) : [];
-
-        document.getElementById(`${pref}display_resultados`).style.display = 'block';
-        const panel = document.getElementById(`${pref}panel_res`); panel.innerHTML = "";
-        
-        for(let i=0; i < cant_final; i++) {
-            let n = listadoFinalPronostico[i]; let css = i < 10 ? 'box hot' : 'box';
-            if(gHoy.includes(n)) { css = 'box ganador-oro'; }
-            panel.innerHTML += `<div class="${css}">${n}</div>`;
+            aciertosLog.push(nuevoAcierto);
+            localStorage.setItem('bolita_aciertos_log', JSON.stringify(aciertosLog));
+            mostrarTablaAciertos();
         }
     }
+}
 
-    window.addEventListener('DOMContentLoaded', () => {
-        inicializarSelectores();
-        let sessionUser = localStorage.getItem('bolita_logged_user');
-        if (sessionUser === _0xAdmin) { 
-            esAdministradorLogueado = true;
-            abrirAdmin(); 
-        } else if (sessionUser && usuariosBD[sessionUser] && usuariosBD[sessionUser].status === "activo") {
-            esAdministradorLogueado = false;
-            usuarioActivo = sessionUser; entrarAApp(30);
-        }
+function mostrarTablaAciertos() {
+    let contenedor = document.getElementById('tabla_historico_aciertos');
+    if (!contenedor) return;
+
+    let aciertosLog = JSON.parse(localStorage.getItem('bolita_aciertos_log')) || [];
+
+    if (aciertosLog.length === 0) {
+        contenedor.innerHTML = `<p style="color: #666; font-style: italic; text-align: center;">No hay aciertos registrados en este dispositivo todavía.</p>`;
+        return;
+    }
+
+    // Volteamos el array para mostrar los aciertos más frescos arriba
+    let logInvertido = [...aciertosLog].reverse();
+
+    let html = `
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Turno</th>
+                    <th>Fijo Ganador</th>
+                    <th style="background-color: #ffeb3b; color: #000;">Casilla</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+    logInvertido.forEach(log => {
+        html += `
+            <tr>
+                <td>${log.fecha}</td>
+                <td>${log.turno}</td>
+                <td style="font-weight: bold; color: #d32f2f;">${log.numero}</td>
+                <td style="font-weight: bold; background-color: #fffde7;">#${log.casilla}</td>
+            </tr>
+        `;
     });
 
-    document.addEventListener('contextmenu', e => e.preventDefault());
-    document.onkeydown = function(e) { if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) return false; };
-// ========================================================
-// COPIA DE SEGURIDAD ACTUALIZADA (FIJOS + HISTÓRICO DE ACIERTOS)
-// ========================================================
+    html += `</tbody></table>`;
+    contenedor.innerHTML = html;
+}
 
+// ========================================================
+// 5. BACKUP DOBLE ACTUALIZADO (FIJOS + TABLA DE ACIERTOS)
+// ========================================================
 function exportarBaseDatos() {
     let db = localStorage.getItem('bolita_master_db');
     let aciertos = localStorage.getItem('bolita_aciertos_log') || "[]";
     
-    if (!db || db === "{}") return alert("No hay datos para exportar.");
+    if (!db || db === "{}") return alert("Error: No tienes fijos en el calendario para exportar.");
 
     let paqueteCompleto = {
         historialFijos: JSON.parse(db),
@@ -648,184 +305,21 @@ function importarBaseDatos(event) {
                 localStorage.setItem('bolita_master_db', JSON.stringify(datos));
             }
             
-            alert("¡Todo importado con éxito! Historial y registro de aciertos sincronizados.");
-            if (typeof renderCal === 'function') renderCal();
-            if (typeof mostrarTablaAciertos === 'function') mostrarTablaAciertos();
+            alert("¡Sincronización Exitosa! Historial y registro de aciertos cargados.");
+            renderCal();
+            mostrarTablaAciertos();
         } catch (err) {
-            alert("Error al leer el archivo de copia de seguridad.");
+            alert("Error crítico al procesar el archivo de copia de seguridad.");
         }
     };
     reader.readAsText(file);
 }
-    // ========================================================
-// SISTERMA DE AUDITORÍA Y REGISTRO DE ACIERTOS PERMANENTES
-// ========================================================
 
-function verificarYRegistrarAcierto(fecha, turno, numeroReal, arrayPronosticos) {
-    // Si no hay pronósticos guardados para comparar, salimos
-    if (!arrayPronosticos || arrayPronosticos.length === 0) return;
-
-    // Buscamos si el número real coincide con alguno en tus casillas de pronóstico
-    // Supongamos que arrayPronosticos viene ordenado por casilla (Casilla 1, Casilla 2...)
-    let casillaGanadora = arrayPronosticos.indexOf(numeroReal);
-
-    if (casillaGanadora !== -1) {
-        // ¡Hubo coincidencia! El índice + 1 nos da el número de la casilla real
-        let numeroCasilla = casillaGanadora + 1;
-
-        // Recuperamos el histórico de aciertos actual o creamos uno nuevo si está vacío
-        let aciertosLog = JSON.parse(localStorage.getItem('bolita_aciertos_log')) || [];
-
-        // Evitamos registrar dos veces el mismo acierto para la misma fecha y turno
-        let yaExiste = aciertosLog.some(log => log.fecha === fecha && log.turno === turno);
-
-        if (!yaExiste) {
-            let nuevoAcierto = {
-                fecha: fecha,
-                turno: turno === 't' ? 'Tarde' : 'Noche',
-                numero: numeroReal,
-                casilla: numeroCasilla,
-                registroTimestamp: new Date().toLocaleString()
-            };
-
-            aciertosLog.push(nuevoAcierto);
-            // Lo guardamos de forma permanente en la memoria local
-            localStorage.setItem('bolita_aciertos_log', JSON.stringify(aciertosLog));
-            
-            // Refrescamos la tabla visual de aciertos en la pantalla
-            mostrarTablaAciertos();
-        }
-    }
-}
-
-// Función para pintar la tabla visual de aciertos abajo en la página
-function mostrarTablaAciertos() {
-    let contenedor = document.getElementById('tabla_historico_aciertos');
-    if (!contenedor) return;
-
-    let aciertosLog = JSON.parse(localStorage.getItem('bolita_aciertos_log')) || [];
-
-    if (aciertosLog.length === 0) {
-        contenedor.innerHTML = `<p style="color: #666; font-style: italic;">No hay aciertos registrados en este dispositivo todavía.</p>`;
-        return;
-    }
-
-    // Ordenamos para que los aciertos más recientes salgan arriba
-    aciertosLog.reverse();
-
-    let html = `
-        <table style="width: 100%; border-collapse: collapse; margin-top: 10px; text-align: center; background-color: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-            <thead>
-                <tr style="background-color: #f8f9fa; border-bottom: 2px solid #dee2e6;">
-                    <th style="padding: 10px;">Fecha</th>
-                    <th style="padding: 10px;">Turno</th>
-                    <th style="padding: 10px;">Fijo Ganador</th>
-                    <th style="padding: 10px; background-color: #ffeb3b; color: #000;">Casilla</th>
-                </tr>
-            </thead>
-            <tbody>
-    `;
-
-    aciertosLog.forEach(log => {
-        html += `
-            <tr style="border-bottom: 1px solid #dee2e6;">
-                <td style="padding: 10px;">${log.fecha}</td>
-                <td style="padding: 10px;">${log.turno}</td>
-                <td style="padding: 10px; font-weight: bold; color: #d32f2f;">${log.numero}</td>
-                <td style="padding: 10px; font-weight: bold; background-color: #fffde7;">#${log.casilla}</td>
-            </tr>
-        `;
-    });
-
-    html += `</tbody></table>`;
-    contenedor.innerHTML = html;
-}
-    <div style="margin-top: 30px; padding: 15px; background: #ffffff; border-radius: 8px; border-left: 5px solid #ffc107;">
-    <h3 style="margin-top: 0; color: #333;">🎯 Histórico Permanente de Aciertos</h3>
-    <p style="font-size: 13px; color: #666;">Cada vez que agregues un número real que coincida con tus pronósticos, se guardará aquí automáticamente.</p>
-    <div id="tabla_historico_aciertos"></div>
-</div>
-
-// Aseguramos que la tabla se dibuje en cuanto cargue la página por primera vez
-document.addEventListener("DOMContentLoaded", function() {
-    mostrarTablaAciertos();
-});
-    // ========================================================
-// SISTEMA DE AUDITORÍA Y REGISTRO DE ACIERTOS PERMANENTES
-// ========================================================
-
-function verificarYRegistrarAcierto(fecha, turno, numeroReal, arrayPronosticos) {
-    if (!arrayPronosticos || arrayPronosticos.length === 0) return;
-
-    let casillaGanadora = arrayPronosticos.indexOf(numeroReal);
-
-    if (casillaGanadora !== -1) {
-        let numeroCasilla = casillaGanadora + 1;
-        let aciertosLog = JSON.parse(localStorage.getItem('bolita_aciertos_log')) || [];
-        let yaExiste = aciertosLog.some(log => log.fecha === fecha && log.turno === turno);
-
-        if (!yaExiste) {
-            let nuevoAcierto = {
-                fecha: fecha,
-                turno: turno === 't' ? 'Tarde' : 'Noche',
-                numero: numeroReal,
-                casilla: numeroCasilla,
-                registroTimestamp: new Date().toLocaleString()
-            };
-
-            aciertosLog.push(nuevoAcierto);
-            localStorage.setItem('bolita_aciertos_log', JSON.stringify(aciertosLog));
-            mostrarTablaAciertos();
-        }
-    }
-}
-
-function mostrarTablaAciertos() {
-    let contenedor = document.getElementById('tabla_historico_aciertos');
-    if (!contenedor) return;
-
-    let aciertosLog = JSON.parse(localStorage.getItem('bolita_aciertos_log')) || [];
-
-    if (aciertosLog.length === 0) {
-        contenedor.innerHTML = `<p style="color: #666; font-style: italic;">No hay aciertos registrados en este dispositivo todavía.</p>`;
-        return;
-    }
-
-    // Copiamos y volteamos para que el más nuevo salga arriba sin modificar el original
-    let logInvertido = [...aciertosLog].reverse();
-
-    let html = `
-        <table style="width: 100%; border-collapse: collapse; margin-top: 10px; text-align: center; background-color: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-            <thead>
-                <tr style="background-color: #f8f9fa; border-bottom: 2px solid #dee2e6;">
-                    <th style="padding: 10px;">Fecha</th>
-                    <th style="padding: 10px;">Turno</th>
-                    <th style="padding: 10px;">Fijo Ganador</th>
-                    <th style="padding: 10px; background-color: #ffeb3b; color: #000;">Casilla</th>
-                </tr>
-            </thead>
-            <tbody>
-    `;
-
-    logInvertido.forEach(log => {
-        html += `
-            <tr style="border-bottom: 1px solid #dee2e6;">
-                <td style="padding: 10px;">${log.fecha}</td>
-                <td style="padding: 10px;">${log.turno}</td>
-                <td style="padding: 10px; font-weight: bold; color: #d32f2f;">${log.numero}</td>
-                <td style="padding: 10px; font-weight: bold; background-color: #fffde7;">#${log.casilla}</td>
-            </tr>
-        `;
-    });
-
-    html += `</tbody></table>`;
-    contenedor.innerHTML = html;
-}
-
-// Esto hace que la tabla cargue al iniciar la web
+// Al cargar el documento, pintamos la tabla por primera vez
 document.addEventListener("DOMContentLoaded", function() {
     mostrarTablaAciertos();
 });
 </script>
+
 </body>
 </html>

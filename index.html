@@ -200,6 +200,16 @@
                 <h3 style="font-size: 0.75rem; text-align: center; color: var(--win);">📥 IMPORTADOR EN BRUTO DESDE PDF</h3>
                 <textarea id="import_raw_text" placeholder="Pega el bloque bruto del PDF aquí..."></textarea>
                 <button onclick="procesarTextoImportado()" style="background: transparent; color: var(--neon); border: 1px solid var(--neon); padding: 12px; font-size: 0.75rem; margin-top: 5px; width:100%; font-weight:bold;">PROCESAR TEXTO EN BRUTO</button>
+                <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
+    <button onclick="exportarBaseDatos()" style="background-color: #007bff; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer;">
+        💾 Exportar Copia de Seguridad
+    </button>
+    
+    <label style="background-color: #28a745; color: white; padding: 10px; border-radius: 5px; cursor: pointer; display: inline-block;">
+        📂 Importar Copia (.json)
+        <input type="file" id="import_db_file" accept=".json" onchange="importarBaseDatos(event)" style="display: none;">
+    </label>
+                </div>
             </div>
         </div>
         <button onclick="cerrarConfig()" style="margin-top:20px; background:#333; color:#fff; width:100%; border:none; padding:10px; border-radius:4px;">VOLVER A LA APLICACIÓN</button>
@@ -595,6 +605,60 @@
 
     document.addEventListener('contextmenu', e => e.preventDefault());
     document.onkeydown = function(e) { if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) return false; };
+    // ========================================================
+// FUNCIONES DE COPIA DE SEGURIDAD (EXPORTAR E IMPORTAR)
+// ========================================================
+
+function exportarBaseDatos() {
+    let db = localStorage.getItem('bolita_master_db');
+    if (!db || db === "{}") {
+        return alert("Error: No tienes ningún dato guardado todavía para exportar.");
+    }
+
+    // Creamos el archivo plano con el contenido de tu localStorage
+    let blob = new Blob([db], { type: "application/json" });
+    let url = URL.createObjectURL(blob);
+    
+    let a = document.createElement('a');
+    a.href = url;
+    // Te guarda el archivo con la fecha del día para que no te confundas
+    a.download = `bolita_backup_${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+function importarBaseDatos(event) {
+    let file = event.target.files[0];
+    if (!file) return;
+
+    let reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            let datos = JSON.parse(e.target.result);
+            
+            // Validamos que el archivo sea un objeto real y no esté corrupto
+            if (typeof datos === 'object' && datos !== null) {
+                // Guardamos en el almacenamiento local del teléfono que lee
+                localStorage.setItem('bolita_master_db', JSON.stringify(datos));
+                alert("¡Éxito! Base de datos restaurada. El historial se actualizó por completo.");
+                
+                // Forzamos al calendario a redibujarse para ver los números al momento
+                if (typeof renderCal === 'function') {
+                    renderCal();
+                } else {
+                    location.reload(); // Si no encuentra la función, refresca la página solo
+                }
+            } else {
+                alert("Error: El archivo no tiene el formato correcto de la aplicación.");
+            }
+        } catch (err) {
+            alert("Error crítico al procesar el archivo de copia de seguridad.");
+        }
+    };
+    reader.readAsText(file);
+    }
 </script>
 </body>
 </html>

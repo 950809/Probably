@@ -659,6 +659,94 @@ function importarBaseDatos(event) {
     };
     reader.readAsText(file);
     }
+    // ========================================================
+// SISTERMA DE AUDITORÍA Y REGISTRO DE ACIERTOS PERMANENTES
+// ========================================================
+
+function verificarYRegistrarAcierto(fecha, turno, numeroReal, arrayPronosticos) {
+    // Si no hay pronósticos guardados para comparar, salimos
+    if (!arrayPronosticos || arrayPronosticos.length === 0) return;
+
+    // Buscamos si el número real coincide con alguno en tus casillas de pronóstico
+    // Supongamos que arrayPronosticos viene ordenado por casilla (Casilla 1, Casilla 2...)
+    let casillaGanadora = arrayPronosticos.indexOf(numeroReal);
+
+    if (casillaGanadora !== -1) {
+        // ¡Hubo coincidencia! El índice + 1 nos da el número de la casilla real
+        let numeroCasilla = casillaGanadora + 1;
+
+        // Recuperamos el histórico de aciertos actual o creamos uno nuevo si está vacío
+        let aciertosLog = JSON.parse(localStorage.getItem('bolita_aciertos_log')) || [];
+
+        // Evitamos registrar dos veces el mismo acierto para la misma fecha y turno
+        let yaExiste = aciertosLog.some(log => log.fecha === fecha && log.turno === turno);
+
+        if (!yaExiste) {
+            let nuevoAcierto = {
+                fecha: fecha,
+                turno: turno === 't' ? 'Tarde' : 'Noche',
+                numero: numeroReal,
+                casilla: numeroCasilla,
+                registroTimestamp: new Date().toLocaleString()
+            };
+
+            aciertosLog.push(nuevoAcierto);
+            // Lo guardamos de forma permanente en la memoria local
+            localStorage.setItem('bolita_aciertos_log', JSON.stringify(aciertosLog));
+            
+            // Refrescamos la tabla visual de aciertos en la pantalla
+            mostrarTablaAciertos();
+        }
+    }
+}
+
+// Función para pintar la tabla visual de aciertos abajo en la página
+function mostrarTablaAciertos() {
+    let contenedor = document.getElementById('tabla_historico_aciertos');
+    if (!contenedor) return;
+
+    let aciertosLog = JSON.parse(localStorage.getItem('bolita_aciertos_log')) || [];
+
+    if (aciertosLog.length === 0) {
+        contenedor.innerHTML = `<p style="color: #666; font-style: italic;">No hay aciertos registrados en este dispositivo todavía.</p>`;
+        return;
+    }
+
+    // Ordenamos para que los aciertos más recientes salgan arriba
+    aciertosLog.reverse();
+
+    let html = `
+        <table style="width: 100%; border-collapse: collapse; margin-top: 10px; text-align: center; background-color: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+            <thead>
+                <tr style="background-color: #f8f9fa; border-bottom: 2px solid #dee2e6;">
+                    <th style="padding: 10px;">Fecha</th>
+                    <th style="padding: 10px;">Turno</th>
+                    <th style="padding: 10px;">Fijo Ganador</th>
+                    <th style="padding: 10px; background-color: #ffeb3b; color: #000;">Casilla</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+    aciertosLog.forEach(log => {
+        html += `
+            <tr style="border-bottom: 1px solid #dee2e6;">
+                <td style="padding: 10px;">${log.fecha}</td>
+                <td style="padding: 10px;">${log.turno}</td>
+                <td style="padding: 10px; font-weight: bold; color: #d32f2f;">${log.numero}</td>
+                <td style="padding: 10px; font-weight: bold; background-color: #fffde7;">#${log.casilla}</td>
+            </tr>
+        `;
+    });
+
+    html += `</tbody></table>`;
+    contenedor.innerHTML = html;
+}
+
+// Aseguramos que la tabla se dibuje en cuanto cargue la página por primera vez
+document.addEventListener("DOMContentLoaded", function() {
+    mostrarTablaAciertos();
+});
 </script>
 </body>
 </html>

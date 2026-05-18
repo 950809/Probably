@@ -3,323 +3,216 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bolita Master Pro</title>
+    <title>Bolita Pro Master - Consola Global Elite v7.4</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f6f9; margin: 0; padding: 20px; color: #333; }
-        .container { max-width: 600px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        h1, h2, h3 { text-align: center; color: #222; }
-        textarea { width: 100%; height: 120px; border: 1px solid #ccc; border-radius: 5px; padding: 10px; box-sizing: border-box; resize: vertical; font-family: monospace; }
-        button { width: 100%; padding: 12px; background-color: #28a745; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; font-weight: bold; margin-top: 10px; }
-        button:hover { background-color: #218838; }
-        .btn-blue { background-color: #007bff; }
-        .btn-blue:hover { background-color: #0069d9; }
-        .flex-container { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px; }
-        .flex-container button, .flex-container label { flex: 1; min-width: 140px; text-align: center; }
-        .file-label { background-color: #17a2b8; color: white; padding: 12px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 14px; box-sizing: border-box; }
-        .file-label:hover { background-color: #138496; }
-        .extractor-box { background-color: #fffde7; border: 2px solid #ffd54f; padding: 15px; border-radius: 8px; margin-top: 20px; text-align: center; }
-        .acierto-box { margin-top: 30px; padding: 15px; background: #ffffff; border-radius: 8px; border-left: 5px solid #ffc107; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; text-align: center; background-color: #fff; }
-        th, td { padding: 10px; border-bottom: 1px solid #dee2e6; }
-        th { background-color: #f8f9fa; font-weight: bold; }
+        :root { --neon: #00ff41; --dark: #050505; --panel: #0d1117; --win: #ffeb3b; --error: #ff3333; }
+        body { font-family: 'Segoe UI', monospace; background: var(--dark); color: var(--neon); margin: 0; padding: 10px; -webkit-user-select: none; user-select: none; }
+        .container { max-width: 480px; margin: auto; border: 1px solid var(--neon); padding: 15px; border-radius: 8px; box-sizing: border-box; }
+        h2 { font-size: 0.8rem; text-align: center; border-bottom: 1px solid var(--neon); padding-bottom: 8px; text-transform: uppercase; margin-bottom: 15px; }
+        
+        .main-form, .login-form { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 15px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        input, select, textarea { background: #000; border: 1px solid var(--neon); color: var(--neon); padding: 12px; text-align: center; border-radius: 4px; font-size: 1.1rem; outline: none; width: 100%; box-sizing: border-box; }
+        textarea { height: 130px; font-size: 0.85rem; text-align: left; resize: none; font-family: monospace; }
+        
+        button { background: var(--neon); color: var(--dark); border: none; width: 100%; padding: 16px; font-weight: bold; cursor: pointer; border-radius: 4px; font-size: 1rem; text-transform: uppercase; }
+        button:disabled { background: #222 !important; color: #555 !important; cursor: not-allowed; }
+        button.secondary { background: transparent; color: var(--neon); border: 1px solid var(--neon); margin-top: 10px; }
+        
+        .top-section { margin: 15px 0; border: 1px solid var(--win); padding: 10px; border-radius: 4px; background: rgba(255, 235, 59, 0.05); }
+        .top-grid { display: flex; justify-content: space-around; text-align: center; }
+        .top-box span { display: block; font-size: 1.6rem; font-weight: bold; color: var(--win); text-shadow: 0 0 8px var(--win); }
+
+        .grid-res { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 15px; border-top: 1px solid #222; padding-top: 10px; }
+        .box { border: 1px solid var(--neon); padding: 10px; text-align: center; font-weight: bold; font-size: 1rem; height: 45px; display: flex; align-items: center; justify-content: center; }
+        .hot { background: #004411; color: var(--neon); border-color: var(--neon); }
+        .ganador-oro { background: var(--win) !important; color: #000 !important; border: 2px solid #fff !important; font-weight: bold !important; box-shadow: 0 0 15px var(--win) !important; }
+
+        #modal-db, #panel-admin, #modal-auditoria { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 1000; padding: 15px; box-sizing: border-box; overflow-y: auto; }
+        .modal-body { max-width: 600px; margin: auto; border: 1px solid var(--neon); padding: 15px; background: var(--dark); }
+        .grid-cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; font-size: 0.75rem; text-align: center; margin-top: 15px; }
+        .day { border: 1px solid #333; padding: 6px; background: #000; min-height: 55px; }
+        .day input { font-size: 0.8rem; padding: 2px; border:none; border-bottom: 1px solid #333; background:transparent; color:var(--win); width:90%; text-align:center;}
+        .day input:disabled { color: #888 !important; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.75rem; }
+        th, td { border: 1px solid var(--neon); padding: 6px; text-align: center; }
+        .status-active { color: var(--neon); }
+        .status-pending { color: var(--win); }
+
+        .admin-section-box { border: 1px dashed var(--neon); padding: 12px; margin-top: 15px; border-radius: 4px; }
+        .btn-table { padding: 4px 8px; font-size: 0.65rem; border: none; font-weight: bold; cursor: pointer; border-radius: 3px; display: block; width: 100%; margin: 2px 0; text-transform: uppercase; }
+        .charada-box { background: #000; border: 1px solid var(--neon); padding: 10px; margin-top: 5px; font-size: 0.85rem; color: #fff; max-height: 120px; overflow-y: auto; text-align: left; border-radius: 4px; display: block; width: 100%; box-sizing: border-box;}
+        .contact-footer { margin-top: 15px; text-align: center; font-size: 0.75rem; color: #aaa; border-top: 1px dashed #333; padding-top: 10px; }
+        .contact-footer a { color: var(--win); text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>🔮 Bolita Master Pro</h1>
-    
-    <div class="extractor-box">
-        <h3>⚡ Extractor Diario y Pronósticos</h3>
-        <p>Introduce los fijos para calcular tendencias o verificar aciertos.</p>
-        <div style="margin-bottom: 10px;">
-            <label>Fecha: <input type="date" id="ext_fecha"></label>
-            <label>Turno: 
-                <select id="ext_turno">
-                    <option value="t">Tarde</option>
-                    <option value="n">Noche</option>
-                </select>
-            </label>
-        </div>
-        <div>
-            <label>Fijo Real Salidor: <input type="number" id="ext_fijo_real" min="0" max="99" placeholder="00" style="padding: 5px; width: 60px; text-align: center;"></label>
-            <button onclick="ejecutarGuardadoYAuditoria()">Guardar Fijo Real</button>
-        </div>
-        <div id="pronosticos_pantalla_debug" style="margin-top: 10px; font-weight: bold; color: #555;">
+<div id="view-login" class="container">
+    <h2>Control de Acceso de Usuarios</h2>
+    <div class="login-form">
+        <input type="text" id="login-user" placeholder="USUARIO (Nombre_Apellido)">
+        <input type="password" id="login-pass" placeholder="CONTRASEÑA">
+        <button onclick="intentarLogin()">ENTRAR AL SISTEMA</button>
+        <button class="secondary" onclick="mostrarRegistroForm(true)">SOLICITAR NUEVO REGISTRO</button>
+    </div>
+    <p id="login-error" style="color:var(--error); text-align:center; font-size:0.8rem; display:none;"></p>
+    <div class="contact-footer">
+        Soporte e Inscripciones:<br>
+        <b>Telegram / WhatsApp:</b> <a href="https://wa.me/5355678143" target="_blank">+53 55678143</a>
+    </div>
+</div>
+
+<div id="view-register" class="container" style="display:none;">
+    <h2>Solicitud de Inscripción (Cupos)</h2>
+    <div class="login-form">
+        <input type="text" id="reg-nombre" placeholder="NOMBRE">
+        <input type="text" id="reg-apellido" placeholder="APELLIDO">
+        <input type="password" id="reg-pass" placeholder="CREA TU CONTRASEÑA">
+        <button onclick="enviarSolicitud()">ENVIAR SOLICITUD A REVISIÓN</button>
+        <button class="secondary" onclick="mostrarRegistroForm(false)">VOLVER AL INICIO</button>
+    </div>
+</div>
+
+<div id="view-app" class="container" style="display:none;">
+    <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--win); margin-bottom: 5px;">
+        <span id="user-display">Usuario: --</span>
+        <span id="expire-display">Expira en: -- días</span>
+    </div>
+    <h2>Probabilidades e Inteligencia</h2>
+    <div class="grid-2">
+        <input type="number" id="fijo_base" placeholder="FIJO" maxlength="2">
+        <select id="cant_final" class="cant_select"></select>
+    </div>
+    <button style="margin-top:10px;" id="btn_generar_user" onclick="generarTodo(false)">Analizar y Generar Jugada</button>
+
+    <div id="display_resultados" style="display:none;">
+        <div class="top-section">
+            <div style="font-size:0.7rem; color:var(--win); text-align:center; margin-bottom:8px;">★ PREVISIÓN DE ALTA CERTEZA APK ★</div>
+            <div class="top-grid">
+                <div class="top-box"><small>Punta</small><span id="c1">--</span></div>
+                <div class="top-box"><small>Terminal</small><span id="c2">--</span></div>
+                <div class="top-box"><small>Arrastre</small><span id="c3">--</span></div>
             </div>
+        </div>
+        <div id="panel_res" class="grid-res"></div>
     </div>
 
-    <div style="margin-top: 25px; border-top: 1px solid #eee; padding-top: 20px;">
-        <h3>📂 Importador en Bruto desde Notas / PDF</h3>
-        <p style="font-size: 13px; color: #666;">Pega el bloque de texto directo de tus notas (Formato: 12/14/20 M0-2-4).</p>
-        <textarea id="import_raw_text" placeholder="Ejemplo:&#10;12/14/20 M0-2-4&#10;12/13/20 E4-4-7"></textarea>
-        <button onclick="procesarTextoImportado()">🚀 PROCESAR TEXTO EN BRUTO</button>
-    </div>
-
-    <div class="flex-container">
-        <button onclick="exportarBaseDatos()" class="btn-blue">💾 Exportar Copia (.json)</button>
+    <div class="admin-section-box" style="border-color: var(--win); margin-top:20px;">
+        <h3 style="font-size:0.75rem; text-align:center; color:var(--win); margin:0 0 10px 0;">📂 PANEL DE CONSULTAS COMPLEMENTARIAS</h3>
+        <button style="padding:10px; font-size:0.75rem; margin-bottom:5px; background:#111; color:var(--neon); border:1px solid var(--neon);" onclick="abrirConfig()">📂 VER HISTÓRICOS Y CALENDARIO</button>
+        <button style="padding:10px; font-size:0.75rem; margin-bottom:10px; background:#111; color:var(--win); border:1px solid var(--win);" onclick="abrirAuditoria()">📊 VER INFORME DE ACIERTOS APK</button>
         
-        <label class="file-label">
-            📂 Importar Copia (.json)
-            <input type="file" id="import_db_file" accept=".json" onchange="importarBaseDatos(event)" style="display: none;">
-        </label>
+        <input type="text" id="search_charada_user" placeholder="Busca en la Charada (ej: Escoba, 46)..." oninput="buscarEnCharada(false)">
+        <div id="charada_result_user" class="charada-box">Escribe arriba para buscar significados...</div>
     </div>
 
-    <div class="acierto-box">
-        <h3 style="margin-top: 0; text-align: left; color: #222;">🎯 Histórico Permanente de Aciertos</h3>
-        <p style="font-size: 13px; color: #666; margin-bottom: 15px;">Registro de fijos reales que cayeron dentro de las casillas de pronósticos.</p>
-        <div id="tabla_historico_aciertos"></div>
+    <button class="secondary" style="padding:8px; font-size:0.7rem; margin-top:20px; width:100%;" onclick="cerrarSesionEfectiva()">CERRAR SESIÓN</button>
+</div>
+
+<div id="panel-admin">
+    <div class="modal-body">
+        <h2>Panel Maestro del Administrador</h2>
+        <div id="admin-stats" style="font-size:0.8rem; text-align:center; margin-bottom:10px;"></div>
+        
+        <table style="max-height: 120px; overflow-y: auto; display: block; border: 1px solid #333;">
+            <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Estado</th>
+                    <th>Días</th>
+                    <th>Acciones Administrativas</th>
+                </tr>
+            </thead>
+            <tbody id="tabla-usuarios"></tbody>
+        </table>
+
+        <div class="admin-section-box" style="background: rgba(255, 235, 59, 0.02); border-color: var(--win);">
+            <h3 style="font-size:0.75rem; text-align:center; color:var(--win); margin: 0 0 5px 0;">⚡ EXTRACTOR DIARIO (LA BOLITA CUBANA.COM)</h3>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
+                <input type="text" id="fijo_hoy_tarde" placeholder="FIJO MEDIODÍA (T)">
+                <input type="text" id="fijo_hoy_noche" placeholder="FIJO NOCHE (N)">
+            </div>
+            <button style="margin-top:5px; padding:10px; font-size:0.8rem; background: var(--win); color: #000;" onclick="guardarFijosDeHoy()">INYECTAR TIROS Y VERIFICAR ACIERTOS</button>
+        </div>
+
+        <button style="margin-top:15px; background:var(--neon); color:#000; width:100%; padding:14px; font-size:0.85rem; font-weight:bold; border-radius:4px;" onclick="abrirConfig()">📂 ABRIR CALENDARIO E IMPORTAR DE PDF</button>
+
+        <div class="admin-section-box" style="border-color: var(--neon);">
+            <h3 style="font-size:0.75rem; color:var(--win); margin:0 0 5px 0; text-align:center;">📘 DICCIONARIO DE LA CHARADA CUBANA</h3>
+            <input type="text" id="search_charada_admin" placeholder="Busca por número o palabra (ej: Escoba, 46)..." oninput="buscarEnCharada(true)">
+            <div id="charada_result_admin" class="charada-box">Escribe arriba para buscar jales...</div>
+        </div>
+
+        <div class="admin-section-box">
+            <h3 style="font-size:0.75rem; text-align:center; color:var(--neon); margin: 0 0 10px 0;">🔮 CONSOLA DE CONSULTA MAESTRA</h3>
+            <div class="grid-2">
+                <input type="number" id="admin_fijo_base" placeholder="ÚLTIMO FIJO" maxlength="2">
+                <select id="admin_cant_final" class="cant_select"></select>
+            </div>
+            <button style="margin-top:10px; padding:12px; font-size:0.9rem;" id="btn_generar_admin" onclick="generarTodo(true)">PROCESAR JUGADA ADMIN</button>
+
+            <div id="admin_display_resultados" style="display:none;">
+                <div class="top-section">
+                    <div style="font-size:0.7rem; color:var(--win); text-align:center; margin-bottom:8px;">★ PREVISIÓN MAESTRA (MODO ADMIN) ★</div>
+                    <div class="top-grid">
+                        <div class="top-box"><small>Punta</small><span id="admin_c1">--</span></div>
+                        <div class="top-box"><small>Terminal</small><span id="admin_c2">--</span></div>
+                        <div class="top-box"><small>Arrastre</small><span id="admin_c3">--</span></div>
+                    </div>
+                </div>
+                <div id="admin_panel_res" class="grid-res"></div>
+            </div>
+        </div>
+
+        <button style="margin-top:15px; background:var(--win); color:#000; width:100%; padding:12px; font-size:0.8rem; font-weight:bold;" onclick="abrirAuditoria()">📊 VER INFORME DE ACIERTOS Y RENDIMIENTO</button>
+        <button class="secondary" style="margin-top:15px; width:100%;" onclick="cerrarAdmin()">SALIR DEL PANEL MASTER</button>
+    </div>
+</div>
+
+<div id="modal-auditoria">
+    <div class="modal-body">
+        <h2>Historial de Efectividad de la Página</h2>
+        <div style="text-align:center; margin-bottom:15px; font-size:0.9rem;">
+            Efectividad General: <span id="aud_pct_modal" style="color:var(--win); font-weight:bold;">0%</span>
+            (<span id="aud_num_modal">0/0</span> sorteos)
+        </div>
+        <div style="max-height: 250px; overflow-y: auto; background:#000; padding:10px; border:1px solid var(--neon); font-size:0.8rem;" id="lista_auditoria_logs">
+            No hay registros de auditoría guardados aún.
+        </div>
+        <button class="secondary" style="margin-top:20px; width:100%;" onclick="cerrarAuditoria()">VOLVER AL PANEL MASTER</button>
+    </div>
+</div>
+
+<div id="modal-db">
+    <div class="modal-body">
+        <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+            <button onclick="moverMes(-1)" style="background:var(--neon); border:none; padding:8px; color:#000; font-weight:bold; border-radius:4px;">◀ MES</button>
+            <span id="mes_label" style="color:var(--win); font-weight:bold; font-size:1.1rem; padding-top:4px;"></span>
+            <button onclick="moverMes(1)" style="background:var(--neon); border:none; padding:8px; color:#000; font-weight:bold; border-radius:4px;">MES ▶</button>
+        </div>
+        <div class="grid-cal" id="cuerpo_cal"></div>
+        
+        <div id="admin_actions_cal">
+            <button onclick="guardarDB()" style="margin-top:20px; background:var(--win); color:#000; width:100%; padding:14px; border:none; font-weight:bold; font-size:1rem; border-radius:4px;">GUARDAR CAMBIOS DEL CALENDARIO</button>
+            <div style="margin-top: 20px; border-top: 1px dashed var(--neon); padding-top: 15px;">
+                <h3 style="font-size: 0.75rem; text-align: center; color: var(--win);">📥 IMPORTADOR EN BRUTO DESDE PDF</h3>
+                <textarea id="import_raw_text" placeholder="Pega el bloque bruto del PDF aquí..."></textarea>
+                <button onclick="procesarTextoImportado()" style="background: transparent; color: var(--neon); border: 1px solid var(--neon); padding: 12px; font-size: 0.75rem; margin-top: 5px; width:100%; font-weight:bold;">PROCESAR TEXTO EN BRUTO</button>
+            </div>
+        </div>
+        <button onclick="cerrarConfig()" style="margin-top:20px; background:#333; color:#fff; width:100%; border:none; padding:10px; border-radius:4px;">VOLVER A LA APLICACIÓN</button>
     </div>
 </div>
 
 <script>
-// ========================================================
-// 1. MOTOR CORE: SIMULACIÓN DE RENDER Y LOGS
-// ========================================================
-
-function renderCal() {
-    console.log("Calendario redibujado con los últimos fijos.");
-    // Aquí se ejecuta tu función original que pinta los números en las celdas de los meses
-}
-
-// Función auxiliar indispensable para capturar qué pronósticos tienes generados en pantalla
-function obtenerPronosticosDeLaPantalla() {
-    // IMPORTANTE: Modifica este array con la lógica real que genera tus casillas (ej. tus 21 o 30 números sugeridos)
-    // Por ahora te dejo un ejemplo para que el sistema sepa qué auditar
-    return ["24", "06", "70", "62", "15"]; 
-}
-
-// ========================================================
-// 2. FUNCIÓN DE IMPORTACIÓN MASIVA REPARADA (INMUNE A CACHÉ)
-// ========================================================
-function procesarTextoImportado() {
-    const rawInput = document.getElementById('import_raw_text').value;
-    if (!rawInput || !rawInput.trim()) {
-        return alert("Error: El cuadro de texto está completamente vacío. Pega las notas primero.");
-    }
-
-    let db = {};
-    try {
-        db = JSON.parse(localStorage.getItem('bolita_master_db')) || {};
-    } catch(e) {
-        db = {};
-    }
-    
-    let c = 0;
-
-    // Normalización agresiva de caracteres y espacios ocultos de las notas
-    let textoLimpio = rawInput
-        .replace(/[\u2014\u2013]/g, '-') 
-        .replace(/\s+/g, ' ')           
-        .trim();
-
-    // Expresión regular ultra flexible
-    const regex = /(\d{1,2})\/(\d{1,2})\/(\d{2,4})\s+([MEme])([0-9\-]+)/g;
-    let m;
-
-    while ((m = regex.exec(textoLimpio)) !== null) {
-        let mes = m[1].padStart(2, '0');
-        let d   = m[2].padStart(2, '0');
-        let a   = m[3];
-        let letraTurno = m[4].toLowerCase();
-        let bloqueNumeros = m[5]; 
-
-        let tu = (letraTurno === 'm') ? 't' : 'n';
-        let aFull = a.length === 2 ? (parseInt(a) < 80 ? "20" + a : "19" + a) : a;
-        
-        if (parseInt(aFull) <= 2009) { tu = 't'; }
-
-        let limpioBloque = bloqueNumeros.replace(/[^0-9\-]/g, '');
-        let partes = limpioBloque.split('-');
-        
-        let num = '';
-        
-        // Extrae decena y unidad ignorando la centena (ej: 0-2-4 -> "2" + "4" = "24")
-        if (partes.length >= 3 && partes[1] !== '' && partes[2] !== '') {
-            num = partes[1].trim() + partes[2].trim();
-        } 
-        else {
-            let digitos = limpioBloque.replace(/-/g, '');
-            if (digitos.length >= 2) {
-                num = digitos.slice(-2);
-            }
-        }
-
-        if (num && num.length === 2) {
-            let k = `${aFull}-${mes}-${d}`;
-            if (!db[k]) { db[k] = {}; }
-            db[k][tu] = num;
-            c++;
-        }
-    }
-
-    if (c === 0) {
-        return alert("Error de Lectura: El sistema no pudo extraer fijos. Asegúrate de usar la estructura: 12/14/20 M0-2-4");
-    }
-
-    localStorage.setItem('bolita_master_db', JSON.stringify(db));
-    
-    alert(`¡Procesado con Éxito! Se inyectaron ${c} fijos reales en el calendario.`);
-    document.getElementById('import_raw_text').value = "";
-    renderCal();
-}
-
-// ========================================================
-// 3. CONTROLADOR DEL EXTRACTOR MANUAL CON AUDITORÍA PERMANENTE
-// ========================================================
-function ejecutarGuardadoYAuditoria() {
-    let fecha = document.getElementById('ext_fecha').value;
-    let turno = document.getElementById('ext_turno').value;
-    let fijo = document.getElementById('ext_fijo_real').value.trim();
-
-    if (!fecha || !fijo) return alert("Por favor selecciona una fecha y digita el fijo real.");
-    
-    let fijoFormateado = fijo.padStart(2, '0');
-
-    // 1. Guardado tradicional en el histórico general
+    const _0xAdmin = "yohnny95", _0xPass = "Elmatatan95*";
     let db = JSON.parse(localStorage.getItem('bolita_master_db')) || {};
-    if (!db[fecha]) db[fecha] = {};
-    db[fecha][turno] = fijoFormateado;
-    localStorage.setItem('bolita_master_db', JSON.stringify(db));
+    let usuariosBD = JSON.parse(localStorage.getItem('bolita_users_db')) || {};
+    let auditoriaBD = JSON.parse(localStorage.getItem('bolita_aud_logs_db')) || [];
+    let usuarioActivo = "";
+    let fechaActualCal = new Date();
+    let esAdministradorLogueado = false;
 
-    // 2. Ejecución automática de la Auditoría permanente
-    let misPronosticos = obtenerPronosticosDeLaPantalla();
-    verificarYRegistrarAcierto(fecha, turno, fijoFormateado, misPronosticos);
-
-    alert(`Fijo ${fijoFormateado} guardado en el calendario.`);
-    renderCal();
-}
-
-// ========================================================
-// 4. SISTEMA DE REGISTRO E INYECCIÓN DE MEDALLAS DE ACIERTOS
-// ========================================================
-function verificarYRegistrarAcierto(fecha, turno, numeroReal, arrayPronosticos) {
-    if (!arrayPronosticos || arrayPronosticos.length === 0) return;
-
-    let casillaGanadora = arrayPronosticos.indexOf(numeroReal);
-
-    if (casillaGanadora !== -1) {
-        let numeroCasilla = casillaGanadora + 1; // Las casillas cuentan desde 1
-        let aciertosLog = JSON.parse(localStorage.getItem('bolita_aciertos_log')) || [];
-        
-        // Evitamos duplicar registros para el mismo tiro
-        let yaExiste = aciertosLog.some(log => log.fecha === fecha && log.turno === (turno === 't' ? 'Tarde' : 'Noche'));
-
-        if (!yaExiste) {
-            let nuevoAcierto = {
-                fecha: fecha,
-                turno: turno === 't' ? 'Tarde' : 'Noche',
-                numero: numeroReal,
-                casilla: numeroCasilla,
-                registroTimestamp: new Date().toLocaleString()
-            };
-
-            aciertosLog.push(nuevoAcierto);
-            localStorage.setItem('bolita_aciertos_log', JSON.stringify(aciertosLog));
-            mostrarTablaAciertos();
-        }
-    }
-}
-
-function mostrarTablaAciertos() {
-    let contenedor = document.getElementById('tabla_historico_aciertos');
-    if (!contenedor) return;
-
-    let aciertosLog = JSON.parse(localStorage.getItem('bolita_aciertos_log')) || [];
-
-    if (aciertosLog.length === 0) {
-        contenedor.innerHTML = `<p style="color: #666; font-style: italic; text-align: center;">No hay aciertos registrados en este dispositivo todavía.</p>`;
-        return;
-    }
-
-    // Volteamos el array para mostrar los aciertos más frescos arriba
-    let logInvertido = [...aciertosLog].reverse();
-
-    let html = `
-        <table>
-            <thead>
-                <tr>
-                    <th>Fecha</th>
-                    <th>Turno</th>
-                    <th>Fijo Ganador</th>
-                    <th style="background-color: #ffeb3b; color: #000;">Casilla</th>
-                </tr>
-            </thead>
-            <tbody>
-    `;
-
-    logInvertido.forEach(log => {
-        html += `
-            <tr>
-                <td>${log.fecha}</td>
-                <td>${log.turno}</td>
-                <td style="font-weight: bold; color: #d32f2f;">${log.numero}</td>
-                <td style="font-weight: bold; background-color: #fffde7;">#${log.casilla}</td>
-            </tr>
-        `;
-    });
-
-    html += `</tbody></table>`;
-    contenedor.innerHTML = html;
-}
-
-// ========================================================
-// 5. BACKUP DOBLE ACTUALIZADO (FIJOS + TABLA DE ACIERTOS)
-// ========================================================
-function exportarBaseDatos() {
-    let db = localStorage.getItem('bolita_master_db');
-    let aciertos = localStorage.getItem('bolita_aciertos_log') || "[]";
-    
-    if (!db || db === "{}") return alert("Error: No tienes fijos en el calendario para exportar.");
-
-    let paqueteCompleto = {
-        historialFijos: JSON.parse(db),
-        historicoAciertos: JSON.parse(aciertos)
-    };
-
-    let blob = new Blob([JSON.stringify(paqueteCompleto)], { type: "application/json" });
-    let url = URL.createObjectURL(blob);
-    
-    let a = document.createElement('a');
-    a.href = url;
-    a.download = `bolita_master_backup_${new Date().toISOString().split('T')[0]}.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-}
-
-function importarBaseDatos(event) {
-    let file = event.target.files[0];
-    if (!file) return;
-
-    let reader = new FileReader();
-    reader.onload = function(e) {
-        try {
-            let datos = JSON.parse(e.target.result);
-            
-            if (datos.historialFijos) {
-                localStorage.setItem('bolita_master_db', JSON.stringify(datos.historialFijos));
-                localStorage.setItem('bolita_aciertos_log', JSON.stringify(datos.historicoAciertos || []));
-            } else {
-                localStorage.setItem('bolita_master_db', JSON.stringify(datos));
-            }
-            
-            alert("¡Sincronización Exitosa! Historial y registro de aciertos cargados.");
-            renderCal();
-            mostrarTablaAciertos();
-        } catch (err) {
-            alert("Error crítico al procesar el archivo de copia de seguridad.");
-        }
-    };
-    reader.readAsText(file);
-}
-
-// Al cargar el documento, pintamos la tabla por primera vez
-document.addEventListener("DOMContentLoaded", function() {
-    mostrarTablaAciertos();
-});
-</script>
-
-</body>
-</html>
+    const charadaDiccionario = {"1":"Caballo, sol, tintero, camello, pescado chiquito","2":"Mariposa, hombre, cafetera, caracol","3":"Niño chiquito, marinero, luna, taza, ciempiés, muerto","4":"Gato, Santa Bárbara, vela, diente, boca, soldado, llave, militar, pavo real","5":"Mujer buena, monja, mar, carta, candado, periódico, fruta, lombriz","6":"Jicotea, reverbero, candela, botella, luna","7":"Mierda, culo, caracol, sueño, medias, caballero, cochino","8":"Muerto, muerto chiquito, calabaza, león, mesa, tigre","9":"Elefante, entierro, lengua, lira, cubo, esqueleto, buey","10":"Pescado grande, paseo, malla, cazuela, dinero, lancha","11":"Gallo fino, lluvia, fósforo, fosforera, taller, fábrica, caballo","12":"Puta, estrella, viaje, toallas, refrigerador, cometa, dama, perro grande","13":"Chulo, niño grande, pavo real, Santa Lucía, anafe, elefante","14":"Cementerio de noche, gato, tigre, matrimonio, enamorados, arresto, sartén","15":"Perro chiquito, niña bonita, visita, cuchara, gallo, ratón","16":"Toro, plancha, arete, mujer santa, vestido, incendio pequeño, funerales, avispa","17":"San Lázaro, luna, mujer buena, hule, camisón, armas, fumar opio","18":"Pescado chiquito, iglesia, sirena, palma, pescado, gato amarillo","19":"Lombriz, campesino, bandera, tropa, mesa grande, armadura, jutía","20":"Tibor, orinal, gato fino, cañón, camiseta, libro, mujer","21":"Majá, dinero, reloj de bolsillo, chaleco, cotorra, cigarros, gallo","22":"Sapo, estrella, lirio, chimenea, sol, jicotea","23":"Vapor, submarino, monte, escalera, barco, águila","24":"Paloma, música, carpintero, cocina, pescado grande","25":"Piedra fina, casa nueva, sol, monja, rana","26":"Anguila, calle, médico nuevo, brillante, nube de oro","27":"Avispa, campana, cuchara grande, canario, baúl, mono","28":"Chivo, bollo, carretón, bandera, político, uvas, perro chiquito","29":"Ratón, jutía, nube, venado, águila","30":"Camarón, arcoíris, pinga, almanaque, buey, cangrejo, chivo","31":"Venado, escuela, zapato nuevo, pato","32":"Puerco chiquito, enemigo, mulo, demonio, majá","33":"Tiñosa, baraja, santo, Jesucristo, bofetón, camarón","34":"Mono, familia, negro, negro chiquito, capataz, paloma","35":"Araña, araña chiquita, novia, bombillo, mosquito, mariposa","36":"Cachimba, teatro, bodega, opio, coloso, pajarito","37":"Bruja, mariposa bruja, gallina prieta, gitana, hormiga, carretera, piedra fina","38":"Dinero, mucho dinero, macao, carro, goleta, guante, barril","39":"Culebra, conejo, rayo, baile, tintorero","40":"Cura, poca sangre, bombero, muchacho, maldita, cantina, estatua","41":"Lagartija, lagartijo, prisión, pato chiquito, jubo, capuchino, clarín","42":"Pato, país lejano, carnero, España, abismo, liga","43":"Alacrán, amigo, vaca, puerta, presidiario, jorobado, tísico","44":"Año del cuero, guácara con guácara, infierno, año malo, temporal, tormenta, plancha, caldero","45":"Tiburón, presidente, traje, tranvía, escuela, estrella","46":"Guagua, humo, hambre, hurón, baile, chino","47":"Pájaro, maricón, mala noticia, mucha sangre, escolta, gallo, rosa","48":"Cucaracha, abanico, barbería, cubo","49":"Borracho, fogón, riqueza, figurín, percha, tesoro, fantasma","50":"Policía, agua, alegría, florero, alcalde, pícaro, árbol","51":"Soldado, guardia rural, sereno, sed, oro, anteojos, presillas","52":"Bicicleta, coche, borracho, abogado, libreta","53":"Luz eléctrica, prenda, tragedia, dinamita, diamante, beso, alguacil","54":"Flores, gallina blanca, sueño, timbre, cañón, rosas","55":"Cangrejo, murciélago, baile, iglesia grande, isleño, caerse, bala, sellos","56":"Gallina sacada, reina, escorpión, pato grande, merengue, piedra, camisa, cara","57":"Cama, ángeles, telegrama, puerta","58":"Adulterio, retrato, cuchillo, cangrejo, ferretero, batea","59":"Loco, fonógrafo, langosta, anillo, araña grande","60":"Payaso, sol oscuro, huevo, cómico, pájaro grande, tempestad, avecilla","61":"Caballo grande, arroz, cañonazo, piedra grande, revólver, boticario, pintor, saco","62":"Matrimonio, robo, asesinato, crimen, nieve, lámpara, visión, academia, carretilla","63":"Asesino, bandido, bandolero, cuernos, espada, caracol, policía, escalera","64":"Muerto vivo, muerto grande, escándalo, tiro de rifle, maromero, relajo, fiera","65":"Cárcel, comida, bruja, ventana, conejo, trueno","66":"Tarro, divorcio, pareja de yeguas, beso, máscara, estrella, mudanza, carnaval","67":"Puñalada, hospital, reloj, autoridad, fonda, aborto, zapato","68":"Cementerio, cementerio grande, globo, cuchillo grande, riña, templo, bolos, dinero","69":"Pozo, fiera, piano, loma, vago, polvorín","70":"Teléfono, coco, tiro, barril, arcoíris, bala, camisa","71":"Río, sombrero, perro mediano, pantera, fusil","72":"Buey, buey viejo, ferrocarril, serrucho, lluvia, collar, cetro, relámpago","73":"Maleta, parque, navaja, manzanas, ajedrez, cigarro","74":"Papalote, coronel, militar, serpiente, cólera, tarima","75":"Cine, corbata, viento, guitarra,

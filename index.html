@@ -345,12 +345,17 @@
 
     // Auto-ejecución al cargar la ventana
     window.addEventListener('load', async () => {
+    let statusDiv = document.getElementById('status-nube');
+    try {
         await descargarNubeGlobal();
-        let statusDiv = document.getElementById('status-nube');
         if(statusDiv) statusDiv.textContent = "✓ Nube Global Sincronizada Exitosamente";
-        mostrarTablaAciertos();
-        if (typeof renderCalendario === 'function') renderCalendario();
-    });
+    } catch(err) {
+        if(statusDiv) statusDiv.textContent = "⚠️ Modo Local (Sin conexión a Nube)";
+        console.error(err);
+    }
+    mostrarTablaAciertos();
+    if (typeof renderCalendario === 'function') renderCalendario();
+});
     // ===========================================
 
     // Control de Secciones de Usuario (Tabs)
@@ -378,13 +383,16 @@
     
     err.style.display = 'block';
     err.style.color = 'var(--win)';
-    err.textContent = "⏳ Verificando credenciales en la nube...";
+    err.textContent = "⏳ Sincronizando con la nube...";
 
-    // FORZAR DESCARGA: Ir a buscar a GitHub los usuarios que tú has aprobado en tu móvil
-    await descargarNubeGlobal();
+    try {
+        // Obligamos a la app a bajarse los últimos usuarios antes de validar
+        await descargarNubeGlobal();
+    } catch (e) {
+        console.error("Error al sincronizar antes del login:", e);
+    }
 
     if(u === _0xAdmin && p === _0xPass) {
-        // Confirmación extra para que nadie entre por accidente a tu cuenta Admin
         let confirmarAdmin = confirm("¿Iniciar sesión como Administrador Supremo en este dispositivo?");
         if(!confirmarAdmin) {
             err.textContent = "Acceso admin cancelado.";
@@ -419,13 +427,17 @@
     err.textContent = "❌ Credenciales incorrectas o usuario no registrado."; 
     err.style.color = 'var(--error)';
 }
+    
+    err.textContent = "❌ Credenciales incorrectas o usuario no registrado."; 
+    err.style.color = 'var(--error)';
+}
 
     function mostrarRegistroForm(ver) {
         document.getElementById('view-login').style.display = ver ? 'none' : 'block';
         document.getElementById('view-register').style.display = ver ? 'block' : 'none';
     }
 
-    function enviarSolicitud() {
+    async function enviarSolicitud() {
     let n = document.getElementById('reg-nombre').value.trim();
     let a = document.getElementById('reg-apellido').value.trim();
     let p = document.getElementById('reg-pass').value;
@@ -433,17 +445,25 @@
     
     let userKey = `${n}_${a}`;
     
-    // Primero descargamos para no pisar registros de otros usuarios nuevos
-    descargarNubeGlobal().then(() => {
+    try {
+        // 1. Nos bajamos lo que hay en la nube para no borrar a nadie
+        await descargarNubeGlobal();
+        
+        // 2. Metemos al nuevo usuario en la lista en estado pendiente
         usuariosBD[userKey] = { pass: p, status: 'pendiente', dias: 30 };
         localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD));
         
+        // 3. Subimos la lista actualizada a GitHub de forma inmediata
         let aciertosLog = JSON.parse(localStorage.getItem('bolita_aciertos_log')) || [];
-        actualizarNubeGlobal({ historialFijos: db, usuarios: usuariosBD, aciertos: aciertosLog });
+        await actualizarNubeGlobal({ historialFijos: db, usuarios: usuariosBD, aciertos: aciertosLog });
         
-        alert("¡Solicitud enviada con éxito! Dile al Administrador que te active desde su teléfono."); 
+        alert("¡Solicitud enviada con éxito! Informa al Administrador para que te active desde su teléfono."); 
         mostrarRegistroForm(false);
-    });
+        
+    } catch (error) {
+        console.error("Error enviando solicitud:", error);
+        alert("Hubo un problema de conexión. Inténtalo de nuevo.");
+    }
 }
 
     function cerrarSesionEfectiva() { usuarioActivo = ""; document.getElementById('view-app').style.display='none'; document.getElementById('view-login').style.display='block'; }

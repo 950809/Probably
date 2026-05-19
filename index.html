@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bolita Pro Master - Consola Global Elite v8.0</title>
+    <title>Bolita Pro Master - Consola Global Elite v8.5</title>
     <style>
         :root { --neon: #00ff41; --dark: #050505; --panel: #0d1117; --win: #ffeb3b; --error: #ff3333; }
         body { font-family: 'Segoe UI', monospace; background: var(--dark); color: var(--neon); margin: 0; padding: 10px; -webkit-user-select: none; user-select: none; }
@@ -99,7 +99,7 @@
 
     <div id="display_resultados" style="display:none;">
         <div class="top-section">
-            <div style="font-size:0.7rem; color:var(--win); text-align:center; margin-bottom:8px;">★ PREVISIÓN DE ALTA CERTEZA APK ★</div>
+            <div style="font-size:0.7rem; color:var(--win); text-align:center; margin-bottom:8px;">★ PREVISIÓN DE ALTA CERTEZA ★</div>
             <div class="top-grid">
                 <div class="top-box"><small>Punta</small><span id="c1">--</span></div>
                 <div class="top-box"><small>Terminal</small><span id="c2">--</span></div>
@@ -115,17 +115,15 @@
     </div>
 
     <div class="admin-section-box" style="border-color: var(--win); margin-top:20px;">
-        <h3 style="font-size:0.75rem; text-align:center; color:var(--win); margin:0 0 10px 0;">📂 PANEL DE CONSULTAS COMPLEMENTARIAS</h3>
+        <h3 style="font-size:0.75rem; text-align:center; color:var(--win); margin:0 0 10px 0;">📂 PANEL DE CONSULTAS</h3>
         <button style="padding:10px; font-size:0.75rem; margin-bottom:5px; background:#111; color:var(--neon); border:1px solid var(--neon);" onclick="abrirConfig()">📂 VER HISTÓRICOS Y CALENDARIO</button>
-        <button style="padding:10px; font-size:0.75rem; margin-bottom:10px; background:#111; color:var(--win); border:1px solid var(--win);" onclick="abrirAuditoria()">📊 VER INFORME DE ACIERTOS APK</button>
         
         <input type="text" id="search_charada_user" placeholder="Busca en la Charada (ej: Escoba, 46)..." oninput="buscarEnCharada(false)">
         <div id="charada_result_user" class="charada-box">Escribe arriba para buscar significados...</div>
         
-        <div class="grid-2" style="margin-top:12px;">
-            <button onclick="exportarBaseDatos()" style="background:transparent; color:var(--win); border: 1px solid var(--win); padding:10px; font-size:0.8rem; font-weight:bold;">💾 EXPORTAR</button>
-            <label style="background:transparent; color:var(--neon); border: 1px solid var(--neon); padding:10px; font-size:0.8rem; text-align:center; border-radius:4px; cursor:pointer; font-weight:bold; box-sizing:border-box; display:block;">
-                📂 IMPORTAR
+        <div style="margin-top:12px;">
+            <label style="background:transparent; color:var(--neon); border: 1px solid var(--neon); padding:12px; font-size:0.8rem; text-align:center; border-radius:4px; cursor:pointer; font-weight:bold; box-sizing:border-box; display:block;">
+                📥 IMPORTAR CALENDARIO MAESTRO (.JSON)
                 <input type="file" accept=".json" onchange="importarBaseDatos(event)" style="display: none;">
             </label>
         </div>
@@ -151,8 +149,26 @@
             <tbody id="tabla-usuarios"></tbody>
         </table>
 
-        <div class="admin-section-box" style="background: rgba(255, 235, 59, 0.02); border-color: var(--win);">
-            <h3 style="font-size:0.75rem; text-align:center; color:var(--win); margin: 0 0 5px 0;">⚡ EXTRACTOR DIARIO (SISTEMA INTEGRADO)</h3>
+        <div class="admin-section-box" style="border-color: var(--win); background: rgba(255,235,59,0.02);">
+            <h3 style="font-size:0.7rem; color:var(--win); text-align:center; margin:0 0 8px 0;">💾 RESPALDOS DE SEGURIDAD GENERAL</h3>
+            <div class="grid-2">
+                <button onclick="exportarBaseDatos()" style="background:#000; color:var(--win); border: 1px solid var(--win); padding:10px; font-size:0.75rem;">💾 EXPORTAR BD</button>
+                <label style="background:#000; color:var(--neon); border: 1px solid var(--neon); padding:10px; font-size:0.75rem; text-align:center; border-radius:4px; cursor:pointer; display:block; box-sizing:border-box; font-weight:bold;">
+                    📥 IMPORTAR BD
+                    <input type="file" accept=".json" onchange="importarBaseDatos(event)" style="display: none;">
+                </label>
+            </div>
+            <div class="grid-2" style="margin-top:8px;">
+                <button onclick="exportarCharada()" style="background:#000; color:#fff; border: 1px solid #fff; padding:10px; font-size:0.75rem;">💾 EXPORTAR CHARADA</button>
+                <label style="background:#000; color:var(--win); border: 1px solid var(--win); padding:10px; font-size:0.75rem; text-align:center; border-radius:4px; cursor:pointer; display:block; box-sizing:border-box; font-weight:bold;">
+                    📥 IMPORTAR CHARADA
+                    <input type="file" accept=".json" onchange="importarCharada(event)" style="display: none;">
+                </label>
+            </div>
+        </div>
+
+        <div class="admin-section-box" style="border-color: var(--neon);">
+            <h3 style="font-size:0.75rem; text-align:center; color:var(--neon); margin: 0 0 5px 0;">⚡ EXTRACTOR DIARIO (INGRESAR FIJOS)</h3>
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
                 <input type="text" id="fijo_hoy_tarde" placeholder="FIJO MEDIODÍA (T)">
                 <input type="text" id="fijo_hoy_noche" placeholder="FIJO NOCHE (N)">
@@ -161,16 +177,16 @@
         </div>
 
         <div class="acierto-box-neon">
-            <h3 style="font-size:0.75rem; text-align:center; color:var(--win); margin:0 0 5px 0;">🎯 HISTÓRICO PERMANENTE DE ACIERTOS (LOG)</h3>
+            <h3 style="font-size:0.75rem; text-align:center; color:var(--win); margin:0 0 5px 0;">🎯 LOG DE ACIERTOS DETECTADOS</h3>
             <div id="tabla_historico_aciertos_admin"></div>
         </div>
 
-        <button style="margin-top:15px; background:var(--neon); color:#000; width:100%; padding:14px; font-size:0.85rem; font-weight:bold; border-radius:4px;" onclick="abrirConfig()">📂 ABRIR CALENDARIO E IMPORTAR DE PDF</button>
+        <button style="margin-top:15px; background:var(--neon); color:#000; width:100%; padding:14px; font-size:0.85rem; font-weight:bold;" onclick="abrirConfig()">📂 ABRIR CALENDARIO E IMPORTADOR BRUTO</button>
 
-        <div class="admin-section-box" style="border-color: var(--neon);">
-            <h3 style="font-size:0.75rem; color:var(--win); margin:0 0 5px 0; text-align:center;">📘 DICCIONARIO DE LA CHARADA CUBANA</h3>
-            <input type="text" id="search_charada_admin" placeholder="Busca por número o palabra (ej: Escoba, 46)..." oninput="buscarEnCharada(true)">
-            <div id="charada_result_admin" class="charada-box">Escribe arriba para buscar jales...</div>
+        <div class="admin-section-box">
+            <h3 style="font-size:0.75rem; color:var(--win); margin:0 0 5px 0; text-align:center;">📘 DICCIONARIO DE LA CHARADA</h3>
+            <input type="text" id="search_charada_admin" placeholder="Busca por número o palabra..." oninput="buscarEnCharada(true)">
+            <div id="charada_result_admin" class="charada-box">Escribe arriba para buscar...</div>
         </div>
 
         <div class="admin-section-box">
@@ -179,13 +195,10 @@
                 <input type="number" id="admin_fijo_base" placeholder="ÚLTIMO FIJO" maxlength="2">
                 <select id="admin_cant_final" class="cant_select"></select>
             </div>
-            <button style="margin-top:10px; padding:12px; font-size:0.9rem;" id="btn_generar_admin" onclick="activarProcesoCalculo(true)">PROCESAR JUGADA ADMIN</button>
-
-            <div id="loading_admin" class="loading-text" style="display:none;">[EJECUTANDO ANÁLISIS ESTADÍSTICO MATRICIAL AVANZADO...]</div>
-
+            <button style="margin-top:10px; padding:12px;" id="btn_generar_admin" onclick="activarProcesoCalculo(true)">PROCESAR JUGADA ADMIN</button>
+            <div id="loading_admin" class="loading-text" style="display:none;">[EJECUTANDO ALGORITMO ANALÍTICO...]</div>
             <div id="admin_display_resultados" style="display:none;">
                 <div class="top-section">
-                    <div style="font-size:0.7rem; color:var(--win); text-align:center; margin-bottom:8px;">★ PREVISIÓN MAESTRA (MODO ADMIN) ★</div>
                     <div class="top-grid">
                         <div class="top-box"><small>Punta</small><span id="admin_c1">--</span></div>
                         <div class="top-box"><small>Terminal</small><span id="admin_c2">--</span></div>
@@ -196,43 +209,28 @@
             </div>
         </div>
 
-        <button style="margin-top:15px; background:var(--win); color:#000; width:100%; padding:12px; font-size:0.8rem; font-weight:bold;" onclick="abrirAuditoria()">📊 VER INFORME DE ACIERTOS Y RENDIMIENTO</button>
         <button class="secondary" style="margin-top:15px; width:100%;" onclick="cerrarAdmin()">SALIR DEL PANEL MASTER</button>
-    </div>
-</div>
-
-<div id="modal-auditoria">
-    <div class="modal-body">
-        <h2>Historial de Efectividad de la Página</h2>
-        <div style="text-align:center; margin-bottom:15px; font-size:0.9rem;">
-            Efectividad General: <span id="aud_pct_modal" style="color:var(--win); font-weight:bold;">0%</span>
-            (<span id="aud_num_modal">0/0</span> sorteos)
-        </div>
-        <div style="max-height: 250px; overflow-y: auto; background:#000; padding:10px; border:1px solid var(--neon); font-size:0.8rem;" id="lista_auditoria_logs">
-            No hay registros de auditoría guardados aún.
-        </div>
-        <button class="secondary" style="margin-top:20px; width:100%;" onclick="cerrarAuditoria()">VOLVER AL PANEL MASTER</button>
     </div>
 </div>
 
 <div id="modal-db">
     <div class="modal-body">
         <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
-            <button onclick="moverMes(-1)" style="background:var(--neon); border:none; padding:8px; color:#000; font-weight:bold; border-radius:4px;">◀ MES</button>
+            <button onclick="moverMes(-1)" style="background:var(--neon); border:none; padding:8px; color:#000; font-weight:bold;">◀ MES</button>
             <span id="mes_label" style="color:var(--win); font-weight:bold; font-size:1.1rem; padding-top:4px;"></span>
-            <button onclick="moverMes(1)" style="background:var(--neon); border:none; padding:8px; color:#000; font-weight:bold; border-radius:4px;">MES ▶</button>
+            <button onclick="moverMes(1)" style="background:var(--neon); border:none; padding:8px; color:#000; font-weight:bold;">MES ▶</button>
         </div>
         <div class="grid-cal" id="cuerpo_cal"></div>
         
         <div id="admin_actions_cal">
-            <button onclick="guardarDB()" style="margin-top:20px; background:var(--win); color:#000; width:100%; padding:14px; border:none; font-weight:bold; font-size:1rem; border-radius:4px;">GUARDAR CAMBIOS DEL CALENDARIO</button>
+            <button onclick="guardarDB()" style="margin-top:20px; background:var(--win); color:#000; width:100%; padding:14px; font-weight:bold; font-size:1rem;">GUARDAR CAMBIOS DEL CALENDARIO</button>
             <div style="margin-top: 20px; border-top: 1px dashed var(--neon); padding-top: 15px;">
-                <h3 style="font-size: 0.75rem; text-align: center; color: var(--win);">📥 IMPORTADOR INTEGRADO EXCRIPTOR PDF (HISTÓRICO COMPLETO)</h3>
-                <textarea id="import_raw_text" placeholder="Pega el texto crudo del PDF o block de notas aquí... Ej: 18/05/08 M 05-43-18"></textarea>
+                <h3 style="font-size: 0.75rem; text-align: center; color: var(--win);">📥 IMPORTADOR EN BRUTO DESDE NOTAS / PDF</h3>
+                <textarea id="import_raw_text" placeholder="Pega el bloque bruto aquí... Ej: 07/31/08 E4-5-6"></textarea>
                 <button onclick="procesarTextoImportado()" style="background: transparent; color: var(--neon); border: 1px solid var(--neon); padding: 12px; font-size: 0.75rem; margin-top: 5px; width:100%; font-weight:bold;">PROCESAR TEXTO EN BRUTO</button>
             </div>
         </div>
-        <button onclick="cerrarConfig()" style="margin-top:20px; background:#333; color:#fff; width:100%; border:none; padding:10px; border-radius:4px;">VOLVER A LA APLICACIÓN</button>
+        <button onclick="cerrarConfig()" style="margin-top:20px; background:#333; color:#fff; width:100%; border:none; padding:10px;">VOLVER A LA APLICACIÓN</button>
     </div>
 </div>
 
@@ -240,12 +238,11 @@
     const _0xAdmin = "yohnny95", _0xPass = "Elmatatan95*";
     let db = JSON.parse(localStorage.getItem('bolita_master_db')) || {};
     let usuariosBD = JSON.parse(localStorage.getItem('bolita_users_db')) || {};
-    let auditoriaBD = JSON.parse(localStorage.getItem('bolita_aud_logs_db')) || [];
     let usuarioActivo = "";
     let fechaActualCal = new Date();
     let esAdministradorLogueado = false;
 
-    const charadaDiccionario = {"1":"Caballo, sol, tintero, camello, pescado chiquito","2":"Mariposa, hombre, cafetera, caracol","3":"Niño chiquito, marinero, luna, taza, ciempiés, muerto","4":"Gato, Santa Bárbara, vela, diente, boca, soldier, llave, militar, pavo real","5":"Mujer buena, monja, mar, carta, candado, periódico, fruta, lombriz","6":"Jicotea, reverbero, candela, botella, luna","7":"Mierda, culo, caracol, sueño, medias, caballero, cochino","8":"Muerto, muerto chiquito, calabaza, león, mesa, tigre","9":"Elefante, entierro, lengua, lira, cubo, esqueleto, buey","10":"Pescado grande, paseo, malla, cazuela, dinero, lancha","11":"Gallo fino, lluvia, fósforo, fosforera, taller, fábrica, caballo","12":"Puta, estrella, viaje, toallas, refrigerador, cometa, dama, perro grande","13":"Chulo, niño grande, pavo real, Santa Lucía, anafe, elefante","14":"Cementerio de noche, gato, tigre, matrimonio, enamorados, arresto, sartén","15":"Perro chiquito, niña bonita, visita, cuchara, gallo, ratón","16":"Toro, plancha, arete, mujer santa, vestido, incendio pequeño, funerales, avispa","17":"San Lázaro, luna, mujer buena, hule, camisón, armas, fumar opio","18":"Pescado chiquito, iglesia, sirena, palma, pescado, gato amarillo","19":"Lombriz, campesino, bandera, tropa, mesa grande, armadura, jutía","20":"Tibor, orinal, gato fino, cañón, camiseta, libro, mujer","21":"Majá, dinero, reloj de bolsillo, chaleco, cotorra, cigarros, gallo","22":"Sapo, estrella, lirio, chimenea, sol, jicotea","23":"Vapor, submarino, monte, escalera, barco, águila","24":"Paloma, música, carpintero, cocina, pescado grande","25":"Piedra fina, casa nueva, sol, monja, rana","26":"Anguila, calle, médico nuevo, brillante, nube de oro","27":"Avispa, campana, cuchara grande, canario, baúl, mono","28":"Chivo, bollo, carretón, bandera, político, uvas, perro chiquito","29":"Ratón, jutía, nube, venado, águila","30":"Camarón, arcoíris, pinga, almanaque, buey, cangrejo, chivo","31":"Venado, escuela, zapato nuevo, pato","32":"Puerco chiquito, enemigo, mulo, demonio, majá","33":"Tiñosa, baraja, santo, Jesucristo, bofetón, camarón","34":"Mono, familia, negro, negro chiquito, capataz, paloma","35":"Araña, araña chiquita, novia, bombillo, mosquito, mariposa","36":"Cachimba, teatro, bodega, opio, coloso, pajarito","37":"Bruja, mariposa bruja, gallina prieta, gitana, hormiga, carretera, piedra fina","38":"Dinero, mucho dinero, macao, carro, goleta, guante, barril","39":"Culebra, conejo, rayo, baile, tintorero","40":"Cura, poca sangre, bombero, muchacho, maldita, cantina, estatua","41":"Lagartija, lagartijo, prisión, pato chiquito, jubo, capuchino, clarín","42":"Pato, país lejano, carnero, España, abismo, liga","43":"Alacrán, amigo, vaca, puerta, presidiario, jorobado, tísico","44":"Año del cuero, guácara con guácara, infierno, año malo, temporal, tormenta, plancha, caldero","45":"Tiburón, presidente, traje, tranvía, escuela, estrella","46":"Guagua, humo, hambre, hurón, baile, chino","47":"Pájaro, maricón, mala noticia, mucha sangre, escolta, gallo, rosa","48":"Cucaracha, abanico, barbería, cubo","49":"Borracho, fogón, riqueza, figurín, percha, tesoro, fantasma","50":"Policía, agua, alegría, florero, alcalde, pícaro, árbol","51":"Soldado, guardia rural, sereno, sed, oro, anteojos, presillas","52":"Bicicleta, coche, borracho, abogado, libreta","53":"Luz eléctrica, prenda, tragedy, dinamita, diamante, beso, alguacil","54":"Flores, gallina blanca, sueño, timbre, cañón, rosas","55":"Cangrejo, murciélago, baile, iglesia grande, isleño, caerse, bala, sellos","56":"Gallina sacada, reina, escorpión, pato grande, merengue, piedra, camisa, cara","57":"Cama, ángeles, telegrama, puerta","58":"Adulterio, retrato, cuchillo, cangrejo, ferretero, batea","59":"Loco, fonógrafo, langosta, anillo, araña grande","60":"Payaso, sol oscuro, huevo, cómico, pájaro grande, tempestad, avecilla","61":"Caballo grande, arroz, cañonazo, piedra grande, revólver, boticario, pintor, saco","62":"Matrimonio, robo, assassination, crimen, nieve, lámpara, visión, academia, carretilla","63":"Asesino, bandido, bandolero, cuernos, espada, caracol, policía, escalera","64":"Muerto vivo, muerto grande, escándalo, tiro de rifle, maromero, relajo, fiera","65":"Cárcel, comida, bruja, ventana, conejo, trueno","66":"Tarro, divorcio, pareja de yeguas, beso, máscara, estrella, mudanza, carnaval","67":"Puñalada, hospital, reloj, autoridad, fonda, aborto, zapato","68":"Cementerio, cementerio grande, globo, cuchillo grande, riña, templo, bolos, dinero","69":"Pozo, fiera, piano, loma, vago, polvorín","70":"Teléfono, coco, tiro, barril, arcoíris, bala, camisa","71":"Río, sombrero, perro mediano, pantera, fusil","72":"Buey, buey viejo, ferrocarril, serrucho, lluvia, collar, cetro, relámpago","73":"Maleta, parque, navaja, manzanas, ajedrez, cigarro","74":"Papalote, coronel, militar, serpiente, cólera, tarima","75":"Cine, corbata, viento, guitarra, cuna","76":"Bailarina, violín, humo, collar, maletín","77":"Banderas, frascos, muletas, soldados, campana","78":"Ataúd, obispo, rey, caballo, música, luna","79":"Tren de carga, coche, abogado, mulo, dulces","80":"Médico, sábanas, paraguas, reloj, buena noticia","81":"Teatro, fango, navaja, gato grande, trampa","82":"Madre, león, buey, lancha, canasta","83":"Tragedia, bastón, procesamiento, madera, limosna","84":"Sastre, sangre, cofre, banquero, iglesia","85":"Espejo, reloj de pared, zapato, ojo, mujer mala","86":"Tijeras, convento, mulas, militar, herida","87":"Plátanos, fuego, Nueva York, pescado, cucaracha","88":"Hojas, aduana, muerto, caballo, vaso","89":"León, agua, cometa, viejo, carretón","90":"Viejo, espejo, caramelos, temporal, hacha","91":"Alpargatas, comunista, bolsas, pájaro negro","92":"Puerco grande, globo, avión, Cuba, silla","93":"Sortija, revolución, andarín, joyas","94":"Machete, herradura, mariposa grande, pulga","95":"Guerra, perro grande, cuchillo, alcalde","96":"Zapato viejo, medicina, desafío, pícaro","97":"Grillo, mosquito,limosnero, sinsonte","98":"Piano, entierro grande, santo, varita","99":"Carbonero, sereno, lluvia, joyero, ratero","100":"Inodoro, dios, escoba, automóvil, canario"};
+    let charadaDiccionario = JSON.parse(localStorage.getItem('bolita_charada_db')) || {"1":"Caballo, sol, tintero, camello, pescado chiquito","2":"Mariposa, hombre, cafetera, caracol","3":"Niño chiquito, marinero, luna, taza, ciempiés, muerto","4":"Gato, Santa Bárbara, vela, diente, boca, soldier, llave, militar, pavo real","5":"Mujer buena, monja, mar, carta, candado, periódico, fruta, lombriz","6":"Jicotea, reverbero, candela, botella, luna","7":"Mierda, culo, caracol, sueño, medias, caballero, cochino","8":"Muerto, muerto chiquito, calabaza, león, mesa, tigre","9":"Elefante, entierro, lengua, lira, cubo, esqueleto, buey","10":"Pescado grande, paseo, malla, cazuela, dinero, lancha","11":"Gallo fino, lluvia, fósforo, fosforera, taller, fábrica, caballo","12":"Puta, estrella, viaje, toallas, refrigerador, cometa, dama, perro grande","13":"Chulo, niño grande, pavo real, Santa Lucía, anafe, elefante","14":"Cementerio de noche, gato, tigre, matrimonio, enamorados, arresto, sartén","15":"Perro chiquito, niña bonita, visita, cuchara, gallo, ratón","16":"Toro, plancha, arete, mujer santa, vestido, incendio pequeño, funerales, avispa","17":"San Lázaro, luna, mujer buena, hule, camisón, armas, fumar opio","18":"Pescado chiquito, iglesia, sirena, palma, pescado, gato amarillo","19":"Lombriz, campesino, bandera, tropa, mesa grande, armadura, jutía","20":"Tibor, orinal, gato fino, cañón, camiseta, libro, mujer","21":"Majá, dinero, reloj de bolsillo, chaleco, cotorra, cigarros, gallo","22":"Sapo, estrella, lirio, chimenea, sol, jicotea","23":"Vapor, submarino, monte, escalera, barco, águila","24":"Paloma, música, carpintero, cocina, pescado grande","25":"Piedra fina, casa nueva, sol, monja, rana","26":"Anguila, calle, médico nuevo, brillante, nube de oro","27":"Avispa, campana, cuchara grande, canario, baúl, mono","28":"Chivo, bollo, carretón, bandera, político, uvas, perro chiquito","29":"Ratón, jutía, nube, venado, águila","30":"Camarón, arcoíris, pinga, almanaque, buey, cangrejo, chivo","31":"Venado, escuela, zapato nuevo, pato","32":"Puerco chiquito, enemigo, mulo, demonio, majá","33":"Tiñosa, baraja, santo, Jesucristo, bofetón, camarón","34":"Mono, familia, negro, negro chiquito, capataz, paloma","35":"Araña, araña chiquita, novia, bombillo, mosquito, mariposa","36":"Cachimba, teatro, bodega, opio, coloso, pajarito","37":"Bruja, mariposa bruja, gallina prieta, gitana, hormiga, carretera, piedra fina","38":"Dinero, mucho dinero, macao, carro, goleta, guante, barril","39":"Culebra, conejo, rayo, baile, tintorero","40":"Cura, poca sangre, bombero, muchacho, maldita, cantina, estatua","41":"Lagartija, lagartijo, prisión, pato chiquito, jubo, capuchino, clarín","42":"Pato, país lejano, carnero, España, abismo, liga","43":"Alacrán, amigo, vaca, puerta, presidiario, jorobado, tísico","44":"Año del cuero, guácara con guácara, infierno, año malo, temporal, tormenta, plancha, caldero","45":"Tiburón, presidente, traje, tranvía, escuela, estrella","46":"Guagua, humo, hambre, hurón, baile, chino","47":"Pájaro, maricón, mala noticia, mucha sangre, escolta, gallo, rosa","48":"Cucaracha, abanico, barbería, cubo","49":"Borracho, fogón, riqueza, figurín, percha, tesoro, fantasma","50":"Policía, agua, alegría, florero, alcalde, pícaro, árbol","51":"Soldado, guardia rural, sereno, sed, oro, anteojos, presillas","52":"Bicicleta, coche, borracho, abogado, libreta","53":"Luz eléctrica, prenda, tragedy, dinamita, diamante, beso, alguacil","54":"Flores, gallina blanca, sueño, timbre, cañón, rosas","55":"Cangrejo, murciélago, baile, iglesia grande, isleño, caerse, bala, sellos","56":"Gallina sacada, reina, escorpión, pato grande, merengue, piedra, camisa, cara","57":"Cama, ángeles, telegrama, puerta","58":"Adulterio, retrato, cuchillo, cangrejo, ferretero, batea","59":"Loco, fonógrafo, langosta, anillo, araña grande","60":"Payaso, sol oscuro, huevo, cómico, pájaro grande, tempestad, avecilla","61":"Caballo grande, arroz, cañonazo, piedra grande, revólver, boticario, pintor, saco","62":"Matrimonio, robo, assassination, crimen, nieve, lámpara, visión, academia, carretilla","63":"Asesino, bandido, bandolero, cuernos, espada, caracol, policía, escalera","64":"Muerto vivo, muerto grande, escándalo, tiro de rifle, maromero, relajo, fiera","65":"Cárcel, comida, bruja, ventana, conejo, trueno","66":"Tarro, divorcio, pareja de yeguas, beso, máscara, estrella, mudanza, carnaval","67":"Puñalada, hospital, reloj, autoridad, fonda, aborto, zapato","68":"Cementerio, cementerio grande, globo, cuchillo grande, riña, templo, bolos, dinero","69":"Pozo, fiera, piano, loma, vago, polvorín","70":"Teléfono, coco, tiro, barril, arcoíris, bala, camisa","71":"Río, sombrero, perro mediano, pantera, fusil","72":"Buey, buey viejo, ferrocarril, serrucho, lluvia, collar, cetro, relámpago","73":"Maleta, parque, navaja, manzanas, ajedrez, cigarro","74":"Papalote, coronel, militar, serpiente, cólera, tarima","75":"Cine, corbata, viento, guitarra, cuna","76":"Bailarina, violín, humo, collar, maletín","77":"Banderas, frascos, muletas, soldados, campana","78":"Ataúd, obispo, rey, caballo, música, luna","79":"Tren de carga, coche, abogado, mulo, dulces","80":"Médico, sábanas, paraguas, reloj, buena noticia","81":"Teatro, fango, navaja, gato grande, trampa","82":"Madre, león, buey, lancha, canasta","83":"Tragedia, bastón, procesamiento, madera, limosna","84":"Sastre, sangre, cofre, banquero, iglesia","85":"Espejo, reloj de pared, zapato, ojo, mujer mala","86":"Tijeras, convento, mulas, militar, herida","87":"Plátanos, fuego, Nueva York, pescado, cucaracha","88":"Hojas, aduana, muerto, caballo, vaso","89":"León, agua, cometa, viejo, carretón","90":"Viejo, espejo, caramelos, temporal, hacha","91":"Alpargatas, comunista, bolsas, pájaro negro","92":"Puerco grande, globo, avión, Cuba, silla","93":"Sortija, revolución, andarín, joyas","94":"Machete, herradura, mariposa grande, pulga","95":"Guerra, perro grande, cuchillo, alcalde","96":"Zapato viejo, medicina, desafío, pícaro","97":"Grillo, mosquito,limosnero, sinsonte","98":"Piano, entierro grande, santo, varita","99":"Carbonero, sereno, lluvia, joyero, ratero","100":"Inodoro, dios, escoba, automóvil, canario"};
 
     document.querySelectorAll('.cant_select').forEach(sel => {
         sel.innerHTML = "";
@@ -274,7 +271,7 @@
             document.getElementById('expire-display').textContent = `Expira en: ${usuariosBD[u].dias} días`;
             mostrarTablaAciertos(); return;
         }
-        let err = document.getElementById('login-error'); err.textContent = "Credenciales incorrectas o cuenta inexistente."; err.style.display='block';
+        let err = document.getElementById('login-error'); err.textContent = "Credenciales incorrectas."; err.style.display='block';
     }
 
     function mostrarRegistroForm(ver) {
@@ -290,13 +287,10 @@
         let userKey = `${n}_${a}`;
         usuariosBD[userKey] = { pass: p, status: 'pendiente', dias: 30 };
         localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD));
-        alert("Solicitud enviada con éxito. Contacta al soporte para activación inmediata.");
-        mostrarRegistroForm(false);
+        alert("Solicitud enviada."); mostrarRegistroForm(false);
     }
 
-    function cerrarSesionEfectiva() {
-        usuarioActivo = ""; document.getElementById('view-app').style.display='none'; document.getElementById('view-login').style.display='block';
-    }
+    function cerrarSesionEfectiva() { usuarioActivo = ""; document.getElementById('view-app').style.display='none'; document.getElementById('view-login').style.display='block'; }
     function cerrarAdmin() { document.getElementById('panel-admin').style.display='none'; document.getElementById('view-login').style.display='block'; }
 
     function actualizarStatsAdmin() {
@@ -329,106 +323,68 @@
         let resultados = document.getElementById(`${prefijo}display_resultados`);
         let fijoStr = document.getElementById(`${prefijo}fijo_base`).value.trim();
 
-        if(!fijoStr || fijoStr.length > 2) return alert("Digita un Fijo base de 2 dígitos.");
-
-        resultados.style.display = 'none';
-        btn.disabled = true;
-        loader.style.display = 'block';
+        if(!fijoStr || fijoStr.length > 2) return alert("Digita un Fijo de 2 dígitos.");
+        resultados.style.display = 'none'; btn.disabled = true; loader.style.display = 'block';
 
         setTimeout(() => {
-            loader.style.display = 'none';
-            btn.disabled = false;
-            generarTodo(isAdmin);
+            loader.style.display = 'none'; btn.disabled = false; generarTodo(isAdmin);
         }, 3000);
     }
 
-    // ==========================================
-    // MOTOR DE ALGORITMOS MATEMÁTICOS Y ESTADÍSTICOS
-    // ==========================================
+    // ========================================================
+    // ALGORITMOS AVANZADOS: RETRASADOS, COMPAÑEROS, VIRADOS Y PAREJAS
+    // ========================================================
     function generarTodo(isAdmin) {
         let prefijo = isAdmin ? 'admin_' : '';
-        let fijoStr = document.getElementById(`${prefijo}fijo_base`).value.trim();
+        let fijoStr = document.getElementById(`${prefijo}fijo_base`).value.trim().padStart(2, '0');
         let cant = parseInt(document.getElementById(`${prefijo}cant_final`).value);
         
-        let numBase = parseInt(fijoStr.padStart(2, '0'));
+        let numBase = parseInt(fijoStr);
         let punta = Math.floor(numBase / 10); let term = numBase % 10;
         
-        // Algoritmo 1: Derivación clásica por arrastre matemático estructural
-        let pSurg = ((punta + 3) % 10).toString();
-        let tSurg = ((term + 7) % 10).toString();
-        let arrSurg = ((numBase + 21) % 100).toString().padStart(2, '0');
-
-        document.getElementById(`${prefijo}c1`).textContent = pSurg;
-        document.getElementById(`${prefijo}c2`).textContent = tSurg;
-        document.getElementById(`${prefijo}c3`).textContent = arrSurg;
+        document.getElementById(`${prefijo}c1`).textContent = ((punta + 3) % 10).toString();
+        document.getElementById(`${prefijo}c2`).textContent = ((term + 7) % 10).toString();
+        document.getElementById(`${prefijo}c3`).textContent = ((numBase + 21) % 100).toString().padStart(2, '0');
 
         let panel = document.getElementById(`${prefijo}panel_res`); panel.innerHTML = "";
-        
-        // Inicializar bolsa probabilística basada en pesos analíticos
-        let pesos = {};
-        for(let i=0; i<100; i++) { pesos[i.toString().padStart(2, '0')] = 0; }
+        let pesos = {}; for(let i=0; i<100; i++) { pesos[i.toString().padStart(2, '0')] = 0; }
 
-        // --- ALGORITMO A: ANÁLISIS DE ATRASO HISTÓRICO ---
-        let ultimoAvistamiento = {};
         let fechasOrdenadas = Object.keys(db).sort();
-        let totalSorteosEfectivos = 0;
+        let totalSorteos = 0;
+        let ultimoAvistamiento = {};
 
         fechasOrdenadas.forEach(f => {
-            if(db[f].t) { totalSorteosEfectivos++; ultimoAvistamiento[db[f].t] = totalSorteosEfectivos; }
-            if(db[f].n) { totalSorteosEfectivos++; ultimoAvistamiento[db[f].n] = totalSorteosEfectivos; }
+            if(db[f].t) { totalSorteos++; ultimoAvistamiento[db[f].t] = totalSorteos; }
+            if(db[f].n) { totalSorteos++; ultimoAvistamiento[db[f].n] = totalSorteos; }
         });
 
+        // Algoritmo 1: Historial de Números más atrasados
         for(let nStr in pesos) {
             let uPos = ultimoAvistamiento[nStr] || 0;
-            let indexAtraso = totalSorteosEfectivos - uPos; // Cuántos sorteos lleva sin salir
-            pesos[nStr] += indexAtraso * 0.12; // A mayor retraso, mayor peso probabilístico de salida
+            pesos[nStr] += (totalSorteos - uPos) * 0.15;
         }
 
-        // --- ALGORITMO B: NÚMEROS COMPAÑEROS / JALES ---
-        let frecuenciasCompañeros = {};
+        // Algoritmo 2: Números compañeros / Jales históricos
         fechasOrdenadas.forEach(f => {
-            let tirosDia = [];
-            if(db[f].t) tirosDia.push(db[f].t);
-            if(db[f].n) tirosDia.push(db[f].n);
-            
-            if(tirosDia.includes(fijoStr)) {
-                tirosDia.forEach(aux => {
-                    if(aux !== fijoStr) {
-                        frecuenciasCompañeros[aux] = (frecuenciasCompañeros[aux] || 0) + 1;
-                    }
-                });
+            let combinados = [];
+            if(db[f].t) combinados.push(db[f].t);
+            if(db[f].n) combinados.push(db[f].n);
+            if(combinados.includes(fijoStr)) {
+                combinados.forEach(c => { if(c !== fijoStr) pesos[c] += 4.5; });
             }
         });
-        for(let comp in frecuenciasCompañeros) {
-            if(pesos[comp] !== undefined) pesos[comp] += frecuenciasCompañeros[comp] * 3.5;
-        }
 
-        // --- ALGORITMO C: LÓGICA DE NÚMEROS VIRADOS ---
-        let viradoStr = fijoStr.split('').reverse().join('');
-        if(pesos[viradoStr] !== undefined) pesos[viradoStr] += 15.0; // Fuerte peso adicional al inverso directo
+        // Algoritmo 3: Números Virados (Inversos directos)
+        let virado = fijoStr.split('').reverse().join('');
+        pesos[virado] += 18.0;
 
-        // --- ALGORITMO D: TRATAMIENTO DE PAREJAS ---
+        // Algoritmo 4: Parejas
         let parejas = ["00","11","22","33","44","55","66","77","88","99"];
-        parejas.forEach(par => {
-            // Si el fijo base comparte dígito con la pareja, se estimula su salida terminal
-            if(par.includes(punta.toString()) || par.includes(term.toString())) {
-                pesos[par] += 6.0;
-            }
-        });
+        parejas.forEach(p => { if(p.includes(punta.toString()) || p.includes(term.toString())) pesos[p] += 7.0; });
 
-        // --- ALGORITMO E: MODELADO SIMULADOR FÍSICO DE LOTERÍA (AZAR PURO CONDICIONADO) ---
-        // Emula el comportamiento estocástico de las bolitas con un factor de ruido aleatorio uniforme (1% por esfera)
-        for(let nStr in pesos) {
-            let ruidoEsfera = Math.random() * 8.0;
-            pesos[nStr] += ruidoEsfera;
-        }
+        // Algoritmo 5: Ruido Estocástico (Simulación física de esferas neumáticas)
+        for(let nStr in pesos) { pesos[nStr] += Math.random() * 5.0; }
 
-        // Forzar inclusiones lógicas base
-        pesos[arrSurg] += 25.0;
-        pesos[((numBase + 1) % 100).toString().padStart(2, '0')] += 20.0;
-        pesos[((numBase + 99) % 100).toString().padStart(2, '0')] += 20.0;
-
-        // Ordenar números de mayor a menor probabilidad calculada
         let arrayOrdenado = Object.keys(pesos).sort((a,b) => pesos[b] - pesos[a]);
         let arrayFinal = arrayOrdenado.slice(0, cant);
 
@@ -445,60 +401,45 @@
         let t = document.getElementById('fijo_hoy_tarde').value.trim();
         let n = document.getElementById('fijo_hoy_noche').value.trim();
         let hoy = new Date().toISOString().split('T')[0];
-
-        if(!t && !n) return alert("Introduce al menos un Fijo de hoy.");
+        if(!t && !n) return alert("Ingresa un número fijo válido.");
         if(!db[hoy]) db[hoy] = {};
-
         if(t) { db[hoy]['t'] = t.padStart(2, '0'); comprobarYRegistrarAcierto(hoy, 't', t.padStart(2, '0')); }
         if(n) { db[hoy]['n'] = n.padStart(2, '0'); comprobarYRegistrarAcierto(hoy, 'n', n.padStart(2, '0')); }
-
         localStorage.setItem('bolita_master_db', JSON.stringify(db));
-        alert("Fijos de hoy inyectados al sistema de forma permanente.");
-        actualizarAuditoriaModal(); mostrarTablaAciertos();
+        alert("Fijos guardados con éxito."); mostrarTablaAciertos();
     }
 
     function comprobarYRegistrarAcierto(fecha, turno, numeroReal) {
         let btn = document.getElementById(`btn_generar_user`);
         if(!btn || !btn.dataset.lastPronosticos) return;
         let pronosticos = JSON.parse(btn.dataset.lastPronosticos);
-        
-        let indiceCasilla = pronosticos.indexOf(numeroReal);
-        if(indiceCasilla !== -1) {
-            let numCasilla = indiceCasilla + 1;
+        let idx = pronosticos.indexOf(numeroReal);
+        if(idx !== -1) {
             let aciertosLog = JSON.parse(localStorage.getItem('bolita_aciertos_log')) || [];
-            let duplicado = aciertosLog.some(l => l.fecha === fecha && l.turno === (turno==='t'?'Tarde':'Noche'));
-            
-            if(!duplicado) {
-                aciertosLog.push({ fecha: fecha, turno: turno==='t'?'Tarde':'Noche', numero: numeroReal, casilla: numCasilla });
+            if(!aciertosLog.some(l => l.fecha === fecha && l.turno === (turno==='t'?'Tarde':'Noche'))) {
+                aciertosLog.push({ fecha: fecha, turno: turno==='t'?'Tarde':'Noche', numero: numeroReal, casilla: idx + 1 });
                 localStorage.setItem('bolita_aciertos_log', JSON.stringify(aciertosLog));
-                
-                let boxUser = document.getElementById(`box-${numeroReal}`); if(boxUser) boxUser.className = "box ganador-oro";
-                let boxAdmin = document.getElementById(`admin_box-${numeroReal}`); if(boxAdmin) boxAdmin.className = "box ganador-oro";
             }
         }
     }
 
     function mostrarTablaAciertos() {
         let aciertosLog = JSON.parse(localStorage.getItem('bolita_aciertos_log')) || [];
-        let contUser = document.getElementById('tabla_historico_aciertos_user');
-        let contAdmin = document.getElementById('tabla_historico_aciertos_admin');
-        
-        let html = aciertosLog.length === 0 ? `<p style="color:#666; font-size:0.7rem; text-align:center; margin:5px 0;">Ningún acierto auditado todavía.</p>` :
-            `<table class="tabla-aciertos"><thead><tr><th>Fecha</th><th>Turno</th><th>Fijo</th><th style="background:var(--win); color:#000;">Casilla</th></tr></thead><tbody>` +
-            [...aciertosLog].reverse().map(l => `<tr><td>${l.fecha}</td><td>${l.turno}</td><td style="color:var(--win); font-weight:bold;">${l.numero}</td><td style="background:rgba(255,235,59,0.1); font-weight:bold; color:var(--win);">#${l.casilla}</td></tr>`).join('') + `</tbody></table>`;
-        
-        if(contUser) contUser.innerHTML = html; if(contAdmin) contAdmin.innerHTML = html;
+        let html = aciertosLog.length === 0 ? `<p style="color:#666; font-size:0.7rem; text-align:center;">Sin aciertos registrados.</p>` :
+            `<table class="tabla-aciertos"><thead><tr><th>Fecha</th><th>Turno</th><th>Fijo</th><th>Casilla</th></tr></thead><tbody>` +
+            aciertosLog.slice().reverse().map(l => `<tr><td>${l.fecha}</td><td>${l.turno}</td><td style="color:var(--win); font-weight:bold;">${l.numero}</td><td>#${l.casilla}</td></tr>`).join('') + `</tbody></table>`;
+        document.getElementById('tabla_historico_aciertos_user').innerHTML = html;
+        document.getElementById('tabla_historico_aciertos_admin').innerHTML = html;
     }
 
+    // INTERFAZ DE IMPORTAR Y EXPORTAR (MÓDULOS CRÍTICOS)
     function exportarBaseDatos() {
-        let master = localStorage.getItem('bolita_master_db');
+        let master = localStorage.getItem('bolita_master_db') || "{}";
         let logs = localStorage.getItem('bolita_aciertos_log') || "[]";
-        if(!master || master === "{}") return alert("El calendario maestro está vacío.");
-
-        let paquete = { historialFijos: JSON.parse(master), historicoAciertos: JSON.parse(logs) };
-        let blob = new Blob([JSON.stringify(paquete)], { type: "application/json" });
+        let pack = { historialFijos: JSON.parse(master), historicoAciertos: JSON.parse(logs) };
+        let blob = new Blob([JSON.stringify(pack)], { type: "application/json" });
         let url = URL.createObjectURL(blob);
-        let a = document.createElement('a'); a.href = url; a.download = `bolita_elite_backup_${new Date().toISOString().split('T')[0]}.json`;
+        let a = document.createElement('a'); a.href = url; a.download = `bolita_master_backup.json`;
         document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
     }
 
@@ -507,14 +448,34 @@
         let reader = new FileReader();
         reader.onload = function(e) {
             try {
-                let datos = JSON.parse(e.target.result);
-                if(datos.historialFijos) {
-                    localStorage.setItem('bolita_master_db', JSON.stringify(datos.historialFijos));
-                    localStorage.setItem('bolita_aciertos_log', JSON.stringify(datos.historicoAciertos || []));
-                    db = datos.historialFijos;
-                } else { localStorage.setItem('bolita_master_db', JSON.stringify(datos)); db = datos; }
-                alert("Base de Datos Sincronizada con Éxito."); mostrarTablaAciertos(); if(document.getElementById('modal-db').style.display==='block') renderCalendario();
-            } catch(err) { alert("Archivo de respaldo inválido o corrupto."); }
+                let d = JSON.parse(e.target.result);
+                if(d.historialFijos) {
+                    localStorage.setItem('bolita_master_db', JSON.stringify(d.historialFijos));
+                    localStorage.setItem('bolita_aciertos_log', JSON.stringify(d.historicoAciertos || []));
+                    db = d.historialFijos;
+                } else { localStorage.setItem('bolita_master_db', JSON.stringify(d)); db = d; }
+                alert("Base de datos importada correctamente."); mostrarTablaAciertos(); renderCalendario();
+            } catch(err) { alert("Archivo JSON incompatible."); }
+        };
+        reader.readAsText(file);
+    }
+
+    function exportarCharada() {
+        let blob = new Blob([JSON.stringify(charadaDiccionario)], { type: "application/json" });
+        let url = URL.createObjectURL(blob);
+        let a = document.createElement('a'); a.href = url; a.download = `charada_backup.json`;
+        document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+    }
+
+    function importarCharada(event) {
+        let file = event.target.files[0]; if(!file) return;
+        let reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                let d = JSON.parse(e.target.result);
+                localStorage.setItem('bolita_charada_db', JSON.stringify(d)); charadaDiccionario = d;
+                alert("Diccionario de la Charada sincronizado.");
+            } catch(err) { alert("Archivo de charada inválido."); }
         };
         reader.readAsText(file);
     }
@@ -522,14 +483,14 @@
     function buscarEnCharada(isAdmin) {
         let str = document.getElementById(isAdmin ? 'search_charada_admin' : 'search_charada_user').value.toLowerCase().trim();
         let resDiv = document.getElementById(isAdmin ? 'charada_result_admin' : 'charada_result_user');
-        if(!str) { resDiv.textContent = "Escribe arriba para buscar jales..."; return; }
+        if(!str) { resDiv.textContent = "Escribe arriba para buscar..."; return; }
         let html = "";
         for(let k in charadaDiccionario) {
             if(k === str || charadaDiccionario[k].toLowerCase().includes(str)) {
                 html += `<div><b>${k.padStart(2,'0')}:</b> ${charadaDiccionario[k]}</div>`;
             }
         }
-        resDiv.innerHTML = html || "<span style='color:var(--error);'>No se encontraron coincidencia.</span>";
+        resDiv.innerHTML = html || "<span style='color:var(--error);'>Sin coincidencias.</span>";
     }
 
     function abrirConfig() { document.getElementById('modal-db').style.display = 'block'; renderCalendario(); }
@@ -540,7 +501,6 @@
         let mNames = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
         let y = fechaActualCal.getFullYear(); let m = fechaActualCal.getMonth();
         document.getElementById('mes_label').textContent = `${mNames[m].toUpperCase()} ${y}`;
-        
         let cuerpo = document.getElementById('cuerpo_cal'); cuerpo.innerHTML = "";
         let primerDia = new Date(y, m, 1).getDay();
         let totalDias = new Date(y, m + 1, 0).getDate();
@@ -552,7 +512,6 @@
             let k = `${y}-${mesStr}-${diaStr}`;
             let valT = (db[k] && db[k].t) ? db[k].t : "";
             let valN = (db[k] && db[k].n) ? db[k].n : "";
-
             let div = document.createElement('div'); div.className = "day";
             div.innerHTML = `<div style="color:#aaa; font-size:0.65rem;">${d}</div>
                 <input type="text" id="t-${k}" value="${valT}" placeholder="T" maxlength="2" ${!esAdministradorLogueado?'disabled':''}>
@@ -564,94 +523,78 @@
 
     function guardarDB() {
         if(!esAdministradorLogueado) return;
-        let inputs = document.querySelectorAll('.day input');
-        inputs.forEach(i => {
+        document.querySelectorAll('.day input').forEach(i => {
             if(!i.id) return;
             let partes = i.id.split('-'); let tu = partes[0]; let k = `${partes[1]}-${partes[2]}-${partes[3]}`;
             let val = i.value.trim();
             if(val) { if(!db[k]) db[k] = {}; db[k][tu] = val.padStart(2, '0'); }
             else if(db[k]) { delete db[k][tu]; if(Object.keys(db[k]).length===0) delete db[k]; }
         });
-        localStorage.setItem('bolita_master_db', JSON.stringify(db)); alert("Cambios guardados en el almacenamiento global.");
+        localStorage.setItem('bolita_master_db', JSON.stringify(db)); alert("Calendario actualizado.");
     }
 
-    // ==========================================
-    // PARSER INTELIGENTE DE HISTÓRICOS (SOPORTA FORMATO ANTIGUO Y MODERNO)
-    // ==========================================
+    // ========================================================
+    // PARSER TEXTO EN BRUTO DEFINITIVO (MES/DÍA/AÑO GLOBAL)
+    // ========================================================
     function procesarTextoImportado() {
         const raw = document.getElementById('import_raw_text').value;
         if(!raw.trim()) return alert("El cuadro de texto está vacío.");
         let cnt = 0;
-        
-        // Normalizar saltos de línea y limpiar caracteres raros
-        let lineas = raw.split('\n');
+        let lineas = raw.split(/[\n\s]+/); 
 
-        // Expresión regular robusta: Captura DD/MM/AA o DD/MM/AAAA, Turno (M, T, N, E), y la cadena de tiros
-        const regexRobust = /(\d{1,2})\/(\d{1,2})\/(\d{2,4})\s+([MNTENTEmne])\s*([0-9\-]+)/;
+        // Captura con precisión: MM/DD/AA o MM/DD/AAAA seguido de la letra del turno y el bloque de guiones
+        const regexFuerte = /(\d{1,2})\/(\d{1,2})\/(\d{2,4})[A-Za-z](\d+)-(\d+)-(\d+)/;
 
-        lineas.forEach(linea => {
-            let m = regexRobust.exec(linea.trim());
+        for (let i = 0; i < lineas.length; i++) {
+            let item = lineas[i].trim();
+            if(!item) continue;
+            
+            let m = regexFuerte.exec(item);
             if (m) {
-                let dia = m[1].padStart(2, '0');
-                let mes = m[2].padStart(2, '0');
+                let mes = m[1].padStart(2, '0');
+                let dia = m[2].padStart(2, '0');
                 let anioStr = m[3];
-                let turnoLetra = m[4].toLowerCase();
-                let bloqueNumeros = m[5];
+                let n1 = m[4]; let n2 = m[5]; let n3 = m[6];
 
-                // Convertir año de 2 dígitos a 4 dígitos de forma segura
                 let fullAnio = anioStr.length === 2 ? "20" + anioStr : anioStr;
-                if (parseInt(anioStr) > 70 && anioStr.length === 2) fullAnio = "19" + anioStr;
+                let k = `${fullAnio}-${mes}-${dia}`;
 
-                // Mapear el identificador del tiro según la época (M era tiro único antes de 2009)
-                let tu = 't'; // Por defecto mediodía/tarde
-                if (turnoLetra === 'n') tu = 'n';
+                // El número fijo SIEMPRE sale de los dos últimos dígitos del bloque de guiones intermedio (n2)
+                let numFijo = n2.padStart(2, '0').slice(-2);
 
-                // Filtrar el bloque de guiones para extraer el número Fijo
-                let partes = bloqueNumeros.split('-');
-                let numFijo = '';
+                // Determinar el turno dinámicamente según la fecha histórica crítica
+                let tu = 't'; 
+                let fechaLimite = new Date(2008, 4, 18); // 18 de Mayo de 2008
+                let fechaSorteo = new Date(parseInt(fullAnio), parseInt(mes) - 1, parseInt(dia));
 
-                if (partes.length >= 3 && partes[1] !== '') {
-                    // Formato estándar: "05-43-18" -> El segundo bloque es el fijo real
-                    numFijo = partes[1].trim();
+                if (fechaSorteo > fechaLimite) {
+                    // Después del 18/05/2008 hay dos tiros. Evaluamos la letra que pegaba al bloque
+                    if (item.includes('M') || item.includes('m') || item.includes('N') || item.includes('n')) {
+                        tu = 'n'; // Noche o Mediodía según tu orden secuencial nocturno
+                    } else {
+                        tu = 't';
+                    }
                 } else {
-                    // Formato de respaldo por si el renglón viene pegado
-                    let digitos = bloqueNumeros.replace(/-/g, '');
-                    if (digitos.length >= 2) numFijo = digitos.slice(0, 2);
+                    // Del 18/05/2008 hacia atrás, solo existía un tiro único al día
+                    tu = 't'; 
                 }
 
-                if (numFijo && numFijo.length === 2) {
-                    let k = `${fullAnio}-${mes}-${dia}`;
-                    if (!db[k]) db[k] = {};
-                    db[k][tu] = numFijo;
-                    cnt++;
-                }
+                if (!db[k]) db[k] = {};
+                db[k][tu] = numFijo;
+                cnt++;
             }
-        });
+        }
 
-        if(cnt === 0) return alert("Estructura no reconocida. Asegúrate de copiar las líneas como se muestra en tus notas.");
+        if(cnt === 0) {
+            alert("Estructura no reconocida. Asegúrate de copiar las líneas como se muestra en tus notas.");
+            return;
+        }
+
         localStorage.setItem('bolita_master_db', JSON.stringify(db));
-        alert(`Éxito Absoluto: Se inyectaron ${cnt} tiros históricos al almacenamiento.`);
+        alert(`Éxito Absoluto: Se inyectaron ${cnt} tiros históricos.`);
         document.getElementById('import_raw_text').value = ""; 
         renderCalendario();
     }
-
-    function abrirAuditoria() { document.getElementById('modal-auditoria').style.display = 'block'; actualizarAuditoriaModal(); }
-    function cerrarAuditoria() { document.getElementById('modal-auditoria').style.display = 'none'; }
-    function actualizarAuditoriaModal() {
-        let totalSorteos = 0; let totalAciertos = (JSON.parse(localStorage.getItem('bolita_aciertos_log')) || []).length;
-        for(let k in db) { totalSorteos += Object.keys(db[k]).length; }
-        let pct = totalSorteos > 0 ? ((totalAciertos / totalSorteos) * 100).toFixed(1) : 0;
-        
-        document.getElementById('aud_pct_modal').textContent = `${pct}%`;
-        document.getElementById('aud_num_modal').textContent = `${totalAciertos}/${totalSorteos}`;
-        
-        let logsCont = document.getElementById('lista_auditoria_logs');
-        let aciertosLog = JSON.parse(localStorage.getItem('bolita_aciertos_log')) || [];
-        if(aciertosLog.length === 0) { logsCont.innerHTML = "No hay registros auditados aún."; return; }
-        
-        logsCont.innerHTML = [...aciertosLog].reverse().map(l => `<div style="border-bottom:1px solid #222; padding:4px 0;">✔ [${l.fecha} - ${l.turno}] Fijo Ganador: <b style="color:var(--win);">${l.numero}</b> detectado en Casilla #${l.casilla}.</div>`).join('');
-    }
 </script>
-
 </body>
 </html>

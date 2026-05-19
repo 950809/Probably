@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bolita Pro Master - Consola Global Elite v9.0</title>
+    <title>Bolita Pro Master - Consola Global Elite v8.8 (Online)</title>
     <style>
         :root { --neon: #00ff41; --dark: #050505; --panel: #0d1117; --win: #ffeb3b; --error: #ff3333; }
         body { font-family: 'Segoe UI', monospace; background: var(--dark); color: var(--neon); margin: 0; padding: 10px; -webkit-user-select: none; user-select: none; }
@@ -32,8 +32,8 @@
         .grid-res { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 15px; border-top: 1px solid #222; padding-top: 10px; }
         .box { border: 1px solid var(--neon); padding: 10px; text-align: center; font-weight: bold; font-size: 1rem; height: 45px; display: flex; align-items: center; justify-content: center; border-radius: 4px; background: #000; }
         
-        /* Iluminación Inteligente de Resultados v9.0 */
-        .box.destacado-top10 { background: #003311; color: #00ff66; border-color: #00ff66; }
+        /* Iluminación Inteligente de Resultados v8.8 */
+        .box.destacado-top10 { background: #003311; color: #00ff66; border-color: #00ff66; font-shadow: 0 0 5px #00ff66; }
         .box.ganador-oro { background: var(--win) !important; color: #000 !important; border: 2px solid #fff !important; font-weight: bold !important; box-shadow: 0 0 15px var(--win) !important; animation: blinker 1.5s linear infinite; }
 
         #modal-db, #panel-admin, #modal-auditoria { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 1000; padding: 15px; box-sizing: border-box; overflow-y: auto; }
@@ -60,19 +60,22 @@
         .tabla-aciertos td { border: 1px solid var(--win); color: #fff; }
 
         .loading-text { text-align: center; color: var(--win); font-size: 0.85rem; font-weight: bold; margin: 20px 0; animation: blinker 1s linear infinite; }
-        .sync-status { text-align: center; font-size: 0.7rem; margin-bottom: 10px; color: #888; font-family: monospace; }
         @keyframes blinker { 50% { opacity: 0; } }
+        
+        /* Banner de Sincronización Online */
+        #status-nube { text-align: center; font-size: 0.75rem; color: var(--win); font-weight: bold; padding: 6px; border: 1px solid var(--win); border-radius: 4px; margin-bottom: 12px; background: rgba(255, 235, 59, 0.03); }
     </style>
 </head>
 <body>
 
+<div id="status-nube">⏳ Conectando con la Nube Global...</div>
+
 <div id="view-login" class="container">
-    <h2>Control de Acceso de Usuarios v9.0</h2>
-    <div id="sync-indicator-login" class="sync-status">Sincronizando la nube remota...</div>
+    <h2>Control de Acceso de Usuarios</h2>
     <div class="login-form">
         <input type="text" id="login-user" placeholder="USUARIO (Nombre_Apellido)">
         <input type="password" id="login-pass" placeholder="CONTRASEÑA">
-        <button id="btn-login-master" onclick="intentarLogin()" disabled>ENTRAR AL SISTEMA</button>
+        <button onclick="intentarLogin()">ENTRAR AL SISTEMA</button>
         <button class="secondary" onclick="mostrarRegistroForm(true)">SOLICITAR NUEVO REGISTRO</button>
     </div>
     <p id="login-error" style="color:var(--error); text-align:center; font-size:0.8rem; display:none;"></p>
@@ -98,7 +101,6 @@
         <span id="user-display">Usuario: --</span>
         <span id="expire-display">Expira en: -- días</span>
     </div>
-    <div id="sync-indicator-app" class="sync-status">✓ Sincronizado en línea</div>
 
     <div class="tabs-container">
         <button id="btn-user-tab-calc" class="tab-btn active" onclick="switchUserSection('calc')">🔮 Probabilidades</button>
@@ -268,128 +270,88 @@
 </div>
 
 <script>
-    // ==========================================
-    // CONFIGURACIÓN CENTRAL DE LA NUBE (GITHUB)
-    // ==========================================
-    // NOTA: Para producción online limpia sin exponer directo tu token principal,
-    // puedes usar un token clásico de GitHub con permisos únicos de "gist".
-    const GITHUB_TOKEN = "ghp_TU_TOKEN_AQUI_SEGURO"; 
-    const GIST_ID = "TU_GIST_ID_AQUI"; 
+    // === CONFIGURACIÓN DE NUBE GLOBAL ===
+    const GITHUB_TOKEN = "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";
+    const GIST_ID = "81e9f2811f3188fd47655ab91b6b89ae";
+    // ====================================
 
     const _0xAdmin = "yohnny95", _0xPass = "Elmatatan95*";
-    
-    // Variables de datos reactivas globales
-    let db = {};
-    let usuariosBD = {};
-    let aciertosLogGlobal = [];
-    
+    let db = JSON.parse(localStorage.getItem('bolita_master_db')) || {};
+    let usuariosBD = JSON.parse(localStorage.getItem('bolita_users_db')) || {};
     let usuarioActivo = "";
     let fechaActualCal = new Date();
     let esAdministradorLogueado = false;
 
-    let charadaDiccionario = JSON.parse(localStorage.getItem('bolita_charada_db')) || {"1":"Caballo, sol, tintero, camello, pescado chiquito","2":"Mariposa, hombre, cafetera, caracol","3":"Niño chiquito, marinero, luna, taza, ciempiés, muerto","4":"Gato, Santa Bárbara, vela, diente, boca, soldier, llave, militar, pavo real","5":"Mujer buena, monja, mar, carta, candado, periódico, fruta, lombriz","6":"Jicotea, reverbero, candela, botella, luna","7":"Mierda, culo, caracol, sueño, medias, caballero, cochino","8":"Muerto, muerto chiquito, calabaza, león, mesa, tigre","9":"Elefante, entierro, lengua, lira, cubo, esqueleto, buey","10":"Pescado grande, paseo, malla, cazuela, dinero, lancha","11":"Gallo fino, lluvia, fósforo, fosforera, taller, fábrica, caballo","12":"Puta, estrella, viaje, toallas, refrigerador, cometa, dama, perro grande","13":"Chulo, niño grande, pavo real, Santa Lucía, anafe, elefante","14":"Cementerio de noche, gato, tigre, matrimonio, enamorados, arresto, sartén","15":"Perro chiquito, niña bonita, visita, cuchara, gallo, ratón","16":"Toro, plancha, arete, mujer santa, vestido, incendio pequeño, funerales, avispa","17":"San Lázaro, luna, mujer buena, hule, camisón, armas, fumar opio","18":"Pescado chiquito, iglesia, sirena, palma, pescado, gato amarillo","19":"Lombriz, campesino, bandera, tropa, mesa grande, armadura, jutía","20":"Tibor, orinal, gato fino, cañón, camiseta, libro, mujer","21":"Majá, dinero, reloj de bolsillo, chaleco, cotorra, cigarros, gallo","22":"Sapo, estrella, lirio, chimenea, sol, jicotea","23":"Vapor, submarino, monte, escalera, barco, águila","24":"Paloma, música, carpintero, cocina, pescado grande","25":"Piedra fina, casa nueva, sol, monja, rana","26":"Anguila, calle, médico nuevo, brillante, nube de oro","27":"Avispa, campana, cuchara grande, canario, baúl, mono","28":"Chivo, bollo, carretón, bandera, político, uvas, perro chiquito","29":"Ratón, jutía, nube, venado, águila","30":"Camarón, arcoíris, pinga, almanaque, buey, cangrejo, chivo","31":"Venado, escuela, zapato nuevo, pato","32":"Puerco chiquito, enemigo, mulo, demonio, majá","33":"Tiñosa, baraja, santo, Jesucristo, bofetón, camarón","34":"Mono, familia, negro, negro chiquito, capataz, paloma","35":"Araña, araña chiquita, novia, bombillo, mosquito, mariposa","36":"Cachimba, teatro, bodega, opio, coloso, pajarito","37":"Bruja, mariposa bruja, gallina prieta, gitana, hormiga, carretera, piedra fina","38":"Dinero, mucho dinero, macao, carro, goleta, guante, barril","39":"Culebra, conejo, rayo, baile, tintorero","40":"Cura, poca sangre, bombero, muchacho, maldita, cantina, estatua","41":"Lagartija, lagartijo, prisión, pato chiquito, jubo, capuchino, clarín","42":"Pato, país lejano, carnero, España, abismo, liga","43":"Alacrán, amigo, vaca, puerta, presidiario, jorobado, tísico","44":"Año del cuero, guácara con guácara, infierno, año malo, temporal, tormenta, plancha, caldero","45":"Tiburón, presidente, traje, tranvía, escuela, estrella","46":"Guagua, humo, hambre, hurón, baile, chino","47":"Pájaro, maricón, mala noticia, mucha sangre, escolta, gallo, rosa","48":"Cucaracha, abanico, barbería, cubo","49":"Borracho, fogón, riqueza, figurín, percha, tesoro, fantasma","50":"Policía, agua, alegría, florero, alcalde, pícaro, árbol","51":"Soldado, guardia rural, sereno, sed, oro, anteojos, presillas","52":"Bicicleta, coche, borracho, abogado, libreta","53":"Luz eléctrica, prenda, tragedy, dinamita, diamante, beso, alguacil","54":"Flores, gallina blanca, sueño, timbre, cañón, rosas","55":"Cangrejo, murciélago, baile, iglesia grande, isleño, caerse, bala, sellos","56":"Gallina sacada, reina, escorpión, pato grande, merengue, piedra, camisa, cara","57":"Cama, ángeles, telegrama, puerta","58":"Adulterio, retrato, cuchillo, cangrejo, ferretero, batea","59":"Loco, fonógrafo, langosta, anillo, araña grande","60":"Payaso, sol oscuro, huevo, cómico, pájaro grande, tempestad, avecilla","61":"Caballo grande, arroz, cañonazo, piedra grande, revólver, boticario, pintor, saco","62":"Matrimonio, robo, assassination, crimen, nieve, lámpara, visión, academia, carretilla","63":"Asesino, bandido, bandolero, cuernos, espada, caracol, policía, escalera","64":"Muerto vivo, muerto grande, escándalo, tiro de rifle, maromero, relajo, fiera","65":"Cárcel, comida, bruja, ventana, conejo, trueno","66":"Tarro, divorcio, pareja de yeguas, beso, máscara, estrella, mudanza, carnaval","67":"Puñalada, hospital, reloj, autoridad, fonda, aborto, zapato","68":"Cementerio, cementerio grande, globo, cuchillo grande, riña, templo, bolos, dinero","69":"Pozo, fiera, piano, loma, vago, polvorín","70":"Teléfono, coco, tiro, barril, arcoíris, bala, camisa","71":"Río, sombrero, perro mediano, pantera, fusil","72":"Buey, buey viejo, ferrocarril, serrucho, lluvia, collar, cetro, relámpago","73":"Maleta, parque, navaja, manzanas, ajedrez, cigarro","74":"Papalote, coronel, militar, serpiente, cólera, tarima","75":"Cine, corbata, viento, guitarra, cuna","76":"Bailarina, violín, humo, collar, maletín","77":"Banderas, frascos, muletas, soldados, campana","78":"Ataúd, obispo, rey, caballo, música, luna","79":"Tren de carga, coche, abogado, mulo, dulces","80":"Médico, sábanas, paraguas, reloj, buena noticia","81":"Teatro, fango, navaja, gato grande, trampa","82":"Madre, león, buey, lancha, canasta","83":"Tragedia, bastón, procesamiento, madera, limosna","84":"Sastre, sangre, cofre, banquero, iglesia","85":"Espejo, reloj de pared, zapato, ojo, mujer mala","86":"Tijeras, convento, mulas, militar, herida","87":"Plátanos, fuego, Nueva York, pescado, cucaracha","88":"Hojas, aduana, muerto, caballo, vaso","89":"León, agua, cometa, viejo, carretón","90":"Viejo, espejo, caramelos, temporal, hacha","91":"Alpargatas, comunista, bolsas, pájaro negro","92":"Puerco grande, globo, avión, Cuba, silla","93":"Sortija, revolución, andarín, joyas","94":"Machete, herradura, mariposa grande, pulga","95":"Guerra, perro grande, cuchillo, alcalde","96":"Zapato viejo, medicina, desafío, pícaro","97":"Grillo, mosquito,limosnero, sinsonte","98":"Piano, entierro grande, santo, varita","99":"Carbonero, sereno, lluvia, joyero, ratero","100":"Inodoro, dios, escoba, automóvil, canario"};
+    let charadaDiccionario = JSON.parse(localStorage.getItem('bolita_charada_db')) || {"1":"Caballo, sol, tintero, camello, pescado chiquito","2":"Mariposa, hombre, cafetera, caracol","3":"Niño chiquito, marinero, luna, taza, ciempiés, muerto","4":"Gato, Santa Bárbara, vela, diente, boca, soldier, llave, militar, pavo real","5":"Mujer buena, monja, mar, carta, candado, periódico, fruta, lombriz","6":"Jicotea, reverbero, candela, botella, luna","7":"Mierda, culo, caracol, sueño, medias, caballero, cochino","8":"Muerto, muerto chiquito, calabaza, león, mesa, tigre","9":"Elefante, entierro, lengua, lira, cubo, esqueleto, buey","10":"Pescado grande, paseo, malla, cazuela, dinero, lancha","11":"Gallo fino, lluvia, fósforo, fosforera, taller, fábrica, caballo","12":"Puta, estrella, viaje, toallas, refrigerador, cometa, dama, perro grande","13":"Chulo, niño grande, pavo real, Santa Lucía, anafe, elefante","14":"Cementerio de noche, gato, tigre, matrimonio, enamorados, arresto, sartén","15":"Perro chiquito, niña bonita, visita, cuchara, gallo, ratón","16":"Toro, plancha, arete, mujer santa, vestido, incendio pequeño, funerales, avispa","17":"San Lázaro, luna, mujer buena, hule, camisón, armas, fumar opio","18":"Pescado chiquito, iglesia, sirena, palma, pescado, gato amarillo","19":"Lombriz, campesino, bandera, tropa, mesa grande, armadura, jutía","20":"Tibor, orinal, gato fino, cañón, camiseta, libro, mujer","21":"Majá, dinero, reloj de bolsillo, chaleco, cotorra, cigarros, gallo","22":"Sapo, estrella, lirio, chimenea, sol, jicotea","23":"Vapor, submarino, monte, escalera, barco, águila","24":"Paloma, música, carpintero, cocina, pescado grande","25":"Piedra fina, casa nueva, sol, monja, rana","26":"Anguila, calle, médico nuevo, brillante, nube de oro","27":"Avispa, campana, cuchara grande, canario, baúl, mono","28":"Chivo, bollo, carretón, bandera, político, uvas, perro chiquito","29":"Ratón, jutía, nube, venado, águila","30":"Camarón, arcoíris, pinga, almanaque, buey, cangrejo, chivo","31":"Venado, escuela, zapato nuevo, pato","32":"Puerco chiquito, enemigo, mulo, demonio, majá","33":"Tiñosa, baraja, santo, Jesucristo, bofetón, camarón","34":"Mono, familia, negro, negro chiquito, capataz, paloma","35":"Araña, araña chiquita, novia, bombillo, mosquito, mariposa","36":"Cachimba, teatro, bodega, opio, coloso, pajarito","37":"Bruja, mariposa bruja, gallina prieta, gitana, hormiga, carretera, piedra fina","38":"Dinero, mucho dinero, macao, carro, goleta, guante, barril","39":"Culebra, conejo, rayo, baile, tintorero","40":"Cura, poca sangre, bombero, muchacho, maldita, cantina, estatua","41":"Lagartija, lagartijo, prisión, pato chiquito, jubo, capuchino, clarín","42":"Pato, país lejano, carnero, España, abismo, liga","43":"Alacrán, amigo, vaca, puerta, presidiario, jorobado, tísico","44":"Año del cuero, guácara con guácara, infierno, año malo, temporal, tormenta, plancha, caldero","45":"Tiburón, presidente, traje, tranvía, escuela, estrella","46":"Guagua, humo, hambre, hurón, baile, chino","47":"Pájaro, maricón, mala noticia, mucha sangre, escolta, gallo, rosa","48":"Cucaracha, abanico, barbería, cubo","49":"Borracho, fogón, riqueza, figurín, percha, tesoro, fantasma","50":"Policía, agua, alegría, florero, alcalde, pícaro, árbol","51":"Soldado, guardia rural, sereno, sed, oro, anteojos, presillas","52":"Bicicleta, coche, borracho, abogado, libreta","53":"Luz eléctrica, prenda, tragedy, dinamita, diamante, beso, alguacil","54":"Flores, gallina blanca, sueño, timbre, cañón, rosas","55":"Cangrejo, murciélago, baile, iglesia grande, isleño, caerse, bala, sellos","56":"Gallina sacada, reina, escorpión, pato grande, merengue, piedra, camisa, cara","57":"Cama, ángeles, telegrama, puerta","58":"Adulterio, retrato, cuchillo, cangrejo, ferretero, batea","59":"Loco, fonógrafo, langosta, anillo, araña grande","60":"Payaso, sol oscuro, huevo, cómico, pájaro grande, tempestad, avecilla","61":"Caballo grande, arroz, cañonazo, piedra grande, revólver, boticario, pintor, saco","62":"Matrimonio, robo, assassination, crimen, nieve, lámpara, visión, academia, carretilla","63":"Asesino, bandido, bandolero, cuernos, espada, caracol, policía, escalera","64":"Muerto vivo, muerto grande, escándalo, tiro de rifle, maromero, relajo, fiera","65":"Cárcel, comida, bruja, ventana, conejo, trueno","66":"Tarro, divorcio, pareja de yeguas, beso, máscara, estrella, mudanza, carnaval","67":"Puñalada, hospital, reloj, autoridad, fonda, aborto, zapato","68":"Cementerio, cementerio grande, globo, cuchillo grande, riña, templo, bolos, dinero","69":"Pozo, fiera, piano, loma, vago, polvorín","70":"Teléfono, coco, tiro, barril, arcoíris, bala, camisa","71":"Río, sombrero, perro mediano, pantera, fusil","72":"Buey, buey viejo, ferrocarril, serrucho, lluvia, collar, cetro, relámpago","73":"Maleta, parque, navaja, manzanas, ajedrez, cigarro","74":"Papalote, coronel, militar, serpiente, cólera, tarima","75":"Cine, corbata, viento, guitarra, cuna","76":"Bailarina, violín, humo, collar, maletín","77":"Banderas, frascos, muletas, soldados, campana","78":"Ataúd, obispo, rey, caballo, música, luna","79":"Tren de carga, coche, abogado, mulo, dulces","80":"Médico, sábanas, paraguas, reloj, buena noticia","81":"Teatro, fango, navaja, gato grande, trampa","82":"Madre, león, buey, lancha, canasta","83":"Tragedia, bastón, procesamiento, madera, limosna","84":"Sastre, sangre, cofre, banquero, iglesia","85":"Espejo, reloj de pared, zapato, ojo, mujer mala","86":"Tijeras, convento, mulas, militar, herida","87":"Plátanos, fuego, Nueva York, pescado, cucaracha","88":"Hojas, aduana, muerto, caballo, vaso","89":"León, agua, cometa, viejo, carretón","90":"Viejo, espejo, caramelos, temporal, hacha","91":"Alpargatas, comunista, bolsas, pájaro negro","92":"Puerco grande, globo, avión, Cuba, silla","93":"Sortija, revolution, andarín, joyas","94":"Machete, herradura, mariposa grande, pulga","95":"Guerra, perro grande, cuchillo, alcalde","96":"Zapato viejo, medicina, desafío, pícaro","97":"Grillo, mosquito,limosnero, sinsonte","98":"Piano, entierro grande, santo, varita","99":"Carbonero, sereno, lluvia, joyero, ratero","100":"Inodoro, dios, escoba, automóvil, canario"};
 
-    // ==========================================
-    // SISTEMA REMOTO DE SINCRONIZACIÓN AUTOMÁTICA
-    // ==========================================
-    async function inicializarYcargarNube() {
-        const indLogin = document.getElementById('sync-indicator-login');
-        const indApp = document.getElementById('sync-indicator-app');
-        
-        // Carga preventiva local por si se cae el internet
-        db = JSON.parse(localStorage.getItem('bolita_master_db')) || {};
-        usuariosBD = JSON.parse(localStorage.getItem('bolita_users_db')) || {};
-        aciertosLogGlobal = JSON.parse(localStorage.getItem('bolita_aciertos_log')) || [];
-
-        if (GIST_ID.includes("TU_GIST_ID")) {
-            indLogin.textContent = "⚠ Ejecutándose en modo Local Offline (Sin Gist)";
-            document.getElementById('btn-login-master').disabled = false;
-            return;
+    document.querySelectorAll('.cant_select').forEach(sel => {
+        sel.innerHTML = "";
+        for(let i=10; i<=100; i+=10) {
+            let opt = document.createElement('option'); opt.value = i; opt.textContent = `${i} Números`;
+            if(i===20) opt.selected = true;
+            sel.appendChild(opt);
         }
+    });
 
+    // === FUNCIONES NUBE GLOBAL (GITHUB GIST) ===
+    async function actualizarNubeGlobal(datosNuevos) {
+        if (!GITHUB_TOKEN || GITHUB_TOKEN.includes("TU_TOKEN")) return;
         try {
-            const respuesta = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
-                headers: { "Authorization": `token ${GITHUB_TOKEN}` }
-            });
-            if(respuesta.ok) {
-                const datosGist = await respuesta.json();
-                if(datosGist.files && datosGist.files["bolita_global_data.json"]) {
-                    const contenidoCrudo = JSON.parse(datosGist.files["bolita_global_data.json"].content);
-                    
-                    db = contenidoCrudo.historialFijos || {};
-                    usuariosBD = contenidoCrudo.usuarios || {};
-                    aciertosLogGlobal = contenidoCrudo.historicoAciertos || [];
-                    
-                    // Sincronizar espejos locales
-                    localStorage.setItem('bolita_master_db', JSON.stringify(db));
-                    localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD));
-                    localStorage.setItem('bolita_aciertos_log', JSON.stringify(aciertosLogGlobal));
-                    
-                    indLogin.textContent = "✓ Nube Global Sincronizada de forma Segura";
-                    indApp.textContent = "✓ Sincronizado en línea";
-                }
-            }
-        } catch (err) {
-            console.log("Error de red. Corriendo con memoria caché local.", err);
-            indLogin.textContent = "⚠ Modo Offline (Caché local activa)";
-            indApp.textContent = "⚠ Modo Offline (Caché local activa)";
-        }
-        document.getElementById('btn-login-master').disabled = false;
-    }
-
-    async function guardarEnNubeGlobal() {
-        const indApp = document.getElementById('sync-indicator-app');
-        // Actualizar local siempre
-        localStorage.setItem('bolita_master_db', JSON.stringify(db));
-        localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD));
-        localStorage.setItem('bolita_aciertos_log', JSON.stringify(aciertosLogGlobal));
-
-        if (GIST_ID.includes("TU_GIST_ID")) return;
-
-        indApp.textContent = "⏳ Guardando cambios en la nube...";
-        
-        const paqueteSalida = {
-            historialFijos: db,
-            usuarios: usuariosBD,
-            historicoAciertos: aciertosLogGlobal
-        };
-
-        try {
-            const respuesta = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
-                method: "PATCH",
+            await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+                method: 'PATCH',
                 headers: {
-                    "Authorization": `token ${GITHUB_TOKEN}`,
-                    "Content-Type": "application/json"
+                    'Authorization': `token ${GITHUB_TOKEN}`,
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     files: {
                         "bolita_global_data.json": {
-                            content: JSON.stringify(paqueteSalida, null, 2)
+                            content: JSON.stringify(datosNuevos, null, 2)
                         }
                     }
                 })
             });
-            if(respuesta.ok) {
-                indApp.textContent = "✓ Cambios globales guardados en la nube";
-            } else {
-                indApp.textContent = "⚠ Error al salvar datos online";
-            }
-        } catch (err) {
-            indApp.textContent = "⚠ Error de red, guardado localmente";
+            console.log("Nube sincronizada.");
+        } catch (error) {
+            console.error("Error al subir a la nube:", error);
         }
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll('.cant_select').forEach(sel => {
-            sel.innerHTML = "";
-            for(let i=10; i<=100; i+=10) {
-                let opt = document.createElement('option'); opt.value = i; opt.textContent = `${i} Números`;
-                if(i===20) opt.selected = true;
-                sel.appendChild(opt);
+    async function descargarNubeGlobal() {
+        if (!GIST_ID || GIST_ID.includes("GIST_ID_AQUI")) return;
+        try {
+            let res = await fetch(`https://api.github.com/gists/${GIST_ID}`);
+            if (!res.ok) return;
+            let gistData = await res.json();
+            let contenidoRaw = gistData.files["bolita_global_data.json"].content;
+            if (contenidoRaw && contenidoRaw !== "{}") {
+                let datosNube = JSON.parse(contenidoRaw);
+                if (datosNube.historialFijos) {
+                    db = datosNube.historialFijos;
+                    localStorage.setItem('bolita_master_db', JSON.stringify(db));
+                }
+                if (datosNube.usuarios) {
+                    usuariosBD = datosNube.usuarios;
+                    localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD));
+                }
+                if (datosNube.aciertos) {
+                    localStorage.setItem('bolita_aciertos_log', JSON.stringify(datosNube.aciertos));
+                }
             }
-        });
-        inicializarYcargarNube();
+        } catch (error) {
+            console.error("Error al descargar de la nube:", error);
+        }
+    }
+
+    // Auto-ejecución al cargar la ventana
+    window.addEventListener('load', async () => {
+        await descargarNubeGlobal();
+        let statusDiv = document.getElementById('status-nube');
+        if(statusDiv) statusDiv.textContent = "✓ Nube Global Sincronizada Exitosamente";
+        mostrarTablaAciertos();
+        if (typeof renderCalendario === 'function') renderCalendario();
     });
+    // ===========================================
 
     // Control de Secciones de Usuario (Tabs)
     function switchUserSection(sec) {
@@ -444,7 +406,11 @@
         if(!n || !a || !p) return alert("Completa todos los campos.");
         let userKey = `${n}_${a}`;
         usuariosBD[userKey] = { pass: p, status: 'pendiente', dias: 30 };
-        guardarEnNubeGlobal();
+        localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD));
+        
+        let aciertosLog = JSON.parse(localStorage.getItem('bolita_aciertos_log')) || [];
+        actualizarNubeGlobal({ historialFijos: db, usuarios: usuariosBD, aciertos: aciertosLog });
+        
         alert("Solicitud enviada."); mostrarRegistroForm(false);
     }
 
@@ -471,8 +437,11 @@
     function alterarUser(key, accion) {
         if(accion==='aprobar') { usuariosBD[key].status = 'activo'; }
         else if(accion==='eliminar') { delete usuariosBD[key]; }
+        localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD)); 
+        
+        let aciertosLog = JSON.parse(localStorage.getItem('bolita_aciertos_log')) || [];
+        actualizarNubeGlobal({ historialFijos: db, usuarios: usuariosBD, aciertos: aciertosLog });
         actualizarStatsAdmin();
-        guardarEnNubeGlobal();
     }
 
     function activarProcesoCalculo(isAdmin) {
@@ -487,7 +456,7 @@
 
         setTimeout(() => {
             loader.style.display = 'none'; btn.disabled = false; generarTodo(isAdmin);
-        }, 2000);
+        }, 3000);
     }
 
     function generarTodo(isAdmin) {
@@ -559,6 +528,7 @@
             } else if(index < 10) {
                 b.className += " destacado-top10";
             }
+            
             panel.appendChild(b);
         });
         document.getElementById(`${prefijo}display_resultados`).style.display = 'block';
@@ -572,13 +542,15 @@
         if(!db[hoy]) db[hoy] = {};
         if(t) { db[hoy]['t'] = t.padStart(2, '0'); comprobarYRegistrarAcierto(hoy, 't', t.padStart(2, '0')); }
         if(n) { db[hoy]['n'] = n.padStart(2, '0'); comprobarYRegistrarAcierto(hoy, 'n', n.padStart(2, '0')); }
+        localStorage.setItem('bolita_master_db', JSON.stringify(db));
         
-        guardarEnNubeGlobal();
-        alert("Fijos guardados e inyectados."); 
-        mostrarTablaAciertos();
+        let aciertosLog = JSON.parse(localStorage.getItem('bolita_aciertos_log')) || [];
+        actualizarNubeGlobal({ historialFijos: db, usuarios: usuariosBD, aciertos: aciertosLog });
+
+        alert("Fijos guardados en Local y Sincronizados con la Nube."); mostrarTablaAciertos();
         
-        if(document.getElementById('display_resultados').style.display === 'block') generarTodo(false);
-        if(document.getElementById('admin_display_resultados').style.display === 'block') generarTodo(true);
+        if(document.getElementById('display_resultados').style.display === 'block') { generarTodo(false); }
+        if(document.getElementById('admin_display_resultados').style.display === 'block') { generarTodo(true); }
     }
 
     function comprobarYRegistrarAcierto(fecha, turno, numeroReal) {
@@ -587,59 +559,50 @@
         let pronosticos = JSON.parse(btn.dataset.lastPronosticos);
         let idx = pronosticos.indexOf(numeroReal);
         if(idx !== -1) {
-            if(!aciertosLogGlobal.some(l => l.fecha === fecha && l.turno === (turno==='t'?'Tarde':'Noche'))) {
-                aciertosLogGlobal.push({ fecha: fecha, turno: turno==='t'?'Tarde':'Noche', numero: numeroReal, casilla: idx + 1 });
+            let aciertosLog = JSON.parse(localStorage.getItem('bolita_aciertos_log')) || [];
+            if(!aciertosLog.some(l => l.fecha === fecha && l.turno === (turno==='t'?'Tarde':'Noche'))) {
+                aciertosLog.push({ fecha: fecha, turno: turno==='t'?'Tarde':'Noche', numero: numeroReal, casilla: idx + 1 });
+                localStorage.setItem('bolita_aciertos_log', JSON.stringify(aciertosLog));
             }
         }
     }
 
     function mostrarTablaAciertos() {
-        let html = aciertosLogGlobal.length === 0 ? `<p style="color:#666; font-size:0.7rem; text-align:center;">Sin aciertos registrados.</p>` :
+        let aciertosLog = JSON.parse(localStorage.getItem('bolita_aciertos_log')) || [];
+        let html = aciertosLog.length === 0 ? `<p style="color:#666; font-size:0.7rem; text-align:center;">Sin aciertos registrados.</p>` :
             `<table class="tabla-aciertos"><thead><tr><th>Fecha</th><th>Turno</th><th>Fijo</th><th>Casilla</th></tr></thead><tbody>` +
-            aciertosLogGlobal.slice().reverse().map(l => `<tr><td>${l.fecha}</td><td>${l.turno}</td><td style="color:var(--win); font-weight:bold;">${l.numero}</td><td>#${l.casilla}</td></tr>`).join('') + `</tbody></table>`;
+            aciertosLog.slice().reverse().map(l => `<tr><td>${l.fecha}</td><td>${l.turno}</td><td style="color:var(--win); font-weight:bold;">${l.numero}</td><td>#${l.casilla}</td></tr>`).join('') + `</tbody></table>`;
         document.getElementById('tabla_historico_aciertos_user').innerHTML = html;
         document.getElementById('tabla_historico_aciertos_admin').innerHTML = html;
     }
 
     function exportarBaseDatos() {
-        let pack = { historialFijos: db, historicoAciertos: aciertosLogGlobal };
-        let blob = new Blob([JSON.stringify(pack, null, 2)], { type: "application/json" });
+        let master = localStorage.getItem('bolita_master_db') || "{}";
+        let logs = localStorage.getItem('bolita_aciertos_log') || "[]";
+        let pack = { historialFijos: JSON.parse(master), historicoAciertos: JSON.parse(logs) };
+        let blob = new Blob([JSON.stringify(pack)], { type: "application/json" });
         let url = URL.createObjectURL(blob);
-        let a = document.createElement('a'); a.href = url; a.download = `bolita_v9_backup.json`;
+        let a = document.createElement('a'); a.href = url; a.download = `bolita_master_backup.json`;
         document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
     }
 
-    // Solución Sólida V9.0 Definitiva al problema de importación vacía o no reconocida
     function importarBaseDatos(event) {
         let file = event.target.files[0]; if(!file) return;
         let reader = new FileReader();
         reader.onload = function(e) {
             try {
                 let d = JSON.parse(e.target.result);
-                if(d && typeof d === 'object') {
-                    // 1. Detección automática si viene empaquetado del archivo exportado (.historialFijos)
-                    if(d.historialFijos) {
-                        db = d.historialFijos;
-                        aciertosLogGlobal = d.historicoAciertos || [];
-                    } 
-                    // 2. Compatibilidad si es un JSON crudo directo de la base vieja limpia
-                    else {
-                        db = d;
-                    }
-                    
-                    alert("¡Importación procesada con éxito, acere! Sincronizando vistas...");
-                    
-                    // Forzar pintado inmediato de interfaces sin necesidad de reiniciar la app
-                    mostrarTablaAciertos(); 
-                    renderCalendario();
-                    if(esAdministradorLogueado) actualizarStatsAdmin();
-                    
-                    // Salvar a la nube global de forma automática
-                    guardarEnNubeGlobal();
-                } else {
-                    alert("Estructura de archivo ilegible.");
-                }
-            } catch(err) { alert("Archivo JSON incompatible o corrupto."); }
+                if(d.historialFijos) {
+                    localStorage.setItem('bolita_master_db', JSON.stringify(d.historialFijos));
+                    localStorage.setItem('bolita_aciertos_log', JSON.stringify(d.historicoAciertos || []));
+                    db = d.historialFijos;
+                } else { localStorage.setItem('bolita_master_db', JSON.stringify(d)); db = d; }
+                
+                let aciertosLog = JSON.parse(localStorage.getItem('bolita_aciertos_log')) || [];
+                actualizarNubeGlobal({ historialFijos: db, usuarios: usuariosBD, aciertos: aciertosLog });
+                
+                alert("Base de datos importada correctamente."); mostrarTablaAciertos(); renderCalendario();
+            } catch(err) { alert("Archivo JSON incompatible."); }
         };
         reader.readAsText(file);
     }
@@ -714,8 +677,12 @@
             if(val) { if(!db[k]) db[k] = {}; db[k][tu] = val.padStart(2, '0'); }
             else if(db[k]) { delete db[k][tu]; if(Object.keys(db[k]).length===0) delete db[k]; }
         });
-        guardarEnNubeGlobal();
-        alert("Calendario guardado y sincronizado online.");
+        localStorage.setItem('bolita_master_db', JSON.stringify(db)); 
+        
+        let aciertosLog = JSON.parse(localStorage.getItem('bolita_aciertos_log')) || [];
+        actualizarNubeGlobal({ historialFijos: db, usuarios: usuariosBD, aciertos: aciertosLog });
+        
+        alert("Calendario actualizado en Local y Nube.");
     }
 
     function procesarTextoImportado() {
@@ -728,7 +695,7 @@
         let coincidencias = raw.match(regexGlobal);
 
         if (!coincidencias || coincidencias.length === 0) {
-            alert("Estructura no reconocida.");
+            alert("Estructura no reconocida. Asegúrate de copiar las líneas como se muestra en tus notas.");
             return;
         }
 
@@ -754,8 +721,11 @@
                     let fechaSorteo = new Date(parseInt(fullAnio), parseInt(mes) - 1, parseInt(dia));
 
                     if (fechaSorteo > fechaLimite) {
-                        if (letraTurno === 'M' || letraTurno === 'N') tu = 'n';
-                        else tu = 't';
+                        if (letraTurno === 'M' || letraTurno === 'N') {
+                            tu = 'n';
+                        } else {
+                            tu = 't';
+                        }
                     } else {
                         tu = 't';
                     }
@@ -767,10 +737,17 @@
             }
         });
 
-        if (cnt === 0) return alert("No se extrajo ningún fijo.");
+        if (cnt === 0) {
+            alert("No se pudo extraer ningún número fijo. Revisa el formato de los guiones.");
+            return;
+        }
 
-        guardarEnNubeGlobal();
-        alert(`¡Inyectados ${cnt} tiros históricos correctamente!`);
+        localStorage.setItem('bolita_master_db', JSON.stringify(db));
+        
+        let aciertosLog = JSON.parse(localStorage.getItem('bolita_aciertos_log')) || [];
+        actualizarNubeGlobal({ historialFijos: db, usuarios: usuariosBD, aciertos: aciertosLog });
+        
+        alert(`¡Éxito Total, acere! Se acaben de inyectar y subir a la nube ${cnt} tiros históricos.`);
         document.getElementById('import_raw_text').value = ""; 
         renderCalendario();
     }

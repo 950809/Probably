@@ -64,7 +64,6 @@
 </head>
 <body>
 
-<button onclick="navigator.clipboard.writeText(document.documentElement.outerHTML); alert('¡Código completo guardado en tu portapapeles con éxito, mi bro!');" style="background:#ffff33; color:#000; padding:12px; font-size:0.8rem; margin-bottom:12px; font-weight:bold; width:100%; border:none; border-radius:4px; cursor:pointer;">📋 COPIAR TODO EL CÓDIGO FUENTE</button>
 
 <div id="view-login" class="container">
     <h2>Control de Acceso de Usuarios</h2>
@@ -130,14 +129,18 @@
             <button style="padding:10px; font-size:0.75rem; margin-bottom:5px; background:#111; color:var(--neon); border:1px solid var(--neon);" onclick="abrirConfig()">📂 VER HISTÓRICOS Y CALENDARIO</button>
             
             <input type="text" id="search_charada_user" placeholder="Busca en la Charada (ej: Escoba, 46)..." oninput="buscarEnCharada(false)">
-            <div id="charada_result_user" class="charada-box">Escribe arriba para buscar significados...</div>
-            
-            <div style="margin-top:12px;">
-                <label style="background:transparent; color:var(--neon); border: 1px solid var(--neon); padding:12px; font-size:0.8rem; text-align:center; border-radius:4px; cursor:pointer; font-weight:bold; box-sizing:border-box; display:block;">
-                    📥 IMPORTAR CALENDARIO MAESTRO (.JSON)
-                    <input type="file" accept=".json" onchange="importarBaseDatos(event)" style="display: none;">
-                </label>
-            </div>
+<div id="charada_result_user" class="charada-box">Escribe arriba para buscar significados...</div>
+
+<div class="grid-2" style="margin-top:12px;">
+    <label style="background:transparent; color:var(--neon); border: 1px solid var(--neon); padding:10px; font-size:0.75rem; text-align:center; border-radius:4px; cursor:pointer; font-weight:bold; box-sizing:border-box; display:block;">
+        📥 IMPORTAR CALENDARIO
+        <input type="file" accept=".json" onchange="importarBaseDatos(event)" style="display: none;">
+    </label>
+    <label style="background:transparent; color:var(--win); border: 1px solid var(--win); padding:10px; font-size:0.75rem; text-align:center; border-radius:4px; cursor:pointer; font-weight:bold; box-sizing:border-box; display:block;">
+        📥 IMPORTAR CHARADA
+        <input type="file" accept=".json" onchange="importarCharada(event)" style="display: none;">
+    </label>
+</div
         </div>
     </div>
 

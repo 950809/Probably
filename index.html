@@ -371,28 +371,54 @@
         document.getElementById('btn-admin-tab-users').className = `tab-btn admin-tab ${sec==='users'?'active':''}`;
     }
 
-    function intentarLogin() {
-        let u = document.getElementById('login-user').value.trim();
-        let p = document.getElementById('login-pass').value;
-        if(u === _0xAdmin && p === _0xPass) {
-            esAdministradorLogueado = true; usuarioActivo = "ADMIN_MASTER";
-            document.getElementById('view-login').style.display = 'none';
-            document.getElementById('panel-admin').style.display = 'block';
-            switchAdminSection('consola');
-            actualizarStatsAdmin(); mostrarTablaAciertos(); return;
+    async function intentarLogin() {
+    let u = document.getElementById('login-user').value.trim();
+    let p = document.getElementById('login-pass').value;
+    let err = document.getElementById('login-error');
+    
+    err.style.display = 'block';
+    err.style.color = 'var(--win)';
+    err.textContent = "⏳ Verificando credenciales en la nube...";
+
+    // FORZAR DESCARGA: Ir a buscar a GitHub los usuarios que tú has aprobado en tu móvil
+    await descargarNubeGlobal();
+
+    if(u === _0xAdmin && p === _0xPass) {
+        // Confirmación extra para que nadie entre por accidente a tu cuenta Admin
+        let confirmarAdmin = confirm("¿Iniciar sesión como Administrador Supremo en este dispositivo?");
+        if(!confirmarAdmin) {
+            err.textContent = "Acceso admin cancelado.";
+            err.style.color = 'var(--error)';
+            return;
         }
-        if(usuariosBD[u] && usuariosBD[u].pass === p) {
-            if(usuariosBD[u].status === 'pendiente') { alert("Tu cuenta aún está en revisión."); return; }
-            usuarioActivo = u; esAdministradorLogueado = false;
-            document.getElementById('view-login').style.display = 'none';
-            document.getElementById('view-app').style.display = 'block';
-            document.getElementById('user-display').textContent = `Usuario: ${u}`;
-            document.getElementById('expire-display').textContent = `Expira en: ${usuariosBD[u].dias} días`;
-            switchUserSection('calc');
-            mostrarTablaAciertos(); return;
-        }
-        let err = document.getElementById('login-error'); err.textContent = "Credenciales incorrectas."; err.style.display='block';
+        esAdministradorLogueado = true; usuarioActivo = "ADMIN_MASTER";
+        document.getElementById('view-login').style.display = 'none';
+        document.getElementById('panel-admin').style.display = 'block';
+        switchAdminSection('consola');
+        actualizarStatsAdmin(); 
+        mostrarTablaAciertos(); 
+        return;
     }
+    
+    if(usuariosBD[u] && usuariosBD[u].pass === p) {
+        if(usuariosBD[u].status === 'pendiente') { 
+            err.textContent = "❌ Tu cuenta aún está en revisión por el Administrador."; 
+            err.style.color = 'var(--error)';
+            return; 
+        }
+        usuarioActivo = u; esAdministradorLogueado = false;
+        document.getElementById('view-login').style.display = 'none';
+        document.getElementById('view-app').style.display = 'block';
+        document.getElementById('user-display').textContent = `Usuario: ${u}`;
+        document.getElementById('expire-display').textContent = `Expira en: ${usuariosBD[u].dias} días`;
+        switchUserSection('calc');
+        mostrarTablaAciertos(); 
+        return;
+    }
+    
+    err.textContent = "❌ Credenciales incorrectas o usuario no registrado."; 
+    err.style.color = 'var(--error)';
+}
 
     function mostrarRegistroForm(ver) {
         document.getElementById('view-login').style.display = ver ? 'none' : 'block';
@@ -400,19 +426,25 @@
     }
 
     function enviarSolicitud() {
-        let n = document.getElementById('reg-nombre').value.trim();
-        let a = document.getElementById('reg-apellido').value.trim();
-        let p = document.getElementById('reg-pass').value;
-        if(!n || !a || !p) return alert("Completa todos los campos.");
-        let userKey = `${n}_${a}`;
+    let n = document.getElementById('reg-nombre').value.trim();
+    let a = document.getElementById('reg-apellido').value.trim();
+    let p = document.getElementById('reg-pass').value;
+    if(!n || !a || !p) return alert("Completa todos los campos.");
+    
+    let userKey = `${n}_${a}`;
+    
+    // Primero descargamos para no pisar registros de otros usuarios nuevos
+    descargarNubeGlobal().then(() => {
         usuariosBD[userKey] = { pass: p, status: 'pendiente', dias: 30 };
         localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD));
         
         let aciertosLog = JSON.parse(localStorage.getItem('bolita_aciertos_log')) || [];
         actualizarNubeGlobal({ historialFijos: db, usuarios: usuariosBD, aciertos: aciertosLog });
         
-        alert("Solicitud enviada."); mostrarRegistroForm(false);
-    }
+        alert("¡Solicitud enviada con éxito! Dile al Administrador que te active desde su teléfono."); 
+        mostrarRegistroForm(false);
+    });
+}
 
     function cerrarSesionEfectiva() { usuarioActivo = ""; document.getElementById('view-app').style.display='none'; document.getElementById('view-login').style.display='block'; }
     function cerrarAdmin() { document.getElementById('panel-admin').style.display='none'; document.getElementById('view-login').style.display='block'; }

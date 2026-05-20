@@ -308,111 +308,36 @@
         document.getElementById('btn-admin-tab-users').className = `tab-btn admin-tab ${sec==='users'?'active':''}`;
     }
 
-    // ==========================================
-// CONFIGURACIÓN DE SUPABASE (ONLINE SIN BLOQUEOS)
-// ==========================================
-const SUPABASE_URL = "https://cdruwznhqqgkpdfvlxjq.supabase.co";
-const SUPABASE_KEY = "sb_publishable_rVlYEZd4pAG1kr6U9EdJLQ_xpjp6IW9";
-
-// 1. FUNCIÓN PARA CARGAR LOS TIROS DE LA NUBE AL ABRIR LA APP
-async function cargarTirosDesdeNube() {
-    try {
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/tiros_historicos?select=*`, {
-            method: 'GET',
-            headers: {
-                'apikey': SUPABASE_KEY,
-                'Authorization': `Bearer ${SUPABASE_KEY}`,
-                'Content-Type': 'application/json'
-            }
-        });
-        if (!response.ok) throw new Error('Error al leer datos desde Supabase');
-        
-        const datos = await response.json();
-        
-        if (datos && datos.length > 0) {
-            let dbTemporal = {};
-            datos.forEach(item => {
-                dbTemporal[item.fecha] = { t: item.tiro_dia, n: item.tiro_noche };
+    // FUNCIÓN DE SINCRONIZACIÓN MAESTRA CON GITHUB GIST
+    async function actualizarNubeGlobal(packCompleto) {
+        if (!GIST_ID || !GITHUB_TOKEN) return console.log("Falta configuración de tokens.");
+        try {
+            let url = `https://api.github.com/gists/${GIST_ID}`;
+            let respuesta = await fetch(url, {
+                method: 'PATCH',
+                headers: {
+                    'Authorization': `token ${GITHUB_TOKEN}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    files: {
+                        "bolita_db.json": { content: JSON.stringify(packCompleto.historialFijos || {}, null, 2) },
+                        "usuarios.json": { content: JSON.stringify(packCompleto.usuarios || {}, null, 2) },
+                        "bolita_aciertos_log.json": { content: JSON.stringify(packCompleto.historicoAciertos || [], null, 2) }
+                    }
+                })
             });
-            localStorage.setItem('bolita_master_db', JSON.stringify(dbTemporal));
-            db = dbTemporal;
-            
-            if (typeof actualizarTablaVisual === "function") {
-                actualizarTablaVisual();
+            if (respuesta.ok) {
+                console.log("¡Nube Sincronizada con Éxito Global!");
+                return true;
+            } else {
+                console.error("Fallo la sincronización en el Gist.");
+                return false;
             }
-            console.log("Base de datos sincronizada desde Supabase con éxito total.");
+        } catch (e) {
+            console.error("Error de conexión con la nube:", e);
+            return false;
         }
-    } catch (error) {
-        console.error("Error de conexión al cargar nube:", error);
-    }
-}
-
-// 2. FUNCIÓN PARA GUARDAR O ACTUALIZAR UN TIRO EN LA NUBE
-async function guardarTiroEnNube(fecha, tiroDia, tiroNoche) {
-    try {
-        const response = await fetch(`${SUPABASE_URL}/rest/v1/tiros_historicos`, {
-            method: 'POST',
-            headers: {
-                'apikey': SUPABASE_KEY,
-                'Authorization': `Bearer ${SUPABASE_KEY}`,
-                'Content-Type': 'application/json',
-                'Prefer': 'resolution=merge-duplicates'
-            },
-            body: JSON.stringify({
-                fecha: fecha,
-                tiro_dia: tiroDia,
-                tiro_noche: tiroNoche
-            })
-        });
-        
-        if (response.ok) {
-            alert("¡Tiro sincronizado en la nube al momento!");
-        } else {
-            alert("Guardado local. Se actualizará cuando detecte internet.");
-        }
-    } catch (error) {
-        console.log("Modo offline: Guardado en la memoria interna del teléfono.", error);
-    }
-}
-
-// 3. REEMPLAZO DIRECTO DE TU FUNCIÓN ACTUALIZARNUBEGLOBAL
-async function actualizarNubeGlobal() {
-    console.log("Sincronizando con Supabase...");
-    
-    // Capturamos los inputs de tu interfaz actual
-    const fechaInput = document.getElementById('fecha-operacion') || document.getElementById('fecha');
-    const tiroDiaInput = document.getElementById('tiro-dia') || document.getElementById('t_dia');
-    const tiroNocheInput = document.getElementById('tiro-noche') || document.getElementById('t_noche');
-    
-    if (fechaInput && (tiroDiaInput || tiroNocheInput)) {
-        const fecha = fechaInput.value;
-        const tDia = tiroDiaInput ? tiroDiaInput.value : "";
-        const tNoche = tiroNocheInput ? tiroNocheInput.value : "";
-        
-        if (fecha) {
-            await guardarTiroEnNube(fecha, tDia, tNoche);
-            await cargarTirosDesdeNube();
-        } else {
-            alert("Por favor, selecciona una fecha válida primero.");
-        }
-    } else {
-        const fechasDisponibles = Object.keys(db);
-        if (fechasDisponibles.length > 0) {
-            const ultimaFecha = fechasDisponibles.sort().pop();
-            const datosTiro = db[ultimaFecha];
-            await guardarTiroEnNube(ultimaFecha, datosTiro.t, datosTiro.n);
-        } else {
-            console.error("No se encontraron datos para subir.");
-        }
-    }
-}
-
-// 4. AUTO-EJECUCIÓN AL ENTRAR (Para que le cargue automático a la familia)
-(function() {
-    setTimeout(() => {
-        cargarTirosDesdeNube();
-    }, 1000);
-})();
     }
 
     async function intentarLogin() {

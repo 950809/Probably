@@ -96,7 +96,7 @@
 <div id="view-app" class="container" style="display:none;">
     <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--win); margin-bottom: 5px;">
         <span id="user-display">Usuario: --</span>
-        <span id="expire-display">Expira en: -- días</span>
+        <span id="expire-display">Estado: Activo</span>
     </div>
 
     <div class="tabs-container">
@@ -228,12 +228,11 @@
         </div>
 
         <div id="admin-sub-users" style="display:none;">
-            <table style="max-height: 250px; overflow-y: auto; display: block; border: 1px solid #333; margin-top:0;">
+            <table style="max-height: 250px; overflow-y: auto; display: block; border: 1px solid #333; margin-top:0; width:100%;">
                 <thead>
                     <tr>
-                        <th style="width:35%;">Usuario</th>
-                        <th style="width:20%;">Estado</th>
-                        <th style="width:15%;">Días</th>
+                        <th style="width:40%;">Usuario</th>
+                        <th style="width:30%;">Estado</th>
                         <th style="width:30%;">Acciones</th>
                     </tr>
                 </thead>
@@ -267,19 +266,19 @@
 </div>
 
 <script>
+    // CREDENCIALES FIJAS DEL ADMINISTRADOR
     const _0xAdmin = "yohnny95", _0xPass = "Elmatatan95*";
-    const GIST_ID = "9406082260ef22f30b92f70b7bdcb0ca";
-    const T_UNO = "ghp_mblw8AXFJh7Xi2c";
-    const T_DOS = "6QUURSWBhemRtRa4avmBQ";
-    const GITHUB_TOKEN = T_UNO + T_DOS;
 
-    let db = JSON.parse(localStorage.getItem('bolita_master_db')) || {};
-    let usuariosBD = JSON.parse(localStorage.getItem('bolita_users_db')) || {};
+    // METE AQUÍ TUS CREDENCIALES PROPIAS DE SUPABASE
+    const SUPABASE_URL = "https://cdruwznhqqgkpdfvlxjq.supabase.co"; 
+    const SUPABASE_KEY = "sb_publishable_rVlYEZd4pAG1kr6U9EdJLQ_xpjp6IW9"; 
+
+    let db = {};
     let usuarioActivo = "";
     let fechaActualCal = new Date();
     let esAdministradorLogueado = false;
 
-    let charadaDiccionario = JSON.parse(localStorage.getItem('bolita_charada_db')) || {"1":"Caballo, sol, tintero, camello, pescado chiquito","2":"Mariposa, hombre, cafetera, caracol","3":"Niño chiquito, marinero, luna, taza, ciempiés, muerto","4":"Gato, Santa Bárbara, vela, diente, boca, soldier, llave, militar, pavo real","5":"Mujer buena, monja, mar, carta, candado, periódico, fruta, lombriz","6":"Jicotea, reverbero, candela, botella, luna","7":"Mierda, culo, caracol, sueño, medias, caballero, cochino","8":"Muerto, muerto chiquito, calabaza, león, mesa, tigre","9":"Elefante, entierro, lengua, lira, cubo, esqueleto, buey","10":"Pescado grande, paseo, malla, cazuela, dinero, lancha","11":"Gallo fino, lluvia, fósforo, fosforera, taller, fábrica, caballo","12":"Puta, estrella, viaje, toallas, refrigerador, cometa, dama, perro grande","13":"Chulo, niño grande, pavo real, Santa Lucía, anafe, elefante","14":"Cementerio de noche, gato, tigre, matrimonio, enamorados, arresto, sartén","15":"Perro chiquito, niña bonita, visita, cuchara, gallo, ratón","16":"Toro, plancha, arete, mujer santa, vestido, incendio pequeño, funerales, avispa","17":"San Lázaro, luna, mujer buena, hule, camisón, armas, fumar opio","18":"Pescado chiquito, iglesia, sirena, palma, pescado, gato amarillo","19":"Lombriz, campesino, bandera, tropa, mesa grande, armadura, jutía","20":"Tibor, orinal, gato fino, cañón, camiseta, libro, mujer","21":"Majá, dinero, reloj de bolsillo, chaleco, cotorra, cigarros, gallo","22":"Sapo, estrella, lirio, chimenea, sol, jicotea","23":"Vapor, submarino, monte, escalera, barco, águila","24":"Paloma, música, carpintero, cocina, pescado grande","25":"Piedra fina, casa nueva, sol, monja, rana","26":"Anguila, calle, médico nuevo, brillante, nube de oro","27":"Avispa, campana, cuchara grande, canario, baúl, mono","28":"Chivo, bollo, carretón, bandera, político, uvas, perro chiquito","29":"Ratón, jutía, nube, venado, águila","30":"Camarón, arcoíris, pinga, almanaque, buey, cangrejo, chivo","31":"Venado, escuela, zapato nuevo, pato","32":"Puerco chiquito, enemigo, mulo, demonio, majá","33":"Tiñosa, baraja, santo, Jesucristo, bofetón, camarón","34":"Mono, familia, negro, negro chiquito, capataz, paloma","35":"Araña, araña chiquita, novia, bombillo, mosquito, mariposa","36":"Cachimba, teatro, bodega, opio, coloso, pajarito","37":"Bruja, mariposa bruja, gallina prieta, gitana, hormiga, carretera, piedra fina","38":"Dinero, mucho dinero, macao, carro, goleta, guante, barril","39":"Culebra, conejo, rayo, baile, tintorero","40":"Cura, poca sangre, bombero, muchacho, maldita, cantina, estatua","41":"Lagartija, lagartijo, prisión, pato chiquito, jubo, capuchino, clarín","42":"Pato, país lejano, carnero, España, abismo, liga","43":"Alacrán, amigo, vaca, puerta, presidiario, jorobado, tísico","44":"Año del cuero, guácara con guácara, infierno, año malo, temporal, tormenta, plancha, caldero","45":"Tiburón, presidente, traje, tranvía, escuela, estrella","46":"Guagua, humo, hambre, hurón, baile, chino","47":"Pájaro, maricón, mala noticia, mucha sangre, escolta, gallo, rosa","48":"Cucaracha, abanico, barbería, cubo","49":"Borracho, fogón, riqueza, figurín, percha, tesoro, fantasma","50":"Policía, agua, alegría, florero, alcalde, pícaro, árbol","51":"Soldado, guardia rural, sereno, sed, oro, anteojos, presillas","52":"Bicicleta, coche, borracho, abogado, libreta","53":"Luz eléctrica, prenda, tragedy, dinamita, diamante, beso, alguacil","54":"Flores, gallina blanca, sueño, timbre, cañón, rosas","55":"Cangrejo, murciélago, baile, iglesia grande, isleño, caerse, bala, sellos","56":"Gallina sacada, reina, escorpión, pato grande, merengue, piedra, camisa, cara","57":"Cama, ángeles, telegrama, puerta","58":"Adulterio, retrato, cuchillo, cangrejo, ferretero, batea","59":"Loco, fonógrafo, langosta, anillo, araña grande","60":"Payaso, sol oscuro, huevo, cómico, pájaro grande, tempestad, avecilla","61":"Caballo grande, arroz, cañonazo, piedra grande, revólver, boticario, pintor, saco","62":"Matrimonio, robo, assassination, crimen, nieve, lámpara, visión, academia, carretilla","63":"Asesino, bandido, bandolero, cuernos, espada, caracol, policía, escalera","64":"Muerto vivo, muerto grande, escándalo, tiro de rifle, maromero, relajo, fiera","65":"Cárcel, comida, bruja, ventana, conejo, trueno","66":"Tarro, divorcio, pareja de yeguas, beso, máscara, estrella, mudanza, carnaval","67":"Puñalada, hospital, reloj, autoridad, fonda, aborto, zapato","68":"Cementerio, cementerio grande, globo, cuchillo grande, riña, templo, bolos, dinero","69":"Pozo, fiera, piano, loma, vago, polvorín","70":"Teléfono, coco, tiro, barril, arcoíris, bala, camisa","71":"Río, sombrero, perro mediano, pantera, fusil","72":"Buey, buey viejo, ferrocarril, serrucho, lluvia, collar, cetro, relámpago","73":"Maleta, parque, navaja, manzanas, ajedrez, cigarro","74":"Papalote, coronel, militar, serpiente, cólera, tarima","75":"Cine, corbata, viento, guitarra, cuna","76":"Bailarina, violín, humo, collar, maletín","77":"Banderas, frascos, muletas, soldados, campana","78":"Ataúd, obispo, rey, caballo, música, luna","79":"Tren de carga, coche, abogado, mulo, dulces","80":"Médico, sábanas, paraguas, reloj, buena noticia","81":"Teatro, fango, navaja, gato grande, trampa","82":"Madre, león, buey, lancha, canasta","83":"Tragedia, bastón, procesamiento, madera, limosna","84":"Sastre, sangre, cofre, banquero, iglesia","85":"Espejo, reloj de pared, zapato, ojo, mujer mala","86":"Tijeras, convento, mulas, militar, herida","87":"Plátanos, fuego, Nueva York, pescado, cucaracha","88":"Hojas, aduana, muerto, caballo, vaso","89":"León, agua, cometa, viejo, carretón","90":"Viejo, espejo, caramelos, temporal, hacha","91":"Alpargatas, comunista, bolsas, pájaro negro","92":"Puerco grande, globo, avión, Cuba, silla","93":"Sortija, revolución, andarín, joyas","94":"Machete, herradura, mariposa grande, pulga","95":"Guerra, perro grande, cuchillo, alcalde","96":"Zapato viejo, medicina, desafío, pícaro","97":"Grillo, mosquito,limosnero, sinsonte","98":"Piano, entierro grande, santo, varita","99":"Carbonero, sereno, lluvia, joyero, ratero","100":"Inodoro, dios, escoba, automóvil, canario"};
+    let charadaDiccionario = JSON.parse(localStorage.getItem('bolita_charada_db')) || {"1":"Caballo, sol, tintero, camello, pescado chiquito","2":"Mariposa, hombre, cafetera, caracol","3":"Niño chiquito, marinero, luna, taza, ciempiés, muerto","4":"Gato, Santa Bárbara, vela, diente, boca, soldier, llave, militar, pavo real","5":"Mujer buena, monja, mar, carta, candado, periódico, fruta, lombriz","6":"Jicotea, reverbero, candela, botella, luna","7":"Mierda, culo, caracol, sueño, medias, caballero, cochino","8":"Muerto, muerto chiquito, calabaza, león, mesa, tigre","9":"Elefante, entierro, lengua, lira, cubo, esqueleto, buey","10":"Pescado grande, paseo, malla, cazuela, dinero, lancha","11":"Gallo fino, lluvia, fósforo, fosforera, taller, fábrica, caballo","12":"Puta, estrella, viaje, toallas, refrigerador, cometa, dama, perro grande","13":"Chulo, niño grande, pavo real, Santa Lucía, anafe, elephants","14":"Cementerio de noche, gato, tigre, matrimonio, enamorados, arresto, sartén","15":"Perro chiquito, niña bonita, visita, cuchara, gallo, ratón","16":"Toro, plancha, arete, mujer santa, vestido, incendio pequeño, funerales, avispa","17":"San Lázaro, luna, mujer buena, hule, camisón, armas, fumar opio","18":"Pescado chiquito, iglesia, sirena, palma, pescado, gato amarillo","19":"Lombriz, campesino, bandera, tropa, mesa grande, armadura, jutía","20":"Tibor, orinal, gato fino, cañón, camiseta, libro, mujer","21":"Majá, dinero, reloj de bolsillo, chaleco, cotorra, cigarros, gallo","22":"Sapo, estrella, lirio, chimenea, sol, jicotea","23":"Vapor, submarino, monte, escalera, barco, águila","24":"Paloma, música, carpintero, cocina, pescado grande","25":"Piedra fina, casa nueva, sol, monja, rana","26":"Anguila, calle, médico nuevo, brillante, nube de oro","27":"Avispa, campana, cuchara grande, canario, baúl, mono","28":"Chivo, bollo, carretón, bandera, político, uvas, perro chiquito","29":"Ratón, jutía, nube, venado, águila","30":"Camarón, arcoíris, pinga, almanaque, buey, cangrejo, chivo","31":"Venado, escuela, zapato nuevo, pato","32":"Puerco chiquito, enemigo, mulo, demonio, majá","33":"Tiñosa, baraja, santo, Jesucristo, bofetón, camarón","34":"Mono, familia, negro, negro chiquito, capataz, paloma","35":"Araña, araña chiquita, novia, bombillo, mosquito, mariposa","36":"Cachimba, teatro, bodega, opio, coloso, pajarito","37":"Bruja, mariposa bruja, gallina prieta, gitana, hormiga, carretera, piedra fina","38":"Dinero, mucho dinero, macao, carro, goleta, guante, barril","39":"Culebra, conejo, rayo, baile, tintorero","40":"Cura, poca sangre, bombero, muchacho, maldita, cantina, estatua","41":"Lagartija, lagartijo, prisión, pato chiquito, jubo, capuchino, clarín","42":"Pato, país lejano, carnero, España, abismo, liga","43":"Alacrán, amigo, vaca, puerta, presidiario, jorobado, tísico","44":"Año del cuero, guácara con guácara, infierno, año malo, temporal, tormenta, plancha, caldero","45":"Tiburón, presidente, traje, tranvía, escuela, estrella","46":"Guagua, humo, hambre, hurón, baile, chino","47":"Pájaro, maricón, mala noticia, mucha sangre, escolta, gallo, rosa","48":"Cucaracha, abanico, barbería, cubo","49":"Borracho, fogón, riqueza, figurín, percha, tesoro, fantasma","50":"Policía, agua, alegría, florero, alcalde, pícaro, árbol","51":"Soldado, guardia rural, sereno, sed, oro, anteojos, presillas","52":"Bicicleta, coche, borracho, abogado, libreta","53":"Luz eléctrica, prenda, tragedy, dinamita, diamante, beso, alguacil","54":"Flores, gallina blanca, sueño, timbre, cañón, rosas","55":"Cangrejo, murciélago, baile, iglesia grande, isleño, caerse, bala, sellos","56":"Gallina sacada, reina, escorpión, pato grande, merengue, piedra, camisa, cara","57":"Cama, ángeles, telegrama, puerta","58":"Adulterio, retrato, cuchillo, cangrejo, ferretero, batea","59":"Loco, fonógrafo, langosta, anillo, araña grande","60":"Payaso, sol oscuro, huevo, cómico, pájaro grande, tempestad, avecilla","61":"Caballo grande, arroz, cañonazo, piedra grande, revólver, boticario, pintor, saco","62":"Matrimonio, robo, assassination, crimen, nieve, lámpara, visión, academia, carretilla","63":"Asesino, bandido, bandolero, cuernos, espada, caracol, policía, escalera","64":"Muerto vivo, muerto grande, escándalo, tiro de rifle, maromero, relajo, fiera","65":"Cárcel, comida, bruja, ventana, conejo, trueno","66":"Tarro, divorcio, pareja de yeguas, beso, máscara, estrella, mudanza, carnaval","67":"Puñalada, hospital, reloj, autoridad, fonda, aborto, zapato","68":"Cementerio, cementerio grande, globo, cuchillo grande, riña, templo, bolos, dinero","69":"Pozo, fiera, piano, loma, vago, polvorín","70":"Teléfono, coco, tiro, barril, arcoíris, bala, camisa","71":"Río, sombrero, perro mediano, pantera, fusil","72":"Buey, buey viejo, ferrocarril, serrucho, lluvia, collar, cetro, relámpago","73":"Maleta, parque, navaja, manzanas, ajedrez, cigarro","74":"Papalote, coronel, militar, serpiente, cólera, tarima","75":"Cine, corbata, viento, guitarra, cuna","76":"Bailarina, violín, humo, collar, maletín","77":"Banderas, frascos, muletas, soldados, campana","78":"Ataúd, obispo, rey, caballo, música, luna","79":"Tren de carga, coche, abogado, mulo, dulces","80":"Médico, sábanas, paraguas, reloj, buena noticia","81":"Teatro, fango, navaja, gato grande, trampa","82":"Madre, león, buey, lancha, canasta","83":"Tragedia, bastón, procesamiento, madera, limosna","84":"Sastre, sangre, cofre, banquero, iglesia","85":"Espejo, reloj de pared, zapato, ojo, mujer mala","86":"Tijeras, convento, mulas, militar, herida","87":"Plátanos, fuego, Nueva York, pescado, cucaracha","88":"Hojas, aduana, muerto, caballo, vaso","89":"León, agua, cometa, viejo, carretón","90":"Viejo, espejo, caramelos, temporal, hacha","91":"Alpargatas, comunista, bolsas, pájaro negro","92":"Puerco grande, globo, avión, Cuba, silla","93":"Sortija, revolución, andarín, joyas","94":"Machete, herradura, mariposa grande, pulga","95":"Guerra, perro grande, cuchillo, alcalde","96":"Zapato viejo, medicina, desafío, pícaro","97":"Grillo, mosquito,limosnero, sinsonte","98":"Piano, entierro grande, santo, varita","99":"Carbonero, sereno, lluvia, joyero, ratero","100":"Inodoro, dios, escoba, automóvil, canario"};
 
     document.querySelectorAll('.cant_select').forEach(sel => {
         sel.innerHTML = "";
@@ -290,7 +289,6 @@
         }
     });
 
-    // Control de Secciones de Usuario (Tabs)
     function switchUserSection(sec) {
         document.getElementById('user-sec-calc').style.display = sec === 'calc' ? 'block' : 'none';
         document.getElementById('user-sec-hist').style.display = sec === 'hist' ? 'block' : 'none';
@@ -298,7 +296,6 @@
         document.getElementById('btn-user-tab-hist').className = `tab-btn ${sec==='hist'?'active':''}`;
     }
 
-    // Control de Secciones de Administrador (Tabs)
     function switchAdminSection(sec) {
         document.getElementById('admin-sub-consola').style.display = sec === 'consola' ? 'block' : 'none';
         document.getElementById('admin-sub-aciertos').style.display = sec === 'aciertos' ? 'block' : 'none';
@@ -308,37 +305,55 @@
         document.getElementById('btn-admin-tab-users').className = `tab-btn admin-tab ${sec==='users'?'active':''}`;
     }
 
-    // FUNCIÓN DE SINCRONIZACIÓN MAESTRA CON GITHUB GIST
-    async function actualizarNubeGlobal(packCompleto) {
-        if (!GIST_ID || !GITHUB_TOKEN) return console.log("Falta configuración de tokens.");
+    // ==========================================
+    // CONTROLADORES DE BASE DE DATOS (SUPABASE)
+    // ==========================================
+
+    // Descarga todos los tiros históricos guardados
+    async function cargarTirosDesdeNube() {
         try {
-            let url = `https://api.github.com/gists/${GIST_ID}`;
-            let respuesta = await fetch(url, {
-                method: 'PATCH',
-                headers: {
-                    'Authorization': `token ${GITHUB_TOKEN}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    files: {
-                        "bolita_db.json": { content: JSON.stringify(packCompleto.historialFijos || {}, null, 2) },
-                        "usuarios.json": { content: JSON.stringify(packCompleto.usuarios || {}, null, 2) },
-                        "bolita_aciertos_log.json": { content: JSON.stringify(packCompleto.historicoAciertos || [], null, 2) }
-                    }
-                })
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/tiros_historicos?select=*`, {
+                method: 'GET',
+                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
             });
-            if (respuesta.ok) {
-                console.log("¡Nube Sincronizada con Éxito Global!");
-                return true;
-            } else {
-                console.error("Fallo la sincronización en el Gist.");
-                return false;
-            }
+            if (!res.ok) throw new Error();
+            const registros = await res.json();
+            db = {};
+            registros.forEach(fila => {
+                db[fila.fecha] = { t: fila.tarde || "", n: fila.noche || "" };
+            });
+            localStorage.setItem('bolita_master_db', JSON.stringify(db));
         } catch (e) {
-            console.error("Error de conexión con la nube:", e);
-            return false;
+            console.error("Error cargando tiros de Supabase, usando locales.");
+            db = JSON.parse(localStorage.getItem('bolita_master_db')) || {};
         }
     }
+
+    // Guarda un tiro específico directo en Supabase
+    async function registrarTiroEnNube(fecha, tarde, noche) {
+        try {
+            const bodyData = { fecha: fecha };
+            if (tarde !== undefined) bodyData.tarde = tarde;
+            if (noche !== undefined) bodyData.noche = noche;
+
+            await fetch(`${SUPABASE_URL}/rest/v1/tiros_historicos`, {
+                method: 'POST',
+                headers: {
+                    'apikey': SUPABASE_KEY,
+                    'Authorization': `Bearer ${SUPABASE_KEY}`,
+                    'Content-Type': 'application/json',
+                    'Prefer': 'resolution=merge-duplicates'
+                },
+                body: JSON.stringify(bodyData)
+            });
+        } catch (e) {
+            console.error("No se pudo subir el tiro a Supabase:", e);
+        }
+    }
+
+    // ==========================================
+    // SISTEMA DE ACCESO Y LOGIN (SUPABASE)
+    // ==========================================
 
     async function intentarLogin() {
         let u = document.getElementById('login-user').value.trim();
@@ -346,55 +361,51 @@
         let err = document.getElementById('login-error');
         err.style.display = 'none';
 
-        if(u === _0xAdmin && p === _0xPass) {
-            document.getElementById('loading_login').style.display = 'block';
-            await sincronizarUsuariosDesdeNube(); // Fuerza la carga de usuarios antes de renderizar la vista de admin
-            document.getElementById('loading_login').style.display = 'none';
+        if(!u || !p) return alert("Completa los datos, acere.");
 
+        // Verificar si es el Admin Maestro de forma local y estricta
+        if(u === _0xAdmin && p === _0xPass) {
             esAdministradorLogueado = true; usuarioActivo = "ADMIN_MASTER";
             document.getElementById('view-login').style.display = 'none';
             document.getElementById('panel-admin').style.display = 'block';
             switchAdminSection('consola');
-            actualizarStatsAdmin(); mostrarTablaAciertos(); return;
+            actualizarStatsAdmin(); 
+            mostrarTablaAciertos(); 
+            return;
         }
 
         document.getElementById('loading_login').style.display = 'block';
-        await sincronizarUsuariosDesdeNube(); // Actualiza la lista por si un amigo se acaba de registrar en otro celular
-        document.getElementById('loading_login').style.display = 'none';
 
-        if(usuariosBD[u] && usuariosBD[u].pass === p) {
-            if(usuariosBD[u].status === 'pendiente') { alert("Tu cuenta aún está en revisión en el servidor central."); return; }
-            usuarioActivo = u; esAdministradorLogueado = false;
-            document.getElementById('view-login').style.display = 'none';
-            document.getElementById('view-app').style.display = 'block';
-            document.getElementById('user-display').textContent = `Usuario: ${u}`;
-            document.getElementById('expire-display').textContent = `Expira en: ${usuariosBD[u].dias} días`;
-            switchUserSection('calc');
-            mostrarTablaAciertos(); return;
-        }
-        err.textContent = "Credenciales incorrectas."; err.style.display='block';
-    }
-
-    async function sincronizarUsuariosDesdeNube() {
-        if (!GIST_ID) return;
         try {
-            let url = `https://api.github.com/gists/${GIST_ID}`;
-            let respuesta = await fetch(url);
-            if(respuesta.ok) {
-                let datosGist = await respuesta.json();
-                if(datosGist.files["usuarios.json"]) {
-                    usuariosBD = JSON.parse(datosGist.files["usuarios.json"].content);
-                    localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD));
-                }
-            }
-        } catch(e) {
-            console.error("No se pudo refrescar los usuarios desde la nube, usando local:", e);
-        }
-    }
+            // Consultar el usuario exacto en Supabase
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/usuarios?usuario=eq.${u}&clave=eq.${p}`, {
+                method: 'GET',
+                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+            });
+            const data = await res.json();
+            document.getElementById('loading_login').style.display = 'none';
 
-    function mostrarRegistroForm(ver) {
-        document.getElementById('view-login').style.display = ver ? 'none' : 'block';
-        document.getElementById('view-register').style.display = ver ? 'block' : 'none';
+            if (data && data.length > 0) {
+                let cuenta = data[0];
+                if (cuenta.rol === 'pendiente') {
+                    alert("Tu cuenta aún está en revisión en el servidor central.");
+                    return;
+                }
+                usuarioActivo = u; 
+                esAdministradorLogueado = false;
+                document.getElementById('view-login').style.display = 'none';
+                document.getElementById('view-app').style.display = 'block';
+                document.getElementById('user-display').textContent = `Usuario: ${u}`;
+                switchUserSection('calc');
+                mostrarTablaAciertos();
+            } else {
+                err.textContent = "Credenciales incorrectas o cuenta inexistente."; 
+                err.style.display = 'block';
+            }
+        } catch (e) {
+            document.getElementById('loading_login').style.display = 'none';
+            alert("Error de conexión con el servidor. Revisa tu internet.");
+        }
     }
 
     async function enviarSolicitud() {
@@ -410,66 +421,118 @@
         btn.disabled = true;
         loader.style.display = 'block';
 
-        await sincronizarUsuariosDesdeNube(); // Carga la lista actual para evitar sobreescribir usuarios existentes
+        try {
+            // Verificar primero si el usuario ya existe
+            const checkRes = await fetch(`${SUPABASE_URL}/rest/v1/usuarios?usuario=eq.${userKey}`, {
+                method: 'GET',
+                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+            });
+            const existe = await checkRes.get ? await checkRes.json() : [];
 
-        if(usuariosBD[userKey]){
-            alert("Este usuario ya está registrado o solicitado. Elige otro nombre.");
-            btn.disabled = false;
+            if (existe && existe.length > 0) {
+                alert("Este nombre ya está registrado o solicitado. Elige otro.");
+                btn.disabled = false; loader.style.display = 'none';
+                return;
+            }
+
+            // Registrar con rol 'pendiente' directo en Supabase
+            const regRes = await fetch(`${SUPABASE_URL}/rest/v1/usuarios`, {
+                method: 'POST',
+                headers: {
+                    'apikey': SUPABASE_KEY,
+                    'Authorization': `Bearer ${SUPABASE_KEY}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ usuario: userKey, clave: p, rol: 'pendiente' })
+            });
+
             loader.style.display = 'none';
-            return;
+            btn.disabled = false;
+
+            if (regRes.ok) {
+                alert("¡Solicitud enviada con éxito total a la nube! Comunícate con el administrador para que te apruebe.");
+                document.getElementById('reg-nombre').value = "";
+                document.getElementById('reg-apellido').value = "";
+                document.getElementById('reg-pass').value = "";
+                mostrarRegistroForm(false);
+            } else {
+                alert("Error interno al guardar los datos en Supabase.");
+            }
+        } catch (e) {
+            loader.style.display = 'none'; btn.disabled = false;
+            alert("Error de red. No se pudo enviar el registro.");
         }
+    }
 
-        usuariosBD[userKey] = { pass: p, status: 'pendiente', dias: 30 };
-        localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD));
-
-        let logs = localStorage.getItem('bolita_aciertos_log') || "[]";
-        let subidoOk = await actualizarNubeGlobal({ historialFijos: db, usuarios: usuariosBD, historicoAciertos: JSON.parse(logs) });
-
-        loader.style.display = 'none';
-        btn.disabled = false;
-
-        if (subidoOk) {
-            alert("¡Solicitud enviada con éxito total a la nube! Comunícate con el administrador para que te dé acceso.");
-            document.getElementById('reg-nombre').value = "";
-            document.getElementById('reg-apellido').value = "";
-            document.getElementById('reg-pass').value = "";
-            mostrarRegistroForm(false);
-        } else {
-            alert("Error de conexión al enviar la solicitud a GitHub. Inténtalo de nuevo.");
-        }
+    function mostrarRegistroForm(ver) {
+        document.getElementById('view-login').style.display = ver ? 'none' : 'block';
+        document.getElementById('view-register').style.display = ver ? 'block' : 'none';
     }
 
     function cerrarSesionEfectiva() { usuarioActivo = ""; document.getElementById('view-app').style.display='none'; document.getElementById('view-login').style.display='block'; }
     function cerrarAdmin() { document.getElementById('panel-admin').style.display='none'; document.getElementById('view-login').style.display='block'; }
 
-    function actualizarStatsAdmin() {
-        let lista = Object.keys(usuariosBD);
-        let pen = lista.filter(k => usuariosBD[k].status === 'pendiente').length;
-        document.getElementById('admin-stats').textContent = `Total Registrados: ${lista.length} | Pendientes: ${pen}`;
-        let tbody = document.getElementById('tabla-usuarios'); tbody.innerHTML = "";
-        lista.forEach(k => {
-            let tr = document.createElement('tr');
-            let stCls = usuariosBD[k].status === 'activo' ? 'status-active' : 'status-pending';
-            tr.innerHTML = `<td>${k}</td><td class="${stCls}">${usuariosBD[k].status.toUpperCase()}</td><td>${usuariosBD[k].dias}</td>
-                <td>
-                    <button class="btn-table" style="background:var(--neon); color:#000;" onclick="alterarUser('${k}','aprobar')">Activar</button>
-                    <button class="btn-table" style="background:var(--error); color:#fff;" onclick="alterarUser('${k}','eliminar')">Borrar</button>
-                </td>`;
-            tbody.appendChild(tr);
-        });
+    // ==========================================
+    // ADMINISTRACIÓN DE USUARIOS (PANEL ADMIN)
+    // ==========================================
+
+    async function actualizarStatsAdmin() {
+        try {
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/usuarios?select=*`, {
+                method: 'GET',
+                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+            });
+            const lista = await res.json();
+            let pen = lista.filter(u => u.rol === 'pendiente').length;
+            
+            document.getElementById('admin-stats').textContent = `Total Registrados: ${lista.length} | Pendientes: ${pen}`;
+            let tbody = document.getElementById('tabla-usuarios'); 
+            tbody.innerHTML = "";
+
+            lista.forEach(u => {
+                let tr = document.createElement('tr');
+                let stCls = u.role !== 'pendiente' && u.rol === 'user' ? 'status-active' : 'status-pending';
+                let txtStatus = u.rol === 'pendiente' ? 'PENDIENTE' : 'ACTIVO';
+                
+                tr.innerHTML = `<td>${u.usuario}</td><td class="${stCls}">${txtStatus}</td>
+                    <td>
+                        <button class="btn-table" style="background:var(--neon); color:#000;" onclick="alterarUser('${u.usuario}','aprobar')">Activar</button>
+                        <button class="btn-table" style="background:var(--error); color:#fff;" onclick="alterarUser('${u.usuario}','eliminar')">Borrar</button>
+                    </td>`;
+                tbody.appendChild(tr);
+            });
+        } catch(e) {
+            console.error("No se pudieron cargar las estadísticas de usuarios.");
+        }
     }
 
-    async function alterarUser(key, accion) {
-        if(accion==='aprobar') { usuariosBD[key].status = 'activo'; }
-        else if(accion==='eliminar') { delete usuariosBD[key]; }
-        localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD)); 
-        
-        let logs = localStorage.getItem('bolita_aciertos_log') || "[]";
-        // Actualiza el servidor central inmediatamente tras activar o borrar un usuario
-        await actualizarNubeGlobal({ historialFijos: db, usuarios: usuariosBD, historicoAciertos: JSON.parse(logs) });
-        
-        actualizarStatsAdmin();
+    async function alterarUser(username, accion) {
+        try {
+            if(accion === 'aprobar') {
+                await fetch(`${SUPABASE_URL}/rest/v1/usuarios?usuario=eq.${username}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': `Bearer ${SUPABASE_KEY}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ rol: 'user' })
+                });
+            } else if(accion === 'eliminar') {
+                await fetch(`${SUPABASE_URL}/rest/v1/usuarios?usuario=eq.${username}`, {
+                    method: 'DELETE',
+                    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+                });
+            }
+            actualizarStatsAdmin();
+        } catch (e) {
+            alert("Error al procesar la acción sobre el usuario.");
+        }
     }
+
+    // ==========================================
+    // ALGORITMOS MATRICIALES DE PROBABILIDADES
+    // ==========================================
 
     function activarProcesoCalculo(isAdmin) {
         let prefijo = isAdmin ? 'admin_' : '';
@@ -510,9 +573,6 @@
             if(db[f].n) { totalSorteos++; ultimoAvistamiento[db[f].n] = totalSorteos; }
         });
 
-        // ==========================================
-        // 0. CAPA DE RETRASO HISTÓRICO ORIGINAL
-        // ==========================================
         for(let nStr in pesos) {
             let uPos = ultimoAvistamiento[nStr] || 0;
             pesos[nStr] += (totalSorteos - uPos) * 0.15;
@@ -527,26 +587,20 @@
             }
         });
 
-        // ==========================================
-        // PARTE 1. LOS 4 ENLACES ESTRATÉGICOS PREVIOS
-        // ==========================================
         let ultimosSorteosCortos = [];
         for(let i = fechasOrdenadas.length - 1; i >= 0 && ultimosSorteosCortos.length < 14; i--) {
             let f = fechasOrdenadas[i];
             if(db[f].n) ultimosSorteosCortos.push(db[f].n);
             if(db[f].t) ultimosSorteosCortos.push(db[f].t);
         }
-        // 1. Frecuencia Corta
+        
         ultimosSorteosCortos.forEach(num => { pesos[num] += 3.5; });
-        // 2. Espejos y Virados
-        let espejoTerminal = ((term + 5) % 10).toString();
-        let espejoPunta = ((punta + 5) % 10).toString();
         let virado = fijoStr.split('').reverse().join('');
         pesos[virado] += 18.0;
-        pesos[espejoPunta + term] += 8.5;
-        pesos[punta + espejoTerminal] += 8.5;
-        pesos[espejoPunta + espejoTerminal] += 12.0;
-        // 3. Control de Decenas
+        pesos[((punta + 5) % 10).toString() + term] += 8.5;
+        pesos[punta + ((term + 5) % 10).toString()] += 8.5;
+        pesos[((punta + 5) % 10).toString() + ((term + 5) % 10).toString()] += 12.0;
+        
         let conteoDecenas = Array(10).fill(0);
         ultimosSorteosCortos.forEach(num => { conteoDecenas[Math.floor(parseInt(num) / 10)]++; });
         for(let nStr in pesos) {
@@ -555,7 +609,6 @@
             else if(conteoDecenas[decNum] >= 4) pesos[nStr] += 4.0;
         }
         
-        // 4. Integración Dinámica de la Charada (Solución al error del valor Null)
         let inputCharada = document.getElementById(isAdmin ? 'search_charada_admin' : 'search_charada_user');
         let palabraBuscada = inputCharada ? inputCharada.value.toLowerCase().trim() : '';
         if(palabraBuscada.length > 2) {
@@ -564,9 +617,6 @@
             }
         }
 
-        // ==========================================
-        // PARTE 2. INTEGRACIÓN DE LOS 6 MATRICES AVANZADAS
-        // ==========================================
         if(ultimosSorteosCortos.length >= 5) {
             let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
             let nReg = Math.min(ultimosSorteosCortos.length, 10);
@@ -587,32 +637,25 @@
         });
         for(let i = 0; i < historialSorteosCompleto.length - 1; i++) {
             if(historialSorteosCompleto[i] === fijoStr) {
-                let siguienteSorteoNum = historialSorteosCompleto[i+1];
-                pesos[siguienteSorteoNum] += 5.5;
+                pesos[historialSorteosCompleto[i+1]] += 5.5;
             }
         }
 
         let promedioSorteosOcurrencia = totalSorteos / 100 || 1;
         for(let nStr in pesos) {
             let sorteosDesdeUltimo = totalSorteos - (ultimoAvistamiento[nStr] || 0);
-            if(sorteosDesdeUltimo > (promedioSorteosOcurrencia * 2.5)) {
-                pesos[nStr] += 7.5;
-            }
+            if(sorteosDesdeUltimo > (promedioSorteosOcurrencia * 2.5)) pesos[nStr] += 7.5;
         }
 
         let clusterGanador = [];
         fechasOrdenadas.slice(-10).forEach(f => {
-            if(db[f].t && db[f].n) {
-                clusterGanador.push(db[f].t); clusterGanador.push(db[f].n);
-            }
+            if(db[f].t && db[f].n) { clusterGanador.push(db[f].t); clusterGanador.push(db[f].n); }
         });
         clusterGanador.forEach(numInCluster => { pesos[numInCluster] += 3.0; });
 
         for(let nStr in pesos) {
             let genBase = parseInt(nStr);
-            let mutacionInversa = 99 - genBase;
-            let claveMutada = mutacionInversa.toString().padStart(2, '0');
-            if(ultimosSorteosCortos.includes(claveMutada)) { pesos[nStr] += 4.0; }
+            if(ultimosSorteosCortos.includes((99 - genBase).toString().padStart(2, '0'))) { pesos[nStr] += 4.0; }
         }
 
         let sumPesos = 0; for(let nStr in pesos) sumPesos += pesos[nStr];
@@ -620,12 +663,9 @@
         let varianza = 0; for(let nStr in pesos) varianza += Math.pow(pesos[nStr] - mediaPesos, 2);
         let desviacionEstandar = Math.sqrt(varianza / 100) || 1;
         for(let nStr in pesos) {
-            if(pesos[nStr] > (mediaPesos + (desviacionEstandar * 1.5))) { pesos[nStr] += 5.0; }
+            if(pesos[nStr] > (mediaPesos + (desviacionEstandar * 1.5))) pesos[nStr] += 5.0;
         }
 
-        // ==========================================
-        // CAPA DE CIERRE TRADICIONAL
-        // ==========================================
         let parejas = ["00","11","22","33","44","55","66","77","88","99"];
         parejas.forEach(p => { if(p.includes(punta.toString()) || p.includes(term.toString())) pesos[p] += 7.0; });
         for(let nStr in pesos) { pesos[nStr] += Math.random() * 5.0; }
@@ -644,16 +684,9 @@
 
         arrayFinal.forEach((n, index) => {
             let b = document.createElement('div'); 
-            b.className = "box";
-            b.textContent = n;
-            b.id = `${prefijo}box-${n}`; 
-            
-            if(fijosHoy.includes(n)) {
-                b.className += " ganador-oro";
-            } else if(index < 10) {
-                b.className += " destacado-top10";
-            }
-            
+            b.className = "box"; b.textContent = n; b.id = `${prefijo}box-${n}`; 
+            if(fijosHoy.includes(n)) b.className += " ganador-oro";
+            else if(index < 10) b.className += " destacado-top10";
             panel.appendChild(b);
         });
         document.getElementById(`${prefijo}display_resultados`).style.display = 'block';
@@ -663,19 +696,27 @@
         let t = document.getElementById('fijo_hoy_tarde').value.trim();
         let n = document.getElementById('fijo_hoy_noche').value.trim();
         let hoy = new Date().toISOString().split('T')[0];
+        
         if(!t && !n) return alert("Ingresa un número fijo válido.");
         if(!db[hoy]) db[hoy] = {};
-        if(t) { db[hoy]['t'] = t.padStart(2, '0'); comprobarYRegistrarAcierto(hoy, 't', t.padStart(2, '0')); }
-        if(n) { db[hoy]['n'] = n.padStart(2, '0'); comprobarYRegistrarAcierto(hoy, 'n', n.padStart(2, '0')); }
+        
+        if(t) { 
+            let fmtT = t.padStart(2, '0'); db[hoy]['t'] = fmtT; 
+            comprobarYRegistrarAcierto(hoy, 't', fmtT); 
+            await registrarTiroEnNube(hoy, fmtT, undefined);
+        }
+        if(n) { 
+            let fmtN = n.padStart(2, '0'); db[hoy]['n'] = fmtN; 
+            comprobarYRegistrarAcierto(hoy, 'n', fmtN); 
+            await registrarTiroEnNube(hoy, undefined, fmtN);
+        }
+        
         localStorage.setItem('bolita_master_db', JSON.stringify(db));
+        alert("Fijos guardados con éxito en Supabase."); 
+        mostrarTablaAciertos();
         
-        let logs = localStorage.getItem('bolita_aciertos_log') || "[]";
-        await actualizarNubeGlobal({ historialFijos: db, usuarios: usuariosBD, historicoAciertos: JSON.parse(logs) });
-        
-        alert("Fijos guardados con éxito en la nube global."); mostrarTablaAciertos();
-        
-        if(document.getElementById('display_resultados').style.display === 'block') { generarTodo(false); }
-        if(document.getElementById('admin_display_resultados').style.display === 'block') { generarTodo(true); }
+        if(document.getElementById('display_resultados').style.display === 'block') generarTodo(false);
+        if(document.getElementById('admin_display_resultados').style.display === 'block') generarTodo(true);
     }
 
     function comprobarYRegistrarAcierto(fecha, turno, numeroReal) {
@@ -701,6 +742,10 @@
         document.getElementById('tabla_historico_aciertos_admin').innerHTML = html;
     }
 
+    // ==========================================
+    // RESPALDOS Y FUNCIONES COMPLEMENTARIAS
+    // ==========================================
+
     function exportarBaseDatos() {
         let master = localStorage.getItem('bolita_master_db') || "{}";
         let logs = localStorage.getItem('bolita_aciertos_log') || "[]";
@@ -723,10 +768,12 @@
                     db = d.historialFijos;
                 } else { localStorage.setItem('bolita_master_db', JSON.stringify(d)); db = d; }
                 
-                let logs = localStorage.getItem('bolita_aciertos_log') || "[]";
-                await actualizarNubeGlobal({ historialFijos: db, usuarios: usuariosBD, historicoAciertos: JSON.parse(logs) });
-                
-                alert("Base de datos importada y subida a la nube correctamente."); mostrarTablaAciertos(); renderCalendario();
+                // Subir en masa el archivo importado a Supabase
+                for (let f in db) {
+                    await registrarTiroEnNube(f, db[f].t, db[f].n);
+                }
+                alert("Base de datos importada y subida a Supabase correctamente."); 
+                mostrarTablaAciertos(); renderCalendario();
             } catch(err) { alert("Archivo JSON incompatible."); }
         };
         reader.readAsText(file);
@@ -795,19 +842,21 @@
 
     async function guardarDB() {
         if(!esAdministradorLogueado) return;
-        document.querySelectorAll('.day input').forEach(i => {
-            if(!i.id) return;
+        let inputs = document.querySelectorAll('.day input');
+        for (let i of inputs) {
+            if(!i.id) continue;
             let partes = i.id.split('-'); let tu = partes[0]; let k = `${partes[1]}-${partes[2]}-${partes[3]}`;
             let val = i.value.trim();
-            if(val) { if(!db[k]) db[k] = {}; db[k][tu] = val.padStart(2, '0'); }
-            else if(db[k]) { delete db[k][tu]; if(Object.keys(db[k]).length===0) delete db[k]; }
-        });
+            if(val) { 
+                if(!db[k]) db[k] = {}; db[k][tu] = val.padStart(2, '0'); 
+                await registrarTiroEnNube(k, tu === 't' ? val.padStart(2, '0') : undefined, tu === 'n' ? val.padStart(2, '0') : undefined);
+            }
+            else if(db[k]) { 
+                delete db[k][tu]; if(Object.keys(db[k]).length===0) delete db[k]; 
+            }
+        }
         localStorage.setItem('bolita_master_db', JSON.stringify(db)); 
-        
-        let logs = localStorage.getItem('bolita_aciertos_log') || "[]";
-        await actualizarNubeGlobal({ historialFijos: db, usuarios: usuariosBD, historicoAciertos: JSON.parse(logs) });
-        
-        alert("Calendario actualizado y guardado en la nube.");
+        alert("Calendario actualizado y guardado en Supabase.");
     }
 
     async function procesarTextoImportado() {
@@ -820,90 +869,41 @@
         let coincidencias = raw.match(regexGlobal);
 
         if (!coincidencias || coincidencias.length === 0) {
-            alert("Estructura no reconocida. Asegúrate de copiar las líneas como se muestra en tus notas.");
-            return;
+            alert("Estructura no reconocida."); return;
         }
 
-        coincidencias.forEach(bloque => {
+        for (let bloque of coincidencias) {
             let m = regexTiro.exec(bloque);
             if (m) {
-                let mes = m[1].padStart(2, '0');
-                let dia = m[2].padStart(2, '0');
-                let anioStr = m[3];
-                let letraTurno = m[4].toUpperCase();
-                let datosTiro = m[5];
-
+                let mes = m[1].padStart(2, '0'); let dia = m[2].padStart(2, '0'); let anioStr = m[3];
+                let letraTurno = m[4].toUpperCase(); let datosTiro = m[5];
                 let fullAnio = anioStr.length === 2 ? "20" + anioStr : anioStr;
                 let k = `${fullAnio}-${mes}-${dia}`;
 
                 let partesGuiones = datosTiro.split('-');
                 if (partesGuiones.length >= 3) {
-                    let centro = partesGuiones[1].trim();
-                    let numFijo = centro.padStart(2, '0').slice(-2);
-
-                    let tu = 't';
-                    let fechaLimite = new Date(2008, 4, 18);
-                    let fechaSorteo = new Date(parseInt(fullAnio), parseInt(mes) - 1, parseInt(dia));
-
-                    if (fechaSorteo > fechaLimite) {
-                        if (letraTurno === 'M' || letraTurno === 'N') {
-                            tu = 'n';
-                        } else {
-                            tu = 't';
-                        }
-                    } else {
-                        tu = 't';
-                    }
+                    let numFijo = partesGuiones[1].trim().padStart(2, '0').slice(-2);
+                    let tu = (new Date(parseInt(fullAnio), parseInt(mes) - 1, parseInt(dia)) > new Date(2008, 4, 18) && (letraTurno === 'M' || letraTurno === 'N')) ? 'n' : 't';
 
                     if (!db[k]) db[k] = {};
                     db[k][tu] = numFijo;
+                    await registrarTiroEnNube(k, tu === 't' ? numFijo : undefined, tu === 'n' ? numFijo : undefined);
                     cnt++;
                 }
             }
-        });
-
-        if (cnt === 0) {
-            alert("No se pudo extraer ningún número fijo. Revisa el formato de los guiones.");
-            return;
         }
 
+        if (cnt === 0) return alert("No se pudo extraer ningún número.");
         localStorage.setItem('bolita_master_db', JSON.stringify(db));
-        
-        let logs = localStorage.getItem('bolita_aciertos_log') || "[]";
-        await actualizarNubeGlobal({ historialFijos: db, usuarios: usuariosBD, historicoAciertos: JSON.parse(logs) });
-        
-        alert(`¡Éxito Total, acere! Se acaban de inyectar ${cnt} tiros históricos sin errores.`);
+        alert(`¡Éxito Total, acere! Se inyectaron ${cnt} tiros históricos en Supabase.`);
         document.getElementById('import_raw_text').value = ""; 
         renderCalendario();
     }
 
-    // INICIALIZACIÓN SÍNCRONA ORIGINAL AL CARGAR LA PÁGINA
+    // INICIALIZACIÓN DE LA APLICACIÓN AL CARGAR
     async function inicializarSistema() {
-        if (!GIST_ID) {
-            alert("Falta configurar el GIST_ID central.");
-            return;
-        }
-        try {
-            let url = `https://api.github.com/gists/${GIST_ID}`;
-            let respuesta = await fetch(url);
-            if(respuesta.ok) {
-                let datosGist = await respuesta.json();
-                if(datosGist.files["bolita_db.json"]) {
-                    db = JSON.parse(datosGist.files["bolita_db.json"].content);
-                    localStorage.setItem('bolita_master_db', JSON.stringify(db));
-                }
-                if(datosGist.files["usuarios.json"]) {
-                    usuariosBD = JSON.parse(datosGist.files["usuarios.json"].content);
-                    localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD));
-                }
-                if(datosGist.files["bolita_aciertos_log.json"]) {
-                    localStorage.setItem('bolita_aciertos_log', datosGist.files["bolita_aciertos_log.json"].content);
-                }
-                console.log("¡Sincronización de Base de Datos e Hilos de Usuarios completada con éxito!");
-            }
-        } catch(e) {
-            console.error("Modo offline o error de red:", e);
-        }
+        // Ejecuta la descarga en paralelo para no congelar el arranque
+        await cargarTirosDesdeNube();
         renderCalendario();
     }
 

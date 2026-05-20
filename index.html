@@ -405,65 +405,81 @@
     }
 
     async function enviarSolicitud() {
-        let n = document.getElementById('reg-nombre').value.trim();
-        let a = document.getElementById('reg-apellido').value.trim();
-        let p = document.getElementById('reg-pass').value;
-        let btn = document.getElementById('btn_enviar_solicitud');
-        let loader = document.getElementById('loading_register');
+    let n = document.getElementById('reg-nombre').value.trim();
+    let a = document.getElementById('reg-apellido').value.trim();
+    let p = document.getElementById('reg-pass').value;
+    let btn = document.getElementById('btn_enviar_solicitud');
+    let loader = document.getElementById('loading_register');
 
-        if(!n || !a || !p) return alert("Completa todos los campos, acere.");
-        let userKey = `${n}_${a}`;
+    if(!n || !a || !p) return alert("Completa todos los campos, acere.");
+    let userKey = `${n}_${a}`;
 
-        btn.disabled = true;
-        loader.style.display = 'block';
+    btn.disabled = true;
+    loader.style.display = 'block';
 
-        try {
-            // Buscamos si el usuario ya existe en la nube de Supabase de forma segura
-            const checkRes = await fetch(`${SUPABASE_URL}/rest/v1/usuarios?usuario=eq.${userKey}`, {
-                method: 'GET',
-                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-            });
-            
-            let existe = [];
-            if (checkRes.ok) {
-                existe = await checkRes.json();
+    try {
+        // 1. Verificar si el usuario ya existe en Supabase
+        const checkRes = await fetch(`${SUPABASE_URL}/rest/v1/usuarios?usuario=eq.${encodeURIComponent(userKey)}`, {
+            method: 'GET',
+            headers: { 
+                'apikey': SUPABASE_KEY, 
+                'Authorization': `Bearer ${SUPABASE_KEY}` 
             }
-
-            // Si vino una lista con datos, significa que ese nombre ya está cogido
-            if (Array.isArray(existe) && existe.length > 0) {
-                alert("Este nombre ya está registrado o solicitado. Elige otro.");
-                btn.disabled = false; loader.style.display = 'none';
-                return;
-            }
-
-            // Inyectamos la fila del nuevo usuario en estado pendiente
-            const regRes = await fetch(`${SUPABASE_URL}/rest/v1/usuarios`, {
-                method: 'POST',
-                headers: {
-                    'apikey': SUPABASE_KEY,
-                    'Authorization': `Bearer ${SUPABASE_KEY}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ usuario: userKey, clave: p, rol: 'pendiente' })
-            });
-
-            loader.style.display = 'none';
-            btn.disabled = false;
-
-            if (regRes.ok) {
-                alert("¡Solicitud enviada con éxito total a la nube! Comunícate con el administrador para que te apruebe.");
-                document.getElementById('reg-nombre').value = "";
-                document.getElementById('reg-apellido').value = "";
-                document.getElementById('reg-pass').value = "";
-                mostrarRegistroForm(false);
-            } else {
-                alert("Error interno al guardar los datos en Supabase.");
-            }
-        } catch (e) {
-            loader.style.display = 'none'; btn.disabled = false;
-            alert("Error de red. No se pudo enviar el registro.");
+        });
+        
+        if (!checkRes.ok) {
+            let errorTexto = await checkRes.text();
+            throw new Error(`Error al verificar usuario: ${errorTexto}`);
         }
+
+        let existe = await checkRes.json();
+        if (Array.isArray(existe) && existe.length > 0) {
+            alert("Este nombre y apellido ya están registrados o solicitados. Elige otro.");
+            btn.disabled = false; loader.style.display = 'none';
+            return;
+        }
+
+        // 2. Intentar registrar enviando un objeto completo por si tienes campos obligatorios
+        let payload = { 
+            usuario: userKey, 
+            clave: p, 
+            rol: 'pendiente',
+            nombre: n,
+            apellido: a
+        };
+
+        const regRes = await fetch(`${SUPABASE_URL}/rest/v1/usuarios`, {
+            method: 'POST',
+            headers: {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`,
+                'Content-Type': 'application/json',
+                'Prefer': 'return=representation' // Pide a Supabase que devuelva el detalle del error si falla
+            },
+            body: JSON.stringify(payload)
+        });
+
+        loader.style.display = 'none';
+        btn.disabled = false;
+
+        if (regRes.ok) {
+            alert("¡Solicitud enviada con éxito total a la nube! Comunícate con el administrador para que te apruebe.");
+            document.getElementById('reg-nombre').value = "";
+            document.getElementById('reg-apellido').value = "";
+            document.getElementById('reg-pass').value = "";
+            mostrarRegistroForm(false);
+        } else {
+            // Aquí capturamos el desglose exacto de Supabase para ver qué columna rebota
+            let errorDetalle = await regRes.text();
+            console.error("Error crudo de Supabase:", errorDetalle);
+            alert(`Supabase rechazó el registro.\n\nDetalle del Servidor: ${errorDetalle}\n\nRevisa si los nombres de tus columnas coinciden exactamente.`);
+        }
+    } catch (e) {
+        loader.style.display = 'none'; btn.disabled = false;
+        console.error("Error de red o ejecución:", e);
+        alert(`Error de ejecución: ${e.message}`);
     }
+}
 
     function mostrarRegistroForm(ver) {
         document.getElementById('view-login').style.display = ver ? 'none' : 'block';

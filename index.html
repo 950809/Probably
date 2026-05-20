@@ -269,7 +269,7 @@
     // CREDENCIALES FIJAS DEL ADMINISTRADOR
     const _0xAdmin = "yohnny95", _0xPass = "Elmatatan95*";
 
-    // METE AQUÍ TUS CREDENCIALES PROPIAS DE SUPABASE
+    // MIGRADO COMPLETO A SUPABASE - CONEXIÓN GLOBAL ESTABLE
     const SUPABASE_URL = "https://cdruwznhqqgkpdfvlxjq.supabase.co"; 
     const SUPABASE_KEY = "sb_publishable_rVlYEZd4pAG1kr6U9EdJLQ_xpjp6IW9"; 
 
@@ -309,7 +309,6 @@
     // CONTROLADORES DE BASE DE DATOS (SUPABASE)
     // ==========================================
 
-    // Descarga todos los tiros históricos guardados
     async function cargarTirosDesdeNube() {
         try {
             const res = await fetch(`${SUPABASE_URL}/rest/v1/tiros_historicos?select=*`, {
@@ -329,7 +328,6 @@
         }
     }
 
-    // Guarda un tiro específico directo en Supabase
     async function registrarTiroEnNube(fecha, tarde, noche) {
         try {
             const bodyData = { fecha: fecha };
@@ -363,7 +361,6 @@
 
         if(!u || !p) return alert("Completa los datos, acere.");
 
-        // Verificar si es el Admin Maestro de forma local y estricta
         if(u === _0xAdmin && p === _0xPass) {
             esAdministradorLogueado = true; usuarioActivo = "ADMIN_MASTER";
             document.getElementById('view-login').style.display = 'none';
@@ -377,7 +374,6 @@
         document.getElementById('loading_login').style.display = 'block';
 
         try {
-            // Consultar el usuario exacto en Supabase
             const res = await fetch(`${SUPABASE_URL}/rest/v1/usuarios?usuario=eq.${u}&clave=eq.${p}`, {
                 method: 'GET',
                 headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
@@ -422,13 +418,11 @@
         loader.style.display = 'block';
 
         try {
-            // Verificar primero si el usuario ya existe
-            //  ASÍ DEBE QUEDAR (REPARADO):
-const checkRes = await fetch(`${SUPABASE_URL}/rest/v1/usuarios?usuario=eq.${userKey}`, {
-    method: 'GET',
-    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-});
-const existe = await checkRes.json(); // <-- Ahora lee los datos directo y sin inventos
+            const checkRes = await fetch(`${SUPABASE_URL}/rest/v1/usuarios?usuario=eq.${userKey}`, {
+                method: 'GET',
+                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+            });
+            const existe = await checkRes.json();
 
             if (existe && existe.length > 0) {
                 alert("Este nombre ya está registrado o solicitado. Elige otro.");
@@ -436,7 +430,6 @@ const existe = await checkRes.json(); // <-- Ahora lee los datos directo y sin i
                 return;
             }
 
-            // Registrar con rol 'pendiente' directo en Supabase
             const regRes = await fetch(`${SUPABASE_URL}/rest/v1/usuarios`, {
                 method: 'POST',
                 headers: {
@@ -492,7 +485,7 @@ const existe = await checkRes.json(); // <-- Ahora lee los datos directo y sin i
 
             lista.forEach(u => {
                 let tr = document.createElement('tr');
-                let stCls = u.role !== 'pendiente' && u.rol === 'user' ? 'status-active' : 'status-pending';
+                let stCls = u.rol !== 'pendiente' && u.rol === 'user' ? 'status-active' : 'status-pending';
                 let txtStatus = u.rol === 'pendiente' ? 'PENDIENTE' : 'ACTIVO';
                 
                 tr.innerHTML = `<td>${u.usuario}</td><td class="${stCls}">${txtStatus}</td>
@@ -595,6 +588,7 @@ const existe = await checkRes.json(); // <-- Ahora lee los datos directo y sin i
             if(db[f].t) ultimosSorteosCortos.push(db[f].t);
         }
         
+        textura_v = ultimosSorteosCortos;
         ultimosSorteosCortos.forEach(num => { pesos[num] += 3.5; });
         let virado = fijoStr.split('').reverse().join('');
         pesos[virado] += 18.0;
@@ -769,7 +763,6 @@ const existe = await checkRes.json(); // <-- Ahora lee los datos directo y sin i
                     db = d.historialFijos;
                 } else { localStorage.setItem('bolita_master_db', JSON.stringify(d)); db = d; }
                 
-                // Subir en masa el archivo importado a Supabase
                 for (let f in db) {
                     await registrarTiroEnNube(f, db[f].t, db[f].n);
                 }
@@ -901,9 +894,7 @@ const existe = await checkRes.json(); // <-- Ahora lee los datos directo y sin i
         renderCalendario();
     }
 
-    // INICIALIZACIÓN DE LA APLICACIÓN AL CARGAR
     async function inicializarSistema() {
-        // Ejecuta la descarga en paralelo para no congelar el arranque
         await cargarTirosDesdeNube();
         renderCalendario();
     }

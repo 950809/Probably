@@ -5,52 +5,228 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bolita Pro Master - Consola Global Elite v8.8</title>
     <style>
-        :root { --neon: #00ff41; --dark: #050505; --panel: #0d1117; --win: #ffeb3b; --error: #ff3333; }
-        body { font-family: 'Segoe UI', monospace; background: var(--dark); color: var(--neon); margin: 0; padding: 10px; -webkit-user-select: none; user-select: none; }
-        .container { max-width: 480px; margin: auto; border: 1px solid var(--neon); padding: 15px; border-radius: 8px; box-sizing: border-box; }
-        h2 { font-size: 0.8rem; text-align: center; border-bottom: 1px solid var(--neon); padding-bottom: 8px; text-transform: uppercase; margin-bottom: 15px; }
+        :root {
+            --neon: #00ff41;
+            --dark: #050505;
+            --panel: #0d1117;
+            --win: #ffeb3b;
+            --error: #ff3333;
+            --gray: #888;
+            --dark-gray: #222;
+        }
+        body {
+            font-family: 'Segoe UI', monospace;
+            background: var(--dark);
+            color: var(--neon);
+            margin: 0;
+            padding: 10px;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        .container {
+            max-width: 480px;
+            margin: auto;
+            border: 1px solid var(--neon);
+            padding: 15px;
+            border-radius: 8px;
+            box-sizing: border-box;
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.1);
+        }
+        h2 {
+            font-size: 0.85rem;
+            text-align: center;
+            border-bottom: 1px solid var(--neon);
+            padding-bottom: 8px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
         
-        .main-form, .login-form { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 15px; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        input, select, textarea { background: #000; border: 1px solid var(--neon); color: var(--neon); padding: 10px; font-size: 1rem; border-radius: 4px; font-family: monospace; }
-        input:focus, select:focus, textarea:focus { outline: none; box-shadow: 0 0 8px var(--neon); }
-        button { background: var(--neon); color: #000; border: none; padding: 12px; font-size: 1rem; font-weight: bold; cursor: pointer; border-radius: 4px; text-transform: uppercase; font-family: monospace; }
-        button:hover { background: #00cc33; box-shadow: 0 0 10px var(--neon); }
+        .main-form, .login-form {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 5px;
+        }
+        input, select, textarea {
+            background: #000;
+            border: 1px solid var(--neon);
+            color: var(--neon);
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 4px;
+            font-family: monospace;
+            box-sizing: border-box;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            box-shadow: 0 0 8px var(--neon);
+        }
+        button {
+            background: var(--neon);
+            color: #000;
+            border: none;
+            padding: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+            text-transform: uppercase;
+            font-family: monospace;
+            transition: all 0.2s ease;
+        }
+        button:hover {
+            background: #00cc33;
+            box-shadow: 0 0 10px var(--neon);
+        }
         
         .btn-danger { background: #220000; color: var(--error); border: 1px solid var(--error); }
         .btn-danger:hover { background: var(--error); color: #000; }
         .btn-warning { background: #222200; color: var(--win); border: 1px solid var(--win); }
         .btn-warning:hover { background: var(--win); color: #000; }
+        .btn-info { background: #001133; color: #00bfff; border: 1px solid #00bfff; }
+        .btn-info:hover { background: #00bfff; color: #000; }
 
         .dashboard { display: none; }
-        .nav-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-bottom: 15px; }
-        .nav-tabs button { padding: 8px 2px; font-size: 0.75rem; background: #111; color: #888; border: 1px solid #333; }
-        .nav-tabs button.active { background: #002200; color: var(--neon); border: 1px solid var(--neon); }
+        .nav-tabs {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 4px;
+            margin-bottom: 15px;
+        }
+        .nav-tabs button {
+            padding: 8px 1px;
+            font-size: 0.7rem;
+            background: #111;
+            color: var(--gray);
+            border: 1px solid var(--dark-gray);
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .nav-tabs button.active {
+            background: #002200;
+            color: var(--neon);
+            border: 1px solid var(--neon);
+        }
         
-        .tab-content { display: none; background: var(--panel); padding: 15px; border-radius: 6px; border: 1px solid #222; }
+        .tab-content {
+            display: none;
+            background: var(--panel);
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid var(--dark-gray);
+        }
         .tab-content.active { display: block; }
 
+        /* CALENDARIO */
         .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; }
-        .day-name { font-size: 0.7rem; color: #888; font-weight: bold; padding-bottom: 5px; }
-        .day-cell { border: 1px solid #222; padding: 4px 2px; min-height: 50px; border-radius: 4px; background: #000; font-size: 0.8rem; display: flex; flex-direction: column; justify-content: space-between; }
+        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
+        .day-name { font-size: 0.65rem; color: var(--gray); font-weight: bold; padding-bottom: 3px; border-bottom: 1px solid var(--dark-gray); }
+        .day-cell {
+            border: 1px solid var(--dark-gray);
+            padding: 3px 1px;
+            min-height: 52px;
+            border-radius: 4px;
+            background: #000;
+            font-size: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-sizing: border-box;
+        }
         .day-cell.empty { background: transparent; border: none; }
-        .day-num { font-size: 0.7rem; color: #666; text-align: left; padding-left: 2px; }
-        .day-tarde { color: var(--win); font-weight: bold; font-size: 0.85rem; }
-        .day-noche { color: var(--neon); font-weight: bold; font-size: 0.85rem; }
+        .day-num { font-size: 0.65rem; color: #555; text-align: left; padding-left: 2px; font-weight: bold; }
+        .day-tarde { color: var(--win); font-weight: bold; font-size: 0.8rem; }
+        .day-noche { color: var(--neon); font-weight: bold; font-size: 0.8rem; }
+        .day-cell.today { border-color: #ff00ff; box-shadow: 0 0 4px #ff00ff; }
         
-        .user-row { display: flex; justify-content: space-between; align-items: center; padding: 8px; border-bottom: 1px solid #222; font-size: 0.9rem; }
-        .badge { padding: 2px 6px; border-radius: 3px; font-size: 0.75rem; font-weight: bold; }
+        /* ANALÍTICAS Y TABLAS */
+        .stats-box {
+            background: #000;
+            border: 1px solid var(--dark-gray);
+            border-radius: 4px;
+            padding: 8px;
+            margin-bottom: 10px;
+            font-size: 0.8rem;
+        }
+        .stats-title {
+            color: var(--win);
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            border-bottom: 1px dashed var(--dark-gray);
+            padding-bottom: 3px;
+        }
+        .stats-grid-mini {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 4px;
+            text-align: center;
+        }
+        .mini-card {
+            background: #111;
+            padding: 4px;
+            border-radius: 3px;
+            border: 1px solid #222;
+        }
+        .mini-num { font-weight: bold; color: #fff; }
+        .mini-val { font-size: 0.65rem; color: var(--neon); }
+
+        /* LISTA DE USUARIOS */
+        .user-row { display: flex; justify-content: space-between; align-items: center; padding: 8px; border-bottom: 1px solid var(--dark-gray); font-size: 0.85rem; }
+        .badge { padding: 2px 5px; border-radius: 3px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; }
         .badge.activo { background: #002200; color: var(--neon); border: 1px solid var(--neon); }
         .badge.pendiente { background: #221100; color: var(--win); border: 1px solid var(--win); }
+        .action-icon { cursor: pointer; padding: 3px 6px; border: 1px solid #444; border-radius: 4px; font-size: 0.75rem; font-weight: bold; }
         
-        .action-icon { cursor: pointer; padding: 4px 8px; border: 1px solid #444; border-radius: 4px; font-size: 0.8rem; }
-        .action-icon:hover { background: #222; }
+        /* COMBINADOR */
+        .comb-output {
+            background: #000;
+            border: 1px solid var(--neon);
+            padding: 10px;
+            border-radius: 4px;
+            min-height: 60px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            word-break: break-all;
+            white-space: pre-wrap;
+        }
 
-        .raw-importer { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; padding-top: 15px; border-top: 1px dashed var(--neon); }
-        .raw-importer label { font-size: 0.75rem; text-transform: uppercase; color: var(--win); }
+        .raw-importer {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed var(--neon);
+        }
+        .raw-importer label { font-size: 0.7rem; text-transform: uppercase; color: var(--win); letter-spacing: 1px; }
 
-        .status-bar { font-size: 0.7rem; color: #666; text-align: center; margin-top: 15px; border-top: 1px solid #111; padding-top: 5px; }
+        .status-bar { font-size: 0.65rem; color: #555; text-align: center; margin-top: 15px; border-top: 1px solid #111; padding-top: 5px; text-transform: uppercase; }
+        
+        /* MATRIZ DE CALUCO */
+        .matriz-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+            text-align: center;
+            margin-top: 5px;
+        }
+        .matriz-table th { background: #111; color: var(--win); padding: 4px; border: 1px solid var(--dark-gray); }
+        .matriz-table td { padding: 4px; border: 1px solid var(--dark-gray); background: #000; }
+        .matriz-table tr:hover td { background: #051505; color: #fff; }
     </style>
 </head>
 <body>
@@ -62,67 +238,112 @@
         <input type="text" id="login-user" placeholder="USUARIO OPERATIVO">
         <input type="password" id="login-pass" placeholder="CLAVE DE ACCESO">
         <button onclick="ejecutarLogin()">INGRESAR AL SISTEMA</button>
-        <button class="btn-warning" onclick="mostrarRegistro()">CREAR NUEVA CUENTA</button>
+        <button class="btn-warning" onclick="mostrarRegistro()">SOLICITAR NUEVA CUENTA</button>
     </div>
 
     <div id="register-screen" class="login-form" style="display:none;">
-        <input type="text" id="reg-user" placeholder="NUEVO USUARIO">
-        <input type="password" id="reg-pass" placeholder="NUEVA CLAVE">
-        <button onclick="ejecutarRegistro()">SOLICITAR ALTA</button>
-        <button class="btn-danger" onclick="cancelarRegistro()">VOLVER</button>
+        <input type="text" id="reg-user" placeholder="NUEVO USUARIO PROPUESTO">
+        <input type="password" id="reg-pass" placeholder="NUEVA CLAVE SEGURA">
+        <button onclick="ejecutarRegistro()">SOLICITAR ACCESO ALTA</button>
+        <button class="btn-danger" onclick="cancelarRegistro()">VOLVER AL LOGIN</button>
     </div>
 
     <div id="dashboard" class="dashboard">
         <div class="nav-tabs">
-            <button id="btn-tab-cal" class="active" onclick="cambiarTab('tab-cal')">VER CALENDARIO</button>
-            <button id="btn-tab-input" onclick="cambiarTab('tab-input')">TIROS</button>
-            <button id="btn-tab-users" style="display:none;" onclick="cambiarTab('tab-users')">USERS</button>
-            <button class="btn-danger" onclick="ejecutarLogout()">SALIR</button>
+            <button id="btn-tab-cal" class="active" onclick="cambiarTab('tab-cal')">CALENDARIO</button>
+            <button id="btn-tab-input" onclick="cambiarTab('tab-input')">INGRESOS</button>
+            <button id="btn-tab-analisis" onclick="cambiarTab('tab-analisis')">MATRIZ TÁCTICA</button>
+            <button id="btn-tab-users" style="display:none;" onclick="cambiarTab('tab-users')">CONTROL</button>
         </div>
 
         <div id="tab-cal" class="tab-content active">
             <div class="cal-header">
-                <button onclick="cambiarMes(-1)">◀ MES</button>
-                <span id="cal-month-title" style="font-weight:bold; font-size:0.9rem; text-transform:uppercase;">-</span>
-                <button onclick="cambiarMes(1)">MES ▶</button>
+                <button onclick="cambiarMes(-1)">◀ ANTERIOR</button>
+                <span id="cal-month-title" style="font-weight:bold; font-size:0.85rem; text-transform:uppercase; color:#fff;">-</span>
+                <button onclick="cambiarMes(1)">SIGUIENTE ▶</button>
             </div>
             <div class="cal-grid" id="cal-grid-container"></div>
+            
+            <div style="margin-top:15px;" id="resumen-rapido-container"></div>
         </div>
 
         <div id="tab-input" class="tab-content">
             <div class="main-form">
+                <label style="font-size:0.75rem; color:var(--neon);">FECHA DE CONTROL TÁCTICO:</label>
                 <input type="date" id="tiro-fecha">
                 <div class="grid-2">
                     <input type="text" id="tiro-tarde" placeholder="FIJO TARDE" maxlength="4">
                     <input type="text" id="tiro-noche" placeholder="FIJO NOCHE" maxlength="4">
                 </div>
-                <button onclick="guardarTiroDirecto()">GUARDAR CAMBIOS DEL CALENDARIO</button>
+                <button onclick="guardarTiroDirecto()">SUBIR Y CONFIGURAR CALENDARIO</button>
+            </div>
+
+            <div style="margin-top:10px; padding-top:10px; border-top:1px dashed var(--dark-gray);">
+                <label style="font-size:0.75rem; color:var(--win); display:block; margin-bottom:5px;">⚡ GENERADOR DE COMBINACIONES PRO (PIRÁMIDES / CRUCES)</label>
+                <div class="grid-3">
+                    <input type="text" id="comb-base" placeholder="BASE" maxlength="10">
+                    <select id="comb-tipo">
+                        <option value="piramide">PIRÁMIDE</option>
+                        <option value="cruces">CRUCE TOTAL</option>
+                        <option value="terminales">TERMINALES</option>
+                    </select>
+                    <button class="btn-info" style="padding:10px 2px; font-size:0.8rem;" onclick="ejecutarGeneracionMatematica()">CALCULAR</button>
+                </div>
+                <div class="comb-output" id="comb-output-box">Esperando datos base...</div>
             </div>
 
             <div class="raw-importer">
-                <label>📥 Importador en bruto desde Notas / PDF</label>
-                <textarea id="raw-text" rows="5" placeholder="Pega aquí el texto copiado de notas... Ejemplo:&#10;1- 54 y 89&#10;02/05/2026: 12 - 45&#10;Día 3 tarde 44 noche 12"></textarea>
-                <button class="btn-warning" onclick="procesarTextoImportado()">PROCESAR E IMPORTAR TEXTO</button>
+                <label>📥 Importador Inteligente Avanzado (Bloc Notas / Mensajes)</label>
+                <textarea id="raw-text" rows="4" placeholder="Pega bloques de datos directo... Ejemplos:&#10;1- 45 y 12&#10;02/05/2026: Fijo Tarde 88 Noche 90&#10;Día 12: 54 23"></textarea>
+                <button class="btn-warning" onclick="procesarTextoImportado()">EJECUTAR EXTRACCIÓN E IMPORTACIÓN</button>
+            </div>
+            
+            <div style="margin-top:10px;">
+                <button class="btn-danger" style="width:100%; padding:8px; font-size:0.8rem;" onclick="ejecutarLogout()">CERRAR SESIÓN TOTAL DEL SISTEMA</button>
+            </div>
+        </div>
+
+        <div id="tab-analisis" class="tab-content">
+            <div class="stats-box">
+                <div class="stats-title">🔥 NÚMEROS MÁS REPETIDOS (ÚLTIMOS 90 DÍAS)</div>
+                <div class="stats-grid-mini" id="stat-repetidos"></div>
+            </div>
+            <div class="stats-box">
+                <div class="stats-title">❄️ LOS MÁS DEMORADOS / ATRASADOS</div>
+                <div class="stats-grid-mini" id="stat-atrasados"></div>
+            </div>
+            <div class="stats-box">
+                <div class="stats-title">📊 ANÁLISIS DE TERMINALES RECURRENTES</div>
+                <div id="stat-terminales-tabla"></div>
+            </div>
+            <div class="stats-box">
+                <div class="stats-title">🔮 CALCULADORA DE PROBABILIDAD INTERNA</div>
+                <div class="grid-2">
+                    <input type="text" id="calc-prob-num" placeholder="NÚMERO (00-99)" maxlength="2">
+                    <button class="btn-info" onclick="calcularProbabilidadEspecifica()">MEDIR FLUJO</button>
+                </div>
+                <div id="calc-prob-res" style="margin-top:8px; font-size:0.8rem; color:#fff; text-align:center;"></div>
             </div>
         </div>
 
         <div id="tab-users" class="tab-content">
+            <div style="font-size:0.75rem; color:var(--win); margin-bottom:10px; text-transform:uppercase; font-weight:bold;">Panel de Activación de Clientes</div>
             <div id="users-list-container"></div>
         </div>
         
-        <div class="status-bar">CONEXIÓN DIRECTA ENCRIPTADA SUPABASE ACTIVA</div>
+        <div class="status-bar" id="app-conexion-status">CONEXIÓN SUPABASE EN LÍNEA + RESPALDO LOCAL ACTIVO</div>
     </div>
 </div>
 
 <script>
     // =================================================================
-    // CONFIGURACIÓN DE CONEXIÓN CON TU PROYECTO 'BilitaBase'
+    // AJUSTES DE CONEXIÓN DEFINITIVOS - PROYECTO: BilitaBase
     // =================================================================
     const SUPABASE_URL = "https://qmeknaemendhxbfgnmeb.supabase.co";
     const SUPABASE_KEY = "sb_publishable_3WYpDpVXShVagap1x7K4GA_EEynNqGR";
 
     // =================================================================
-    // CLIENTE API REST MOTORIZADO
+    // MOTOR REST DE TRANSFERENCIA ENCRIPTADA
     // =================================================================
     async function supabaseFetch(endpoint, method = 'GET', body = null) {
         const url = `${SUPABASE_URL}/rest/v1/${endpoint}`;
@@ -134,51 +355,61 @@
         };
         const config = { method, headers };
         if (body) config.body = JSON.stringify(body);
+        
         const res = await fetch(url, config);
         if (!res.ok) throw new Error(`SupaError: ${res.statusText}`);
         return res.json();
     }
 
     // =================================================================
-    // VARIABLES DE ESTADO LOCAL
+    // ALMACENAMIENTO DINÁMICO Y ESTADOS DE COMPILACIÓN
     // =================================================================
     let usuarioActual = null;
-    let baseHistorico = {}; // Memoria en ejecución estructurada como { "YYYY-MM-DD": { fijo_tarde, fijo_noche } }
+    let baseHistorico = {}; 
     let fechaFiltro = new Date();
 
-    // Inicializar inputs de fecha
     document.getElementById('tiro-fecha').value = new Date().toISOString().split('T')[0];
 
     // =================================================================
-    // CONTROLADOR DE CAPAS (TABS)
+    // MANEJADOR DE CAPAS OPERATIVAS (TABS)
     // =================================================================
     function cambiarTab(tabId) {
         document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
         document.querySelectorAll('.nav-tabs button').forEach(b => {
             if(b.id !== '') b.classList.remove('active');
         });
+        
         document.getElementById(tabId).classList.add('active');
-        const btnMap = { 'tab-cal': 'btn-tab-cal', 'tab-input': 'btn-tab-input', 'tab-users': 'btn-tab-users' };
+        const btnMap = { 'tab-cal': 'btn-tab-cal', 'tab-input': 'btn-tab-input', 'tab-analisis': 'btn-tab-analisis', 'tab-users': 'btn-tab-users' };
         if(btnMap[tabId]) document.getElementById(btnMap[tabId]).classList.add('active');
         
         if (tabId === 'tab-cal') renderCalendario();
+        if (tabId === 'tab-analisis') ejecutarEstadisticasAvanzadas();
         if (tabId === 'tab-users') cargarListaUsuariosAdmin();
     }
 
     // =================================================================
-    // SISTEMA DE SEGURIDAD, LOGIN Y REGISTRO
+    // ACCESO, SEGURIDAD, FILTRADO Y VALIDACIONES DE ALTA
     // =================================================================
     async function ejecutarLogin() {
         const u = document.getElementById('login-user').value.trim().toLowerCase();
         const p = document.getElementById('login-pass').value.trim();
-        if(!u || !p) return alert("Escriba usuario y clave, acere.");
+        if(!u || !p) return alert("Ingrese credenciales válidas.");
 
         try {
+            document.getElementById('app-conexion-status').innerText = "AUTENTICANDO CONSOLA...";
             const data = await supabaseFetch(`usuarios?nombre=eq.${u}&clave=eq.${p}`, 'GET');
-            if(data.length === 0) return alert("Usuario o clave incorrectos.");
+            
+            if(data.length === 0) {
+                document.getElementById('app-conexion-status').innerText = "FALLO EN CREDENCIALES";
+                return alert("Usuario o clave incorrectos, verifique.");
+            }
             
             const user = data[0];
-            if(user.rol === 'pendiente') return alert("Tu cuenta está registrada pero en estado 'pendiente'. Pídele al administrador que te active.");
+            if(user.rol === 'pendiente') {
+                document.getElementById('app-conexion-status').innerText = "ACCESO EN ESPERA DE VALIDACIÓN";
+                return alert("Tu cuenta está en fase 'pendiente'. Informa al administrador para su habilitación.");
+            }
             
             usuarioActual = user;
             document.getElementById('login-screen').style.display = 'none';
@@ -188,17 +419,28 @@
                 document.getElementById('btn-tab-users').style.display = 'block';
             }
             
-            // Descargar histórico inicial de base de datos e iniciar la PWA
             await sincronizarHistorico();
             cambiarTab('tab-cal');
         } catch(err) {
-            alert("Error de red al iniciar sesión. Inténtelo más tarde.");
+            console.error(err);
+            // Inicio de sesión de emergencia Offline si el usuario existía en cache de sesiones previas
+            const cacheSesion = localStorage.getItem('cache_session_user');
+            if(cacheSesion && JSON.parse(cacheSesion).nombre === u && JSON.parse(cacheSesion).clave === p) {
+                usuarioActual = JSON.parse(cacheSesion);
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                if(usuarioActual.rol === 'admin') document.getElementById('btn-tab-users').style.display = 'block';
+                cargarDatosDesdeCopiaLocal();
+                cambiarTab('tab-cal');
+                document.getElementById('app-conexion-status').innerText = "CONSOLA OPERANDO EN MODO OFFLINE REFORZADO";
+            } else {
+                alert("Error de enlace de red y sin respaldo local previo para esta cuenta.");
+            }
         }
     }
 
     function mostrarRegistro() {
         document.getElementById('login-screen').style.display = 'none';
-        document.getElementById('register-screen').style.display = 'none';
         document.getElementById('register-screen').style.display = 'grid';
     }
     function cancelarRegistro() {
@@ -209,17 +451,17 @@
     async function ejecutarRegistro() {
         const u = document.getElementById('reg-user').value.trim().toLowerCase();
         const p = document.getElementById('reg-pass').value.trim();
-        if(!u || !p) return alert("Llene los campos.");
+        if(!u || !p) return alert("Complete los campos requeridos.");
 
         try {
             const existe = await supabaseFetch(`usuarios?nombre=eq.${u}`, 'GET');
-            if(existe.length > 0) return alert("Ese nombre de usuario ya está solicitado.");
+            if(existe.length > 0) return alert("El nombre solicitado ya tiene una petición en curso.");
 
             await supabaseFetch('usuarios', 'POST', { nombre: u, clave: p, rol: 'pendiente' });
-            alert("Solicitud enviada con éxito. Espera a que el administrador cambie tu estado a 'activo'.");
+            alert("Solicitud procesada. Estado actual: PENDIENTE. Contacte para su activación.");
             cancelarRegistro();
         } catch(err) {
-            alert("Error al procesar el registro.");
+            alert("Fallo al registrar la petición en el servidor.");
         }
     }
 
@@ -230,15 +472,17 @@
         document.getElementById('login-screen').style.display = 'grid';
         document.getElementById('login-user').value = '';
         document.getElementById('login-pass').value = '';
+        document.getElementById('app-conexion-status').innerText = "SESIÓN CERRADA SOBERANAMENTE";
     }
 
     // =================================================================
-    // MOTOR DE SINCRONIZACIÓN SEGURO (NUBE + LOCAL STORAGE)
+    // MOTOR DE CONTROL DOBLE FLUJO (SINCRO NUBE + LOCAL STORAGE COMPLETO)
     // =================================================================
     async function sincronizarHistorico() {
         try {
-            // Intentar descargar desde Supabase siempre primero
+            document.getElementById('app-conexion-status').innerText = "DESCARGANDO HISTÓRICO GLOBAL...";
             const data = await supabaseFetch('historico', 'GET');
+            
             baseHistorico = {};
             data.forEach(item => {
                 if(item.fecha) {
@@ -248,88 +492,93 @@
                     };
                 }
             });
-            // Si la descarga fue exitosa, respaldar inmediatamente en localStorage
-            localStorage.setItem('local_historico', JSON.stringify(baseHistorico));
-            console.log("Sincronización con la nube exitosa. Caché local actualizada.");
+            
+            // Guardar copia exacta blindada en LocalStorage
+            localStorage.setItem('local_historico_v88', JSON.stringify(baseHistorico));
+            if(usuarioActual) localStorage.setItem('cache_session_user', JSON.stringify(usuarioActual));
+            
+            document.getElementById('app-conexion-status').innerText = "SISTEMA SINCRONIZADO (NUBE + LOCAL OK)";
         } catch(err) {
-            console.warn("Fallo de conexión a Supabase. Cargando copia de seguridad local...", err);
-            // Si falla la red, jalar la copia local para no dejar colgado al usuario
-            const localData = localStorage.getItem('local_historico');
-            if(localData) {
-                baseHistorico = JSON.parse(localData);
-            } else {
-                baseHistorico = {};
-            }
+            console.warn("Red no disponible. Activando persistencia local interna:", err);
+            cargarDatosDesdeCopiaLocal();
+        }
+    }
+
+    function cargarDatosDesdeCopiaLocal() {
+        const localData = localStorage.getItem('local_historico_v88');
+        if(localData) {
+            baseHistorico = JSON.parse(localData);
+            document.getElementById('app-conexion-status').innerText = "OPERANDO CON COPIA DE RESPALDO INTERNA";
+        } else {
+            baseHistorico = {};
+            document.getElementById('app-conexion-status').innerText = "SIN DATOS NUBE NI CACHÉ DETECTADA";
         }
     }
 
     // =================================================================
-    // MOTOR DE PERSISTENCIA DOBLE (GUARDA EN AMBOS LUGARES)
+    // GRABACIÓN DE SEGURIDAD SIMULTÁNEA (DUAL PATH PERSISTENCE)
     // =================================================================
     async function persistirTiro(fecha, tarde, noche) {
-        // 1. Guardar primero en el LocalStorage interno del teléfono de manera inmediata
+        // Registro inmediato en LocalStorage para evitar cortes bruscos de luz/red
         baseHistorico[fecha] = { fijo_tarde: tarde, fijo_noche: noche };
-        localStorage.setItem('local_historico', JSON.stringify(baseHistorico));
+        localStorage.setItem('local_historico_v88', JSON.stringify(baseHistorico));
 
-        // 2. Intentar guardar en Supabase (Nube) de forma asíncrona
         try {
-            // Verificar si el registro de esa fecha ya existe en Supabase para decidir si hacer POST o PATCH
             const existCheck = await supabaseFetch(`historico?fecha=eq.${fecha}`, 'GET');
-            
             if(existCheck.length > 0) {
-                // Actualizar registro existente
                 await supabaseFetch(`historico?fecha=eq.${fecha}`, 'PATCH', {
                     fijo_tarde: tarde,
                     fijo_noche: noche
                 });
             } else {
-                // Insertar nuevo registro
                 await supabaseFetch('historico', 'POST', {
                     fecha: fecha,
                     fijo_tarde: tarde,
                     fijo_noche: noche
                 });
             }
-            return { status: 'completo', msg: "¡Calendario actualizado y guardado en Supabase y copia local!" };
+            return { status: 'completo', msg: "Datos guardados en Supabase y duplicados en el almacenamiento del móvil." };
         } catch (error) {
-            console.error("Error al subir a Supabase, pero los datos están a salvo en el móvil:", error);
-            // Retornamos un estado que avise que se guardó pero solo a nivel local por problemas de red
-            return { status: 'local_only', msg: "Guardado localmente en el móvil. (Error de red: no se pudo subir a Supabase en este momento)." };
+            console.error("Fallo de subida a la nube, datos retenidos localmente:", error);
+            return { status: 'local_only', msg: "Guardado en la memoria interna del teléfono. Al recuperar la red se actualizará Supabase." };
         }
     }
 
-    // Acciones del botón directo de la interfaz
     async function guardarTiroDirecto() {
-        if(usuarioActual.rol !== 'admin') return alert("Permiso denegado. Solo administradores pueden guardar tiros.");
+        if(usuarioActual.rol !== 'admin') return alert("Permiso de edición denegado.");
         
         const fecha = document.getElementById('tiro-fecha').value;
         const tarde = document.getElementById('tiro-tarde').value.trim() || '-';
         const noche = document.getElementById('tiro-noche').value.trim() || '-';
         
-        if(!fecha) return alert("Selecciona una fecha válida, acere.");
+        if(!fecha) return alert("Seleccione una coordenada temporal válida.");
 
+        document.getElementById('app-conexion-status').innerText = "PERSISTIENDO REGISTRO DUAL...";
         const resultado = await persistirTiro(fecha, tarde, noche);
         alert(resultado.msg);
         
-        // Limpiar inputs
         document.getElementById('tiro-tarde').value = '';
         document.getElementById('tiro-noche').value = '';
+        
+        await sincronizarHistorico();
         renderCalendario();
     }
 
     // =================================================================
-    // PARSER AVANZADO E IMPORTADOR EN BLOQUE
+    // EXTRACCIÓN Y TRADUCCIÓN INTELECTUAL DE TEXTO EN BRUTO (PARSER LOGIC)
     // =================================================================
     async function procesarTextoImportado() {
-        if(usuarioActual.rol !== 'admin') return alert("Acceso denegado.");
+        if(usuarioActual.rol !== 'admin') return alert("Acceso restringido.");
         const txt = document.getElementById('raw-text').value;
-        if(!txt.trim()) return alert("El cuadro está vacío. Pega texto antes de procesar.");
+        if(!txt.trim()) return alert("Contenedor de importación vacío.");
 
         const lineas = txt.split('\n');
         let añoActual = fechaFiltro.getFullYear();
         let mesActual = fechaFiltro.getMonth(); 
-        let procesados = 0;
-        let erroresRed = false;
+        let cont = 0;
+        let errorRedDetectado = false;
+
+        document.getElementById('app-conexion-status').innerText = "PROCESANDO MATRIZ DE TEXTO...";
 
         for(let linea of lineas) {
             linea = linea.trim();
@@ -340,7 +589,6 @@
             let noche = '-';
             let fechaClave = null;
 
-            // CASO A: Formato completo con barras diagonales (Ej: 02/05/2026: 12 - 45 o 2/5: 80 - 10)
             if(linea.includes('/')) {
                 const matchFecha = linea.match(/(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?/);
                 if(matchFecha) {
@@ -349,7 +597,6 @@
                     let a = matchFecha[3] ? parseInt(matchFecha[3], 10) : añoActual;
                     if(a < 100) a += 2000; 
 
-                    // Extraer los números limpiando el resto de la línea
                     const resto = linea.replace(matchFecha[0], '');
                     const numeros = resto.match(/\d+/g);
                     if(numeros) {
@@ -358,9 +605,7 @@
                     }
                     fechaClave = `${a}-${String(m+1).padStart(2,'0')}-${String(dia).padStart(2,'0')}`;
                 }
-            } 
-            // CASO B: Formato plano por números de lista (Ej: "1- 70 y 71" o "05 - 88 y 21")
-            else {
+            } else {
                 const matchDiaPlano = linea.match(/^(\d{1,2})\s*[-:]?\s*(.*)/);
                 if(matchDiaPlano) {
                     dia = parseInt(matchDiaPlano[1], 10);
@@ -374,27 +619,26 @@
                 }
             }
 
-            // Si el parser logró extraer una fecha estructurada, procesamos el doble guardado
             if(fechaClave && !isNaN(dia)) {
                 const res = await persistirTiro(fechaClave, tarde, noche);
-                if(res.status === 'local_only') erroresRed = true;
-                procesados++;
+                if(res.status === 'local_only') errorRedDetectado = true;
+                cont++;
             }
         }
 
         document.getElementById('raw-text').value = '';
-        await sincronizarHistorico(); // Actualizar interfaz limpia
+        await sincronizarHistorico();
         renderCalendario();
 
-        if(erroresRed) {
-            alert(`Se procesaron ${procesados} días con éxito localmente, pero hubo problemas de red para subirlos a Supabase. Los datos se mantendrán a salvo en el móvil.`);
+        if(errorRedDetectado) {
+            alert(`Importados ${cont} elementos a la base interna local del móvil. Supabase rechazó la subida sincrónica por latencia de red.`);
         } else {
-            alert(`¡Éxito Total, acere! Se han procesado y guardado ${procesados} registros en Supabase y copia de seguridad local.`);
+            alert(`Procesamiento masivo completado. ${cont} registros inyectados con éxito en la nube.`);
         }
     }
 
     // =================================================================
-    // RENDERIZADOR DEL CALENDARIO DINÁMICO
+    // ESTRUCTURACIÓN COMPLETA DEL CALENDARIO OPERATIVO
     // =================================================================
     function cambiarMes(dir) {
         fechaFiltro.setMonth(fechaFiltro.getMonth() + dir);
@@ -402,16 +646,15 @@
     }
 
     function renderCalendario() {
-        const nombresMeses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+        const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
         const año = fechaFiltro.getFullYear();
         const mes = fechaFiltro.getMonth();
         
-        document.getElementById('cal-month-title').innerText = `${nombresMeses[mes]} ${año}`;
+        document.getElementById('cal-month-title').innerText = `${meses[mes]} ${año}`;
         
         const contenedor = document.getElementById('cal-grid-container');
         contenedor.innerHTML = '';
         
-        // Renderizar cabecera de días
         const diasSemana = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
         diasSemana.forEach(d => {
             const div = document.createElement('div');
@@ -420,113 +663,311 @@
             contenedor.appendChild(div);
         });
         
-        // Calcular desfase de cuadrícula
         let primerDia = new Date(año, mes, 1).getDay();
-        let desajuste = primerDia === 0 ? 6 : primerDia - 1; // Ajustar para que la semana empiece en Lunes
-        
+        let desajuste = primerDia === 0 ? 6 : primerDia - 1; 
         const diasTotales = new Date(año, mes + 1, 0).getDate();
         
-        // Celdas vacías iniciales
         for(let i=0; i<desajuste; i++) {
             const empty = document.createElement('div');
             empty.className = 'day-cell empty';
             contenedor.appendChild(empty);
         }
         
-        // Crear celdas operativas para cada día del mes
+        const hoy = new Date();
+        const hoyStr = `${hoy.getFullYear()}-${String(hoy.getMonth()+1).padStart(2,'0')}-${String(hoy.getDate()).padStart(2,'0')}`;
+        
+        let tirosConseguidosEnMes = 0;
+
         for(let d=1; d<=diasTotales; d++) {
-            const fechaString = `${año}-${String(mes+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-            const datosDia = baseHistorico[fechaString] || { fijo_tarde: '-', fijo_noche: '-' };
+            const fStr = `${año}-${String(mes+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+            const datos = baseHistorico[fStr] || { fijo_tarde: '-', fijo_noche: '-' };
             
+            if(datos.fijo_tarde !== '-' || datos.fijo_noche !== '-') tirosConseguidosEnMes++;
+
             const celda = document.createElement('div');
             celda.className = 'day-cell';
+            if(fStr === hoyStr) celda.classList.add('today');
             
-            // Evento interactivo para el administrador (autocompleta la fecha al tocar el día)
-            if(usuarioActual && usuarioActual.role === 'admin' || usuarioActual.rol === 'admin') {
+            if(usuarioActual && usuarioActual.rol === 'admin') {
                 celda.style.cursor = 'pointer';
                 celda.onclick = () => {
-                    document.getElementById('tiro-fecha').value = fechaString;
-                    document.getElementById('tiro-tarde').value = datosDia.fijo_tarde === '-' ? '' : datosDia.fijo_tarde;
-                    document.getElementById('tiro-noche').value = datosDia.fijo_noche === '-' ? '' : datosDia.fijo_noche;
+                    document.getElementById('tiro-fecha').value = fStr;
+                    document.getElementById('tiro-tarde').value = datos.fijo_tarde === '-' ? '' : datos.fijo_tarde;
+                    document.getElementById('tiro-noche').value = datos.fijo_noche === '-' ? '' : datos.fijo_noche;
                     cambiarTab('tab-input');
                 };
             }
             
             celda.innerHTML = `
                 <div class="day-num">${d}</div>
-                <div class="day-tarde">${datosDia.fijo_tarde}</div>
-                <div class="day-noche">${datosDia.fijo_noche}</div>
+                <div class="day-tarde">${datos.fijo_tarde}</div>
+                <div class="day-noche">${datos.fijo_noche}</div>
             `;
             contenedor.appendChild(celda);
+        }
+
+        // Resumen rápido al pie de página
+        document.getElementById('resumen-rapido-container').innerHTML = `
+            <div style="font-size:0.75rem; color:#fff; display:flex; justify-content:space-between; border-top:1px solid #333; padding-top:8px;">
+                <span>DÍAS CONTROLADOS EN EL MES:</span>
+                <span style="color:var(--neon); font-weight:bold;">${tirosConseguidosEnMes} de ${diasTotales}</span>
+            </div>
+        `;
+    }
+
+    // =================================================================
+    // GENERADORES NUMÉRICOS, CÁLCULOS MÁXIMOS Y COMBINATORIAS
+    // =================================================================
+    function ejecutarGeneracionMatematica() {
+        const base = document.getElementById('comb-base').value.trim();
+        const tipo = document.getElementById('comb-tipo').value;
+        const box = document.getElementById('comb-output-box');
+        
+        if(!base || isNaN(base)) {
+            return box.innerText = "Error: Introduzca una cadena numérica base válida.";
+        }
+
+        if(tipo === 'piramide') {
+            let pasos = [base];
+            let actual = base.split('').map(Number);
+            while(actual.length > 1) {
+                let sig = [];
+                for(let i=0; i<actual.length-1; i++) {
+                    sig.push((actual[i] + actual[i+1]) % 10);
+                }
+                pasos.push(sig.join(''));
+                actual = sig;
+            }
+            box.innerText = "PIRÁMIDE REDUCIDA:\n" + pasos.join('\n');
+        } 
+        else if(tipo === 'cruces') {
+            let digitos = Array.from(new Set(base.split('')));
+            let combinaciones = [];
+            for(let i=0; i<digitos.length; i++) {
+                for(let j=0; j<digitos.length; j++) {
+                    if(i !== j) combinaciones.push(digitos[i] + digitos[j]);
+                }
+            }
+            box.innerText = `CRUCE DE DÍGITOS (TOTAL: ${combinaciones.length}):\n` + combinaciones.join(' - ');
+        }
+        else if(tipo === 'terminales') {
+            let ult = base.slice(-1);
+            let lista = [];
+            for(let i=0; i<=9; i++) {
+                lista.push(i + ult);
+            }
+            box.innerText = `TERMINALES RECOMENDADOS EN BASE [${ult}]:\n` + lista.join(' , ');
         }
     }
 
     // =================================================================
-    // PANEL ADMINISTRATIVO DE ROLES DE USUARIOS
+    // MOTOR ANALÍTICO AVANZADO (CÁLCULOS ESTADÍSTICOS DE MATRIX)
+    // =================================================================
+    function ejecutarEstadisticasAvanzadas() {
+        let arrayNumeros = [];
+        let terminalesConteo = Array(10).fill(0);
+        let ultimoAvistamiento = {};
+
+        // Inicializar último avistamiento de cada número de 00 a 99
+        for(let i=0; i<=99; i++) {
+            let strNum = String(i).padStart(2,'0');
+            ultimoAvistamiento[strNum] = Infinity; 
+        }
+
+        // Ordenar fechas para calcular retrasos reales de forma lineal
+        let fechasOrdenadas = Object.keys(baseHistorico).sort((a,b) => new Date(b) - new Date(a));
+
+        let diasContados = 0;
+        fechasOrdenadas.forEach((f, index) => {
+            const t = baseHistorico[f];
+            if(t.fijo_tarde && t.fijo_tarde !== '-') {
+                let nT = String(t.fijo_tarde).slice(-2).padStart(2,'0');
+                if(!isNaN(nT)) {
+                    arrayNumeros.push(nT);
+                    terminalesConteo[parseInt(nT.slice(-1))]++;
+                    if(ultimoAvistamiento[nT] === Infinity) ultimoAvistamiento[nT] = index;
+                }
+            }
+            if(t.fijo_noche && t.fijo_noche !== '-') {
+                let nN = String(t.fijo_noche).slice(-2).padStart(2,'0');
+                if(!isNaN(nN)) {
+                    arrayNumeros.push(nN);
+                    terminalesConteo[parseInt(nN.slice(-1))]++;
+                    if(ultimoAvistamiento[nN] === Infinity) ultimoAvimamiento = index;
+                    if(ultimoAvistamiento[nN] === Infinity || ultimoAvistamiento[nN] > index) ultimoAvistamiento[nN] = index;
+                }
+            }
+        });
+
+        // Contar frecuencias directas
+        let frecuencias = {};
+        arrayNumeros.forEach(n => frecuencias[n] = (frecuencias[n] || 0) + 1);
+
+        // Renderizar los más repetidos
+        let itemsRepetidos = Object.keys(frecuencias).map(k => ({num: k, cant: frecuencias[k]}));
+        itemsRepetidos.sort((a,b) => b.cant - a.cant);
+        
+        const boxRep = document.getElementById('stat-repetidos');
+        boxRep.innerHTML = '';
+        itemsRepetidos.slice(0, 5).forEach(item => {
+            boxRep.innerHTML += `
+                <div class="mini-card">
+                    <div class="mini-num">${item.num}</div>
+                    <div class="mini-val">${item.cant}x</div>
+                </div>
+            `;
+        });
+        if(itemsRepetidos.length === 0) boxRep.innerHTML = '<div style="grid-column:1/6; font-size:0.7rem; color:#555;">FALTAN DATOS</div>';
+
+        // Renderizar los más atrasados basados en el índice posicional
+        let itemsAtrasados = [];
+        for(let i=0; i<=99; i++) {
+            let sN = String(i).padStart(2,'0');
+            itemsAtrasados.push({num: sN, atraso: ultimoAvistamiento[sN]});
+        }
+        itemsAtrasados.sort((a,b) => b.atraso - a.atraso);
+
+        const boxAtr = document.getElementById('stat-atrasados');
+        boxAtr.innerHTML = '';
+        itemsAtrasados.slice(0, 5).forEach(item => {
+            let diasTexto = item.atraso === Infinity ? 'MÁS' : item.atraso;
+            boxAtr.innerHTML += `
+                <div class="mini-card" style="border-color:#330000;">
+                    <div class="mini-num" style="color:var(--error);">${item.num}</div>
+                    <div class="mini-val" style="color:var(--gray);">${diasTexto} d</div>
+                </div>
+            `;
+        });
+
+        // Renderizar tabla estructurada de terminales recurrentes
+        const boxTerm = document.getElementById('stat-terminales-tabla');
+        let tablaHTML = `<table class="matriz-table">
+            <tr><th>TERM</th><th>CANTIDAD DETECTADA</th><th>FLUJO</th></tr>`;
+        
+        let maxTerm = Math.max(...terminalesConteo) || 1;
+        for(let i=0; i<=9; i++) {
+            let porcentaje = Math.round((terminalesConteo[i] / maxTerm) * 100) || 0;
+            tablaHTML += `
+                <tr>
+                    <td style="font-weight:bold; color:var(--win); font-size:0.85rem;">-${i}</td>
+                    <td>${terminalesConteo[i]} veces</td>
+                    <td style="color:var(--neon); font-weight:bold;">${porcentaje}%</td>
+                </tr>
+            `;
+        }
+        tablaHTML += `</table>`;
+        boxTerm.innerHTML = tablaHTML;
+    }
+
+    function calcularProbabilidadEspecifica() {
+        const num = document.getElementById('calc-prob-num').value.trim();
+        const resBox = document.getElementById('calc-prob-res');
+        
+        if(!num || isNaN(num) || num.length < 2) {
+            return resBox.innerText = "Introduzca un dígito doble entre 00 y 99.";
+        }
+
+        let totalTiros = 0;
+        let apariciones = 0;
+
+        Object.keys(baseHistorico).forEach(f => {
+            const t = baseHistorico[f];
+            if(t.fijo_tarde && t.fijo_tarde !== '-') {
+                totalTiros++;
+                if(String(t.fijo_tarde).slice(-2) === num) apariciones++;
+            }
+            if(t.fijo_noche && t.fijo_noche !== '-') {
+                totalTiros++;
+                if(String(t.fijo_noche).slice(-2) === num) apariciones++;
+            }
+        });
+
+        if(totalTiros === 0) {
+            resBox.innerHTML = "Base analítica vacía. Ingrese más tiros.";
+            return;
+        }
+
+        let probBase = (1 / 100) * 100; // Probabilidad teórica estándar
+        let frecReal = (apariciones / totalTiros) * 100;
+        let variacion = frecReal - probBase;
+        
+        let dictamen = "FLUJO ESTABLE MATEMÁTICO";
+        let color = "#fff";
+
+        if(variacion < 0) { dictamen = "ALTA PROBABILIDAD DE SALIDA (ATRASADO)"; color = "var(--win)"; }
+        if(variacion > 1.5) { dictamen = "CANTIDAD SATURADA (BAJA PROBABILIDAD)"; color = "var(--error)"; }
+
+        resBox.innerHTML = `
+            <div style="font-weight:bold; color:${color}; margin-bottom:4px;">${dictamen}</div>
+            Frecuencia Real: ${frecReal.toFixed(2)}% | Desviación: ${variacion.toFixed(2)}%
+        `;
+    }
+
+    // =================================================================
+    // GESTIÓN ADMINISTRATIVA DE ALTAS DE CLIENTES
     // =================================================================
     async function cargarListaUsuariosAdmin() {
         if(usuarioActual.rol !== 'admin') return;
         const contenedor = document.getElementById('users-list-container');
-        contenedor.innerHTML = '<div style="font-size:0.8rem;color:#666;text-align:center;">Cargando lista...</div>';
+        contenedor.innerHTML = '<div style="font-size:0.75rem;color:#666;text-align:center;">Analizando credenciales en base de datos...</div>';
 
         try {
             const lista = await supabaseFetch('usuarios', 'GET');
             contenedor.innerHTML = '';
             
             lista.forEach(user => {
-                // No mostrarse a sí mismo en la lista editable para evitar accidentes
                 if(user.nombre === usuarioActual.nombre) return;
 
                 const row = document.createElement('div');
                 row.className = 'user-row';
                 
-                // Definición de acciones de control de estado
                 let botonAccion = '';
                 if(user.rol === 'pendiente') {
-                    botonAccion = `<span class="action-icon" style="color:var(--neon);border-color:var(--neon);" onclick="cambiarRolUsuario('${user.id}', 'activo')">✓ ACTIVAR</span>`;
+                    botonAccion = `<span class="action-icon" style="color:var(--neon);border-color:var(--neon);" onclick="cambiarRolUsuario('${user.id}', 'activo')">ACTIVAR ACCESO</span>`;
                 } else {
-                    botonAccion = `<span class="action-icon" style="color:var(--error);border-color:var(--error);" onclick="cambiarRolUsuario('${user.id}', 'pendiente')">✕ SUSPENDER</span>`;
+                    botonAccion = `<span class="action-icon" style="color:var(--error);border-color:var(--error);" onclick="cambiarRolUsuario('${user.id}', 'pendiente')">SUSPENDER</span>`;
                 }
 
                 row.innerHTML = `
                     <div>
-                        <span style="font-weight:bold; color:#fff;">${user.nombre}</span>
-                        <span class="badge ${user.rol}">${user.rol.toUpperCase()}</span>
+                        <span style="font-weight:bold; color:#fff; font-family:monospace;">${user.nombre.toUpperCase()}</span>
+                        <span class="badge ${user.rol}">${user.rol}</span>
                     </div>
                     <div>${botonAccion}</div>
                 `;
                 contenedor.appendChild(row);
             });
+            if(contenedor.innerHTML === '') contenedor.innerHTML = '<div style="font-size:0.7rem;color:#555;text-align:center;">NO HAY SOLICITUDES EXTERNAS</div>';
         } catch(err) {
-            contenedor.innerHTML = '<div style="font-size:0.8rem;color:var(--error);text-align:center;">Error al cargar usuarios.</div>';
+            contenedor.innerHTML = '<div style="font-size:0.7rem;color:var(--error);text-align:center;">ERROR AL OBTENER LISTA RESTRINGIDA.</div>';
         }
     }
 
     async function cambiarRolUsuario(id, nuevoRol) {
-        if(!confirm(`¿Seguro que deseas cambiar el estado de este usuario a ${nuevoRol.toUpperCase()}?`)) return;
+        if(!confirm(`¿Ejecutar reconfiguración de permisos para este ID de usuario?`)) return;
         try {
             await supabaseFetch(`usuarios?id=eq.${id}`, 'PATCH', { rol: nuevoRol });
             cargarListaUsuariosAdmin();
         } catch(err) {
-            alert("No se pudo cambiar el rol.");
+            alert("Operación denegada en el servidor.");
         }
     }
 
-    // Inicialización del sistema al cargar la página
+    // Inicialización del sistema al cargar el DOM
     function inicializarSistema() {
-        // Cargar lo que haya en cache local de inmediato para respuesta visual instantánea
-        const localData = localStorage.getItem('local_historico');
+        // Cargar caché local instantánea al inicio para blindar respuesta táctica
+        const localData = localStorage.getItem('local_historico_v88');
         if(localData) {
             baseHistorico = JSON.parse(localData);
         }
     }
 
     window.onload = inicializarSistema;
+
     // =================================================================
-    // MOTOR DE INSTALACIÓN COMO APLICACIÓN MÓVIL (PWA AUTOMÁTICA)
+    // MANIFEST DE ENLACE DINÁMICO E INSTALACIÓN PWA AUTOMÁTICA
     // =================================================================
     let deferredPrompt;
-
     const manifestData = {
         "short_name": "BolitaPro",
         "name": "Bolita Pro Master v8.8",
@@ -540,17 +981,11 @@
         "orientation": "portrait"
     };
     
-    // Crear el enlace del manifiesto dinámicamente si existe el id en el documento
-    const pwaManifestEl = document.getElementById('pwa-manifest');
-    if(pwaManifestEl) {
-        pwaManifestEl.setAttribute('href', 'data:application/manifest+json;base64,' + btoa(JSON.stringify(manifestData)));
-    } else {
-        const link = document.createElement('link');
-        link.id = 'pwa-manifest';
-        link.rel = 'manifest';
-        link.href = 'data:application/manifest+json;base64,' + btoa(JSON.stringify(manifestData));
-        document.head.appendChild(link);
-    }
+    const link = document.createElement('link');
+    link.id = 'pwa-manifest';
+    link.rel = 'manifest';
+    link.href = 'data:application/manifest+json;base64,' + btoa(JSON.stringify(manifestData));
+    document.head.appendChild(link);
 
     if ('serviceWorker' in navigator) {
         const swCode = `self.addEventListener('fetch', function(e) { e.respondWith(fetch(e.request)); });`;

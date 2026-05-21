@@ -285,7 +285,6 @@
 <script>
     const _0xAdmin = "yohnny95", _0xPass = "Elmatatan95*";
 
-    // NUEVAS CREDENCIALES FIJADAS CORRECTAMENTE
     const SUPABASE_URL = "https://cdruwznhqqgkpdfvlxjq.supabase.co"; 
     const SUPABASE_KEY = "sb_publishable_3WYpDpVXShVagap1x7K4GA_EEynNqGR"; 
 
@@ -327,9 +326,6 @@
         document.getElementById('btn-admin-tab-users').className = `tab-btn admin-tab ${sec==='users'?'active':''}`;
     }
 
-    // ==========================================
-    // FUNCIÓN 1: LOGIN (username / password)
-    // ==========================================
     async function intentarLogin() {
         let u = document.getElementById('login-user').value.trim();
         let p = document.getElementById('login-pass').value;
@@ -381,9 +377,6 @@
         }
     }
 
-    // ==========================================
-    // FUNCIÓN 2: REGISTRO (Mapeado a la Tabla Nueva)
-    // ==========================================
     async function enviarSolicitud() {
         let u = document.getElementById('reg-nombre').value.trim();
         let p = document.getElementById('reg-pass').value;
@@ -426,9 +419,6 @@
         }
     }
 
-    // ==========================================
-    // SECCIÓN HISTÓRICOS Y CALCULOS DE TIROS
-    // ==========================================
     async function cargarTirosDesdeNube() {
         try {
             const res = await fetch(`${SUPABASE_URL}/rest/v1/tiros_historicos?select=*`, {
@@ -439,7 +429,9 @@
                 const registros = await res.json();
                 db = {};
                 registros.forEach(fila => {
-                    db[fila.fecha] = { t: fila.fijo_tarde || "", n: fila.fijo_noche || "" };
+                    if(fila.fecha) {
+                        db[fila.fecha] = { t: fila.fijo_tarde !== null ? String(fila.fijo_tarde) : "", n: fila.fijo_noche !== null ? String(fila.fijo_noche) : "" };
+                    }
                 });
                 localStorage.setItem('bolita_master_db', JSON.stringify(db));
             }
@@ -551,9 +543,6 @@
         alert("Sincronización completa con Supabase.");
     }
 
-    // ==========================================
-    // SISTEMA ADMINISTRATIVO DE USUARIOS
-    // ==========================================
     async function actualizarStatsAdmin() {
         try {
             const res = await fetch(`${SUPABASE_URL}/rest/v1/usuarios`, {
@@ -599,14 +588,29 @@
         } catch (e) {}
     }
 
+    // ==========================================
+    // FUNCIÓN BLINDADA CONTRA ERRORES DE CONEXIÓN / DATOS VACÍOS
+    // ==========================================
     function mostrarTablaAciertos() {
         let html = "<table><thead><tr><th>Fecha</th><th>Mediodía</th><th>Noche</th></tr></thead><tbody>";
-        let llaves = Object.keys(db).sort().reverse().slice(0, 10);
-        llaves.forEach(k => {
-            html += `<tr><td>${k}</td><td>${db[k].t || '--'}</td><td>${db[k].n || '--'}</td></tr>`;
-        });
+        
+        // Filtramos las llaves para asegurarnos de que no entren claves nulas o vacías que rompan el split
+        let llaves = Object.keys(db).filter(k => k && k.includes('-')).sort().reverse().slice(0, 10);
+        
+        if(llaves.length === 0) {
+            html += `<tr><td colspan="3" style="color:var(--win);">Sin registros históricos cargados</td></tr>`;
+        } else {
+            llaves.forEach(k => {
+                if(db[k]) {
+                    html += `<tr><td>${k}</td><td>${db[k].t || '--'}</td><td>${db[k].n || '--'}</td></tr>`;
+                }
+            });
+        }
         html += "</tbody></table>";
-        document.getElementById('tabla_historico_aciertos_user').innerHTML = html;
+        
+        let userDiv = document.getElementById('tabla_historico_aciertos_user');
+        if(userDiv) userDiv.innerHTML = html;
+        
         let adminDiv = document.getElementById('tabla_historico_aciertos_admin');
         if(adminDiv) adminDiv.innerHTML = html;
     }
@@ -635,7 +639,6 @@
         }, 800);
     }
 
-    // Funciones del importador masivo nativo
     function exportarBaseDatos() {
         let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db));
         let dlAnchorElem = document.createElement('a'); dlAnchorElem.setAttribute("href", dataStr);
@@ -704,7 +707,6 @@
     // =================================================================
     let deferredPrompt;
 
-    // Generador base64 automático del Manifest de instalación para Android Chrome
     const manifestData = {
         "short_name": "BolitaPro",
         "name": "Bolita Pro Master v8.8",
@@ -719,14 +721,12 @@
     };
     document.getElementById('pwa-manifest').setAttribute('href', 'data:application/manifest+json;base64,' + btoa(JSON.stringify(manifestData)));
 
-    // Inyección del Service Worker virtual obligatorio para forzar la opción de instalación
     if ('serviceWorker' in navigator) {
         const swCode = `self.addEventListener('fetch', function(e) { e.respondWith(fetch(e.request)); });`;
         const blob = new Blob([swCode], { type: 'application/javascript' });
         navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(err => console.log("SW Error", err));
     }
 
-    // Captura del evento de instalación nativo
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;

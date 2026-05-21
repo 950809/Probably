@@ -406,12 +406,17 @@
             }
             
             const user = data[0];
-            if(user.rol === 'pendiente') {
+            // Forzar el rol a minúsculas para evitar fallos de escritura en Supabase
+            const rolLimpio = String(user.rol).trim().toLowerCase();
+            
+            if(rolLimpio === 'pendiente') {
                 document.getElementById('app-conexion-status').innerText = "ACCESO EN ESPERA DE VALIDACIÓN";
                 return alert("Tu cuenta está en fase 'pendiente'. Informa al administrador para su habilitación.");
             }
             
             usuarioActual = user;
+            usuarioActual.rol = rolLimpio; // Asegurar rol en minúsculas en memoria
+            
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('dashboard').style.display = 'block';
             
@@ -423,10 +428,12 @@
             cambiarTab('tab-cal');
         } catch(err) {
             console.error(err);
-            // Inicio de sesión de emergencia Offline si el usuario existía en cache de sesiones previas
             const cacheSesion = localStorage.getItem('cache_session_user');
             if(cacheSesion && JSON.parse(cacheSesion).nombre === u && JSON.parse(cacheSesion).clave === p) {
                 usuarioActual = JSON.parse(cacheSesion);
+                const rolCache = String(usuarioActual.rol).trim().toLowerCase();
+                usuarioActual.rol = rolCache;
+                
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('dashboard').style.display = 'block';
                 if(usuarioActual.rol === 'admin') document.getElementById('btn-tab-users').style.display = 'block';

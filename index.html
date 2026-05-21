@@ -188,6 +188,7 @@
         .user-row { display: flex; justify-content: space-between; align-items: center; padding: 8px; border-bottom: 1px solid var(--dark-gray); font-size: 0.85rem; }
         .badge { padding: 2px 5px; border-radius: 3px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; }
         .badge.activo { background: #002200; color: var(--neon); border: 1px solid var(--neon); }
+        .badge.admin { background: #001133; color: #00bfff; border: 1px solid #00bfff; }
         .badge.pendiente { background: #221100; color: var(--win); border: 1px solid var(--win); }
         .action-icon { cursor: pointer; padding: 3px 6px; border: 1px solid #444; border-radius: 4px; font-size: 0.75rem; font-weight: bold; }
         
@@ -406,7 +407,6 @@
             }
             
             const user = data[0];
-            // Forzar el rol a minúsculas para evitar fallos de escritura en Supabase
             const rolLimpio = String(user.rol).trim().toLowerCase();
             
             if(rolLimpio === 'pendiente') {
@@ -415,13 +415,16 @@
             }
             
             usuarioActual = user;
-            usuarioActual.rol = rolLimpio; // Asegurar rol en minúsculas en memoria
+            usuarioActual.rol = rolLimpio; 
             
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('dashboard').style.display = 'block';
             
             if(usuarioActual.rol === 'admin') {
+                document.getElementById('btn-tab-users').style.style.setProperty('display', 'block', 'important');
                 document.getElementById('btn-tab-users').style.display = 'block';
+            } else {
+                document.getElementById('btn-tab-users').style.display = 'none';
             }
             
             await sincronizarHistorico();
@@ -429,20 +432,28 @@
         } catch(err) {
             console.error(err);
             const cacheSesion = localStorage.getItem('cache_session_user');
-            if(cacheSesion && JSON.parse(cacheSesion).nombre === u && JSON.parse(cacheSesion).clave === p) {
-                usuarioActual = JSON.parse(cacheSesion);
-                const rolCache = String(usuarioActual.rol).trim().toLowerCase();
-                usuarioActual.rol = rolCache;
-                
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('dashboard').style.display = 'block';
-                if(usuarioActual.rol === 'admin') document.getElementById('btn-tab-users').style.display = 'block';
-                cargarDatosDesdeCopiaLocal();
-                cambiarTab('tab-cal');
-                document.getElementById('app-conexion-status').innerText = "CONSOLA OPERANDO EN MODO OFFLINE REFORZADO";
-            } else {
-                alert("Error de enlace de red y sin respaldo local previo para esta cuenta.");
+            if(cacheSesion) {
+                const parsedUser = JSON.parse(cacheSesion);
+                if(parsedUser.nombre === u && parsedUser.clave === p) {
+                    usuarioActual = parsedUser;
+                    usuarioActual.rol = String(usuarioActual.rol).trim().toLowerCase();
+                    
+                    document.getElementById('login-screen').style.display = 'none';
+                    document.getElementById('dashboard').style.display = 'block';
+                    
+                    if(usuarioActual.rol === 'admin') {
+                        document.getElementById('btn-tab-users').style.style.setProperty('display', 'block', 'important');
+                        document.getElementById('btn-tab-users').style.display = 'block';
+                    }
+                    
+                    cargarDatosDesdeCopiaLocal();
+                    cambiarTab('tab-cal');
+                    document.getElementById('app-conexion-status').innerText = "CONSOLA OPERANDO EN MODO OFFLINE REFORZADO";
+                    return;
+                }
             }
+            alert("Error de enlace de red y sin respaldo local previo válido.");
+            document.getElementById('app-conexion-status').innerText = "FALLO DE RED DE ENTRADA";
         }
     }
 
@@ -462,7 +473,7 @@
 
         try {
             const existe = await supabaseFetch(`usuarios?nombre=eq.${u}`, 'GET');
-            if(existe.length > 0) return alert("El nombre solicitado ya tiene una petición en curso.");
+            if(existe.length > 0) return alert("El nombre solicitado ya tiene una petición en curso o existe.");
 
             await supabaseFetch('usuarios', 'POST', { nombre: u, clave: p, rol: 'pendiente' });
             alert("Solicitud procesada. Estado actual: PENDIENTE. Contacte para su activación.");
@@ -474,6 +485,7 @@
 
     function ejecutarLogout() {
         usuarioActual = null;
+        localStorage.removeItem('cache_session_user'); // Limpiar caché vieja para refrescar roles en limpio
         document.getElementById('dashboard').style.display = 'none';
         document.getElementById('btn-tab-users').style.display = 'none';
         document.getElementById('login-screen').style.display = 'grid';
@@ -500,7 +512,6 @@
                 }
             });
             
-            // Guardar copia exacta blindada en LocalStorage
             localStorage.setItem('local_historico_v88', JSON.stringify(baseHistorico));
             if(usuarioActual) localStorage.setItem('cache_session_user', JSON.stringify(usuarioActual));
             
@@ -526,7 +537,6 @@
     // GRABACIÓN DE SEGURIDAD SIMULTÁNEA (DUAL PATH PERSISTENCE)
     // =================================================================
     async function persistirTiro(fecha, tarde, noche) {
-        // Registro inmediato en LocalStorage para evitar cortes bruscos de luz/red
         baseHistorico[fecha] = { fijo_tarde: tarde, fijo_noche: noche };
         localStorage.setItem('local_historico_v88', JSON.stringify(baseHistorico));
 
@@ -552,7 +562,7 @@
     }
 
     async function guardarTiroDirecto() {
-        if(usuarioActual.rol !== 'admin') return alert("Permiso de edición denegado.");
+        if(!usuarioActual || usuarioActual.rol !== 'admin') return alert("Permiso de edición denegado.");
         
         const fecha = document.getElementById('tiro-fecha').value;
         const tarde = document.getElementById('tiro-tarde').value.trim() || '-';
@@ -575,7 +585,7 @@
     // EXTRACCIÓN Y TRADUCCIÓN INTELECTUAL DE TEXTO EN BRUTO (PARSER LOGIC)
     // =================================================================
     async function procesarTextoImportado() {
-        if(usuarioActual.rol !== 'admin') return alert("Acceso restringido.");
+        if(!usuarioActual || usuarioActual.rol !== 'admin') return alert("Acceso restringido.");
         const txt = document.getElementById('raw-text').value;
         if(!txt.trim()) return alert("Contenedor de importación vacío.");
 
@@ -713,7 +723,6 @@
             contenedor.appendChild(celda);
         }
 
-        // Resumen rápido al pie de página
         document.getElementById('resumen-rapido-container').innerHTML = `
             <div style="font-size:0.75rem; color:#fff; display:flex; justify-content:space-between; border-top:1px solid #333; padding-top:8px;">
                 <span>DÍAS CONTROLADOS EN EL MES:</span>
@@ -775,16 +784,13 @@
         let terminalesConteo = Array(10).fill(0);
         let ultimoAvistamiento = {};
 
-        // Inicializar último avistamiento de cada número de 00 a 99
         for(let i=0; i<=99; i++) {
             let strNum = String(i).padStart(2,'0');
             ultimoAvistamiento[strNum] = Infinity; 
         }
 
-        // Ordenar fechas para calcular retrasos reales de forma lineal
         let fechasOrdenadas = Object.keys(baseHistorico).sort((a,b) => new Date(b) - new Date(a));
 
-        let diasContados = 0;
         fechasOrdenadas.forEach((f, index) => {
             const t = baseHistorico[f];
             if(t.fijo_tarde && t.fijo_tarde !== '-') {
@@ -800,17 +806,14 @@
                 if(!isNaN(nN)) {
                     arrayNumeros.push(nN);
                     terminalesConteo[parseInt(nN.slice(-1))]++;
-                    if(ultimoAvistamiento[nN] === Infinity) ultimoAvimamiento = index;
                     if(ultimoAvistamiento[nN] === Infinity || ultimoAvistamiento[nN] > index) ultimoAvistamiento[nN] = index;
                 }
             }
         });
 
-        // Contar frecuencias directas
         let frecuencias = {};
         arrayNumeros.forEach(n => frecuencias[n] = (frecuencias[n] || 0) + 1);
 
-        // Renderizar los más repetidos
         let itemsRepetidos = Object.keys(frecuencias).map(k => ({num: k, cant: frecuencias[k]}));
         itemsRepetidos.sort((a,b) => b.cant - a.cant);
         
@@ -826,7 +829,6 @@
         });
         if(itemsRepetidos.length === 0) boxRep.innerHTML = '<div style="grid-column:1/6; font-size:0.7rem; color:#555;">FALTAN DATOS</div>';
 
-        // Renderizar los más atrasados basados en el índice posicional
         let itemsAtrasados = [];
         for(let i=0; i<=99; i++) {
             let sN = String(i).padStart(2,'0');
@@ -846,7 +848,6 @@
             `;
         });
 
-        // Renderizar tabla estructurada de terminales recurrentes
         const boxTerm = document.getElementById('stat-terminales-tabla');
         let tablaHTML = `<table class="matriz-table">
             <tr><th>TERM</th><th>CANTIDAD DETECTADA</th><th>FLUJO</th></tr>`;
@@ -894,7 +895,7 @@
             return;
         }
 
-        let probBase = (1 / 100) * 100; // Probabilidad teórica estándar
+        let probBase = (1 / 100) * 100; 
         let frecReal = (apariciones / totalTiros) * 100;
         let variacion = frecReal - probBase;
         
@@ -914,7 +915,7 @@
     // GESTIÓN ADMINISTRATIVA DE ALTAS DE CLIENTES
     // =================================================================
     async function cargarListaUsuariosAdmin() {
-        if(usuarioActual.rol !== 'admin') return;
+        if(!usuarioActual || usuarioActual.rol !== 'admin') return;
         const contenedor = document.getElementById('users-list-container');
         contenedor.innerHTML = '<div style="font-size:0.75rem;color:#666;text-align:center;">Analizando credenciales en base de datos...</div>';
 
@@ -929,16 +930,18 @@
                 row.className = 'user-row';
                 
                 let botonAccion = '';
-                if(user.rol === 'pendiente') {
-                    botonAccion = `<span class="action-icon" style="color:var(--neon);border-color:var(--neon);" onclick="cambiarRolUsuario('${user.id}', 'activo')">ACTIVAR ACCESO</span>`;
+                const rLimpio = String(user.rol).trim().toLowerCase();
+                
+                if(rLimpio === 'pendiente') {
+                    botonAccion = `<span class="action-icon" style="color:var(--neon);border-color:var(--neon);" onclick="cambiarRolUsuario('${user.id || user.nombre}', 'activo')">ACTIVAR ACCESO</span>`;
                 } else {
-                    botonAccion = `<span class="action-icon" style="color:var(--error);border-color:var(--error);" onclick="cambiarRolUsuario('${user.id}', 'pendiente')">SUSPENDER</span>`;
+                    botonAccion = `<span class="action-icon" style="color:var(--error);border-color:var(--error);" onclick="cambiarRolUsuario('${user.id || user.nombre}', 'pendiente')">SUSPENDER</span>`;
                 }
 
                 row.innerHTML = `
                     <div>
                         <span style="font-weight:bold; color:#fff; font-family:monospace;">${user.nombre.toUpperCase()}</span>
-                        <span class="badge ${user.rol}">${user.rol}</span>
+                        <span class="badge ${rLimpio}">${rLimpio}</span>
                     </div>
                     <div>${botonAccion}</div>
                 `;
@@ -950,19 +953,19 @@
         }
     }
 
-    async function cambiarRolUsuario(id, nuevoRol) {
-        if(!confirm(`¿Ejecutar reconfiguración de permisos para este ID de usuario?`)) return;
+    async function cambiarRolUsuario(identificador, nuevoRol) {
+        if(!confirm(`¿Ejecutar reconfiguración de permisos para este usuario?`)) return;
         try {
-            await supabaseFetch(`usuarios?id=eq.${id}`, 'PATCH', { rol: nuevoRol });
+            // Soporta filtrado inteligente por ID numérico o por Nombre si el ID falla
+            let endpoint = isNaN(identificador) ? `usuarios?nombre=eq.${identificador}` : `usuarios?id=eq.${identificador}`;
+            await supabaseFetch(endpoint, 'PATCH', { rol: nuevoRol });
             cargarListaUsuariosAdmin();
         } catch(err) {
-            alert("Operación denegada en el servidor.");
+            alert("Operación denegada o error de respuesta en el servidor.");
         }
     }
 
-    // Inicialización del sistema al cargar el DOM
     function inicializarSistema() {
-        // Cargar caché local instantánea al inicio para blindar respuesta táctica
         const localData = localStorage.getItem('local_historico_v88');
         if(localData) {
             baseHistorico = JSON.parse(localData);

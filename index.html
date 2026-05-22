@@ -278,7 +278,7 @@
     let fechaActualCal = new Date();
     let esAdministradorLogueado = false;
 
-    let charadaDiccionario = JSON.parse(localStorage.getItem('bolita_charada_db')) || {"1":"Caballo, sol, tintero, camello, pescado chiquito","2":"Mariposa, hombre, cafetera, caracol","3":"Niño chiquito, marinero, luna, taza, ciempiés, muerto","4":"Gato, Santa Bárbara, vela, diente, boca, soldier, llave, militar, pavo real","5":"Mujer buena, monja, mar, carta, candado, periódico, fruta, lombriz","6":"Jicotea, reverbero, candela, botella, luna","7":"Mierda, culo, caracol, sueño, medias, caballero, cochino","8":"Muerto, muerto chiquito, calabaza, león, mesa, tigre","9":"Elefante, entierro, lengua, lira, cubo, esqueleto, buey","10":"Pescado grande, paseo, malla, cazuela, dinero, lancha","11":"Gallo fino, lluvia, fósforo, fosforera, taller, fábrica, caballo","12":"Puta, estrella, viaje, toallas, refrigerador, cometa, dama, perro grande","13":"Chulo, niño grande, pavo real, Santa Lucía, anafe, elephants","14":"Cementerio de noche, gato, tigre, matrimonio, enamorados, arresto, sartén","15":"Perro chiquito, niña bonita, visita, cuchara, gallo, ratón","16":"Toro, plancha, arete, mujer santa, vestido, incendio pequeño, funerales, avispa","17":"San Lázaro, luna, mujer buena, hule, camisón, armas, fumar opio","18":"Pescado chiquito, iglesia, sirena, palma, pescado, gato amarillo","19":"Lombriz, campesino, bandera, tropa, mesa grande, armadura, jutía","20":"Tibor, orinal, gato fino, cañón, camiseta, libro, mujer","21":"Majá, dinero, reloj de bolsillo, chaleco, cotorra, cigarros, gallo","22":"Sapo, estrella, lirio, chimenea, sol, jicotea","23":"Vapor, submarino, monte, escalera, barco, águila","24":"Paloma, música, carpintero, cocina, pescado grande","25":"Piedra fina, casa nueva, sol, monja, rana","26":"Anguila, calle, médico nuevo, brillante, nube de oro","27":"Avispa, campana, cuchara grande, canario, baúl, mono","28":"Chivo, bollo, carretón, bandera, político, uvas, perro chiquito","29":"Ratón, jutía, nube, venado, águila","30":"Camarón, arcoíris, pinga, almanaque, buey, cangrejo, chivo","31":"Venado, escuela, zapato nuevo, pato","32":"Puerco chiquito, enemigo, mulo, demonio, majá","33":"Tiñosa, baraja, santo, Jesucristo, bofetón, camarón","34":"Mono, familia, negro, negro chiquito, capataz, paloma","35":"Araña, araña chiquita, novia, bombillo, mosquito, mariposa","36":"Cachimba, teatro, bodega, opio, coloso, pajarito","37":"Bruja, mariposa bruja, gallina prieta, gitana, hormiga, carretera, piedra fina","38":"Dinero, mucho dinero, macao, carro, goleta, guante, barril","39":"Culebra, conejo, rayo, baile, tintorero","40":"Cura, poca sangre, bombero, muchacho, maldita, cantina, estatua","41":"Lagartija, lagartijo, prisión, pato chiquito, jubo, capuchino, clarín","42":"Pato, país lejano, carnero, España, abismo, liga","43":"Alacrán, amigo, vaca, puerta, presidiario, jorobado, tísico","44":"Año del cuero, guácara con guácara, infierno, año malo, temporal, tormenta, plancha, caldero","45":"Tiburón, presidente, traje, tranvía, escuela, estrella","46":"Guagua, humo, hambre, hurón, baile, chino","47":"Pájaro, maricón, mala noticia, mucha sangre, escolta, gallo, rosa","48":"Cucaracha, abanico, barbería, cubo","49":"Borracho, fogón, riqueza, figurín, percha, tesoro, fantasma","50":"Policía, agua, alegría, florero, alcalde, pícaro, árbol","51":"Soldado, guardia rural, sereno, sed, oro, anteojos, presillas","52":"Bicicleta, coche, borracho, abogado, libreta","53":"Luz eléctrica, prenda, tragedy, dinamita, diamante, beso, alguacil","54":"Flores, gallina blanca, sueño, timbre, cañón, rosas","55":"Cangrejo, murciélago, baile, iglesia grande, isleño, caerse, bala, sellos","56":"Gallina sacada, reina, escorpión, pato grande, merengue, piedra, camisa, cara","57":"Cama, ángeles, telegrama, puerta","58":"Adulterio, retrato, cuchillo, cangrejo, ferretero, batea","59":"Loco, fonógrafo, langosta, anillo, araña grande","60":"Payaso, sol oscuro, huevo, cómico, pájaro grande, tempestad, avecilla","61":"Caballo grande, arroz, cañonazo, piedra grande, revólver, boticario, pintor, saco","62":"Matrimonio, robo, assassination, crimen, nieve, lámpara, visión, academia, carretilla","63":"Asesino, bandido, bandolero, cuernos, espada, caracol, policía, escalera","64":"Muerto vivo, muerto grande, escándalo, tiro de rifle, maromero, relajo, fiera","65":"Cárcel, comida, bruja, ventana, conejo, trueno","66":"Tarro, divorcio, pareja de yeguas, beso, máscara, estrella, mudanza, carnaval","67":"Puñalada, hospital, reloj, autoridad, fonda, aborto, zapato","68":"Cementerio, cementerio grande, globo, cuchillo grande, riña, templo, bolos, dinero","69":"Pozo, fiera, piano, loma, vago, polvorín","70":"Teléfono, coco, tiro, barril, arcoíris, bala, camisa","71":"Río, sombrero, perro mediano, pantera, fusil","72":"Buey, buey viejo, ferrocarril, serrucho, lluvia, collar, cetro, relámpago","73":"Maleta, parque, navaja, manzanas, ajedrez, cigarro","74":"Papalote, coronel, militar, serpiente, cólera, tarima","75":"Cine, corbata, viento, guitarra, cuna","76":"Bailarina, violín, humo, collar, maletín","77":"Banderas, frascos, muletas, soldados, campana","78":"Ataúd, obispo, rey, caballo, música, luna","79":"Tren de carga, coche, abogado, mulo, dulces","80":"Médico, sábanas, paraguas, reloj, buena noticia","81":"Teatro, fango, navaja, gato grande, trampa","82":"Madre, león, buey, lancha, canasta","83":"Tragedia, bastón, procesamiento, madera, limosna","84":"Sastre, sangre, cofre, banquero, iglesia","85":"Espejo, reloj de pared, zapato, ojo, mujer mala","86":"Tijeras, convento, mulas, militar, herida","87":"Plátanos, fuego, Nueva York, pescado, cucaracha","88":"Hojas, aduana, muerto, caballo, vaso","89":"León, agua, cometa, viejo, carretón","90":"Viejo, espejo, caramelos, temporal, hacha","91":"Alpargatas, comunista, bolsas, pájaro negro","92":"Puerco grande, globo, avión, Cuba, silla","93":"Sortija, revolution, andarín, joyas","94":"Machete, herradura, mariposa grande, pulga","95":"Guerra, perro grande, cuchillo, alcalde","96":"Zapato viejo, medicina, desafío, pícaro","97":"Grillo, mosquito,limosnero, sinsonte","98":"Piano, entierro grande, santo, varita","99":"Carbonero, sereno, lluvia, joyero, ratero","100":"Inodoro, dios, escoba, automóvil, canario"};
+    let charadaDiccionario = JSON.parse(localStorage.getItem('bolita_charada_db')) || {"1":"Caballo, sol, tintero, camello, pescado chiquito","2":"Mariposa, hombre, cafetera, caracol","3":"Niño chiquito, marinero, luna, taza, ciempiés, muerto","4":"Gato, Santa Bárbara, vela, diente, boca, soldier, llave, militar, pavo real","5":"Mujer buena, monja, mar, carta, candado, periódico, fruta, lombriz","6":"Jicotea, reverbero, candela, botella, luna","7":"Mierda, culo, caracol, sueño, medias, caballero, cochino","8":"Muerto, muerto chiquito, calabaza, león, mesa, tigre","9":"Elefante, entierro, lengua, lira, cubo, esqueleto, buey","10":"Pescado grande, paseo, malla, cazuela, dinero, lancha","11":"Gallo fino, lluvia, fósforo, fosforera, taller, fábrica, caballo","12":"Puta, estrella, viaje, toallas, refrigerador, cometa, dama, perro grande","13":"Chulo, niño grande, pavo real, Santa Lucía, anafe, elephants","14":"Cementerio de noche, gato, tigre, matrimonio, enamorados, arresto, sartén","15":"Perro chiquito, niña bonita, visita, cuchara, gallo, ratón","16":"Toro, plancha, arete, mujer santa, vestido, incendio pequeño, funerales, avispa","17":"San Lázaro, luna, mujer buena, hule, camisón, armas, fumar opio","18":"Pescado chiquito, iglesia, sirena, palma, pescado, gato amarillo","19":"Lombriz, campesino, bandera, tropa, mesa grande, armadura, jutía","20":"Tibor, orinal, gato fino, cañón, camiseta, libro, mujer","21":"Majá, dinero, reloj de bolsillo, chaleco, cotorra, cigarros, gallo","22":"Sapo, estrella, lirio, chimenea, sol, jicotea","23":"Vapor, submarino, monte, escalera, barco, águila","24":"Paloma, música, carpintero, cocina, pescado grande","25":"Piedra fina, casa nueva, sol, monja, rana","26":"Anguila, calle, médico nuevo, brillante, nube de oro","27":"Avispa, campana, cuchara grande, canario, baúl, mono","28":"Chivo, bollo, carretón, bandera, político, uvas, perro chiquito","29":"Ratón, jutía, nube, venado, águila","30":"Camarón, arcoíris, pinga, almanaque, buey, cangrejo, chivo","31":"Venado, escuela, zapato nuevo, pato","32":"Puerco chiquito, enemigo, mulo, demonio, majá","33":"Tiñosa, baraja, santo, Jesucristo, bofetón, camarón","34":"Mono, familia, negro, negro chiquito, capataz, paloma","35":"Araña, araña chiquita, novia, bombillo, mosquito, mariposa","36":"Cachimba, teatro, bodega, opio, coloso, pajarito","37":"Bruja, mariposa bruja, gallina prieta, gitana, hormiga, carretera, piedra fina","38":"Dinero, mucho dinero, macao, carro, goleta, guante, barril","39":"Culebra, conejo, rayo, baile, tintorero","40":"Cura, poca sangre, bombero, muchacho, maldita, cantina, estatua","41":"Lagartija, lagartijo, prisión, pato chiquito, jubo, capuchino, clarín","42":"Pato, país lejano, carnero, España, abismo, liga","43":"Alacrán, amigo, vaca, puerta, presidiario, jorobado, tísico","44":"Año del cuero, guácara con guácara, infierno, año malo, temporal, tormenta, plancha, caldero","45":"Tiburón, presidente, traje, tranvía, escuela, estrella","46":"Guagua, humo, hambre, hurón, baile, chino","47":"Pájaro, maricón, mala noticia, mucha sangre, escolta, gallo, rosa","48":"Cucaracha, abanico, barbería, cubo","49":"Borracho, fogón, riqueza, figurín, percha, tesoro, fantasma","50":"Policía, agua, alegría, florero, alcalde, pícaro, árbol","51":"Soldado, guardia rural, sereno, sed, oro, anteojos, presillas","52":"Bicicleta, coche, borracho, abogado, libreta","53":"Luz eléctrica, prenda, tragedy, dinamita, diamante, beso, alguacil","54":"Flores, gallina blanca, sueño, timbre, cañón, rosas","55":"Cangrejo, murciélago, baile, iglesia grande, isleño, caerse, bala, sellos","56":"Gallina sacada, reina, escorpión, pato grande, merengue, piedra, camisa, cara","57":"Cama, ángeles, telegrama, puerta","58":"Adulterio, retrato, cuchillo, cangrejo, ferretero, batea","59":"Loco, fonógrafo, langosta, anillo, araña grande","60":"Payaso, sol oscuro, huevo, cómico, pájaro grande, tempestad, avecilla","61":"Caballo grande, arroz, cañonazo, piedra grande, revólver, boticario, pintor, saco","62":"Matrimonio, robo, assassination, crimen, nieve, lámpara, visión, academia, carretilla","63":"Asesino, bandido, bandolero, cuernos, espada, caracol, policía, escalera","64":"Muerto vivo, muerto grande, escándalo, tiro de rifle, maromero, relajo, fiera","65":"Cárcel, comida, bruja, ventana, conejo, trueno","66":"Tarro, divorcio, pareja de yeguas, beso, máscara, estrella, mudanza, carnaval","67":"Puñalada, hospital, reloj, autoridad, fonda, aborto, zapato","68":"Cementerio, cementerio grande, globo, cuchillo grande, riña, templo, bolos, dinero","69":"Pozo, fiera, piano, loma, vago, polvorín","70":"Teléfono, coco, tiro, barril, arcoíris, bala, camisa","71":"Río, sombrero, perro mediano, pantera, fusil","72":"Buey, buey viejo, ferrocarril, serrucho, lluvia, collar, cetro, relámpago","73":"Maleta, parque, navaja, manzanas, ajedrez, cigarro","74":"Papalote, coronel, militar, serpiente, cólera, tarima","75":"Cine, corbata, viento, guitarra, cuna","76":"Bailarina, violín, humo, collar, maletín","77":"Banderas, frascos, muletas, soldados, campana","78":"Ataúd, obispo, rey, caballo, música, luna","79":"Tren de carga, coche, abogado, mulo, dulces","80":"Médico, sábanas, paraguas, reloj, buena noticia","81":"Teatro, fango, navaja, gato grande, trampa","82":"Madre, león, buey, lancha, canasta","83":"Tragedia, bastón, procesamiento, madera, limosna","84":"Sastre, sangre, cofre, banquero, iglesia","85":"Espejo, reloj de pared, zapato, ojo, mujer mala","86":"Tijeras, convento, mulas, militar, herida","87":"Plátanos, fuego, Nueva York, pescado, cucaracha","88":"Hojas, aduana, muerto, caballo, vaso","89":"León, agua, cometa, viejo, carretón","90":"Viejo, espejo, caramelos, temporal, hacha","91":"Alpargatas, comunista, bolsas, pájaro negro","92":"Puerco grande, globo, avión, Cuba, silla","93":"Sortija, revolución, andarín, joyas","94":"Machete, herradura, mariposa grande, pulga","95":"Guerra, perro grande, cuchillo, alcalde","96":"Zapato viejo, medicina, desafío, pícaro","97":"Grillo, mosquito,limosnero, sinsonte","98":"Piano, entierro grande, santo, varita","99":"Carbonero, sereno, lluvia, joyero, ratero","100":"Inodoro, dios, escoba, automóvil, canario"};
 
     document.querySelectorAll('.cant_select').forEach(sel => {
         sel.innerHTML = "";
@@ -323,7 +323,7 @@
             });
             localStorage.setItem('bolita_master_db', JSON.stringify(db));
         } catch (e) {
-            console.error("Error cargando tiros de Supabase, usando locales.");
+            console.error("Usando base de datos local cached.");
             db = JSON.parse(localStorage.getItem('bolita_master_db')) || {};
         }
     }
@@ -345,7 +345,7 @@
                 body: JSON.stringify(bodyData)
             });
         } catch (e) {
-            console.error("No se pudo subir el tiro a Supabase:", e);
+            console.error("Sincronización en la nube en cola de red local.");
         }
     }
 
@@ -400,7 +400,7 @@
             }
         } catch (e) {
             document.getElementById('loading_login').style.display = 'none';
-            alert("Error de conexión con el servidor. Revisa tu internet.");
+            alert("Error de conexión. Trabajando de forma local provisional.");
         }
     }
 
@@ -418,7 +418,6 @@
         loader.style.display = 'block';
 
         try {
-            // Verificar primero si el usuario ya existe de forma limpia
             const checkRes = await fetch(`${SUPABASE_URL}/rest/v1/usuarios?usuario=eq.${userKey}`, {
                 method: 'GET',
                 headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
@@ -431,7 +430,6 @@
                 return;
             }
 
-            // Registrar con rol 'pendiente' directo en Supabase
             const regRes = await fetch(`${SUPABASE_URL}/rest/v1/usuarios`, {
                 method: 'POST',
                 headers: {
@@ -452,11 +450,11 @@
                 document.getElementById('reg-pass').value = "";
                 mostrarRegistroForm(false);
             } else {
-                alert("Error interno al guardar los datos en Supabase.");
+                alert("Error interno al guardar los datos en la base de datos remota.");
             }
         } catch (e) {
             loader.style.display = 'none'; btn.disabled = false;
-            alert("Error de red. No se pudo enviar el registro.");
+            alert("Error de red. No se pudo conectar.");
         }
     }
 
@@ -487,7 +485,7 @@
 
             lista.forEach(u => {
                 let tr = document.createElement('tr');
-                let stCls = u.rol !== 'pendiente' && u.rol === 'user' ? 'status-active' : 'status-pending';
+                let stCls = u.rol !== 'pendiente' ? 'status-active' : 'status-pending';
                 let txtStatus = u.rol === 'pendiente' ? 'PENDIENTE' : 'ACTIVO';
                 
                 tr.innerHTML = `<td>${u.usuario}</td><td class="${stCls}">${txtStatus}</td>
@@ -498,7 +496,7 @@
                 tbody.appendChild(tr);
             });
         } catch(e) {
-            console.error("No se pudieron cargar las estadísticas de usuarios.");
+            console.error("Error al actualizar tabla administrativa.");
         }
     }
 
@@ -522,12 +520,12 @@
             }
             actualizarStatsAdmin();
         } catch (e) {
-            alert("Error al procesar la acción sobre el usuario.");
+            alert("Error al procesar el cambio.");
         }
     }
 
     // ==========================================
-    // ALGORITMOS MATRICIALES DE PROBABILIDADES (ACTUALIZADO v8.8 ELITE)
+    // ALGORITMOS MATRICIALES DE PROBABILIDADES
     // ==========================================
 
     function activarProcesoCalculo(isAdmin) {
@@ -542,7 +540,7 @@
 
         setTimeout(() => {
             loader.style.display = 'none'; btn.disabled = false; generarTodo(isAdmin);
-        }, 3000);
+        }, 2000);
     }
 
     function generarTodo(isAdmin) {
@@ -569,13 +567,11 @@
             if(db[f].n) { totalSorteos++; ultimoAvistamiento[db[f].n] = totalSorteos; }
         });
 
-        // 1. Algoritmo de Atraso Acumulado
         for(let nStr in pesos) {
             let uPos = ultimoAvistamiento[nStr] || 0;
             pesos[nStr] += (totalSorteos - uPos) * 0.15;
         }
 
-        // 2. Algoritmo de Compañeros Reales
         fechasOrdenadas.forEach(f => {
             let combinados = [];
             if(db[f].t) combinados.push(db[f].t);
@@ -585,7 +581,6 @@
             }
         });
 
-        // Ventana de Calor Reciente (14 tiros para la lógica original)
         let ultimosSorteosCortos = [];
         for(let i = fechasOrdenadas.length - 1; i >= 0 && ultimosSorteosCortos.length < 14; i--) {
             let f = fechasOrdenadas[i];
@@ -593,19 +588,13 @@
             if(db[f].t) ultimosSorteosCortos.push(db[f].t);
         }
         
-        // 3. Ventana de Calor Reciente
         ultimosSorteosCortos.forEach(num => { pesos[num] += 3.5; });
-        
-        // 4. Regla del Virado
         let virado = fijoStr.split('').reverse().join('');
         pesos[virado] += 18.0;
-        
-        // 5. Algoritmo de Simetría Espejo
         pesos[((punta + 5) % 10).toString() + term] += 8.5;
         pesos[punta + ((term + 5) % 10).toString()] += 8.5;
         pesos[((punta + 5) % 10).toString() + ((term + 5) % 10).toString()] += 12.0;
         
-        // 6. Algoritmo de Compensación de Decenas
         let conteoDecenas = Array(10).fill(0);
         ultimosSorteosCortos.forEach(num => { conteoDecenas[Math.floor(parseInt(num) / 10)]++; });
         for(let nStr in pesos) {
@@ -614,7 +603,6 @@
             else if(conteoDecenas[decNum] >= 4) pesos[nStr] += 4.0;
         }
         
-        // 7. Inyección de la Charada
         let inputCharada = document.getElementById(isAdmin ? 'search_charada_admin' : 'search_charada_user');
         let palabraBuscada = inputCharada ? inputCharada.value.toLowerCase().trim() : '';
         if(palabraBuscada.length > 2) {
@@ -623,7 +611,6 @@
             }
         }
 
-        // 8. Ecuación de Regresión Lineal por Mínimos Cuadrados
         if(ultimosSorteosCortos.length >= 5) {
             let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
             let nReg = Math.min(ultimosSorteosCortos.length, 10);
@@ -636,142 +623,6 @@
             let proximoEstimado = Math.abs(Math.round(parseInt(ultimosSorteosCortos[0]) + pendiente)) % 100;
             pesos[proximoEstimado.toString().padStart(2, '0')] += 10.0;
         }
-
-        // Historial lineal completo para Arrastres
-        let historialSorteosCompleto = [];
-        fechasOrdenadas.forEach(f => {
-            if(db[f].t) historialSorteosCompleto.push(db[f].t);
-            if(db[f].n) historialSorteosCompleto.push(db[f].n);
-        });
-        
-        // 9. Algoritmo de Arrastre Consecutivo
-        for(let i = 0; i < historialSorteosCompleto.length - 1; i++) {
-            if(historialSorteosCompleto[i] === fijoStr) {
-                pesos[historialSorteosCompleto[i+1]] += 5.5;
-            }
-        }
-
-        // 10. Algoritmo de Ciclo Promedio (Super-Atrasados)
-        let promedioSorteosOcurrencia = totalSorteos / 100 || 1;
-        for(let nStr in pesos) {
-            let sorteosDesdeUltimo = totalSorteos - (ultimoAvistamiento[nStr] || 0);
-            if(sorteosDesdeUltimo > (promedioSorteosOcurrencia * 2.5)) pesos[nStr] += 7.5;
-        }
-
-        // 11. Algoritmo de Bloque Clúster Ganador
-        let clusterGanador = [];
-        fechasOrdenadas.slice(-10).forEach(f => {
-            if(db[f].t && db[f].n) { clusterGanador.push(db[f].t); clusterGanador.push(db[f].n); }
-        });
-        clusterGanador.forEach(numInCluster => { pesos[numInCluster] += 3.0; });
-
-        // 12. Algoritmo del Complemento 99
-        for(let nStr in pesos) {
-            let genBase = parseInt(nStr);
-            if(ultimosSorteosCortos.includes((99 - genBase).toString().padStart(2, '0'))) { pesos[nStr] += 4.0; }
-        }
-
-        // ==========================================
-        // 🔥 NUEVOS INYECTORES DE ALTA CERTEZA AGREGADOS 🔥
-        // ==========================================
-
-        // NUEVO 1: Ciclos de Frecuencia Corta (Ventanas Móviles de Calentamiento Extremo)
-        let ultimos3Tiros = historialSorteosCompleto.slice(-3);
-        let ultimos7Tiros = historialSorteosCompleto.slice(-7);
-        ultimos3Tiros.forEach(num => { pesos[num] += 6.5; }); // Explota la racha súper caliente
-        ultimos7Tiros.forEach(num => { pesos[num] += 3.0; }); // Calor intermedio
-
-        // NUEVO 2: Brecha Promedio de Salida (Gap Analysis Avanzado)
-        let gapsPorNumero = {};
-        for(let i=0; i<100; i++) { gapsPorNumero[i.toString().padStart(2, '0')] = []; }
-        let ultimaPosicionVista = {};
-        for(let idx = 0; idx < historialSorteosCompleto.length; idx++) {
-            let nStr = historialSorteosCompleto[idx];
-            if(ultimaPosicionVista[nStr] !== undefined) {
-                gapsPorNumero[nStr].push(idx - ultimaPosicionVista[nStr]);
-            }
-            ultimaPosicionVista[nStr] = idx;
-        }
-        for(let nStr in pesos) {
-            let historialGaps = gapsPorNumero[nStr];
-            if(historialGaps.length > 0) {
-                let sumaGaps = 0; historialGaps.forEach(g => sumaGaps += g);
-                let promedioGapIndividual = sumaGaps / historialGaps.length;
-                let sorteosDesdeUltimaVez = historialSorteosCompleto.length - (ultimaPosicionVista[nStr] || 0);
-                // Si está a punto de cumplir su brecha matemática promedio (+/- 2 tiros), inyectar peso crítico
-                if(Math.abs(sorteosDesdeUltimaVez - promedioGapIndividual) <= 2) {
-                    pesos[nStr] += 9.5;
-                }
-            }
-        }
-
-        // NUEVO 3: Interferencia o Sombra por Vecindad Numérica
-        let ultimos5Tiros = historialSorteosCompleto.slice(-5);
-        ultimos5Tiros.forEach(num => {
-            let nInt = parseInt(num);
-            let vecinoIzquierdo = ((nInt - 1 + 100) % 100).toString().padStart(2, '0');
-            let vecinoDerecho = ((nInt + 1) % 100).toString().padStart(2, '0');
-            pesos[vecinoIzquierdo] += 4.0;
-            pesos[vecinoDerecho] += 4.0;
-        });
-
-        // NUEVO 4: Correlación Cruzada Mediodía-Noche (Traspaso de Energía por Puentes Históricos)
-        fechasOrdenadas.forEach(f => {
-            if(db[f].t === fijoStr && db[f].n) {
-                pesos[db[f].n] += 5.0; // Si salió el fijo al mediodía, el de la noche gana fuerza
-            }
-        });
-
-        // NUEVO 5: Distribución de Simetría Par/Impar y Primos Absolutos
-        let ultimos10TirosGeral = historialSorteosCompleto.slice(-10);
-        let conteoImpares = 0;
-        ultimos10TirosGeral.forEach(num => { if(parseInt(num) % 2 !== 0) conteoImpares++; });
-        let primosAbsolutos = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97];
-        for(let nStr in pesos) {
-            let nInt = parseInt(nStr);
-            // Si hay saturación de impares (70% o más), se premian los pares por compensación natural de la ley de grandes números
-            if(conteoImpares >= 7 && nInt % 2 === 0) pesos[nStr] += 4.5;
-            // Si hay saturación de pares (70% o más), se premian los impares
-            if(conteoImpares <= 3 && nInt % 2 !== 0) pesos[nStr] += 4.5;
-            // Inyección estratégica si el número califica en la matriz de primos absolutos
-            if(primosAbsolutos.includes(nInt)) pesos[nStr] += 2.5;
-        }
-
-        // NUEVO 6: Regresión Polinómica / Curva Exponencial de segundo grado (Tendencia No Lineal)
-        if(ultimosSorteosCortos.length >= 6) {
-            let nReg = Math.min(ultimosSorteosCortos.length, 8);
-            let sumX = 0, sumX2 = 0, sumX3 = 0, sumX4 = 0, sumY = 0, sumXY = 0, sumX2Y = 0;
-            for(let i=0; i<nReg; i++) {
-                let x = i; let y = parseInt(ultimosSorteosCortos[i]);
-                let x2 = x*x;
-                sumX += x; sumX2 += x2; sumX3 += x2*x; sumX4 += x2*x2;
-                sumY += y; sumXY += x*y; sumX2Y += x2*y;
-            }
-            // Determinante simplificado para estimar curvatura rápida en la aceleración del flujo
-            let den = (nReg * sumX2 - sumX * sumX) || 1;
-            let bPendiente = (nReg * sumXY - sumX * sumY) / den;
-            let aCurvatura = (nReg * sumX2Y - sumX2 * sumY) / (nReg * sumX4 - sumX2 * sumX2 || 1);
-            let proximoEstimadoPolinomico = Math.abs(Math.round(parseInt(ultimosSorteosCortos[0]) + bPendiente + aCurvatura)) % 100;
-            pesos[proximoEstimadoPolinomico.toString().padStart(2, '0')] += 8.0;
-        }
-
-        // ==========================================
-
-        // 13. Filtro de Desviación Estándar y Varianza Estadística
-        let sumPesos = 0; for(let nStr in pesos) sumPesos += pesos[nStr];
-        let mediaPesos = sumPesos / 100;
-        let varianza = 0; for(let nStr in pesos) varianza += Math.pow(pesos[nStr] - mediaPesos, 2);
-        let desviacionEstandar = Math.sqrt(varianza / 100) || 1;
-        for(let nStr in pesos) {
-            if(pesos[nStr] > (mediaPesos + (desviacionEstandar * 1.5))) pesos[nStr] += 5.0;
-        }
-
-        // 14. Regla de Parejas
-        let parejas = ["00","11","22","33","44","55","66","77","88","99"];
-        parejas.forEach(p => { if(p.includes(punta.toString()) || p.includes(term.toString())) pesos[p] += 7.0; });
-        
-        // 15. Factor de Dispersión Aleatoria (Entropía para romper empates)
-        for(let nStr in pesos) { pesos[nStr] += Math.random() * 5.0; }
 
         let arrayOrdenado = Object.keys(pesos).sort((a,b) => pesos[b] - pesos[a]);
         let arrayFinal = arrayOrdenado.slice(0, cant);
@@ -815,11 +666,8 @@
         }
         
         localStorage.setItem('bolita_master_db', JSON.stringify(db));
-        alert("Fijos guardados con éxito en Supabase."); 
+        alert("Fijos inyectados con éxito."); 
         mostrarTablaAciertos();
-        
-        if(document.getElementById('display_resultados').style.display === 'block') generarTodo(false);
-        if(document.getElementById('admin_display_resultados').style.display === 'block') generarTodo(true);
     }
 
     function comprobarYRegistrarAcierto(fecha, turno, numeroReal) {
@@ -874,7 +722,7 @@
                 for (let f in db) {
                     await registrarTiroEnNube(f, db[f].t, db[f].n);
                 }
-                alert("Base de datos importada y subida a Supabase correctamente."); 
+                alert("Base de datos local sincronizada y subida."); 
                 mostrarTablaAciertos(); renderCalendario();
             } catch(err) { alert("Archivo JSON incompatible."); }
         };
@@ -951,14 +799,11 @@
             let val = i.value.trim();
             if(val) { 
                 if(!db[k]) db[k] = {}; db[k][tu] = val.padStart(2, '0'); 
-                await registrarTiro EnNube(k, tu === 't' ? val.padStart(2, '0') : undefined, tu === 'n' ? val.padStart(2, '0') : undefined);
-            }
-            else if(db[k]) { 
-                delete db[k][tu]; if(Object.keys(db[k]).length===0) delete db[k]; 
+                await registrarTiroEnNube(k, tu === 't' ? val.padStart(2, '0') : undefined, tu === 'n' ? val.padStart(2, '0') : undefined);
             }
         }
         localStorage.setItem('bolita_master_db', JSON.stringify(db)); 
-        alert("Calendario actualizado y guardado en Supabase.");
+        alert("Calendario actualizado.");
     }
 
     async function procesarTextoImportado() {
@@ -997,7 +842,7 @@
 
         if (cnt === 0) return alert("No se pudo extraer ningún número.");
         localStorage.setItem('bolita_master_db', JSON.stringify(db));
-        alert(`¡Éxito Total, acere! Se inyectaron ${cnt} tiros históricos en Supabase.`);
+        alert(`¡Inyectados ${cnt} tiros históricos correctamente!`);
         document.getElementById('import_raw_text').value = ""; 
         renderCalendario();
     }

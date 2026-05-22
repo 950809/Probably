@@ -349,9 +349,9 @@
         }
     }
 
-    // ====================================================================
-    // SISTEMA DE ACCESO Y LOGIN REPARADO (ENLACE PERFECTO CON NUEVA TABLA)
-    // ====================================================================
+    // ==========================================
+    // SISTEMA DE ACCESO Y LOGIN (SUPABASE)
+    // ==========================================
 
     async function intentarLogin() {
         let u = document.getElementById('login-user').value.trim();
@@ -361,10 +361,8 @@
 
         if(!u || !p) return alert("Completa los datos, acere.");
 
-        // LOGIN DE ADMINISTRADOR LOCAL Y DIRECTO
         if(u === _0xAdmin && p === _0xPass) {
-            esAdministradorLogueado = true; 
-            usuarioActivo = "ADMIN_MASTER";
+            esAdministradorLogueado = true; usuarioActivo = "ADMIN_MASTER";
             document.getElementById('view-login').style.display = 'none';
             document.getElementById('panel-admin').style.display = 'block';
             switchAdminSection('consola');
@@ -376,8 +374,7 @@
         document.getElementById('loading_login').style.display = 'block';
 
         try {
-            // Consulta perfecta usando las nuevas columnas 'nombre' y 'clave'
-            const res = await fetch(`${SUPABASE_URL}/rest/v1/usuarios?nombre=eq.${u}&clave=eq.${p}`, {
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/usuarios?usuario=eq.${u}&clave=eq.${p}`, {
                 method: 'GET',
                 headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
             });
@@ -386,27 +383,16 @@
 
             if (data && data.length > 0) {
                 let cuenta = data[0];
-                let rolLimpio = String(cuenta.rol).trim().toLowerCase();
-                
-                if (rolLimpio === 'pendiente') {
+                if (cuenta.rol === 'pendiente') {
                     alert("Tu cuenta aún está en revisión en el servidor central.");
                     return;
                 }
-                
                 usuarioActivo = u; 
-                esAdministradorLogueado = (rolLimpio === 'admin');
-                
+                esAdministradorLogueado = false;
                 document.getElementById('view-login').style.display = 'none';
-                
-                if (esAdministradorLogueado) {
-                    document.getElementById('panel-admin').style.display = 'block';
-                    switchAdminSection('consola');
-                    actualizarStatsAdmin();
-                } else {
-                    document.getElementById('view-app').style.display = 'block';
-                    document.getElementById('user-display').textContent = `Usuario: ${u}`;
-                    switchUserSection('calc');
-                }
+                document.getElementById('view-app').style.display = 'block';
+                document.getElementById('user-display').textContent = `Usuario: ${u}`;
+                switchUserSection('calc');
                 mostrarTablaAciertos();
             } else {
                 err.textContent = "Credenciales incorrectas o cuenta inexistente."; 
@@ -432,8 +418,7 @@
         loader.style.display = 'block';
 
         try {
-            // Comprobación limpia usando la columna 'nombre'
-            const checkRes = await fetch(`${SUPABASE_URL}/rest/v1/usuarios?nombre=eq.${userKey}`, {
+            const checkRes = await fetch(`${SUPABASE_URL}/rest/v1/usuarios?usuario=eq.${userKey}`, {
                 method: 'GET',
                 headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
             });
@@ -445,7 +430,6 @@
                 return;
             }
 
-            // Inserción adaptada a: nombre, clave, rol
             const regRes = await fetch(`${SUPABASE_URL}/rest/v1/usuarios`, {
                 method: 'POST',
                 headers: {
@@ -453,7 +437,7 @@
                     'Authorization': `Bearer ${SUPABASE_KEY}`,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ nombre: userKey, clave: p, rol: 'pendiente' })
+                body: JSON.stringify({ usuario: userKey, clave: p, rol: 'pendiente' })
             });
 
             loader.style.display = 'none';
@@ -482,9 +466,9 @@
     function cerrarSesionEfectiva() { usuarioActivo = ""; document.getElementById('view-app').style.display='none'; document.getElementById('view-login').style.display='block'; }
     function cerrarAdmin() { document.getElementById('panel-admin').style.display='none'; document.getElementById('view-login').style.display='block'; }
 
-    // =========================================================
-    // ADMINISTRACIÓN DE USUARIOS REPARADO CON ROL E ID NUMÉRICO
-    // =========================================================
+    // ==========================================
+    // ADMINISTRACIÓN DE USUARIOS (PANEL ADMIN)
+    // ==========================================
 
     async function actualizarStatsAdmin() {
         try {
@@ -493,24 +477,21 @@
                 headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
             });
             const lista = await res.json();
-            let pen = lista.filter(u => String(u.rol).trim().toLowerCase() === 'pendiente').length;
+            let pen = lista.filter(u => u.rol === 'pendiente').length;
             
             document.getElementById('admin-stats').textContent = `Total Registrados: ${lista.length} | Pendientes: ${pen}`;
             let tbody = document.getElementById('tabla-usuarios'); 
             tbody.innerHTML = "";
 
             lista.forEach(u => {
-                let rolLimpio = String(u.rol).trim().toLowerCase();
-                if(u.nombre === "yohnny95") return; // Saltar tu cuenta máster en la lista
-
                 let tr = document.createElement('tr');
-                let stCls = rolLimpio !== 'pendiente' ? 'status-active' : 'status-pending';
-                let txtStatus = rolLimpio === 'pendiente' ? 'PENDIENTE' : 'ACTIVO';
+                let stCls = u.rol !== 'pendiente' && u.rol === 'user' ? 'status-active' : 'status-pending';
+                let txtStatus = u.rol === 'pendiente' ? 'PENDIENTE' : 'ACTIVO';
                 
-                tr.innerHTML = `<td>${u.nombre}</td><td class="${stCls}">${txtStatus}</td>
+                tr.innerHTML = `<td>${u.usuario}</td><td class="${stCls}">${txtStatus}</td>
                     <td>
-                        <button class="btn-table" style="background:var(--neon); color:#000;" onclick="alterarUser('${u.id}','aprobar')">Activar</button>
-                        <button class="btn-table" style="background:var(--error); color:#fff;" onclick="alterarUser('${u.id}','eliminar')">Borrar</button>
+                        <button class="btn-table" style="background:var(--neon); color:#000;" onclick="alterarUser('${u.usuario}','aprobar')">Activar</button>
+                        <button class="btn-table" style="background:var(--error); color:#fff;" onclick="alterarUser('${u.usuario}','eliminar')">Borrar</button>
                     </td>`;
                 tbody.appendChild(tr);
             });
@@ -519,10 +500,10 @@
         }
     }
 
-    async function alterarUser(userId, accion) {
+    async function alterarUser(username, accion) {
         try {
             if(accion === 'aprobar') {
-                await fetch(`${SUPABASE_URL}/rest/v1/usuarios?id=eq.${userId}`, {
+                await fetch(`${SUPABASE_URL}/rest/v1/usuarios?usuario=eq.${username}`, {
                     method: 'PATCH',
                     headers: {
                         'apikey': SUPABASE_KEY,
@@ -532,7 +513,7 @@
                     body: JSON.stringify({ rol: 'user' })
                 });
             } else if(accion === 'eliminar') {
-                await fetch(`${SUPABASE_URL}/rest/v1/usuarios?id=eq.${userId}`, {
+                await fetch(`${SUPABASE_URL}/rest/v1/usuarios?usuario=eq.${username}`, {
                     method: 'DELETE',
                     headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
                 });
@@ -544,7 +525,7 @@
     }
 
     // ==========================================
-    // ALGORITMOS MATRICIALES DE PROBABILIDADES
+    // ALGORITMOS MATRICIALES DE PROBABILIDADES (ACTUALIZADO v8.8 ELITE)
     // ==========================================
 
     function activarProcesoCalculo(isAdmin) {
@@ -586,11 +567,13 @@
             if(db[f].n) { totalSorteos++; ultimoAvistamiento[db[f].n] = totalSorteos; }
         });
 
+        // 1. Algoritmo de Atraso Acumulado
         for(let nStr in pesos) {
             let uPos = ultimoAvistamiento[nStr] || 0;
             pesos[nStr] += (totalSorteos - uPos) * 0.15;
         }
 
+        // 2. Algoritmo de Compañeros Reales
         fechasOrdenadas.forEach(f => {
             let combinados = [];
             if(db[f].t) combinados.push(db[f].t);
@@ -600,6 +583,7 @@
             }
         });
 
+        // Ventana de Calor Reciente (14 tiros para la lógica original)
         let ultimosSorteosCortos = [];
         for(let i = fechasOrdenadas.length - 1; i >= 0 && ultimosSorteosCortos.length < 14; i--) {
             let f = fechasOrdenadas[i];
@@ -607,13 +591,19 @@
             if(db[f].t) ultimosSorteosCortos.push(db[f].t);
         }
         
+        // 3. Ventana de Calor Reciente
         ultimosSorteosCortos.forEach(num => { pesos[num] += 3.5; });
+        
+        // 4. Regla del Virado
         let virado = fijoStr.split('').reverse().join('');
         pesos[virado] += 18.0;
+        
+        // 5. Algoritmo de Simetría Espejo
         pesos[((punta + 5) % 10).toString() + term] += 8.5;
         pesos[punta + ((term + 5) % 10).toString()] += 8.5;
         pesos[((punta + 5) % 10).toString() + ((term + 5) % 10).toString()] += 12.0;
         
+        // 6. Algoritmo de Compensación de Decenas
         let conteoDecenas = Array(10).fill(0);
         ultimosSorteosCortos.forEach(num => { conteoDecenas[Math.floor(parseInt(num) / 10)]++; });
         for(let nStr in pesos) {
@@ -622,6 +612,7 @@
             else if(conteoDecenas[decNum] >= 4) pesos[nStr] += 4.0;
         }
         
+        // 7. Inyección de la Charada
         let inputCharada = document.getElementById(isAdmin ? 'search_charada_admin' : 'search_charada_user');
         let palabraBuscada = inputCharada ? inputCharada.value.toLowerCase().trim() : '';
         if(palabraBuscada.length > 2) {
@@ -630,6 +621,7 @@
             }
         }
 
+        // 8. Ecuación de Regresión Lineal por Mínimos Cuadrados
         if(ultimosSorteosCortos.length >= 5) {
             let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
             let nReg = Math.min(ultimosSorteosCortos.length, 10);
@@ -643,34 +635,127 @@
             pesos[proximoEstimado.toString().padStart(2, '0')] += 10.0;
         }
 
+        // Historial lineal completo para Arrastres
         let historialSorteosCompleto = [];
         fechasOrdenadas.forEach(f => {
             if(db[f].t) historialSorteosCompleto.push(db[f].t);
             if(db[f].n) historialSorteosCompleto.push(db[f].n);
         });
+        
+        // 9. Algoritmo de Arrastre Consecutivo
         for(let i = 0; i < historialSorteosCompleto.length - 1; i++) {
             if(historialSorteosCompleto[i] === fijoStr) {
                 pesos[historialSorteosCompleto[i+1]] += 5.5;
             }
         }
 
+        // 10. Algoritmo de Ciclo Promedio (Super-Atrasados)
         let promedioSorteosOcurrencia = totalSorteos / 100 || 1;
         for(let nStr in pesos) {
             let sorteosDesdeUltimo = totalSorteos - (ultimoAvistamiento[nStr] || 0);
             if(sorteosDesdeUltimo > (promedioSorteosOcurrencia * 2.5)) pesos[nStr] += 7.5;
         }
 
+        // 11. Algoritmo de Bloque Clúster Ganador
         let clusterGanador = [];
         fechasOrdenadas.slice(-10).forEach(f => {
             if(db[f].t && db[f].n) { clusterGanador.push(db[f].t); clusterGanador.push(db[f].n); }
         });
         clusterGanador.forEach(numInCluster => { pesos[numInCluster] += 3.0; });
 
+        // 12. Algoritmo del Complemento 99
         for(let nStr in pesos) {
             let genBase = parseInt(nStr);
             if(ultimosSorteosCortos.includes((99 - genBase).toString().padStart(2, '0'))) { pesos[nStr] += 4.0; }
         }
 
+        // ==========================================
+        // 🔥 NUEVOS INYECTORES DE ALTA CERTEZA AGREGADOS 🔥
+        // ==========================================
+
+        // NUEVO 1: Ciclos de Frecuencia Corta (Ventanas Móviles de Calentamiento Extremo)
+        let ultimos3Tiros = historialSorteosCompleto.slice(-3);
+        let ultimos7Tiros = historialSorteosCompleto.slice(-7);
+        ultimos3Tiros.forEach(num => { pesos[num] += 6.5; }); // Explota la racha súper caliente
+        ultimos7Tiros.forEach(num => { pesos[num] += 3.0; }); // Calor intermedio
+
+        // NUEVO 2: Brecha Promedio de Salida (Gap Analysis Avanzado)
+        let gapsPorNumero = {};
+        for(let i=0; i<100; i++) { gapsPorNumero[i.toString().padStart(2, '0')] = []; }
+        let ultimaPosicionVista = {};
+        for(let idx = 0; idx < historialSorteosCompleto.length; idx++) {
+            let nStr = historialSorteosCompleto[idx];
+            if(ultimaPosicionVista[nStr] !== undefined) {
+                gapsPorNumero[nStr].push(idx - ultimaPosicionVista[nStr]);
+            }
+            ultimaPosicionVista[nStr] = idx;
+        }
+        for(let nStr in pesos) {
+            let historialGaps = gapsPorNumero[nStr];
+            if(historialGaps.length > 0) {
+                let sumaGaps = 0; historialGaps.forEach(g => sumaGaps += g);
+                let promedioGapIndividual = sumaGaps / historialGaps.length;
+                let sorteosDesdeUltimaVez = historialSorteosCompleto.length - (ultimaPosicionVista[nStr] || 0);
+                // Si está a punto de cumplir su brecha matemática promedio (+/- 2 tiros), inyectar peso crítico
+                if(Math.abs(sorteosDesdeUltimaVez - promedioGapIndividual) <= 2) {
+                    pesos[nStr] += 9.5;
+                }
+            }
+        }
+
+        // NUEVO 3: Interferencia o Sombra por Vecindad Numérica
+        let ultimos5Tiros = historialSorteosCompleto.slice(-5);
+        ultimos5Tiros.forEach(num => {
+            let nInt = parseInt(num);
+            let vecinoIzquierdo = ((nInt - 1 + 100) % 100).toString().padStart(2, '0');
+            let vecinoDerecho = ((nInt + 1) % 100).toString().padStart(2, '0');
+            pesos[vecinoIzquierdo] += 4.0;
+            pesos[vecinoDerecho] += 4.0;
+        });
+
+        // NUEVO 4: Correlación Cruzada Mediodía-Noche (Traspaso de Energía por Puentes Históricos)
+        fechasOrdenadas.forEach(f => {
+            if(db[f].t === fijoStr && db[f].n) {
+                pesos[db[f].n] += 5.0; // Si salió el fijo al mediodía, el de la noche gana fuerza
+            }
+        });
+
+        // NUEVO 5: Distribución de Simetría Par/Impar y Primos Absolutos
+        let ultimos10TirosGeral = historialSorteosCompleto.slice(-10);
+        let conteoImpares = 0;
+        ultimos10TirosGeral.forEach(num => { if(parseInt(num) % 2 !== 0) conteoImpares++; });
+        let primosAbsolutos = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97];
+        for(let nStr in pesos) {
+            let nInt = parseInt(nStr);
+            // Si hay saturación de impares (70% o más), se premian los pares por compensación natural de la ley de grandes números
+            if(conteoImpares >= 7 && nInt % 2 === 0) pesos[nStr] += 4.5;
+            // Si hay saturación de pares (70% o más), se premian los impares
+            if(conteoImpares <= 3 && nInt % 2 !== 0) pesos[nStr] += 4.5;
+            // Inyección estratégica si el número califica en la matriz de primos absolutos
+            if(primosAbsolutos.includes(nInt)) pesos[nStr] += 2.5;
+        }
+
+        // NUEVO 6: Regresión Polinómica / Curva Exponencial de segundo grado (Tendencia No Lineal)
+        if(ultimosSorteosCortos.length >= 6) {
+            let nReg = Math.min(ultimosSorteosCortos.length, 8);
+            let sumX = 0, sumX2 = 0, sumX3 = 0, sumX4 = 0, sumY = 0, sumXY = 0, sumX2Y = 0;
+            for(let i=0; i<nReg; i++) {
+                let x = i; let y = parseInt(ultimosSorteosCortos[i]);
+                let x2 = x*x;
+                sumX += x; sumX2 += x2; sumX3 += x2*x; sumX4 += x2*x2;
+                sumY += y; sumXY += x*y; sumX2Y += x2*y;
+            }
+            // Determinante simplificado para estimar curvatura rápida en la aceleración del flujo
+            let den = (nReg * sumX2 - sumX * sumX) || 1;
+            let bPendiente = (nReg * sumXY - sumX * sumY) / den;
+            let aCurvatura = (nReg * sumX2Y - sumX2 * sumY) / (nReg * sumX4 - sumX2 * sumX2 || 1);
+            let proximoEstimadoPolinomico = Math.abs(Math.round(parseInt(ultimosSorteosCortos[0]) + bPendiente + aCurvatura)) % 100;
+            pesos[proximoEstimadoPolinomico.toString().padStart(2, '0')] += 8.0;
+        }
+
+        // ==========================================
+
+        // 13. Filtro de Desviación Estándar y Varianza Estadística
         let sumPesos = 0; for(let nStr in pesos) sumPesos += pesos[nStr];
         let mediaPesos = sumPesos / 100;
         let varianza = 0; for(let nStr in pesos) varianza += Math.pow(pesos[nStr] - mediaPesos, 2);
@@ -679,8 +764,11 @@
             if(pesos[nStr] > (mediaPesos + (desviacionEstandar * 1.5))) pesos[nStr] += 5.0;
         }
 
+        // 14. Regla de Parejas
         let parejas = ["00","11","22","33","44","55","66","77","88","99"];
         parejas.forEach(p => { if(p.includes(punta.toString()) || p.includes(term.toString())) pesos[p] += 7.0; });
+        
+        // 15. Factor de Dispersión Aleatoria (Entropía para romper empates)
         for(let nStr in pesos) { pesos[nStr] += Math.random() * 5.0; }
 
         let arrayOrdenado = Object.keys(pesos).sort((a,b) => pesos[b] - pesos[a]);
@@ -861,7 +949,7 @@
             let val = i.value.trim();
             if(val) { 
                 if(!db[k]) db[k] = {}; db[k][tu] = val.padStart(2, '0'); 
-                await registrarTiroEnNube(k, tu === 't' ? val.padStart(2, '0') : undefined, tu === 'n' ? val.padStart(2, '0') : undefined);
+                await registrarTiro EnNube(k, tu === 't' ? val.padStart(2, '0') : undefined, tu === 'n' ? val.padStart(2, '0') : undefined);
             }
             else if(db[k]) { 
                 delete db[k][tu]; if(Object.keys(db[k]).length===0) delete db[k]; 

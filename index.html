@@ -645,6 +645,75 @@
         });
         document.getElementById(`${prefijo}display_resultados`).style.display = 'block';
     }
+    // [ALGORITMO 1 a 4: Inicialización de pesos y mapeo de matriz de 100 casillas]
+        let panel = document.getElementById(`${prefijo}panel_res`); panel.innerHTML = "";
+        let pesos = {}; for(let i=0; i<100; i++) { pesos[i.toString().padStart(2, '0')] = 0; }
+
+        let fechasOrdenadas = Object.keys(db).sort();
+        let totalSorteos = 0;
+        let ultimoAvistamiento = {};
+
+        // [ALGORITMO 5 a 8: Cálculo de distancias temporales y desfase cronológico]
+        fechasOrdenadas.forEach(f => {
+            if(db[f].t) { totalSorteos++; ultimoAvistamiento[db[f].t] = totalSorteos; }
+            if(db[f].n) { totalSorteos++; ultimoAvistamiento[db[f].n] = totalSorteos; }
+        });
+
+        // [ALGORITMO 9 a 12: Multiplicador dinámico por desuso de terminales]
+        for(let nStr in pesos) {
+            let uPos = ultimoAvistamiento[nStr] || 0;
+            pesos[nStr] += (totalSorteos - uPos) * 0.15;
+        }
+    // [ALGORITMO ADICIONAL 1: Matriz de Asociación Cruzada / Co-ocurrencia con el Fijo]
+        fechasOrdenadas.forEach(f => {
+            let combinados = [];
+            if(db[f].t) combinados.push(db[f].t);
+            if(db[f].n) combinados.push(db[f].n);
+            if(combinados.includes(fijoStr)) {
+                combinados.forEach(c => { if(c !== fijoStr) pesos[c] += 4.5; });
+            }
+        });
+
+        // [ALGORITMO ADICIONAL 2: Filtro de Arrastre por Tendencia de Corto Plazo (Últimos 14 sorteos)]
+        let ultimosSorteosCortos = [];
+        for(let i = fechasOrdenadas.length - 1; i >= 0 && ultimosSorteosCortos.length < 14; i--) {
+            let f = fechasOrdenadas[i];
+            if(db[f].n) ultimosSorteosCortos.push(db[f].n);
+            if(db[f].t) ultimosSorteosCortos.push(db[f].t);
+        }
+        ultimosSorteosCortos.forEach(num => { pesos[num] += 3.5; });
+
+        // [ALGORITMO ADICIONAL 3: Inversión de Espejo Matemático (Número Virado)]
+        let virado = fijoStr.split('').reverse().join('');
+        pesos[virado] += 18.0;
+
+        // [ALGORITMO ADICIONAL 4: Desfases Simétricos de Base de Datos (+5 en Punta/Terminal/Ambos)]
+        pesos[((punta + 5) % 10).toString() + term] += 8.5;
+        pesos[punta + ((term + 5) % 10).toString()] += 8.5;
+        pesos[((punta + 5) % 10).toString() + ((term + 5) % 10).toString()] += 12.0;
+        
+        // [ALGORITMO ADICIONAL 5: Compensación por Vacío o Saturación de Decenas]
+        let conteoDecenas = Array(10).fill(0);
+        ultimosSorteosCortos.forEach(num => { conteoDecenas[Math.floor(parseInt(num) / 10)]++; });
+        for(let nStr in pesos) {
+            let decNum = Math.floor(parseInt(nStr) / 10);
+            if(conteoDecenas[decNum] === 0) pesos[nStr] += 6.0;
+            else if(conteoDecenas[decNum] >= 4) pesos[nStr] += 4.0;
+        }
+
+        // [ALGORITMO ADICIONAL 6: Regresión Lineal por Mínimos Cuadrados (Predicción de Pendiente Estadística)]
+        if(ultimosSorteosCortos.length >= 5) {
+            let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
+            let nReg = Math.min(ultimosSorteosCortos.length, 10);
+            for(let i = 0; i < nReg; i++) {
+                let yVal = parseInt(ultimosSorteosCortos[i]);
+                let xVal = i;
+                sumX += xVal; sumY += yVal; sumXY += (xVal * yVal); sumX2 += (xVal * xVal);
+            }
+            let pendiente = (nReg * sumXY - sumX * sumY) / (nReg * sumX2 - sumX * sumX || 1);
+            let proximoEstimado = Math.abs(Math.round(parseInt(ultimosSorteosCortos[0]) + pendiente)) % 100;
+            pesos[proximoEstimado.toString().padStart(2, '0')] += 10.0;
+        }
 
     async function guardarFijosDeHoy() {
         let t = document.getElementById('fijo_hoy_tarde').value.trim();

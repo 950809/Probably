@@ -623,9 +623,11 @@
             let proximoEstimado = Math.abs(Math.round(parseInt(ultimosSorteosCortos[0]) + pendiente)) % 100;
             pesos[proximoEstimado.toString().padStart(2, '0')] += 10.0;
         }
+let arrayOrdenado = Object.keys(pesos).sort((a,b) => pesos[b] - pesos[a]);
+let arrayFinal = arrayOrdenado.slice(0, cant);
 
-        let arrayOrdenado = Object.keys(pesos).sort((a,b) => pesos[b] - pesos[a]);
-        let arrayFinal = arrayOrdenado.slice(0, cant);
+// AQUÍ ESTÁ (Línea 306 aprox.)
+document.getElementById(`btn_generar_user`).dataset.lastPronosticos = JSON.stringify(arrayFinal);
 
         document.getElementById(`btn_generar_user`).dataset.lastPronosticos = JSON.stringify(arrayFinal);
 
@@ -746,10 +748,12 @@
         let idx = pronosticos.indexOf(numeroReal);
         if(idx !== -1) {
             let aciertosLog = JSON.parse(localStorage.getItem('bolita_aciertos_log')) || [];
-            if(!aciertosLog.some(l => l.fecha === fecha && l.turno === (turno==='t'?'Tarde':'Noche'))) {
-                aciertosLog.push({ fecha: fecha, turno: turno==='t'?'Tarde':'Noche', numero: numeroReal, casilla: idx + 1 });
-                localStorage.setItem('bolita_aciertos_log', JSON.stringify(aciertosLog));
-            }
+if(!aciertosLog.some(l => l.fecha === fecha && l.turno === (turno==='t'?'Tarde':'Noche'))) {
+    aciertosLog.push({ fecha: fecha, turno: turno==='t'?'Tarde':'Noche', numero: numeroReal, casilla: idx + 1 });
+    
+    // AQUÍ ESTÁ (Línea 335 aprox.)
+    localStorage.setItem('bolita_aciertos_log', JSON.stringify(aciertosLog));
+}
         }
     }
 
@@ -917,9 +921,11 @@
     }
 
     async function inicializarSistema() {
-        await cargarTirosDesdeNube();
-        renderCalendario();
-    }
+    await cargarTirosDesdeNube();
+    renderCalendario();
+}
+
+window.onload = inicializarSistema;
 
     window.onload = inicializarSistema;
 </script>

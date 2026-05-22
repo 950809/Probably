@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bolita Pro Master - Consola Global Elite v8.8</title>
+    <title>Bolita Pro Master - Consola Local v9.0</title>
     <style>
         :root { --neon: #00ff41; --dark: #050505; --panel: #0d1117; --win: #ffeb3b; --error: #ff3333; }
         body { font-family: 'Segoe UI', monospace; background: var(--dark); color: var(--neon); margin: 0; padding: 10px; -webkit-user-select: none; user-select: none; }
@@ -19,7 +19,6 @@
         button:disabled { background: #222 !important; color: #555 !important; cursor: not-allowed; }
         button.secondary { background: transparent; color: var(--neon); border: 1px solid var(--neon); margin-top: 10px; }
         
-        /* Sistema de Pestañas (Tabs) */
         .tabs-container { display: flex; gap: 5px; margin-bottom: 15px; }
         .tab-btn { background: #111; color: #aaa; border: 1px solid #333; padding: 10px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; text-transform: uppercase; font-weight: bold; flex: 1; }
         .tab-btn.active { background: transparent; color: var(--neon); border-color: var(--neon); box-shadow: 0 0 5px rgba(0,255,65,0.2); }
@@ -32,8 +31,7 @@
         .grid-res { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 15px; border-top: 1px solid #222; padding-top: 10px; }
         .box { border: 1px solid var(--neon); padding: 10px; text-align: center; font-weight: bold; font-size: 1rem; height: 45px; display: flex; align-items: center; justify-content: center; border-radius: 4px; background: #000; }
         
-        /* Iluminación Inteligente de Resultados v8.8 */
-        .box.destacado-top10 { background: #003311; color: #00ff66; border-color: #00ff66; font-shadow: 0 0 5px #00ff66; }
+        .box.destacado-top10 { background: #003311; color: #00ff66; border-color: #00ff66; }
         .box.ganador-oro { background: var(--win) !important; color: #000 !important; border: 2px solid #fff !important; font-weight: bold !important; box-shadow: 0 0 15px var(--win) !important; animation: blinker 1.5s linear infinite; }
 
         #modal-db, #panel-admin, #modal-auditoria { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 1000; padding: 15px; box-sizing: border-box; overflow-y: auto; }
@@ -68,12 +66,11 @@
 <div id="view-login" class="container">
     <h2>Control de Acceso de Usuarios</h2>
     <div class="login-form">
-        <input type="text" id="login-user" placeholder="USUARIO (Nombre_Apellido)">
+        <input type="text" id="login-user" placeholder="USUARIO">
         <input type="password" id="login-pass" placeholder="CONTRASEÑA">
         <button onclick="intentarLogin()">ENTRAR AL SISTEMA</button>
         <button class="secondary" onclick="mostrarRegistroForm(true)">SOLICITAR NUEVO REGISTRO</button>
     </div>
-    <div id="loading_login" class="loading-text" style="display:none;">[VALIDANDO ACCESO INTEGRADO CON LA NUBE...]</div>
     <p id="login-error" style="color:var(--error); text-align:center; font-size:0.8rem; display:none;"></p>
     <div class="contact-footer">
         Soporte e Inscripciones:<br>
@@ -84,11 +81,9 @@
 <div id="view-register" class="container" style="display:none;">
     <h2>Solicitud de Inscripción (Cupos)</h2>
     <div class="login-form">
-        <input type="text" id="reg-nombre" placeholder="NOMBRE">
-        <input type="text" id="reg-apellido" placeholder="APELLIDO">
+        <input type="text" id="reg-nombre" placeholder="NOMBRE DE USUARIO">
         <input type="password" id="reg-pass" placeholder="CREA TU CONTRASEÑA">
         <button id="btn_enviar_solicitud" onclick="enviarSolicitud()">ENVIAR SOLICITUD A REVISIÓN</button>
-        <div id="loading_register" class="loading-text" style="display:none;">[ENVIANDO SOLICITUD MAESTRA A LA NUBE...]</div>
         <button class="secondary" onclick="mostrarRegistroForm(false)">VOLVER AL INICIO</button>
     </div>
 </div>
@@ -266,12 +261,7 @@
 </div>
 
 <script>
-    // CREDENCIALES FIJAS DEL ADMINISTRADOR
     const _0xAdmin = "yohnny95", _0xPass = "Elmatatan95*";
-
-    // METE AQUÍ TUS CREDENCIALES PROPIAS DE SUPABASE
-    const SUPABASE_URL = "https://cdruwznhqqgkpdfvlxjq.supabase.co"; 
-    const SUPABASE_KEY = "sb_publishable_rVlYEZd4pAG1kr6U9EdJLQ_xpjp6IW9"; 
 
     let db = {};
     let usuarioActivo = "";
@@ -305,55 +295,7 @@
         document.getElementById('btn-admin-tab-users').className = `tab-btn admin-tab ${sec==='users'?'active':''}`;
     }
 
-    // ==========================================
-    // CONTROLADORES DE BASE DE DATOS (SUPABASE)
-    // ==========================================
-
-    async function cargarTirosDesdeNube() {
-        try {
-            const res = await fetch(`${SUPABASE_URL}/rest/v1/tiros_historicos?select=*`, {
-                method: 'GET',
-                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-            });
-            if (!res.ok) throw new Error();
-            const registros = await res.json();
-            db = {};
-            registros.forEach(fila => {
-                db[fila.fecha] = { t: fila.tarde || "", n: fila.noche || "" };
-            });
-            localStorage.setItem('bolita_master_db', JSON.stringify(db));
-        } catch (e) {
-            console.error("Usando base de datos local cached.");
-            db = JSON.parse(localStorage.getItem('bolita_master_db')) || {};
-        }
-    }
-
-    async function registrarTiroEnNube(fecha, tarde, noche) {
-        try {
-            const bodyData = { fecha: fecha };
-            if (tarde !== undefined) bodyData.tarde = tarde;
-            if (noche !== undefined) bodyData.noche = noche;
-
-            await fetch(`${SUPABASE_URL}/rest/v1/tiros_historicos`, {
-                method: 'POST',
-                headers: {
-                    'apikey': SUPABASE_KEY,
-                    'Authorization': `Bearer ${SUPABASE_KEY}`,
-                    'Content-Type': 'application/json',
-                    'Prefer': 'resolution=merge-duplicates'
-                },
-                body: JSON.stringify(bodyData)
-            });
-        } catch (e) {
-            console.error("Sincronización en la nube en cola de red local.");
-        }
-    }
-
-    // ==========================================
-    // SISTEMA DE ACCESO Y LOGIN (SUPABASE)
-    // ==========================================
-
-    async function intentarLogin() {
+    function intentarLogin() {
         let u = document.getElementById('login-user').value.trim();
         let p = document.getElementById('login-pass').value;
         let err = document.getElementById('login-error');
@@ -371,91 +313,50 @@
             return;
         }
 
-        document.getElementById('loading_login').style.display = 'block';
+        let usuariosLocales = JSON.parse(localStorage.getItem('bolita_usuarios_db')) || [];
+        let cuenta = usuariosLocales.find(user => user.usuario === u && user.clave === p);
 
-        try {
-            const res = await fetch(`${SUPABASE_URL}/rest/v1/usuarios?usuario=eq.${u}&clave=eq.${p}`, {
-                method: 'GET',
-                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-            });
-            const data = await res.json();
-            document.getElementById('loading_login').style.display = 'none';
-
-            if (data && data.length > 0) {
-                let cuenta = data[0];
-                if (cuenta.rol === 'pendiente') {
-                    alert("Tu cuenta aún está en revisión en el servidor central.");
-                    return;
-                }
-                usuarioActivo = u; 
-                esAdministradorLogueado = false;
-                document.getElementById('view-login').style.display = 'none';
-                document.getElementById('view-app').style.display = 'block';
-                document.getElementById('user-display').textContent = `Usuario: ${u}`;
-                switchUserSection('calc');
-                mostrarTablaAciertos();
-            } else {
-                err.textContent = "Credenciales incorrectas o cuenta inexistente."; 
-                err.style.display = 'block';
+        if (cuenta) {
+            if (cuenta.rol === 'pendiente') {
+                alert("Tu cuenta aún está en revisión por el administrador maestro.");
+                return;
             }
-        } catch (e) {
-            document.getElementById('loading_login').style.display = 'none';
-            alert("Error de conexión. Trabajando de forma local provisional.");
+            usuarioActivo = u; 
+            esAdministradorLogueado = false;
+            document.getElementById('view-login').style.display = 'none';
+            document.getElementById('view-app').style.display = 'block';
+            document.getElementById('user-display').textContent = `Usuario: ${u}`;
+            switchUserSection('calc');
+            mostrarTablaAciertos();
+            cargarUltimoPronosticoUI();
+        } else {
+            err.textContent = "Credenciales incorrectas o cuenta inexistente localmente."; 
+            err.style.display = 'block';
         }
     }
 
-    async function enviarSolicitud() {
+    function enviarSolicitud() {
         let n = document.getElementById('reg-nombre').value.trim();
-        let a = document.getElementById('reg-apellido').value.trim();
         let p = document.getElementById('reg-pass').value;
         let btn = document.getElementById('btn_enviar_solicitud');
-        let loader = document.getElementById('loading_register');
 
-        if(!n || !a || !p) return alert("Completa todos los campos, acere.");
-        let userKey = `${n}_${a}`;
+        if(!n || !p) return alert("Completa todos los campos, acere.");
 
-        btn.disabled = true;
-        loader.style.display = 'block';
+        let usuariosLocales = JSON.parse(localStorage.getItem('bolita_usuarios_db')) || [];
+        let existe = usuariosLocales.some(user => user.usuario === n);
 
-        try {
-            const checkRes = await fetch(`${SUPABASE_URL}/rest/v1/usuarios?usuario=eq.${userKey}`, {
-                method: 'GET',
-                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-            });
-            const existe = await checkRes.json();
-
-            if (existe && existe.length > 0) {
-                alert("Este nombre ya está registrado o solicitado. Elige otro.");
-                btn.disabled = false; loader.style.display = 'none';
-                return;
-            }
-
-            const regRes = await fetch(`${SUPABASE_URL}/rest/v1/usuarios`, {
-                method: 'POST',
-                headers: {
-                    'apikey': SUPABASE_KEY,
-                    'Authorization': `Bearer ${SUPABASE_KEY}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ usuario: userKey, clave: p, rol: 'pendiente' })
-            });
-
-            loader.style.display = 'none';
-            btn.disabled = false;
-
-            if (regRes.ok) {
-                alert("¡Solicitud enviada con éxito total a la nube! Comunícate con el administrador para que te apruebe.");
-                document.getElementById('reg-nombre').value = "";
-                document.getElementById('reg-apellido').value = "";
-                document.getElementById('reg-pass').value = "";
-                mostrarRegistroForm(false);
-            } else {
-                alert("Error interno al guardar los datos en la base de datos remota.");
-            }
-        } catch (e) {
-            loader.style.display = 'none'; btn.disabled = false;
-            alert("Error de red. No se pudo conectar.");
+        if (existe) {
+            alert("Este nombre de usuario ya está solicitado o registrado. Elige otro.");
+            return;
         }
+
+        usuariosLocales.push({ usuario: n, clave: p, rol: 'pendiente' });
+        localStorage.setItem('bolita_usuarios_db', JSON.stringify(usuariosLocales));
+
+        alert("¡Solicitud registrada localmente! Dile al administrador que active tu usuario.");
+        document.getElementById('reg-nombre').value = "";
+        document.getElementById('reg-pass').value = "";
+        mostrarRegistroForm(false);
     }
 
     function mostrarRegistroForm(ver) {
@@ -466,67 +367,38 @@
     function cerrarSesionEfectiva() { usuarioActivo = ""; document.getElementById('view-app').style.display='none'; document.getElementById('view-login').style.display='block'; }
     function cerrarAdmin() { document.getElementById('panel-admin').style.display='none'; document.getElementById('view-login').style.display='block'; }
 
-    // ==========================================
-    // ADMINISTRACIÓN DE USUARIOS (PANEL ADMIN)
-    // ==========================================
+    function actualizarStatsAdmin() {
+        let lista = JSON.parse(localStorage.getItem('bolita_usuarios_db')) || [];
+        let pen = lista.filter(u => u.rol === 'pendiente').length;
+        
+        document.getElementById('admin-stats').textContent = `Total Registrados: ${lista.length} | Pendientes: ${pen}`;
+        let tbody = document.getElementById('tabla-usuarios'); 
+        tbody.innerHTML = "";
 
-    async function actualizarStatsAdmin() {
-        try {
-            const res = await fetch(`${SUPABASE_URL}/rest/v1/usuarios?select=*`, {
-                method: 'GET',
-                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-            });
-            const lista = await res.json();
-            let pen = lista.filter(u => u.rol === 'pendiente').length;
+        lista.forEach(u => {
+            let tr = document.createElement('tr');
+            let stCls = u.rol !== 'pendiente' ? 'status-active' : 'status-pending';
+            let txtStatus = u.rol === 'pendiente' ? 'PENDIENTE' : 'ACTIVO';
             
-            document.getElementById('admin-stats').textContent = `Total Registrados: ${lista.length} | Pendientes: ${pen}`;
-            let tbody = document.getElementById('tabla-usuarios'); 
-            tbody.innerHTML = "";
-
-            lista.forEach(u => {
-                let tr = document.createElement('tr');
-                let stCls = u.rol !== 'pendiente' ? 'status-active' : 'status-pending';
-                let txtStatus = u.rol === 'pendiente' ? 'PENDIENTE' : 'ACTIVO';
-                
-                tr.innerHTML = `<td>${u.usuario}</td><td class="${stCls}">${txtStatus}</td>
-                    <td>
-                        <button class="btn-table" style="background:var(--neon); color:#000;" onclick="alterarUser('${u.usuario}','aprobar')">Activar</button>
-                        <button class="btn-table" style="background:var(--error); color:#fff;" onclick="alterarUser('${u.usuario}','eliminar')">Borrar</button>
-                    </td>`;
-                tbody.appendChild(tr);
-            });
-        } catch(e) {
-            console.error("Error al actualizar tabla administrativa.");
-        }
+            tr.innerHTML = `<td>${u.usuario}</td><td class="${stCls}">${txtStatus}</td>
+                <td>
+                    <button class="btn-table" style="background:var(--neon); color:#000;" onclick="alterarUser('${u.usuario}','aprobar')">Activar</button>
+                    <button class="btn-table" style="background:var(--error); color:#fff;" onclick="alterarUser('${u.usuario}','eliminar')">Borrar</button>
+                </td>`;
+            tbody.appendChild(tr);
+        });
     }
 
-    async function alterarUser(username, accion) {
-        try {
-            if(accion === 'aprobar') {
-                await fetch(`${SUPABASE_URL}/rest/v1/usuarios?usuario=eq.${username}`, {
-                    method: 'PATCH',
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${SUPABASE_KEY}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ rol: 'user' })
-                });
-            } else if(accion === 'eliminar') {
-                await fetch(`${SUPABASE_URL}/rest/v1/usuarios?usuario=eq.${username}`, {
-                    method: 'DELETE',
-                    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-                });
-            }
-            actualizarStatsAdmin();
-        } catch (e) {
-            alert("Error al procesar el cambio.");
+    function alterarUser(username, accion) {
+        let lista = JSON.parse(localStorage.getItem('bolita_usuarios_db')) || [];
+        if(accion === 'aprobar') {
+            lista = lista.map(u => u.usuario === username ? { ...u, rol: 'user' } : u);
+        } else if(accion === 'eliminar') {
+            lista = lista.filter(u => u.usuario !== username);
         }
+        localStorage.setItem('bolita_usuarios_db', JSON.stringify(lista));
+        actualizarStatsAdmin();
     }
-
-    // ==========================================
-    // ALGORITMOS MATRICIALES DE PROBABILIDADES
-    // ==========================================
 
     function activarProcesoCalculo(isAdmin) {
         let prefijo = isAdmin ? 'admin_' : '';
@@ -540,7 +412,7 @@
 
         setTimeout(() => {
             loader.style.display = 'none'; btn.disabled = false; generarTodo(isAdmin);
-        }, 2000);
+        }, 1200);
     }
 
     function generarTodo(isAdmin) {
@@ -569,7 +441,7 @@
 
         for(let nStr in pesos) {
             let uPos = ultimoAvistamiento[nStr] || 0;
-            pesos[nStr] += (totalSorteos - uPos) * 0.15;
+            pesos[nStr] += (totalSorteos - uPos) * 0.45; 
         }
 
         fechasOrdenadas.forEach(f => {
@@ -577,7 +449,7 @@
             if(db[f].t) combinados.push(db[f].t);
             if(db[f].n) combinados.push(db[f].n);
             if(combinados.includes(fijoStr)) {
-                combinados.forEach(c => { if(c !== fijoStr) pesos[c] += 4.5; });
+                combinados.forEach(c => { if(c !== fijoStr) pesos[c] += 8.5; });
             }
         });
 
@@ -588,26 +460,29 @@
             if(db[f].t) ultimosSorteosCortos.push(db[f].t);
         }
         
-        ultimosSorteosCortos.forEach(num => { pesos[num] += 3.5; });
+        ultimosSorteosCortos.forEach((num, index) => { 
+            pesos[num] += (14 - index) * 1.5; 
+        });
+
         let virado = fijoStr.split('').reverse().join('');
-        pesos[virado] += 18.0;
-        pesos[((punta + 5) % 10).toString() + term] += 8.5;
-        pesos[punta + ((term + 5) % 10).toString()] += 8.5;
-        pesos[((punta + 5) % 10).toString() + ((term + 5) % 10).toString()] += 12.0;
+        pesos[virado] += 25.0;
+        pesos[((punta + 5) % 10).toString() + term] += 12.5;
+        pesos[punta + ((term + 5) % 10).toString()] += 12.5;
+        pesos[((punta + 5) % 10).toString() + ((term + 5) % 10).toString()] += 15.0;
         
         let conteoDecenas = Array(10).fill(0);
         ultimosSorteosCortos.forEach(num => { conteoDecenas[Math.floor(parseInt(num) / 10)]++; });
         for(let nStr in pesos) {
             let decNum = Math.floor(parseInt(nStr) / 10);
-            if(conteoDecenas[decNum] === 0) pesos[nStr] += 6.0;
-            else if(conteoDecenas[decNum] >= 4) pesos[nStr] += 4.0;
+            if(conteoDecenas[decNum] === 0) pesos[nStr] += 10.0;
+            else if(conteoDecenas[decNum] >= 4) pesos[nStr] -= 5.0; 
         }
         
         let inputCharada = document.getElementById(isAdmin ? 'search_charada_admin' : 'search_charada_user');
         let palabraBuscada = inputCharada ? inputCharada.value.toLowerCase().trim() : '';
         if(palabraBuscada.length > 2) {
             for(let k in charadaDiccionario) {
-                if(charadaDiccionario[k].toLowerCase().includes(palabraBuscada)) pesos[k.padStart(2, '0')] += 15.0;
+                if(charadaDiccionario[k].toLowerCase().includes(palabraBuscada)) pesos[k.padStart(2, '0')] += 20.0;
             }
         }
 
@@ -621,15 +496,16 @@
             }
             let pendiente = (nReg * sumXY - sumX * sumY) / (nReg * sumX2 - sumX * sumX || 1);
             let proximoEstimado = Math.abs(Math.round(parseInt(ultimosSorteosCortos[0]) + pendiente)) % 100;
-            pesos[proximoEstimado.toString().padStart(2, '0')] += 10.0;
+            pesos[proximoEstimatedStr = proximoEstimado.toString().padStart(2, '0')] += 18.0;
         }
-let arrayOrdenado = Object.keys(pesos).sort((a,b) => pesos[b] - pesos[a]);
-let arrayFinal = arrayOrdenado.slice(0, cant);
 
-// AQUÍ ESTÁ (Línea 306 aprox.)
-document.getElementById(`btn_generar_user`).dataset.lastPronosticos = JSON.stringify(arrayFinal);
+        let arrayOrdenado = Object.keys(pesos).sort((a,b) => pesos[b] - pesos[a]);
+        let arrayFinal = arrayOrdenado.slice(0, cant);
 
-        document.getElementById(`btn_generar_user`).dataset.lastPronosticos = JSON.stringify(arrayFinal);
+        if(!isAdmin) {
+            localStorage.setItem('bolita_ultimo_pronostico', JSON.stringify(arrayFinal));
+            document.getElementById(`btn_generar_user`).dataset.lastPronosticos = JSON.stringify(arrayFinal);
+        }
 
         let hoy = new Date().toISOString().split('T')[0];
         let fijosHoy = [];
@@ -647,77 +523,8 @@ document.getElementById(`btn_generar_user`).dataset.lastPronosticos = JSON.strin
         });
         document.getElementById(`${prefijo}display_resultados`).style.display = 'block';
     }
-    // [ALGORITMO 1 a 4: Inicialización de pesos y mapeo de matriz de 100 casillas]
-        let panel = document.getElementById(`${prefijo}panel_res`); panel.innerHTML = "";
-        let pesos = {}; for(let i=0; i<100; i++) { pesos[i.toString().padStart(2, '0')] = 0; }
 
-        let fechasOrdenadas = Object.keys(db).sort();
-        let totalSorteos = 0;
-        let ultimoAvistamiento = {};
-
-        // [ALGORITMO 5 a 8: Cálculo de distancias temporales y desfase cronológico]
-        fechasOrdenadas.forEach(f => {
-            if(db[f].t) { totalSorteos++; ultimoAvistamiento[db[f].t] = totalSorteos; }
-            if(db[f].n) { totalSorteos++; ultimoAvistamiento[db[f].n] = totalSorteos; }
-        });
-
-        // [ALGORITMO 9 a 12: Multiplicador dinámico por desuso de terminales]
-        for(let nStr in pesos) {
-            let uPos = ultimoAvistamiento[nStr] || 0;
-            pesos[nStr] += (totalSorteos - uPos) * 0.15;
-        }
-    // [ALGORITMO ADICIONAL 1: Matriz de Asociación Cruzada / Co-ocurrencia con el Fijo]
-        fechasOrdenadas.forEach(f => {
-            let combinados = [];
-            if(db[f].t) combinados.push(db[f].t);
-            if(db[f].n) combinados.push(db[f].n);
-            if(combinados.includes(fijoStr)) {
-                combinados.forEach(c => { if(c !== fijoStr) pesos[c] += 4.5; });
-            }
-        });
-
-        // [ALGORITMO ADICIONAL 2: Filtro de Arrastre por Tendencia de Corto Plazo (Últimos 14 sorteos)]
-        let ultimosSorteosCortos = [];
-        for(let i = fechasOrdenadas.length - 1; i >= 0 && ultimosSorteosCortos.length < 14; i--) {
-            let f = fechasOrdenadas[i];
-            if(db[f].n) ultimosSorteosCortos.push(db[f].n);
-            if(db[f].t) ultimosSorteosCortos.push(db[f].t);
-        }
-        ultimosSorteosCortos.forEach(num => { pesos[num] += 3.5; });
-
-        // [ALGORITMO ADICIONAL 3: Inversión de Espejo Matemático (Número Virado)]
-        let virado = fijoStr.split('').reverse().join('');
-        pesos[virado] += 18.0;
-
-        // [ALGORITMO ADICIONAL 4: Desfases Simétricos de Base de Datos (+5 en Punta/Terminal/Ambos)]
-        pesos[((punta + 5) % 10).toString() + term] += 8.5;
-        pesos[punta + ((term + 5) % 10).toString()] += 8.5;
-        pesos[((punta + 5) % 10).toString() + ((term + 5) % 10).toString()] += 12.0;
-        
-        // [ALGORITMO ADICIONAL 5: Compensación por Vacío o Saturación de Decenas]
-        let conteoDecenas = Array(10).fill(0);
-        ultimosSorteosCortos.forEach(num => { conteoDecenas[Math.floor(parseInt(num) / 10)]++; });
-        for(let nStr in pesos) {
-            let decNum = Math.floor(parseInt(nStr) / 10);
-            if(conteoDecenas[decNum] === 0) pesos[nStr] += 6.0;
-            else if(conteoDecenas[decNum] >= 4) pesos[nStr] += 4.0;
-        }
-
-        // [ALGORITMO ADICIONAL 6: Regresión Lineal por Mínimos Cuadrados (Predicción de Pendiente Estadística)]
-        if(ultimosSorteosCortos.length >= 5) {
-            let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
-            let nReg = Math.min(ultimosSorteosCortos.length, 10);
-            for(let i = 0; i < nReg; i++) {
-                let yVal = parseInt(ultimosSorteosCortos[i]);
-                let xVal = i;
-                sumX += xVal; sumY += yVal; sumXY += (xVal * yVal); sumX2 += (xVal * xVal);
-            }
-            let pendiente = (nReg * sumXY - sumX * sumY) / (nReg * sumX2 - sumX * sumX || 1);
-            let proximoEstimado = Math.abs(Math.round(parseInt(ultimosSorteosCortos[0]) + pendiente)) % 100;
-            pesos[proximoEstimado.toString().padStart(2, '0')] += 10.0;
-        }
-
-    async function guardarFijosDeHoy() {
+    function guardarFijosDeHoy() {
         let t = document.getElementById('fijo_hoy_tarde').value.trim();
         let n = document.getElementById('fijo_hoy_noche').value.trim();
         let hoy = new Date().toISOString().split('T')[0];
@@ -728,12 +535,10 @@ document.getElementById(`btn_generar_user`).dataset.lastPronosticos = JSON.strin
         if(t) { 
             let fmtT = t.padStart(2, '0'); db[hoy]['t'] = fmtT; 
             comprobarYRegistrarAcierto(hoy, 't', fmtT); 
-            await registrarTiroEnNube(hoy, fmtT, undefined);
         }
         if(n) { 
             let fmtN = n.padStart(2, '0'); db[hoy]['n'] = fmtN; 
             comprobarYRegistrarAcierto(hoy, 'n', fmtN); 
-            await registrarTiroEnNube(hoy, undefined, fmtN);
         }
         
         localStorage.setItem('bolita_master_db', JSON.stringify(db));
@@ -743,32 +548,47 @@ document.getElementById(`btn_generar_user`).dataset.lastPronosticos = JSON.strin
 
     function comprobarYRegistrarAcierto(fecha, turno, numeroReal) {
         let btn = document.getElementById(`btn_generar_user`);
-        if(!btn || !btn.dataset.lastPronosticos) return;
-        let pronosticos = JSON.parse(btn.dataset.lastPronosticos);
+        let cached = localStorage.getItem('bolita_ultimo_pronostico');
+        if(!cached) return;
+        
+        let pronosticos = JSON.parse(cached);
         let idx = pronosticos.indexOf(numeroReal);
         if(idx !== -1) {
             let aciertosLog = JSON.parse(localStorage.getItem('bolita_aciertos_log')) || [];
-if(!aciertosLog.some(l => l.fecha === fecha && l.turno === (turno==='t'?'Tarde':'Noche'))) {
-    aciertosLog.push({ fecha: fecha, turno: turno==='t'?'Tarde':'Noche', numero: numeroReal, casilla: idx + 1 });
-    
-    // AQUÍ ESTÁ (Línea 335 aprox.)
-    localStorage.setItem('bolita_aciertos_log', JSON.stringify(aciertosLog));
-}
+            if(!aciertosLog.some(l => l.fecha === fecha && l.turno === (turno==='t'?'Tarde':'Noche'))) {
+                aciertosLog.push({ fecha: fecha, turno: turno==='t'?'Tarde':'Noche', numero: numeroReal, casilla: idx + 1 });
+                localStorage.setItem('bolita_aciertos_log', JSON.stringify(aciertosLog));
+            }
         }
     }
 
     function mostrarTablaAciertos() {
         let aciertosLog = JSON.parse(localStorage.getItem('bolita_aciertos_log')) || [];
-        let html = aciertosLog.length === 0 ? `<p style="color:#666; font-size:0.7rem; text-align:center;">Sin aciertos registrados.</p>` :
+        let html = aciertosLog.length === 0 ? `<p style="color:#666; font-size:0.7rem; text-align:center;">Sin aciertos registrados todavía.</p>` :
             `<table class="tabla-aciertos"><thead><tr><th>Fecha</th><th>Turno</th><th>Fijo</th><th>Casilla</th></tr></thead><tbody>` +
             aciertosLog.slice().reverse().map(l => `<tr><td>${l.fecha}</td><td>${l.turno}</td><td style="color:var(--win); font-weight:bold;">${l.numero}</td><td>#${l.casilla}</td></tr>`).join('') + `</tbody></table>`;
         document.getElementById('tabla_historico_aciertos_user').innerHTML = html;
         document.getElementById('tabla_historico_aciertos_admin').innerHTML = html;
     }
 
-    // ==========================================
-    // RESPALDOS Y FUNCIONES COMPLEMENTARIAS
-    // ==========================================
+    function cargarUltimoPronosticoUI() {
+        let cached = localStorage.getItem('bolita_ultimo_pronostico');
+        if (cached) {
+            let arrayFinal = JSON.parse(cached);
+            document.getElementById(`btn_generar_user`).dataset.lastPronosticos = cached;
+            let panel = document.getElementById('panel_res');
+            if (panel) {
+                panel.innerHTML = "";
+                arrayFinal.forEach((n, index) => {
+                    let b = document.createElement('div');
+                    b.className = "box" + (index < 10 ? " destacado-top10" : "");
+                    b.textContent = n;
+                    panel.appendChild(b);
+                });
+                document.getElementById('display_resultados').style.display = 'block';
+            }
+        }
+    }
 
     function exportarBaseDatos() {
         let master = localStorage.getItem('bolita_master_db') || "{}";
@@ -780,10 +600,10 @@ if(!aciertosLog.some(l => l.fecha === fecha && l.turno === (turno==='t'?'Tarde':
         document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
     }
 
-    async function importarBaseDatos(event) {
+    function importarBaseDatos(event) {
         let file = event.target.files[0]; if(!file) return;
         let reader = new FileReader();
-        reader.onload = async function(e) {
+        reader.onload = function(e) {
             try {
                 let d = JSON.parse(e.target.result);
                 if(d.historialFijos) {
@@ -791,11 +611,7 @@ if(!aciertosLog.some(l => l.fecha === fecha && l.turno === (turno==='t'?'Tarde':
                     localStorage.setItem('bolita_aciertos_log', JSON.stringify(d.historicoAciertos || []));
                     db = d.historialFijos;
                 } else { localStorage.setItem('bolita_master_db', JSON.stringify(d)); db = d; }
-                
-                for (let f in db) {
-                    await registrarTiroEnNube(f, db[f].t, db[f].n);
-                }
-                alert("Base de datos local sincronizada y subida."); 
+                alert("Base de datos local sincronizada correctamente."); 
                 mostrarTablaAciertos(); renderCalendario();
             } catch(err) { alert("Archivo JSON incompatible."); }
         };
@@ -863,7 +679,7 @@ if(!aciertosLog.some(l => l.fecha === fecha && l.turno === (turno==='t'?'Tarde':
         document.getElementById('admin_actions_cal').style.display = esAdministradorLogueado ? 'block' : 'none';
     }
 
-    async function guardarDB() {
+    function guardarDB() {
         if(!esAdministradorLogueado) return;
         let inputs = document.querySelectorAll('.day input');
         for (let i of inputs) {
@@ -872,14 +688,13 @@ if(!aciertosLog.some(l => l.fecha === fecha && l.turno === (turno==='t'?'Tarde':
             let val = i.value.trim();
             if(val) { 
                 if(!db[k]) db[k] = {}; db[k][tu] = val.padStart(2, '0'); 
-                await registrarTiroEnNube(k, tu === 't' ? val.padStart(2, '0') : undefined, tu === 'n' ? val.padStart(2, '0') : undefined);
             }
         }
         localStorage.setItem('bolita_master_db', JSON.stringify(db)); 
         alert("Calendario actualizado.");
     }
 
-    async function procesarTextoImportado() {
+    function procesarTextoImportado() {
         const raw = document.getElementById('import_raw_text').value;
         if (!raw.trim()) return alert("El cuadro de texto está vacío.");
         
@@ -907,7 +722,6 @@ if(!aciertosLog.some(l => l.fecha === fecha && l.turno === (turno==='t'?'Tarde':
 
                     if (!db[k]) db[k] = {};
                     db[k][tu] = numFijo;
-                    await registrarTiroEnNube(k, tu === 't' ? numFijo : undefined, tu === 'n' ? numFijo : undefined);
                     cnt++;
                 }
             }
@@ -920,12 +734,11 @@ if(!aciertosLog.some(l => l.fecha === fecha && l.turno === (turno==='t'?'Tarde':
         renderCalendario();
     }
 
-    async function inicializarSistema() {
-    await cargarTirosDesdeNube();
-    renderCalendario();
-}
-
-window.onload = inicializarSistema;
+    function inicializarSistema() {
+        db = JSON.parse(localStorage.getItem('bolita_master_db')) || {};
+        renderCalendario();
+        mostrarTablaAciertos();
+    }
 
     window.onload = inicializarSistema;
 </script>

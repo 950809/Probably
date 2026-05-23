@@ -403,12 +403,11 @@
             });
 
             if (matrizMarkov[fijoStr]) {
-                for (let numeroSucesor in matrizMarkov[fijoStr]) {
-                    let apariciones = matrizMarkov[fijoStr][numeroSucesor];
-                    pesos[numeroSucesor.padStart(2, '0')] += (apariciones * 12.0);
-                }
-            }
-        }
+    for (let numeroSucesor in matrizMarkov[fijoStr]) {
+        let apariciones = matrizMarkov[fijoStr][numeroSucesor];
+        pesos[numeroSucesor.padStart(2, '0')] += (apariciones * 35.0); // <- Sube a 35.0
+    }
+}
 
         // ALGORITMO 3: Retraso Acumulado Completo
         if (fechasOrdenadas.length > 0) {
@@ -418,15 +417,15 @@
                 if(db[f] && db[f].n) { totalSorteos++; ultimoAvistamiento[db[f].n] = totalSorteos; }
             });
             for(let nStr in pesos) {
-                let uPos = ultimoAvistamiento[nStr] || 0;
-                pesos[nStr] += (totalSorteos - uPos) * 0.75;
-            }
+    let uPos = ultimoAvistamiento[nStr] || 0;
+    pesos[nStr] += (totalSorteos - uPos) * 0.02; // <- Baja a 0.02
+}
             
             // ALGORITMO 4: Co-ocurrencia de fijos cruzados (Acompañamiento diario)
             fechasOrdenadas.forEach(f => {
                 if(db[f]) {
                     let comb = [db[f].t, db[f].n];
-                    if(comb.includes(fijoStr)) comb.forEach(c => { if(c !== fijoStr && c) pesos[c] += 15.0; });
+                    if(comb.includes(fijoStr)) comb.forEach(c => { if(c !== fijoStr && c) pesos[c] += 25.0; });
                 }
             });
         }

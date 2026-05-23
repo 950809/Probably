@@ -304,9 +304,6 @@
         mostrarTablaAciertos();
     });
 
-    // =========================================================================
-    // TRADUCTOR Y NORMALIZADOR CRÍTICO DE FECHAS (Une Masivo + Manual)
-    // =========================================================================
     function normalizarFechaAISO(strFecha) {
         let limpia = strFecha.trim();
         if (limpia.includes('/')) {
@@ -469,13 +466,13 @@
     function autoOptimizarPesos(database, turnoSeleccionado) {
         let fechas = obtenerFechasCronologicas(database);
         if(fechas.length < 5) {
-            return { markov:35, retraso:0.02, cooc:40, charada:35, lunar:22, fib:25, desv:20, hermanos:30, regresion:18, entropia:25, primos:15, hamming:20, espejo:24, kde:22 };
+            return { markov:65, retraso:0.05, cooc:60, charada:35, lunar:45, fib:25, desv:40, hermanos:30, regresion:18, entropia:25, primos:15, hamming:20, espejo:45, kde:22 };
         }
 
         const setsDePrueba = [
             { name: "Cíclico Directo", markov:50, retraso:0.01, cooc:50, charada:25, lunar:15, fib:20, desv:10, hermanos:40, regresion:10, entropia:10, primos:10, hamming:15, espejo:20, kde:15 },
             { name: "Caótico / Inverso", markov:15, retraso:0.05, cooc:15, charada:20, lunar:30, fib:35, desv:40, hermanos:15, regresion:30, entropia:50, primos:25, hamming:30, espejo:15, kde:35 },
-            { name: "Balanceado Pro", markov:35, retraso:0.02, cooc:40, charada:35, lunar:22, fib:25, desv:20, hermanos:30, regresion:18, entropia:25, primos:15, hamming:20, espejo:24, kde:22 }
+            { name: "Balanceado Pro", markov:65, retraso:0.05, cooc:60, charada:35, lunar:45, fib:25, desv:40, hermanos:30, regresion:18, entropia:25, primos:15, hamming:20, espejo:45, kde:22 }
         ];
 
         let mejorSet = setsDePrueba[2]; 
@@ -511,7 +508,7 @@
     }
 
     function ejecutarAlgoritmoCore(fijoBaseStr, cantidadSalida, dbSimulada, configPesos, turnoSeleccionado = 'combinado') {
-        let pActivos = configPesos || pesosGlobalesOptimos || { markov:35, retraso:0.02, cooc:40, charada:35, lunar:22, fib:25, desv:20, hermanos:30, regresion:18, entropia:25, primos:15, hamming:20, espejo:24, kde:22 };
+        let pActivos = configPesos || pesosGlobalesOptimos || { markov:65, retraso:0.05, cooc:60, charada:35, lunar:45, fib:25, desv:40, hermanos:30, regresion:18, entropia:25, primos:15, hamming:20, espejo:45, kde:22 };
 
         let fijoStr = fijoBaseStr.padStart(2, '0');
         let numBase = parseInt(fijoStr);
@@ -519,81 +516,105 @@
         let term = numBase % 10;
 
         let pesos = {};
-        for(let i=0; i<100; i++) pesos[i.toString().padStart(2, '0')] = Math.random() * 1.5; 
+        for(let i=0; i<100; i++) pesos[i.toString().padStart(2, '0')] = Math.random() * 2.0; 
 
-        // ORDEN CRONOLÓGICO ABSOLUTO INTEGRADO
         let fechasOrdenadas = obtenerFechasCronologicas(dbSimulada);
 
-        let flujoNumeros = [];
+        let flujoNumerosCompleto = [];
         fechasOrdenadas.forEach(f => {
-            if (turnoSeleccionado === 'tarde' && dbSimulada[f]?.t) flujoNumeros.push(dbSimulada[f].t);
-            else if (turnoSeleccionado === 'noche' && dbSimulada[f]?.n) flujoNumeros.push(dbSimulada[f].n);
-            else if (turnoSeleccionado === 'combinado') {
-                if(dbSimulada[f]?.t) flujoNumeros.push(dbSimulada[f].t);
-                if(dbSimulada[f]?.n) flujoNumeros.push(dbSimulada[f].n);
-            }
+            if(dbSimulada[f]?.t) flujoNumerosCompleto.push(dbSimulada[f].t);
+            if(dbSimulada[f]?.n) flujoNumerosCompleto.push(dbSimulada[f].n);
         });
+        
+        let flujoRachaCaliente = flujoNumerosCompleto.slice(-150);
+        let fechasRachaCortas = fechasOrdenadas.slice(-75);
 
-        // 1. MARKOV
+        // 1. MARKOV RECIENTE
         let ultimoNum = null;
-        flujoNumeros.forEach(num => {
-            if (ultimoNum === fijoStr) pesos[num.padStart(2, '0')] += pActivos.markov;
+        flujoRachaCaliente.forEach(num => {
+            if (ultimoNum === fijoStr) pesos[num.padStart(2, '0')] += (pActivos.markov * 1.8);
             ultimoNum = num;
         });
 
-        // 2. RETRASO ACUMULADO
+        // 2. RETRASO CONTROLADO EN VENTANA CORTA
         let totalSorteos = 0; let ultimoAvistamiento = {};
-        flujoNumeros.forEach(num => {
+        flujoRachaCaliente.forEach(num => {
             totalSorteos++; ultimoAvistamiento[num] = totalSorteos;
         });
         for(let nStr in pesos) pesos[nStr] += (totalSorteos - (ultimoAvistamiento[nStr] || 0)) * pActivos.retraso;
 
-        // 3. CO-OCURRENCIAS
-        fechasOrdenadas.forEach(f => {
+        // 3. CO-OCURRENCIAS RECIENTES
+        fechasRachaCortas.forEach(f => {
             if(dbSimulada[f]) {
                 let comb = [dbSimulada[f].t, dbSimulada[f].n];
-                if(comb.includes(fijoStr)) comb.forEach(c => { if(c !== fijoStr && c) pesos[c] += pActivos.cooc; });
+                if(comb.includes(fijoStr)) comb.forEach(c => { if(c !== fijoStr && c) pesos[c] += (pActivos.cooc * 1.5); });
             }
         });
 
-        // 4. CHARADA
+        // 4. FILTRADO AGRESIVO POR TURNO ESPECÍFICO
+        if (turnoSeleccionado === 'tarde' || turnoSeleccionado === 'noche') {
+            let fInverso = turnoSeleccionado === 'tarde' ? 'n' : 't';
+            fechasRachaCortas.slice(-30).forEach(f => {
+                if(dbSimulada[f] && dbSimulada[f][fInverso]) {
+                    let numCastigado = dbSimulada[f][fInverso].padStart(2, '0');
+                    pesos[numCastigado] -= 25.0; 
+                }
+            });
+        }
+
+        // 5. CHARADA INTERSECCIÓN
         let inputCharada = document.getElementById('search_charada_user');
         let palabra = inputCharada ? inputCharada.value.toLowerCase().trim() : '';
         if(palabra.length > 2) {
             for(let k in charadaDiccionario) { if(charadaDiccionario[k].toLowerCase().includes(palabra)) pesos[k.padStart(2, '0')] += pActivos.charada; }
         }
 
-        // 5. CICLO LUNAR
-        let hoySimulado = new Date(normalizarFechaAISO(fechasOrdenadas[fechasOrdenadas.length - 1] || "2026-05-23"));
-        let faseHoy = Math.floor((hoySimulado.getDate()) % 29.5);
-        fechasOrdenadas.slice(-200).forEach(f => {
-            if(Math.floor((new Date(normalizarFechaAISO(f)).getDate()) % 29.5) === faseHoy && dbSimulada[f]) {
-                if(turnoSeleccionado !== 'noche' && dbSimulada[f].t) pesos[dbSimulada[f].t] += pActivos.lunar;
-                if(turnoSeleccionado !== 'tarde' && dbSimulada[f].n) pesos[dbSimulada[f].n] += pActivos.lunar;
-            }
+        // 6. DESVIACIÓN ESTÁNDAR HISTÓRICA (Modo Lupa: Reparado apuntando a la racha unificada)
+        let contadores = {}; 
+        for(let i = 0; i < 100; i++) contadores[i.toString().padStart(2, '0')] = 0;
+        
+        flujoRachaCaliente.slice(-100).forEach(n => {
+            if(n) contadores[n.padStart(2, '0')]++;
         });
+        for(let nStr in pesos) { 
+            if(contadores[nStr] === 0) pesos[nStr] += pActivos.desv; 
+        }
 
-        // 6. DESVIACIÓN ESTÁNDAR
-        let contadores = {}; for(let i=0; i<100; i++) contadores[i.toString().padStart(2,'0')] = 0;
-        flujoNumeros.slice(-100).forEach(n => contadores[n]++);
-        for(let nStr in pesos) { if(contadores[nStr] === 0) pesos[nStr] += pActivos.desv; }
-
-        // 7. SATURACIÓN CRÍTICA
-        let saturacionBloques = {}; for(let i=0; i<10; i++) saturacionBloques[i] = 0;
-        flujoNumeros.slice(-20).forEach(num => {
-            let decada = Math.floor(parseInt(num) / 10);
-            saturacionBloques[decada]++;
+        // 7. SATURACIÓN CRÍTICA DE DÉCADAS (Modo Lupa: Reparado apuntando a la racha unificada)
+        let saturacionBloques = {}; 
+        for(let i = 0; i < 10; i++) saturacionBloques[i] = 0;
+        
+        flujoRachaCaliente.slice(-20).forEach(num => {
+            if(num) {
+                let decada = Math.floor(parseInt(num) / 10);
+                if(!isNaN(decada) && decada >= 0 && decada <= 9) saturacionBloques[decada]++;
+            }
         });
         for(let nStr in pesos) {
             let decadaNum = Math.floor(parseInt(nStr) / 10);
-            if(saturacionBloques[decadaNum] >= 5) pesos[nStr] -= (saturacionBloques[decadaNum] * 4.0);
+            if(!isNaN(decadaNum) && saturacionBloques[decadaNum] >= 4) {
+                pesos[nStr] -= (saturacionBloques[decadaNum] * 5.0);
+            }
         }
 
-        // Resguardos fijos
-        let virado = fijoStr.split('').reverse().join('').padStart(2, '0');
-        pesos[virado] += 40.0; pesos[((punta + 5) % 10).toString() + term] += 15.0;
+        // 8. REGRESIÓN DE HERMANOS Y ESPEJOS PARALELOS
+        let hermano = (numBase + 11) % 100;
+        let pariente = (numBase + 50) % 100;
+        pesos[hermano.toString().padStart(2, '0')] += pActivos.hermanos;
+        pesos[pariente.toString().padStart(2, '0')] += pActivos.hermanos;
 
-        let arrayOrdenado = Object.keys(pesos).sort((a,b) => pesos[b] - pesos[a]);
+        // 9. REGLA DE ADYACENCIA (VECINOS DE MATRIZ)
+        let vecinoArriba = (numBase + 10) % 100;
+        let vecinoAbajo = (numBase - 10 < 0) ? (numBase - 10 + 100) : (numBase - 10);
+        pesos[vecinoArriba.toString().padStart(2, '0')] += 15.0;
+        pesos[vecinoAbajo.toString().padStart(2, '0')] += 15.0;
+
+        // 10. RESGUARDOS FIJOS Y REFLEJOS AUTOMÁTICOS
+        let virado = fijoStr.split('').reverse().join('').padStart(2, '0');
+        pesos[virado] += 45.0; 
+        pesos[((punta + 5) % 10).toString() + term] += 15.0;
+
+        let arrayOrdenado = Object.keys(pesos).sort((a, b) => pesos[b] - pesos[a]);
         return arrayOrdenado.slice(0, cantidadSalida);
     }
 
@@ -625,16 +646,11 @@
         document.getElementById(`${pref}display_resultados`).style.display = 'block';
     }
 
-    // =========================================================================
-    // AUDITORÍA HISTÓRICA TOTAL (Une 2009 con el presente)
-    // =========================================================================
     function ejecutarSimulacionAutomatica() {
         let fechas = obtenerFechasCronologicas(db);
         if (fechas.length < 10) return alert("Historial insuficiente para auditar.");
         
         resultadosSimulacionGlobal = {}; 
-        
-        // Auditamos los últimos 50 días reales continuos de TODA tu base de datos reunida
         let muestraFechas = fechas.slice(-50); 
 
         for (let i = 1; i < muestraFechas.length; i++) {
@@ -738,7 +754,6 @@
             try {
                 let parsed = JSON.parse(e.target.result);
                 let cleanedDb = {};
-                // Limpieza interna e indexación forzada durante la carga
                 Object.keys(parsed).forEach(k => {
                     let newKey = normalizarFechaAISO(k);
                     cleanedDb[newKey] = parsed[k];

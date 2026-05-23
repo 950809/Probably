@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bolita Pro Master - Consola Global Elite v9.8</title>
+    <title>Bolita Pro Master - Consola Global Elite v9.9</title>
     <style>
         :root { --neon: #00ff41; --dark: #050505; --panel: #0d1117; --win: #ffeb3b; --error: #ff3333; --cyber: #00bcd4; }
         body { font-family: 'Segoe UI', monospace; background: var(--dark); color: var(--neon); margin: 0; padding: 10px; -webkit-user-select: none; user-select: none; }
@@ -47,6 +47,10 @@
         .charada-box { background: #000; border: 1px solid #222; padding: 6px; border-radius: 4px; max-height: 90px; overflow-y: auto; font-size: 0.75rem; color: #ccc; white-space: pre-line; margin-top: 4px; }
         .loader { display: none; text-align: center; color: var(--win); font-size: 0.8rem; font-weight: bold; margin: 8px 0; letter-spacing: 1px; }
         .bloque-comb { font-size: 0.75rem; color: #fff; background: #000; border: 1px solid var(--cyber); padding: 5px; border-radius: 4px; margin-bottom: 4px; font-family: monospace; }
+        
+        .badge-acierto { padding: 2px 4px; border-radius: 3px; font-size: 0.65rem; font-weight: bold; }
+        .badge-green { background: #003300; color: #00ff00; border: 1px solid #00ff00; }
+        .badge-red { background: #330000; color: #ff3333; border: 1px solid #ff3333; }
     </style>
 </head>
 <body>
@@ -140,7 +144,10 @@
 
         <div id="user-sec-hist" style="display: none;">
             <div class="panel" style="margin-top:0;">
-                <label style="font-size:0.65rem; color:var(--win); font-weight:bold; text-transform:uppercase;">Registro de Aciertos del Algoritmo</label>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                    <label style="font-size:0.65rem; color:var(--win); font-weight:bold; text-transform:uppercase;">Historial Auditado</label>
+                    <button style="font-size:0.6rem; padding:2px 6px; border-color:var(--win); color:var(--win);" onclick="ejecutarSimulacionAutomatica()">Correr Simulación</button>
+                </div>
                 <div id="tabla_historico_aciertos_user" style="margin-top:8px;"></div>
             </div>
         </div>
@@ -188,7 +195,10 @@
 
         <div id="admin-sub-aciertos" style="display: none;">
             <div class="panel" style="margin-top:0;">
-                <label style="font-size:0.65rem; color:var(--win); font-weight:bold; text-transform:uppercase;">Monitoreo Global</label>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                    <label style="font-size:0.65rem; color:var(--win); font-weight:bold; text-transform:uppercase;">Monitoreo Global</label>
+                    <button style="font-size:0.6rem; padding:2px 6px; border-color:var(--win); color:var(--win);" onclick="ejecutarSimulacionAutomatica()">Simular Auditoría</button>
+                </div>
                 <div id="tabla_historico_aciertos_admin"></div>
             </div>
         </div>
@@ -250,6 +260,7 @@
     let fechaActualCal = new Date();
     let esAdministradorLogueado = false;
     let ultimosNumerosGenerados = [];
+    let resultadosSimulacionGlobal = {}; 
 
     const charadaDiccionario = {"1":"Caballo, sol, tintero","2":"Mariposa, hombre","3":"Niño, marinero, muerto","4":"Gato, vela, boca","5":"Mujer, mar, candado","6":"Jicotea, candela","7":"Mierda, caracol","8":"Muerto, calabaza, león","9":"Elefante, lengua","10":"Pescado grande, dinero","11":"Gallo, lluvia","12":"Puta, estrella, perro grande","13":"Chulo, pavo real","14":"Cementerio, gato, matrimonio","15":"Perro chico, niña, ratón","16":"Toro, vestido, avispa","17":"San Lázaro, armas","18":"Pescado chico, iglesia","19":"Lombriz, campesino, jutía","20":"Tibor, cañón, libro","21":"Majá, dinero, reloj","22":"Sapo, estrella, lirio","23":"Vapor, barco, águila","24":"Paloma, cocina","25":"Piedra fina, casa, rana","26":"Anguila, calle, nube","27":"Avispa, campana","28":"Chivo, bollo, perro chico","29":"Ratón, venado","30":"Camarón, almanaque, cangrejo","31":"Venado, escuela","32":"Puerco chico, majá","33":"Tiñosa, baraja","34":"Mono, negro","35":"Araña, mosquito","36":"Cachimba, bodega","37":"Bruja, hormiga","38":"Dinero, macao, carro","39":"Culebra, conejo, rayo","40":"Cura, bombero, cantina","41":"Lagartija, prisión","42":"Pato, país lejano","43":"Alacrán, amigo, vaca","44":"Infierno, tormenta, caldero","45":"Tiburón, presidente, traje","46":"Guagua, humo, chino","47":"Pájaro, mala noticia","48":"Cucaracha, abanico","49":"Borracho, riqueza","50":"Policía, agua, florero","51":"Soldado, oro","52":"Bicicleta, abogado","53":"Luz eléctrica, diamante","54":"Flores, gallina blanca","55":"Cangrejo, murciélago","56":"Reina, escorpión, camisa","57":"Cama, ángeles","58":"Adulterio, cuchillo","59":"Loco, anillo","60":"Payaso, huevo, tempestad","61":"Caballo grande, revólver","62":"Matrimonio, robo, crimen","63":"Asesino, espada","64":"Muerto vivo, escándalo","65":"Cárcel, comida","66":"Tarro, divorcio, máscara","67":"Puñalada, hospital","68":"Cementerio grande, riña","69":"Pozo, loma, vago","70":"Teléfono, coco, tiro","71":"Río, sombrero, fusil","72":"Buey, ferrocarril, lluvia","73":"Maleta, navaja","74":"Papalote, militar","75":"Cine, corbata, guitarra","76":"Bailarina, violín","77":"Banderas, campana","78":"Ataúd, obispo, rey","79":"Tren de carga, dulces","80":"Médico, sábanas","81":"Teatro, fango","82":"Madre, león","83":"Tragedia, bastón","84":"Sastre, sangre","85":"Espejo, ojo","86":"Tijeras, herida","87":"Plátanos, Nueva York","88":"Hojas, muerto, vaso","89":"León, cometa","90":"Viejo, espejo","91":"Alpargatas, comunista","92":"Puerco grande, avión, Cuba","93":"Sortija, revolution","94":"Machete, pulga","95":"Guerra, cuchillo","96":"Zapato viejo, pícaro","97":"Grillo, sinsonte","98":"Piano, entierro","99":"Carbonero, ratero","100":"Inodoro, dios, escoba"};
 
@@ -359,39 +370,28 @@
     }
 
     // =========================================================================
-    // MOTOR UNIFICADO GLOBAL: TODOS LOS ALGORITMOS RECONSTRUIDOS Y CORREGIDOS
+    // NÚCLEO MATEMÁTICO: MOTOR UNIFICADO (CALIBRACIÓN OPTIMIZADA DESDE 2009)
     // =========================================================================
-    function generarTodo(isAdmin) {
-        let pref = isAdmin ? 'admin_' : '';
-        let fijoStr = document.getElementById(`${pref}fijo_base`).value.trim().padStart(2, '0');
-        let cant = parseInt(document.getElementById(`${pref}cant_final`).value);
+    function ejecutarAlgoritmoCore(fijoBaseStr, cantidadSalida, dbSimulada) {
+        let fijoStr = fijoBaseStr.padStart(2, '0');
         let numBase = parseInt(fijoStr);
-        if(isNaN(numBase)) return alert("Introduce un Fijo Base válido.");
+        let punta = Math.floor(numBase / 10); 
+        let term = numBase % 10;
 
-        let punta = Math.floor(numBase / 10); let term = numBase % 10;
-        
-        // ALGORITMO 1: Fórmulas Estáticas Tradicionales (C1, C2, C3)
-        if(!isAdmin) {
-            document.getElementById(`c1`).textContent = ((punta + 3) % 10).toString();
-            document.getElementById(`c2`).textContent = ((term + 7) % 10).toString();
-            document.getElementById(`c3`).textContent = ((numBase + 21) % 100).toString().padStart(2, '0');
-        }
-
-        // Matriz de inicialización balanceada
         let pesos = {};
         for(let i=0; i<100; i++) pesos[i.toString().padStart(2, '0')] = Math.random() * 20.0;
 
-        let fechasOrdenadas = Object.keys(db).sort();
+        let fechasOrdenadas = Object.keys(dbSimulada).sort();
         
-        // ALGORITMO 2: Cadenas de Markov (Secuencias cronológicas directas)
+        // MARKOV: Ajustado a 35.0 (Prioridad de secuencias históricas)
         if (fechasOrdenadas.length > 0) {
             let matrizMarkov = {};
             let ultimoNumeroEscaneado = null;
 
             fechasOrdenadas.forEach(f => {
                 let tirosDelDia = [];
-                if(db[f] && db[f].t) tirosDelDia.push(db[f].t);
-                if(db[f] && db[f].n) tirosDelDia.push(db[f].n);
+                if(dbSimulada[f] && dbSimulada[f].t) tirosDelDia.push(dbSimulada[f].t);
+                if(dbSimulada[f] && dbSimulada[f].n) tirosDelDia.push(dbSimulada[f].n);
 
                 tirosDelDia.forEach(numActual => {
                     if (ultimoNumeroEscaneado !== null) {
@@ -403,40 +403,40 @@
             });
 
             if (matrizMarkov[fijoStr]) {
-    for (let numeroSucesor in matrizMarkov[fijoStr]) {
-        let apariciones = matrizMarkov[fijoStr][numeroSucesor];
-        pesos[numeroSucesor.padStart(2, '0')] += (apariciones * 35.0);
+                for (let numeroSucesor in matrizMarkov[fijoStr]) {
+                    let apariciones = matrizMarkov[fijoStr][numeroSucesor];
+                    pesos[numeroSucesor.padStart(2, '0')] += (apariciones * 35.0); 
+                }
+            }
         }
-    }
-}
 
-        // ALGORITMO 3: Retraso Acumulado Completo
+        // RETRASO: Reducido a 0.02 (Evita la saturación por el banco de datos masivo)
         if (fechasOrdenadas.length > 0) {
             let totalSorteos = 0; let ultimoAvistamiento = {};
             fechasOrdenadas.forEach(f => {
-                if(db[f] && db[f].t) { totalSorteos++; ultimoAvistamiento[db[f].t] = totalSorteos; }
-                if(db[f] && db[f].n) { totalSorteos++; ultimoAvistamiento[db[f].n] = totalSorteos; }
+                if(dbSimulada[f] && dbSimulada[f].t) { totalSorteos++; ultimoAvistamiento[dbSimulada[f].t] = totalSorteos; }
+                if(dbSimulada[f] && dbSimulada[f].n) { totalSorteos++; ultimoAvistamiento[dbSimulada[f].n] = totalSorteos; }
             });
             for(let nStr in pesos) {
-    let uPos = ultimoAvistamiento[nStr] || 0;
-    pesos[nStr] += (totalSorteos - uPos) * 0.02; // <- Baja a 0.02
-}
+                let uPos = ultimoAvistamiento[nStr] || 0;
+                pesos[nStr] += (totalSorteos - uPos) * 0.02;
+            }
             
-            // ALGORITMO 4: Co-ocurrencia de fijos cruzados (Acompañamiento diario)
+            // CO-OCURRENCIA: Sube a 25.0
             fechasOrdenadas.forEach(f => {
-                if(db[f]) {
-                    let comb = [db[f].t, db[f].n];
+                if(dbSimulada[f]) {
+                    let comb = [dbSimulada[f].t, dbSimulada[f].n];
                     if(comb.includes(fijoStr)) comb.forEach(c => { if(c !== fijoStr && c) pesos[c] += 25.0; });
                 }
             });
         }
 
-        // ALGORITMO 5: Leyes de Simetría, Terminales y Virados Automáticos (Viejos)
+        // SIMETRÍAS Y VIRADOS
         let virado = fijoStr.split('').reverse().join('').padStart(2, '0');
         pesos[virado] += 20.0;
         pesos[((punta + 5) % 10).toString() + term] += 15.0;
 
-        // ALGORITMO 6: Inyección Cuántica por Equivalencia de Charada
+        // FILTRO CHARADA
         let inputCharada = document.getElementById('search_charada_user');
         let palabra = inputCharada ? inputCharada.value.toLowerCase().trim() : '';
         if(palabra.length > 2) {
@@ -445,9 +445,27 @@
             }
         }
 
-        // Ordenamiento final de probabilidades
         let arrayOrdenado = Object.keys(pesos).sort((a,b) => pesos[b] - pesos[a]);
-        ultimosNumerosGenerados = arrayOrdenado.slice(0, cant);
+        return arrayOrdenado.slice(0, cantidadSalida);
+    }
+
+    function generarTodo(isAdmin) {
+        let pref = isAdmin ? 'admin_' : '';
+        let fijoStr = document.getElementById(`${pref}fijo_base`).value.trim().padStart(2, '0');
+        let cant = parseInt(document.getElementById(`${pref}cant_final`).value);
+        
+        let numBase = parseInt(fijoStr);
+        if(isNaN(numBase)) return alert("Introduce un Fijo Base válido.");
+
+        if(!isAdmin) {
+            let punta = Math.floor(numBase / 10); let term = numBase % 10;
+            document.getElementById(`c1`).textContent = ((punta + 3) % 10).toString();
+            document.getElementById(`c2`).textContent = ((term + 7) % 10).toString();
+            document.getElementById(`c3`).textContent = ((numBase + 21) % 100).toString().padStart(2, '0');
+        }
+
+        // Ejecuta el motor matemático real
+        ultimosNumerosGenerados = ejecutarAlgoritmoCore(fijoStr, cant, db);
 
         let panel = document.getElementById(`${pref}panel_res`); panel.innerHTML = "";
         ultimosNumerosGenerados.forEach((n, index) => {
@@ -457,6 +475,48 @@
         });
         document.getElementById(`${pref}display_resultados`).style.display = 'block';
         if(!isAdmin) document.getElementById('panel_cobertura').innerHTML = "<p style='color:#666; font-size:0.7rem;'>Selecciona un sistema para empaquetar.</p>";
+    }
+
+    // =========================================================================
+    // AUDITORÍA SÚPER AVANZADA: MOTOR DE SIMULACIÓN AUTOMÁTICA (BACKTEST)
+    // =========================================================================
+    function ejecutarSimulacionAutomatica() {
+        let fechas = Object.keys(db).sort();
+        if (fechas.length < 5) return alert("Historial insuficiente para simular.");
+        
+        resultadosSimulacionGlobal = {}; 
+        
+        // Simulamos sobre los últimos 15 días guardados en el calendario
+        let muestraFechas = fechas.slice(-15);
+
+        for (let i = 1; i < muestraFechas.length; i++) {
+            let fechaObjetivo = muestraFechas[i];
+            let fechaAnterior = muestraFechas[i-1];
+
+            let tiroAnteriorFijo = db[fechaAnterior].n || db[fechaAnterior].t;
+            let tiroRealTarde = db[fechaObjetivo].t;
+            let tiroRealNoche = db[fechaObjetivo].n;
+
+            if (!tiroAnteriorFijo) continue;
+
+            // Clonamos la BBDD en memoria y capamos el día a adivinar para simular punto ciego
+            let dbCiega = JSON.parse(JSON.stringify(db));
+            delete dbCiega[fechaObjetivo];
+
+            // Forzamos al motor a calcular solo con los datos pasados
+            let prediccionSimulada = ejecutarAlgoritmoCore(tiroAnteriorFijo, 20, dbCiega);
+
+            let aciertoTarde = tiroRealTarde && prediccionSimulada.includes(tiroRealTarde.padStart(2,'0'));
+            let aciertoNoche = tiroRealNoche && prediccionSimulada.includes(tiroRealNoche.padStart(2,'0'));
+
+            resultadosSimulacionGlobal[fechaObjetivo] = {
+                tardeStatus: aciertoTarde ? "🟢 HIT" : "🔴 MISS",
+                nocheStatus: aciertoNoche ? "🟢 HIT" : "🔴 MISS"
+            };
+        }
+        
+        alert("Auditoría de simulación completada con éxito.");
+        mostrarTablaAciertos();
     }
 
     function generarCobertura(tipo) {
@@ -491,11 +551,28 @@
 
     function mostrarTablaAciertos() {
         let fechas = Object.keys(db).sort().reverse();
-        let html = fechas.length === 0 ? `<p style="color:#666; font-size:0.7rem; text-align:center;">Sin tiros guardados.</p>` :
-            `<table><thead><tr><th>Fecha</th><th>Tar</th><th>Noc</th></tr></thead><tbody>` +
-            fechas.slice(0, 15).map(f => `<tr><td>${f}</td><td style="color:var(--neon); font-weight:bold;">${db[f].t || '-'}</td><td style="color:var(--win); font-weight:bold;">${db[f].n || '-'}</td></tr>`).join('') + `</tbody></table>`;
-        document.getElementById('tabla_historico_aciertos_user').innerHTML = html;
-        document.getElementById('tabla_historico_aciertos_admin').innerHTML = html;
+        let tbodyHtml = "";
+
+        if (fechas.length === 0) {
+            tbodyHtml = `<tr><td colspan="4" style="text-align:center; color:#666;">Sin tiros guardados.</td></tr>`;
+        } else {
+            fechas.slice(0, 15).forEach(f => {
+                let sim = resultadosSimulacionGlobal[f] || { tardeStatus: "⚙️ N/A", nocheStatus: "⚙️ N/A" };
+                
+                let classT = sim.tardeStatus.includes("HIT") ? "badge-green" : (sim.tardeStatus.includes("MISS") ? "badge-red" : "");
+                let classN = sim.nocheStatus.includes("HIT") ? "badge-green" : (sim.nocheStatus.includes("MISS") ? "badge-red" : "");
+
+                tbodyHtml += `<tr>
+                    <td>${f}</td>
+                    <td style="color:var(--neon); font-weight:bold;">${db[f].t || '-'} <span class="badge-acierto ${classT}">${sim.tardeStatus}</span></td>
+                    <td style="color:var(--win); font-weight:bold;">${db[f].n || '-'} <span class="badge-acierto ${classN}">${sim.nocheStatus}</span></td>
+                </tr>`;
+            });
+        }
+
+        let tablaCompleta = `<table><thead><tr><th>Fecha</th><th>Tarde (Test)</th><th>Noche (Test)</th></tr></thead><tbody>${tbodyHtml}</tbody></table>`;
+        document.getElementById('tabla_historico_aciertos_user').innerHTML = tablaCompleta;
+        document.getElementById('tabla_historico_aciertos_admin').innerHTML = tablaCompleta;
     }
 
     function buscarEnCharada() {

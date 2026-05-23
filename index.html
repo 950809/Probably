@@ -504,8 +504,7 @@
             delete dbCiega[fechaObjetivo];
 
             // Forzamos al motor a calcular solo con los datos pasados
-            let prediccionSimulada = ejecutarAlgoritmoCore(tiroAnteriorFijo, 20, dbCiega);
-
+            let prediccionSimulada = ejecutarAlgoritmoCore(tiroAnteriorFijo, 50, dbCiega);
             let aciertoTarde = tiroRealTarde && prediccionSimulada.includes(tiroRealTarde.padStart(2,'0'));
             let aciertoNoche = tiroRealNoche && prediccionSimulada.includes(tiroRealNoche.padStart(2,'0'));
 

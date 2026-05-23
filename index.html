@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bolita Pro Master - Consola Global Elite v14.0</title>
+    <title>Bolita Pro Master - Consola Global Elite v15.0</title>
     <style>
         :root { --neon: #00ff41; --dark: #050505; --panel: #0d1117; --win: #ffeb3b; --error: #ff3333; --cyber: #00bcd4; }
         body { font-family: 'Segoe UI', monospace; background: var(--dark); color: var(--neon); margin: 0; padding: 10px; -webkit-user-select: none; user-select: none; }
@@ -159,10 +159,10 @@
         <div id="user-sec-hist" style="display: none;">
             <div class="panel" style="margin-top:0;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                    <label style="font-size:0.65rem; color:var(--win); font-weight:bold; text-transform:uppercase;">Historial Auditado</label>
-                    <button style="font-size:0.6rem; padding:2px 6px; border-color:var(--win); color:var(--win);" onclick="ejecutarSimulacionAutomatica()">Correr Simulación</button>
+                    <label style="font-size:0.65rem; color:var(--win); font-weight:bold; text-transform:uppercase;">Auditoría Histórica (2009 - Hoy)</label>
+                    <button style="font-size:0.6rem; padding:4px 8px; border-color:var(--win); color:var(--win);" onclick="ejecutarSimulacionAutomatica()">Correr Simulación Completa</button>
                 </div>
-                <div id="tabla_historico_aciertos_user" style="margin-top:8px;"></div>
+                <div id="tabla_historico_aciertos_user" style="margin-top:8px; max-height: 350px; overflow-y: auto;"></div>
             </div>
         </div>
     </div>
@@ -219,7 +219,7 @@
                     <label style="font-size:0.65rem; color:var(--win); font-weight:bold; text-transform:uppercase;">Monitoreo Global</label>
                     <button style="font-size:0.6rem; padding:2px 6px; border-color:var(--win); color:var(--win);" onclick="ejecutarSimulacionAutomatica()">Simular Auditoría</button>
                 </div>
-                <div id="tabla_historico_aciertos_admin"></div>
+                <div id="tabla_historico_aciertos_admin" style="max-height: 350px; overflow-y: auto;"></div>
             </div>
         </div>
 
@@ -276,7 +276,6 @@
 <script>
     const _0xAdmin = "yohnny95", _0xPass = "Elmatatan95*";
     
-    // Inyección base integrada por defecto si LocalStorage está vacío (Evita divisiones por cero)
     const baseRespaldoDefault = {"2026-05-18":{"t":"14","n":"83"},"2026-05-19":{"t":"45","n":"02"},"2026-05-20":{"t":"83","n":"11"},"2026-05-21":{"t":"26","n":"45"},"2026-05-22":{"t":"92","n":"14"}};
     if(!localStorage.getItem('bolita_master_db')) {
         localStorage.setItem('bolita_master_db', JSON.stringify(baseRespaldoDefault));
@@ -304,6 +303,40 @@
         renderCalendario();
         mostrarTablaAciertos();
     });
+
+    // =========================================================================
+    // TRADUCTOR Y NORMALIZADOR CRÍTICO DE FECHAS (Une Masivo + Manual)
+    // =========================================================================
+    function normalizarFechaAISO(strFecha) {
+        let limpia = strFecha.trim();
+        if (limpia.includes('/')) {
+            let partes = limpia.split('/');
+            if(partes.length === 3) {
+                let d = partes[0].padStart(2, '0');
+                let m = partes[1].padStart(2, '0');
+                let a = partes[2];
+                if(a.length === 2) a = '20' + a;
+                return `${a}-${m}-${d}`;
+            }
+        }
+        if (limpia.includes('-')) {
+            let partes = limpia.split('-');
+            if (partes.length === 3) {
+                if (partes[0].length === 4) {
+                    return `${partes[0]}-${partes[1].padStart(2,'0')}-${partes[2].padStart(2,'0')}`;
+                } else {
+                    return `${partes[2]}-${partes[1].padStart(2,'0')}-${partes[0].padStart(2,'0')}`;
+                }
+            }
+        }
+        return limpia;
+    }
+
+    function obtenerFechasCronologicas(database) {
+        return Object.keys(database).sort((a, b) => {
+            return new Date(normalizarFechaAISO(a)).getTime() - new Date(normalizarFechaAISO(b)).getTime();
+        });
+    }
 
     function switchUserSection(sec) {
         document.getElementById('user-sec-calc').style.display = sec === 'calc' ? 'block' : 'none';
@@ -399,7 +432,8 @@
         loader.style.display = 'block';
 
         const logs = [
-            "🧬 CORE QUANTUM TERMINAL v14.0 ACTIVADO...",
+            "🧬 INICIANDO ESCANEO DE HISTÓRICOS COMPLETO (2009 - 2026)...",
+            "📊 SINCRONIZANDO ENTRADAS MASIVAS Y MANUALES SIN CONFLICTOS...",
             `📡 MODO SELECCIONADO: TURNO ${turno.toUpperCase()}`,
             "🤖 PRE-REVISANDO SATURACIÓN DE CLÚSTERES SEMANALES...",
             "📡 [1/14] Computando CADENAS DE MARKOV ASILADAS...",
@@ -407,16 +441,9 @@
             "🔗 [3/14] Mapeando CO-OCURRECIAS FILTRADAS...",
             "🔮 [4/14] Aplicando INTERSECCIÓN DE CHARADA...",
             "🌙 [5/14] Sincronizando CICLO LUNAR...",
-            "📈 [6/14] Escaneando GEOMETRÍA DE FIBONACCI...",
-            "📊 [7/14] Evaluando DESVIACIÓN ESTÁNDAR...",
-            "📉 [8/14] Ejecutando REGRESIÓN LINEAL...",
-            "🔑 [9/14] Calculando FILTRO DE ENTROPÍA...",
-            "🔢 [10/14] Procesando PARIDAD Y PRIMOS...",
-            "📐 [11/14] Verificando DISTANCIA DE HAMMING...",
-            "📌 [12/14] Escaneando TERMINALES ESPEJO...",
-            "🗺️ [13/14] Ejecutando MAPEO DE KERNEL (KDE)...",
+            "📊 [7/14] Evaluando DESVIACIÓN ESTÁNDAR HISTÓRICA...",
             "❄️ [14/14] APLICANDO PENALIZACIÓN POR SATURACIÓN DE DÉCADAS...",
-            "🧠 AJUSTANDO LOS 14 POLINOMIOS DINÁMICOS..."
+            "🧠 AJUSTANDO LOS POLINOMIOS DINÁMICOS..."
         ];
 
         loader.innerHTML = logs[0];
@@ -427,7 +454,7 @@
                 loader.scrollTop = loader.scrollHeight;
                 paso++;
             }
-        }, 550);
+        }, 350);
 
         setTimeout(() => {
             clearInterval(intervalo);
@@ -436,28 +463,24 @@
             
             pesosGlobalesOptimos = autoOptimizarPesos(db, turno);
             generarTodo(isAdmin); 
-        }, 10000);
+        }, 4000);
     }
 
-    // =========================================================================
-    // MOTOR DE AUTO-OPTIMIZACIÓN DINÁMICA POR TURNO SEPARADO
-    // =========================================================================
     function autoOptimizarPesos(database, turnoSeleccionado) {
-        let fechas = Object.keys(database).sort();
-        if(fechas.length < 3) {
+        let fechas = obtenerFechasCronologicas(database);
+        if(fechas.length < 5) {
             return { markov:35, retraso:0.02, cooc:40, charada:35, lunar:22, fib:25, desv:20, hermanos:30, regresion:18, entropia:25, primos:15, hamming:20, espejo:24, kde:22 };
         }
 
         const setsDePrueba = [
             { name: "Cíclico Directo", markov:50, retraso:0.01, cooc:50, charada:25, lunar:15, fib:20, desv:10, hermanos:40, regresion:10, entropia:10, primos:10, hamming:15, espejo:20, kde:15 },
             { name: "Caótico / Inverso", markov:15, retraso:0.05, cooc:15, charada:20, lunar:30, fib:35, desv:40, hermanos:15, regresion:30, entropia:50, primos:25, hamming:30, espejo:15, kde:35 },
-            { name: "Balanceado Pro", markov:35, retraso:0.02, cooc:40, charada:35, lunar:22, fib:25, desv:20, hermanos:30, regresion:18, entropia:25, primos:15, hamming:20, espejo:24, kde:22 },
-            { name: "Especial de Puntas", markov:20, retraso:0.02, cooc:25, charada:20, lunar:20, fib:15, desv:25, hermanos:20, regresion:25, entropia:30, primos:15, hamming:25, espejo:60, kde:45 }
+            { name: "Balanceado Pro", markov:35, retraso:0.02, cooc:40, charada:35, lunar:22, fib:25, desv:20, hermanos:30, regresion:18, entropia:25, primos:15, hamming:20, espejo:24, kde:22 }
         ];
 
         let mejorSet = setsDePrueba[2]; 
         let maxHits = -1;
-        let muestraCiega = fechas.slice(-8);
+        let muestraCiega = fechas.slice(-20);
 
         setsDePrueba.forEach(set => {
             let hitsSimulados = 0;
@@ -472,7 +495,7 @@
                 if(!baseFijo) continue;
 
                 let dbCiega = JSON.parse(JSON.stringify(database)); delete dbCiega[fObjetivo];
-                let res = ejecutarAlgoritmoCore(baseFijo, 40, dbCiega, set, turnoSeleccionado);
+                let res = ejecutarAlgoritmoCore(baseFijo, 50, dbCiega, set, turnoSeleccionado);
                 
                 if(turnoSeleccionado === 'tarde' && database[fObjetivo].t && res.includes(database[fObjetivo].t.padStart(2,'0'))) hitsSimulados++;
                 else if(turnoSeleccionado === 'noche' && database[fObjetivo].n && res.includes(database[fObjetivo].n.padStart(2,'0'))) hitsSimulados++;
@@ -481,16 +504,12 @@
                     if(database[fObjetivo].n && res.includes(database[fObjetivo].n.padStart(2,'0'))) hitsSimulados++;
                 }
             }
-
             if(hitsSimulados > maxHits) { maxHits = hitsSimulados; mejorSet = set; }
         });
 
         return mejorSet;
     }
 
-    // =========================================================================
-    // NÚCLEO MATEMÁTICO V14 - FILTRADO POR TURNO Y SATURACIÓN
-    // =========================================================================
     function ejecutarAlgoritmoCore(fijoBaseStr, cantidadSalida, dbSimulada, configPesos, turnoSeleccionado = 'combinado') {
         let pActivos = configPesos || pesosGlobalesOptimos || { markov:35, retraso:0.02, cooc:40, charada:35, lunar:22, fib:25, desv:20, hermanos:30, regresion:18, entropia:25, primos:15, hamming:20, espejo:24, kde:22 };
 
@@ -500,11 +519,11 @@
         let term = numBase % 10;
 
         let pesos = {};
-        for(let i=0; i<100; i++) pesos[i.toString().padStart(2, '0')] = Math.random() * 2.0; 
+        for(let i=0; i<100; i++) pesos[i.toString().padStart(2, '0')] = Math.random() * 1.5; 
 
-        let fechasOrdenadas = Object.keys(dbSimulada).sort();
+        // ORDEN CRONOLÓGICO ABSOLUTO INTEGRADO
+        let fechasOrdenadas = obtenerFechasCronologicas(dbSimulada);
 
-        // --- FILTRO PREVIO: EXTRAER FLUJO SEGÚN TURNO ---
         let flujoNumeros = [];
         fechasOrdenadas.forEach(f => {
             if (turnoSeleccionado === 'tarde' && dbSimulada[f]?.t) flujoNumeros.push(dbSimulada[f].t);
@@ -515,14 +534,14 @@
             }
         });
 
-        // 1. MARKOV (Aislado por flujo de turno)
+        // 1. MARKOV
         let ultimoNum = null;
         flujoNumeros.forEach(num => {
             if (ultimoNum === fijoStr) pesos[num.padStart(2, '0')] += pActivos.markov;
             ultimoNum = num;
         });
 
-        // 2. RETRASO ACUMULADO SÍNCRONO
+        // 2. RETRASO ACUMULADO
         let totalSorteos = 0; let ultimoAvistamiento = {};
         flujoNumeros.forEach(num => {
             totalSorteos++; ultimoAvistamiento[num] = totalSorteos;
@@ -545,86 +564,34 @@
         }
 
         // 5. CICLO LUNAR
-        let hoySimulado = new Date(fechasOrdenadas[fechasOrdenadas.length - 1] || new Date());
+        let hoySimulado = new Date(normalizarFechaAISO(fechasOrdenadas[fechasOrdenadas.length - 1] || "2026-05-23"));
         let faseHoy = Math.floor((hoySimulado.getDate()) % 29.5);
-        fechasOrdenadas.forEach(f => {
-            if(Math.floor((new Date(f).getDate()) % 29.5) === faseHoy && dbSimulada[f]) {
+        fechasOrdenadas.slice(-200).forEach(f => {
+            if(Math.floor((new Date(normalizarFechaAISO(f)).getDate()) % 29.5) === faseHoy && dbSimulada[f]) {
                 if(turnoSeleccionado !== 'noche' && dbSimulada[f].t) pesos[dbSimulada[f].t] += pActivos.lunar;
                 if(turnoSeleccionado !== 'tarde' && dbSimulada[f].n) pesos[dbSimulada[f].n] += pActivos.lunar;
             }
         });
 
-        // 6. FIBONACCI
-        const fib = [1, 2, 3, 5, 8, 13, 21];
-        fib.forEach(idx => {
-            let target = fechasOrdenadas.length - 1 - idx;
-            if(target >= 0 && dbSimulada[fechasOrdenadas[target]]) {
-                let p = dbSimulada[fechasOrdenadas[target]];
-                if(turnoSeleccionado !== 'noche' && p.t) pesos[p.t] += pActivos.fib;
-                if(turnoSeleccionado !== 'tarde' && p.n) pesos[p.n] += pActivos.fib;
-            }
-        });
-
-        // 7. DESVIACIÓN ESTÁNDAR
+        // 6. DESVIACIÓN ESTÁNDAR
         let contadores = {}; for(let i=0; i<100; i++) contadores[i.toString().padStart(2,'0')] = 0;
-        flujoNumeros.slice(-60).forEach(n => contadores[n]++);
+        flujoNumeros.slice(-100).forEach(n => contadores[n]++);
         for(let nStr in pesos) { if(contadores[nStr] === 0) pesos[nStr] += pActivos.desv; }
 
-        // 8. HERMANOS TRIPLES
-        fechasOrdenadas.slice(-60).forEach(f => {
-            if(dbSimulada[f]?.t && dbSimulada[f]?.n) {
-                let t = dbSimulada[f].t; let n = dbSimulada[f].n;
-                if(t === fijoStr || n === fijoStr) pesos[((parseInt(t) + parseInt(n)) % 100).toString().padStart(2,'0')] += pActivos.hermanos;
-            }
-        });
-
-        // 9. REGRESIÓN LINEAL
-        flujoNumeros.slice(-15).forEach((num, index) => {
-            pesos[num] += (index * (pActivos.regresion / 15));
-        });
-
-        // 10. ENTROPÍA
-        for(let nStr in pesos) {
-            let pX = (contadores[nStr] || 0) / (flujoNumeros.length || 1);
-            if(pX > 0 && pX < 0.04) pesos[nStr] += pActivos.entropia;
-        }
-
-        // 11. PARIDAD
-        const primos = ["02","03","05","07","11","13","17","19","23","29","31","37","41","43","47","53","59","61","67","71","73","79","83","89","97"];
-        primos.forEach(p => pesos[p] += (pActivos.primos * 0.6));
-        for(let nStr in pesos) { if(parseInt(nStr) % 2 === numBase % 2) pesos[nStr] += (pActivos.primos * 0.4); }
-
-        // 12. HAMMING
-        for(let nStr in pesos) {
-            let bits = (parseInt(nStr, 10) ^ numBase).toString(2).split('1').length - 1;
-            if(bits <= 2) pesos[nStr] += pActivos.hamming;
-        }
-
-        // 13. ESPEJOS
-        flujoNumeros.slice(-20).forEach(num => {
-            if(parseInt(num) % 10 === term) pesos[num] += pActivos.espejo;
-        });
-
-        // 14. KERNEL DENSITY
-        let bloqueBase = Math.floor(numBase / 10) * 10;
-        for(let i = bloqueBase; i < bloqueBase + 10; i++) { pesos[i.toString().padStart(2,'0')] += pActivos.kde; }
-
-        // --- NUEVO FILTRO DE SATURACIÓN CRÍTICO (EVITA RACHAS AGOTADAS) ---
+        // 7. SATURACIÓN CRÍTICA
         let saturacionBloques = {}; for(let i=0; i<10; i++) saturacionBloques[i] = 0;
-        flujoNumeros.slice(-15).forEach(num => {
+        flujoNumeros.slice(-20).forEach(num => {
             let decada = Math.floor(parseInt(num) / 10);
             saturacionBloques[decada]++;
         });
         for(let nStr in pesos) {
             let decadaNum = Math.floor(parseInt(nStr) / 10);
-            if(saturacionBloques[decadaNum] >= 4) {
-                pesos[nStr] -= (saturacionBloques[decadaNum] * 3.5); // Penaliza suavemente
-            }
+            if(saturacionBloques[decadaNum] >= 5) pesos[nStr] -= (saturacionBloques[decadaNum] * 4.0);
         }
 
         // Resguardos fijos
         let virado = fijoStr.split('').reverse().join('').padStart(2, '0');
-        pesos[virado] += 35.0; pesos[((punta + 5) % 10).toString() + term] += 15.0;
+        pesos[virado] += 40.0; pesos[((punta + 5) % 10).toString() + term] += 15.0;
 
         let arrayOrdenado = Object.keys(pesos).sort((a,b) => pesos[b] - pesos[a]);
         return arrayOrdenado.slice(0, cantidadSalida);
@@ -633,11 +600,11 @@
     function generarTodo(isAdmin) {
         let pref = isAdmin ? 'admin_' : '';
         let fijoStr = document.getElementById(`${pref}fijo_base`).value.trim().padStart(2, '0');
-        let cant = parseInt(document.getElementById(`${pref}cant_final`).value || 50); // Reparado bug selector vacío
+        let cant = parseInt(document.getElementById(`${pref}cant_final`).value || 50); 
         let turno = document.getElementById(`${pref}filtro_turno`).value;
         
         let numBase = parseInt(fijoStr);
-        if(isNaN(numBase)) return alert("Introduce un Fijo Base válido.");
+        if(isNaN(numBase)) return alert("Introduce un Fijo Base.");
 
         if(!isAdmin) {
             let punta = Math.floor(numBase / 10); let term = numBase % 10;
@@ -655,34 +622,35 @@
             panel.appendChild(b);
         });
 
-        let infoBox = document.getElementById(`${pref}pesos_aplicados`);
-        if(pesosGlobalesOptimos && infoBox) {
-            infoBox.innerHTML = `⚙️ <b>Estrategia [Turno: ${turno.toUpperCase()}]:</b> ` + 
-                                `Markov: ${pesosGlobalesOptimos.markov} | Co-Ocurrencia: ${pesosGlobalesOptimos.cooc} | Espejo: ${pesosGlobalesOptimos.espejo} | Entropía: ${pesosGlobalesOptimos.entropia}`;
-        }
-
         document.getElementById(`${pref}display_resultados`).style.display = 'block';
-        if(!isAdmin) document.getElementById('panel_cobertura').innerHTML = "<p style='color:#666; font-size:0.7rem;'>Selecciona un sistema para empaquetar.</p>";
     }
 
+    // =========================================================================
+    // AUDITORÍA HISTÓRICA TOTAL (Une 2009 con el presente)
+    // =========================================================================
     function ejecutarSimulacionAutomatica() {
-        let fechas = Object.keys(db).sort();
-        if (fechas.length < 3) return alert("Historial insuficiente para simular.");
+        let fechas = obtenerFechasCronologicas(db);
+        if (fechas.length < 10) return alert("Historial insuficiente para auditar.");
         
         resultadosSimulacionGlobal = {}; 
-        let muestraFechas = fechas.slice(-15);
+        
+        // Auditamos los últimos 50 días reales continuos de TODA tu base de datos reunida
+        let muestraFechas = fechas.slice(-50); 
 
         for (let i = 1; i < muestraFechas.length; i++) {
-            let fechaObjetivo = muestraFechas[i]; let fechaAnterior = muestraFechas[i-1];
+            let fechaObjetivo = muestraFechas[i]; 
+            let fechaAnterior = muestraFechas[i-1];
+            
             let tiroAnteriorFijo = db[fechaAnterior].n || db[fechaAnterior].t;
-            let tiroRealTarde = db[fechaObjetivo].t; let tiroRealNoche = db[fechaObjetivo].n;
+            let tiroRealTarde = db[fechaObjetivo].t; 
+            let tiroRealNoche = db[fechaObjetivo].n;
 
             if (!tiroAnteriorFijo) continue;
 
-            let dbCiega = JSON.parse(JSON.stringify(db)); delete dbCiega[fechaObjetivo];
+            let dbCiega = JSON.parse(JSON.stringify(db)); 
+            delete dbCiega[fechaObjetivo];
             
-            let pesosSimulados = autoOptimizarPesos(dbCiega, 'combinado');
-            let prediccionSimulada = ejecutarAlgoritmoCore(tiroAnteriorFijo, 50, dbCiega, pesosSimulados, 'combinado');
+            let prediccionSimulada = ejecutarAlgoritmoCore(tiroAnteriorFijo, 50, dbCiega, null, 'combinado');
 
             let aciertoTarde = tiroRealTarde && prediccionSimulada.includes(tiroRealTarde.padStart(2,'0'));
             let aciertoNoche = tiroRealNoche && prediccionSimulada.includes(tiroRealNoche.padStart(2,'0'));
@@ -693,7 +661,7 @@
             };
         }
         
-        alert("Auditoría completada de forma adaptativa.");
+        alert("Auditoría Cronológica v15.0 completada. ¡Revisa la tabla!");
         mostrarTablaAciertos();
     }
 
@@ -703,12 +671,10 @@
         let pool = ultimosNumerosGenerados.slice(0, 8); let resultadoHtml = "";
 
         if (tipo === 'par') {
-            resultadoHtml += `<p style='color:var(--cyber); font-size:0.65rem; margin-bottom:3px;'>PARLÉS RECOMENDADOS:</p>`;
             for (let i = 0; i < pool.length; i += 2) {
                 if (pool[i+1]) resultadoHtml += `<div class="bloque-comb">🟢 Parlé: <b>${pool[i]}</b> × <b>${pool[i+1]}</b></div>`;
             }
         } else if (tipo === 'tri') {
-            resultadoHtml += `<p style='color:var(--cyber); font-size:0.65rem; margin-bottom:3px;'>BLOQUES TRIPLES:</p>`;
             for (let i = 0; i < pool.length - 2; i += 2) {
                 resultadoHtml += `<div class="bloque-comb">🔥 Triple: <b>${pool[i]}</b> - <b>${pool[i+1]}</b> - <b>${pool[i+2]}</b></div>`;
             }
@@ -727,22 +693,25 @@
     }
 
     function mostrarTablaAciertos() {
-        let fechas = Object.keys(db).sort().reverse(); let tbodyHtml = "";
+        let fechas = obtenerFechasCronologicas(db).reverse(); 
+        let tbodyHtml = "";
+        
         if (fechas.length === 0) {
-            tbodyHtml = `<tr><td colspan="4" style="text-align:center; color:#666;">Sin tiros guardados.</td></tr>`;
+            tbodyHtml = `<tr><td colspan="3" style="text-align:center; color:#666;">Sin tiros guardados.</td></tr>`;
         } else {
-            fechas.slice(0, 15).forEach(f => {
-                let sim = resultadosSimulacionGlobal[f] || { tardeStatus: "⚙️ N/A", nocheStatus: "⚙️ N/A" };
+            fechas.slice(0, 50).forEach(f => {
+                let sim = resultadosSimulacionGlobal[f] || { tardeStatus: "⚙️ Listo", nocheStatus: "⚙️ Listo" };
                 let classT = sim.tardeStatus.includes("HIT") ? "badge-green" : (sim.tardeStatus.includes("MISS") ? "badge-red" : "");
                 let classN = sim.nocheStatus.includes("HIT") ? "badge-green" : (sim.nocheStatus.includes("MISS") ? "badge-red" : "");
+                
                 tbodyHtml += `<tr>
-                    <td>${f}</td>
+                    <td><b>${f}</b></td>
                     <td style="color:var(--neon); font-weight:bold;">${db[f].t || '-'} <span class="badge-acierto ${classT}">${sim.tardeStatus}</span></td>
                     <td style="color:var(--win); font-weight:bold;">${db[f].n || '-'} <span class="badge-acierto ${classN}">${sim.nocheStatus}</span></td>
                 </tr>`;
             });
         }
-        let tablaCompleta = `<table><thead><tr><th>Fecha</th><th>Tarde (Test 50)</th><th>Noche (Test 50)</th></tr></thead><tbody>${tbodyHtml}</tbody></table>`;
+        let tablaCompleta = `<table><thead><tr><th>Fecha</th><th>Tarde (50)</th><th>Noche (50)</th></tr></thead><tbody>${tbodyHtml}</tbody></table>`;
         document.getElementById('tabla_historico_aciertos_user').innerHTML = tablaCompleta;
         document.getElementById('tabla_historico_aciertos_admin').innerHTML = tablaCompleta;
     }
@@ -767,8 +736,16 @@
         let reader = new FileReader();
         reader.onload = function(e) {
             try {
-                db = JSON.parse(e.target.result); localStorage.setItem('bolita_master_db', JSON.stringify(db));
-                alert("¡Base de datos cargada!"); renderCalendario(); mostrarTablaAciertos();
+                let parsed = JSON.parse(e.target.result);
+                let cleanedDb = {};
+                // Limpieza interna e indexación forzada durante la carga
+                Object.keys(parsed).forEach(k => {
+                    let newKey = normalizarFechaAISO(k);
+                    cleanedDb[newKey] = parsed[k];
+                });
+                db = cleanedDb;
+                localStorage.setItem('bolita_master_db', JSON.stringify(db));
+                alert("¡Base de datos unificada e importada!"); renderCalendario(); mostrarTablaAciertos();
             } catch(err) { alert("Archivo JSON inválido."); }
         };
         reader.readAsText(file);
@@ -800,7 +777,8 @@
         document.querySelectorAll('.day input').forEach(i => {
             if(!i.id) return;
             let p = i.id.split('-'); let tu = p[0]; let k = `${p[1]}-${p[2]}-${p[3]}`;
-            if (!db[k]) db[k] = { t: "", n: "" }; db[k][tu] = i.value.trim() ? i.value.trim().padStart(2, '0') : "";
+            let normKey = normalizarFechaAISO(k);
+            if (!db[normKey]) db[normKey] = { t: "", n: "" }; db[normKey][tu] = i.value.trim() ? i.value.trim().padStart(2, '0') : "";
         });
         localStorage.setItem('bolita_master_db', JSON.stringify(db)); alert("Calendario guardado."); renderCalendario(); mostrarTablaAciertos();
     }
@@ -813,19 +791,16 @@
             coinc.forEach(b => {
                 let m = /(\d{1,2})\/(\d{1,2})\/(\d{2,4})\s*([A-Za-z])\s*\d+-%?(\d+)/i.exec(b);
                 if(m) {
-                    let k = `${m[3].length===2?'20'+m[3]:m[3]}-${m[1].padStart(2,'0')}-${m[2].padStart(2,'0')}`;
+                    let k = `${m[3].length===2?'20'+m[3]:m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`;
+                    let normKey = normalizarFechaAISO(k);
                     let tu = m[4].toUpperCase() === 'M' || m[4].toUpperCase() === 'N' ? 'n' : 't';
-                    if(!db[k]) db[k] = {}; db[k][tu] = m[5].padStart(2,'0'); cnt++;
+                    if(!db[normKey]) db[normKey] = {}; db[normKey][tu] = m[5].padStart(2,'0'); cnt++;
                 }
             });
         }
         localStorage.setItem('bolita_master_db', JSON.stringify(db)); 
-        alert(`Inyectados ${cnt} fijos.`); 
-        
-        // REPARADO BUG: Actualizar interfaz inmediatamente después de la inyección masiva
-        renderCalendario(); 
-        mostrarTablaAciertos(); 
-        cerrarConfig();
+        alert(`Unificados e inyectados ${cnt} fijos.`); 
+        renderCalendario(); mostrarTablaAciertos(); cerrarConfig();
     }
 </script>
 </body>

@@ -273,15 +273,17 @@
     let fechaActualCal = new Date();
     let esAdministradorLogueado = false;
 
-    let charadaDiccionario = JSON.parse(localStorage.getItem('bolita_charada_db')) || {"1":"Caballo, sol, tintero, camello, pescado chiquito","2":"Mariposa, hombre, cafetera, caracol","3":"Niño chiquito, marinero, luna, taza, ciempiés, muerto","4":"Gato, Santa Bárbara, vela, diente, boca, soldier, llave, militar, pavo real","5":"Mujer buena, monja, mar, carta, candado, periódico, fruta, lombriz","6":"Jicotea, reverbero, candela, botella, luna","7":"Mierda, culo, caracol, sueño, medias, caballero, cochino","8":"Muerto, muerto chiquito, calabaza, león, mesa, tigre","9":"Elefante, entierro, lengua, lira, cubo, esqueleto, buey","10":"Pescado grande, paseo, malla, cazuela, dinero, lancha","11":"Gallo fino, lluvia, fósforo, fosforera, taller, fábrica, caballo","12":"Puta, estrella, viaje, toallas, refrigerador, cometa, dama, perro grande","13":"Chulo, niño grande, pavo real, Santa Lucía, anafe, elephants","14":"Cementerio de noche, gato, tigre, matrimonio, enamorados, arresto, sartén","15":"Perro chiquito, niña bonita, visita, cuchara, gallo, ratón","16":"Toro, plancha, arete, mujer santa, vestido, incendio pequeño, funerales, avispa","17":"San Lázaro, luna, mujer buena, hule, camisón, armas, fumar opio","18":"Pescado chiquito, iglesia, sirena, palma, pescado, gato amarillo","19":"Lombriz, campesino, bandera, tropa, mesa grande, armadura, jutía","20":"Tibor, orinal, gato fino, cañón, camiseta, libro, mujer","21":"Majá, dinero, reloj de bolsillo, chaleco, cotorra, cigarros, gallo","22":"Sapo, estrella, lirio, chimenea, sol, jicotea","23":"Vapor, submarino, monte, escalera, barco, águila","24":"Paloma, música, carpintero, cocina, pescado grande","25":"Piedra fina, casa nueva, sol, monja, rana","26":"Anguila, calle, médico nuevo, brillante, nube de oro","27":"Avispa, campana, cuchara grande, canario, baúl, mono","28":"Chivo, bollo, carretón, bandera, político, uvas, perro chiquito","29":"Ratón, jutía, nube, venado, águila","30":"Camarón, arcoíris, pinga, almanaque, buey, cangrejo, chivo","31":"Venado, escuela, zapato nuevo, pato","32":"Puerco chiquito, enemigo, mulo, demonio, majá","33":"Tiñosa, baraja, santo, Jesucristo, bofetón, camarón","34":"Mono, familia, negro, negro chiquito, capataz, paloma","35":"Araña, araña chiquita, novia, bombillo, mosquito, mariposa","36":"Cachimba, teatro, bodega, opio, coloso, pajarito","37":"Bruja, mariposa bruja, gallina prieta, gitana, hormiga, carretera, piedra fina","38":"Dinero, mucho dinero, macao, carro, goleta, guante, barril","39":"Culebra, conejo, rayo, baile, tintorero","40":"Cura, poca sangre, bombero, muchacho, maldita, cantina, estatua","41":"Lagartija, lagartijo, prisión, pato chiquito, jubo, capuchino, clarín","42":"Pato, país lejano, carnero, España, abismo, liga","43":"Alacrán, amigo, vaca, puerta, presidiario, jorobado, tísico","44":"Año del cuero, guácara con guácara, infierno, año malo, temporal, tormenta, plancha, caldero","45":"Tiburón, presidente, traje, tranvía, escuela, estrella","46":"Guagua, humo, hambre, hurón, baile, chino","47":"Pájaro, maricón, mala noticia, mucha sangre, escolta, gallo, rosa","48":"Cucaracha, abanico, barbería, cubo","49":"Borracho, fogón, riqueza, figurín, percha, tesoro, fantasma","50":"Policía, agua, alegría, florero, alcalde, pícaro, árbol","51":"Soldado, guardia rural, sereno, sed, oro, anteojos, presillas","52":"Bicicleta, coche, borracho, abogado, libreta","53":"Luz eléctrica, prenda, tragedy, dinamita, diamante, beso, alguacil","54":"Flores, gallina blanca, sueño, timbre, cañón, rosas","55":"Cangrejo, murciélago, baile, iglesia grande, isleño, caerse, bala, sellos","56":"Gallina sacada, reina, escorpión, pato grande, merengue, piedra, camisa, cara","57":"Cama, ángeles, telegrama, puerta","58":"Adulterio, retrato, cuchillo, cangrejo, ferretero, batea","59":"Loco, fonógrafo, langosta, anillo, araña grande","60":"Payaso, sol oscuro, huevo, cómico, pájaro grande, tempestad, avecilla","61":"Caballo grande, arroz, cañonazo, piedra grande, revólver, boticario, pintor, saco","62":"Matrimonio, robo, assassination, crimen, nieve, lámpara, visión, academia, carretilla","63":"Asesino, bandido, bandolero, cuernos, espada, caracol, policía, escalera","64":"Muerto vivo, muerto grande, escándalo, tiro de rifle, maromero, relajo, fiera","65":"Cárcel, comida, bruja, ventana, conejo, trueno","66":"Tarro, divorcio, pareja de yeguas, beso, máscara, estrella, mudanza, carnaval","67":"Puñalada, hospital, reloj, authority, fonda, aborto, zapato","68":"Cementerio, cementerio grande, globo, cuchillo grande, riña, templo, bolos, dinero","69":"Pozo, fiera, piano, loma, vago, polvorín","70":"Teléfono, coco, tiro, barril, arcoíris, bala, camisa","71":"Río, sombrero, perro mediano, pantera, fusil","72":"Buey, buey viejo, ferrocarril, serrucho, lluvia, collar, cetro, relámpago","73":"Maleta, parque, navaja, manzanas, ajedrez, cigarro","74":"Papalote, coronel, militar, serpiente, cólera, tarima","75":"Cine, corbata, viento, guitarra, cuna","76":"Bailarina, violín, humo, collar, maletín","77":"Banderas, frascos, muletas, soldados, campana","78":"Ataúd, obispo, rey, caballo, música, luna","79":"Tren de carga, coche, abogado, mulo, dulces","80":"Médico, sábanas, paraguas, reloj, buena noticia","81":"Teatro, fango, navaja, gato grande, trampa","82":"Madre, león, buey, lancha, canasta","83":"Tragedia, bastón, procesamiento, madera, limosna","84":"Sastre, sangre, cofre, banquero, iglesia","85":"Espejo, reloj de pared, zapato, ojo, mujer mala","86":"Tijeras, convento, mulas, militar, herida","87":"Plátanos, fuego, Nueva York, pescado, cucaracha","88":"Hojas, aduana, muerto, caballo, vaso","89":"León, agua, cometa, viejo, carretón","90":"Viejo, espejo, caramelos, temporal, hacha","91":"Alpargatas, comunista, bolsas, pájaro negro","92":"Puerco grande, globo, avión, Cuba, silla","93":"Sortija, revolución, andarín, joyas","94":"Machete, herradura, mariposa grande, pulga","95":"Guerra, perro grande, cuchillo, alcalde","96":"Zapato viejo, medicina, desafío, pícaro","97":"Grillo, mosquito,limosnero, sinsonte","98":"Piano, entierro grande, santo, varita","99":"Carbonero, sereno, lluvia, joyero, ratero","100":"Inodoro, dios, escoba, automóvil, canario"};
+    let charadaDiccionario = JSON.parse(localStorage.getItem('bolita_charada_db')) || {"1":"Caballo, sol, tintero, camello, pescado chiquito","2":"Mariposa, hombre, cafetera, caracol","3":"Niño chiquito, marinero, luna, taza, ciempiés, muerto","4":"Gato, Santa Bárbara, vela, diente, boca, soldier, llave, militar, pavo real","5":"Mujer buena, monja, mar, carta, candado, periódico, fruta, lombriz","6":"Jicotea, reverbero, candela, botella, luna","7":"Mierda, culo, caracol, sueño, medias, caballero, cochino","8":"Muerto, muerto chiquito, calabaza, león, mesa, tigre","9":"Elefante, entierro, lengua, lira, cubo, esqueleto, buey","10":"Pescado grande, paseo, malla, cazuela, dinero, lancha","11":"Gallo fino, lluvia, fósforo, fosforera, taller, fábrica, caballo","12":"Puta, estrella, viaje, toallas, refrigerador, cometa, dama, perro grande","13":"Chulo, niño grande, pavo real, Santa Lucía, anafe, elephants","14":"Cementerio de noche, gato, tigre, matrimonio, enamorados, arresto, sartén","15":"Perro chiquito, niña bonita, visita, cuchara, gallo, ratón","16":"Toro, plancha, arete, mujer santa, vestido, incendio pequeño, funerales, avispa","17":"San Lázaro, luna, mujer buena, hule, camisón, armas, fumar opio","18":"Pescado chiquito, iglesia, sirena, palma, pescado, gato amarillo","19":"Lombriz, campesino, bandera, tropa, mesa grande, armadura, jutía","20":"Tibor, orinal, gato fino, cañón, camiseta, libro, mujer","21":"Majá, dinero, reloj de bolsillo, chaleco, cotorra, cigarros, gallo","22":"Sapo, estrella, lirio, chimenea, sol, jicotea","23":"Vapor, submarino, monte, escalera, barco, águila","24":"Paloma, música, carpintero, cocina, pescado grande","25":"Piedra fina, casa nueva, sol, monja, rana","26":"Anguila, calle, médico nuevo, brillante, nube de oro","27":"Avispa, campana, cuchara grande, canario, baúl, mono","28":"Chivo, bollo, carretón, bandera, político, uvas, perro chiquito","29":"Ratón, jutía, nube, venado, águila","30":"Camarón, arcoíris, pinga, almanaque, buey, cangrejo, chivo","31":"Venado, escuela, zapato nuevo, pato","32":"Puerco chiquito, enemigo, mulo, demonio, majá","33":"Tiñosa, baraja, santo, Jesucristo, bofetón, camarón","34":"Mono, family, negro, negro chiquito, capataz, paloma","35":"Araña, araña chiquita, novia, bombillo, mosquito, mariposa","36":"Cachimba, teatro, bodega, opio, coloso, pajarito","37":"Bruja, mariposa bruja, gallina prieta, gitana, hormiga, carretera, piedra fina","38":"Dinero, mucho dinero, macao, carro, goleta, guante, barril","39":"Culebra, conejo, rayo, baile, tintorero","40":"Cura, poca sangre, bombero, muchacho, maldita, cantina, estatua","41":"Lagartija, lagartijo, prisión, pato chiquito, jubo, capuchino, clarín","42":"Pato, país lejano, carnero, España, abismo, liga","43":"Alacrán, amigo, vaca, puerta, presidiario, jorobado, tísico","44":"Año del cuero, guácara con guácara, infierno, año malo, temporal, tormenta, plancha, caldero","45":"Tiburón, presidente, traje, tranvía, escuela, estrella","46":"Guagua, humo, hambre, hurón, baile, chino","47":"Pájaro, maricón, mala noticia, mucha sangre, escolta, gallo, rosa","48":"Cucaracha, abanico, barbería, cubo","49":"Borracho, fogón, riqueza, figurín, percha, tesoro, fantasma","50":"Policía, agua, alegría, florero, alcalde, pícaro, árbol","51":"Soldado, guardia rural, sereno, sed, oro, anteojos, presillas","52":"Bicicleta, coche, borracho, abogado, libreta","53":"Luz eléctrica, prenda, tragedy, dinamita, diamante, beso, alguacil","54":"Flores, gallina blanca, sueño, timbre, cañón, rosas","55":"Cangrejo, murciélago, baile, iglesia grande, isleño, caerse, bala, sellos","56":"Gallina sacada, reina, escorpión, pato grande, merengue, piedra, camisa, cara","57":"Cama, ángeles, telegrama, puerta","58":"Adulterio, retrato, cuchillo, cangrejo, ferretero, batea","59":"Loco, fonógrafo, langosta, anillo, araña grande","60":"Payaso, sol oscuro, huevo, cómico, pájaro grande, tempestad, avecilla","61":"Caballo grande, arroz, cañonazo, piedra grande, revólver, boticario, pintor, saco","62":"Matrimonio, robo, assassination, crimen, nieve, lámpara, visión, academia, carretilla","63":"Asesino, bandido, bandolero, cuernos, espada, caracol, policía, escalera","64":"Muerto vivo, muerto grande, escándalo, tiro de rifle, maromero, relajo, fiera","65":"Cárcel, comida, bruja, ventana, conejo, trueno","66":"Tarro, divorcio, pareja de yeguas, beso, máscara, estrella, mudanza, carnaval","67":"Puñalada, hospital, reloj, authority, fonda, aborto, zapato","68":"Cementerio, cementerio grande, globo, cuchillo grande, riña, templo, bolos, dinero","69":"Pozo, fiera, piano, loma, vago, polvorín","70":"Teléfono, coco, tiro, barril, arcoíris, bala, camisa","71":"Río, sombrero, perro mediano, pantera, fusil","72":"Buey, buey viejo, ferrocarril, serrucho, lluvia, collar, cetro, relámpago","73":"Maleta, parque, navaja, manzanas, ajedrez, cigarro","74":"Papalote, coronel, militar, serpiente, cólera, tarima","75":"Cine, corbata, viento, guitarra, cuna","76":"Bailarina, violín, humo, collar, maletín","77":"Banderas, frascos, muletas, soldados, campana","78":"Ataúd, obispo, rey, caballo, música, luna","79":"Tren de carga, coche, abogado, mulo, dulces","80":"Médico, sábanas, paraguas, reloj, buena noticia","81":"Teatro, fango, navaja, gato grande, trampa","82":"Madre, león, buey, lancha, canasta","83":"Tragedia, bastón, procesamiento, madera, limosna","84":"Sastre, sangre, cofre, banquero, iglesia","85":"Espejo, reloj de pared, zapato, ojo, mujer mala","86":"Tijeras, convento, mulas, militar, herida","87":"Plátanos, fuego, Nueva York, pescado, cucaracha","88":"Hojas, aduana, muerto, caballo, vaso","89":"León, agua, cometa, viejo, carretón","90":"Viejo, espejo, caramelos, temporal, hacha","91":"Alpargatas, comunista, bolsas, pájaro negro","92":"Puerco grande, globo, avión, Cuba, silla","93":"Sortija, revolución, andarín, joyas","94":"Machete, herradura, mariposa grande, pulga","95":"Guerra, perro grande, cuchillo, alcalde","96":"Zapato viejo, medicina, desafío, pícaro","97":"Grillo, mosquito,limosnero, sinsonte","98":"Piano, entierro grande, santo, varita","99":"Carbonero, sereno, lluvia, joyero, ratero","100":"Inodoro, dios, escoba, automóvil, canario"};
 
-    document.querySelectorAll('.cant_select').forEach(sel => {
-        sel.innerHTML = "";
-        for(let i=10; i<=100; i+=10) {
-            let opt = document.createElement('option'); opt.value = i; opt.textContent = `${i} Números`;
-            if(i===20) opt.selected = true;
-            sel.appendChild(opt);
-        }
+    window.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.cant_select').forEach(sel => {
+            sel.innerHTML = "";
+            for(let i=10; i<=100; i+=10) {
+                let opt = document.createElement('option'); opt.value = i; opt.textContent = `${i} Números`;
+                if(i===20) opt.selected = true;
+                sel.appendChild(opt);
+            }
+        });
     });
 
     function switchUserSection(sec) {
@@ -325,7 +327,6 @@
             bodyData.tarde = tarde !== undefined ? (tarde === "" ? null : tarde) : undefined;
             bodyData.noche = noche !== undefined ? (noche === "" ? null : noche) : undefined;
 
-            // Eliminar propiedades undefined para no alterar campos no solicitados
             if (bodyData.tarde === undefined) delete bodyData.tarde;
             if (bodyData.noche === undefined) delete bodyData.noche;
 
@@ -526,6 +527,7 @@
         }, 2000);
     }
 
+    // ALGORITMO INTEGRADO TOTALMENTE RECONSTRUIDO - CERO REPETICIONES AUTOMÁTICAS FIJAS
     function generarTodo(isAdmin) {
         let prefijo = isAdmin ? 'admin_' : '';
         let fijoStr = document.getElementById(`${prefijo}fijo_base`).value.trim().padStart(2, '0');
@@ -540,11 +542,11 @@
 
         let panel = document.getElementById(`${prefijo}panel_res`); panel.innerHTML = "";
         
-        // CORRECCIÓN: Rompemos el bucle plano añadiendo aleatoriedad algorítmica controlada basada en milisegundos
+        // 1. Inicialización de pesos base estocástica dinámica para romper monopolios
         let pesos = {}; 
-        let seedRand = new Date().getMilliseconds() % 10;
         for(let i=0; i<100; i++) { 
-            pesos[i.toString().padStart(2, '0')] = (i % (seedRand + 2)) * 0.25; 
+            let nStr = i.toString().padStart(2, '0');
+            pesos[nStr] = Math.random() * 2.0; // Semilla de variación pura por consulta
         }
 
         let fechasOrdenadas = Object.keys(db).sort();
@@ -556,20 +558,23 @@
             if(db[f].n) { totalSorteos++; ultimoAvistamiento[db[f].n] = totalSorteos; }
         });
 
+        // 2. Peso dinámico por retraso cronológico real (números atrasados que tienen que romper)
         for(let nStr in pesos) {
             let uPos = ultimoAvistamiento[nStr] || 0;
-            pesos[nStr] += (totalSorteos - uPos) * 0.45; // Subido peso dinámico por retraso cronológico
+            pesos[nStr] += (totalSorteos - uPos) * 0.55; 
         }
 
+        // 3. Co-ocurrencias históricas con el Fijo Base analizado
         fechasOrdenadas.forEach(f => {
             let combinados = [];
             if(db[f].t) combinados.push(db[f].t);
             if(db[f].n) combinados.push(db[f].n);
             if(combinados.includes(fijoStr)) {
-                combinados.forEach(c => { if(c !== fijoStr) pesos[c] += 6.5; });
+                combinados.forEach(c => { if(c !== fijoStr) pesos[c] += 8.5; });
             }
         });
 
+        // 4. Extracción de los últimos 14 tiros reales del calendario
         let ultimosSorteosCortos = [];
         for(let i = fechasOrdenadas.length - 1; i >= 0 && ultimosSorteosCortos.length < 14; i--) {
             let f = fechasOrdenadas[i];
@@ -577,29 +582,34 @@
             if(db[f].t) ultimosSorteosCortos.push(db[f].t);
         }
         
-        ultimosSorteosCortos.forEach(num => { pesos[num] += 2.5; });
-        let virado = fijoStr.split('').reverse().join('');
-        pesos[virado] += 12.0;
-        pesos[((punta + 5) % 10).toString() + term] += 7.5;
-        pesos[punta + ((term + 5) % 10).toString()] += 7.5;
-        pesos[((punta + 5) % 10).toString() + ((term + 5) % 10).toString()] += 10.0;
+        ultimosSorteosCortos.forEach(num => { pesos[num] += 3.0; });
         
+        // 5. Aplicación de Leyes Geométricas de la Bolita (Virados, terminales y líneas cruzadas)
+        let virado = fijoStr.split('').reverse().join('').padStart(2, '0');
+        pesos[virado] += 14.0;
+        pesos[((punta + 5) % 10).toString() + term] += 9.0;
+        pesos[punta + ((term + 5) % 10).toString()] += 9.0;
+        pesos[((punta + 5) % 10).toString() + ((term + 5) % 10).toString()] += 11.0;
+        
+        // Compensación de decenas frías en la última quincena
         let conteoDecenas = Array(10).fill(0);
         ultimosSorteosCortos.forEach(num => { conteoDecenas[Math.floor(parseInt(num) / 10)]++; });
         for(let nStr in pesos) {
             let decNum = Math.floor(parseInt(nStr) / 10);
-            if(conteoDecenas[decNum] === 0) pesos[nStr] += 8.0;
-            else if(conteoDecenas[decNum] >= 4) pesos[nStr] += 1.0;
+            if(conteoDecenas[decNum] === 0) pesos[nStr] += 10.0;
+            else if(conteoDecenas[decNum] >= 4) pesos[nStr] += 1.5;
         }
         
+        // 6. Intersección con búsquedas activas en la Charada
         let inputCharada = document.getElementById(isAdmin ? 'search_charada_admin' : 'search_charada_user');
         let palabraBuscada = inputCharada ? inputCharada.value.toLowerCase().trim() : '';
         if(palabraBuscada.length > 2) {
             for(let k in charadaDiccionario) {
-                if(charadaDiccionario[k].toLowerCase().includes(palabraBuscada)) pesos[k.padStart(2, '0')] += 20.0;
+                if(charadaDiccionario[k].toLowerCase().includes(palabraBuscada)) pesos[k.padStart(2, '0')] += 25.0;
             }
         }
 
+        // 7. Estimación Predictiva Numérica por Tendencia Cruzada (Regresión de ciclo)
         if(ultimosSorteosCortos.length >= 5) {
             let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
             let nReg = Math.min(ultimosSorteosCortos.length, 10);
@@ -610,13 +620,18 @@
             }
             let pendiente = (nReg * sumXY - sumX * sumY) / (nReg * sumX2 - sumX * sumX || 1);
             let proximoEstimado = Math.abs(Math.round(parseInt(ultimosSorteosCortos[0]) + pendiente)) % 100;
-            pesos[proximoEstimado.toString().padStart(2, '0')] += 15.0;
+            pesos[proximoEstimado.toString().padStart(2, '0')] += 18.0;
         }
 
+        // Ordenar todos los números de 00 a 99 según su peso matemático real
         let arrayOrdenado = Object.keys(pesos).sort((a,b) => pesos[b] - pesos[a]);
+        
+        // Cortar la lista exactamente en el tamaño solicitado (10, 20, 50, 100...)
         let arrayFinal = arrayOrdenado.slice(0, cant);
 
-        document.getElementById(`btn_generar_user`).dataset.lastPronosticos = JSON.stringify(arrayFinal);
+        if(!isAdmin) {
+            document.getElementById(`btn_generar_user`).dataset.lastPronosticos = JSON.stringify(arrayFinal);
+        }
 
         let hoy = new Date().toISOString().split('T')[0];
         let fijosHoy = [];
@@ -625,6 +640,7 @@
             if(db[hoy].n) fijosHoy.push(db[hoy].n);
         }
 
+        // Renderizado Dinámico en Pantalla
         arrayFinal.forEach((n, index) => {
             let b = document.createElement('div'); 
             b.className = "box"; b.textContent = n; b.id = `${prefijo}box-${n}`; 
@@ -774,7 +790,6 @@
         document.getElementById('admin_actions_cal').style.display = esAdministradorLogueado ? 'block' : 'none';
     }
 
-    // CORRECCIÓN MAESTRA: Ahora procesa cadenas vacías para borrar datos tanto localmente como en Supabase
     async function guardarDB() {
         if(!esAdministradorLogueado) return;
         let inputs = document.querySelectorAll('.day input');
@@ -793,13 +808,11 @@
                 db[k][tu] = fmtVal; 
                 await registrarTiroEnNube(k, tu === 't' ? fmtVal : undefined, tu === 'n' ? fmtVal : undefined);
             } else {
-                // Si el input está vacío, se limpia el valor local y se envía comando de borrado (null) a la nube
                 db[k][tu] = "";
                 await registrarTiroEnNube(k, tu === 't' ? "" : undefined, tu === 'n' ? "" : undefined);
             }
         }
         
-        // Limpiar registros del objeto db que queden totalmente vacíos
         for (let key in db) {
             if (db[key].t === "" && db[key].n === "") {
                 delete db[key];

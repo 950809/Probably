@@ -405,7 +405,8 @@
             if (matrizMarkov[fijoStr]) {
     for (let numeroSucesor in matrizMarkov[fijoStr]) {
         let apariciones = matrizMarkov[fijoStr][numeroSucesor];
-        pesos[numeroSucesor.padStart(2, '0')] += (apariciones * 35.0); // <- Sube a 35.0
+        pesos[numeroSucesor.padStart(2, '0')] += (apariciones * 35.0);
+        }
     }
 }
 

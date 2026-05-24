@@ -737,7 +737,7 @@
         if (fechas.length < 3) return alert("Historial insuficiente para auditar.");
         
         resultadosSimulacionGlobal = {}; 
-        let muestraFechas = fechas.slice(-30); 
+        let muestraFechas = fechas.slice(-200); 
 
         for (let i = 1; i < muestraFechas.length; i++) {
             let fechaObjetivo = muestraFechas[i]; 

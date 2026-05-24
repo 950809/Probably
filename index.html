@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bolita Pro Master - Consola Global Elite v15.5</title>
+    <title>Bolita Pro Master - Consola Global Elite v15.6</title>
     
     <meta name="theme-color" content="#050505">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -20,7 +20,6 @@
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
         input, select, textarea { background: #000; border: 1px solid var(--neon); color: var(--neon); padding: 8px; font-family: monospace; border-radius: 4px; font-size: 0.85rem; width: 100%; box-sizing: border-box; }
-        input:focus, select:focus { outline: none; box-shadow: 0 0 5px var(--neon); }
         
         button { background: transparent; border: 1px solid var(--neon); color: var(--neon); padding: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; border-radius: 4px; transition: 0.2s; font-size: 0.8rem; }
         button:hover { background: var(--neon); color: #000; }
@@ -29,7 +28,6 @@
         .panel { background: var(--panel); border: 1px dashed var(--neon); padding: 10px; border-radius: 6px; margin-top: 10px; }
         .grid-panel { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 8px; }
         .box { background: #000; border: 1px solid var(--neon); text-align: center; padding: 8px 0; font-size: 1rem; font-weight: bold; border-radius: 4px; color: #fff; }
-        
         .destacado-top10 { border-color: var(--cyber); color: var(--cyber); box-shadow: 0 0 3px var(--cyber); }
         
         .tab-bar { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 10px; }
@@ -39,34 +37,31 @@
         .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-top: 8px; text-align: center; }
         .cal-header { font-size: 0.6rem; color: #888; font-weight: bold; text-transform: uppercase; padding-bottom: 2px; }
         .day { background: #000; border: 1px solid #222; padding: 3px 1px; border-radius: 3px; min-height: 38px; display: flex; flex-direction: column; justify-content: space-between; }
-        .day input { padding: 1px; font-size: 0.65rem; text-align: center; border: none; border-bottom: 1px solid #333; border-radius: 0; margin-top: 1px; background: transparent; color: #fff; }
+        .day input { padding: 1px; font-size: 0.65rem; text-align: center; border: none; border-bottom: 1px solid #333; background: transparent; color: #fff; }
         
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; overflow-y: auto; padding: 10px 0; }
         .modal-content { max-width: 440px; margin: auto; background: var(--panel); border: 1px solid var(--neon); padding: 12px; border-radius: 6px; }
         
-        table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.75rem; text-align: left; }
-        th, td { padding: 5px; border-bottom: 1px solid #222; }
+        table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.75rem; }
+        th, td { padding: 5px; border-bottom: 1px solid #222; text-align: left; }
         th { color: var(--neon); text-transform: uppercase; font-size: 0.65rem; }
         
         .calc-box { background: #000; border: 1px solid #333; padding: 6px; border-radius: 4px; text-align: center; }
         .calc-box span { display: block; font-size: 1.1rem; font-weight: bold; color: #fff; margin-top: 2px; }
-        
         .charada-box { background: #000; border: 1px solid #222; padding: 6px; border-radius: 4px; max-height: 90px; overflow-y: auto; font-size: 0.75rem; color: #ccc; white-space: pre-line; margin-top: 4px; }
-        .loader { display: none; text-align: left; color: var(--win); font-size: 0.72rem; font-weight: bold; margin: 12px 0; letter-spacing: 0.5px; line-height: 1.4; border: 1px dashed var(--win); padding: 12px; border-radius: 4px; background: rgba(255,235,59,0.02); font-family: monospace; max-height: 220px; overflow-y: auto; }
-        .bloque-comb { font-size: 0.75rem; color: #fff; background: #000; border: 1px solid var(--cyber); padding: 5px; border-radius: 4px; margin-bottom: 4px; font-family: monospace; }
+        .loader { display: none; color: var(--win); font-size: 0.72rem; border: 1px dashed var(--win); padding: 12px; border-radius: 4px; background: rgba(255,235,59,0.02); font-family: monospace; max-height: 220px; overflow-y: auto; }
+        .bloque-comb { font-size: 0.75rem; color: #fff; background: #000; border: 1px solid var(--cyber); padding: 5px; border-radius: 4px; margin-bottom: 4px; }
         
         .badge-acierto { padding: 2px 4px; border-radius: 3px; font-size: 0.65rem; font-weight: bold; }
         .badge-green { background: #003300; color: #00ff00; border: 1px solid #00ff00; }
         .badge-red { background: #330000; color: #ff3333; border: 1px solid #ff3333; }
-        .pesos-info { font-size: 0.62rem; color: var(--cyber); margin-top: 5px; line-height: 1.3; font-family: monospace; word-break: break-all; }
-        
+        .pesos-info { font-size: 0.62rem; color: var(--cyber); margin-top: 5px; line-height: 1.3; word-break: break-all; }
         .pwa-badge { display: none; background: #002244; border: 1px solid var(--cyber); color: var(--cyber); padding: 6px; text-align: center; border-radius: 4px; font-size: 0.7rem; font-weight: bold; margin-bottom: 10px; cursor: pointer; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
 <div class="container">
-
     <div id="pwa-install-btn" class="pwa-badge" onclick="ejecutarInstalacionPWA()">⚡ Instalar en Pantalla de Inicio ⚡</div>
 
     <div id="view-login" style="display: block;">
@@ -152,7 +147,7 @@
                         <span style="font-size:0.55rem; color:var(--win); font-weight:bold;">🤖 14 Motores Activos</span>
                     </div>
                     <div id="panel_res" class="grid-panel"></div>
-                    <div id="user_pesos_aplicados" class="pesos-info" style="color:var(--cyber);"></div>
+                    <div id="user_pesos_aplicados" class="pesos-info"></div>
                 </div>
 
                 <div class="panel" style="border-color: var(--cyber);">
@@ -169,8 +164,8 @@
         <div id="user-sec-hist" style="display: none;">
             <div class="panel" style="margin-top:0;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                    <label style="font-size:0.65rem; color:var(--win); font-weight:bold; text-transform:uppercase;">Auditoría Histórica (2009 - Hoy)</label>
-                    <button style="font-size:0.6rem; padding:4px 8px; border-color:var(--win); color:var(--win);" onclick="ejecutarSimulacionAutomatica()">Correr Simulación Completa</button>
+                    <label style="font-size:0.65rem; color:var(--win); font-weight:bold; text-transform:uppercase;">Auditoría Histórica (Últimos 50)</label>
+                    <button style="font-size:0.6rem; padding:4px 8px; border-color:var(--win); color:var(--win);" onclick="ejecutarSimulacionAutomatica()">Correr Simulación</button>
                 </div>
                 <div id="tabla_historico_aciertos_user" style="margin-top:8px; max-height: 350px; overflow-y: auto;"></div>
             </div>
@@ -244,7 +239,6 @@
             </div>
         </div>
     </div>
-
 </div>
 
 <div id="modal-db" class="modal">
@@ -284,16 +278,12 @@
 </div>
 
 <script>
-    // INYECCIÓN AUTOMÁTICA DE ENTORNOS PWA
     const pwaManifestObj = {
         "short_name": "BolitaPro",
         "name": "Bolita Pro Master Elite",
         "icons": [{
             "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='192' height='192' viewBox='0 0 192 192'><rect width='192' height='192' fill='%23050505'/><circle cx='96' cy='96' r='60' stroke='%2300ff41' stroke-width='6' fill='none'/><text x='96' y='110' font-family='monospace' font-size='42' font-weight='bold' fill='%2300ff41' text-anchor='middle'>BPM</text></svg>",
             "type": "image/svg+xml", "sizes": "192x192"
-        }, {
-            "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'><rect width='512' height='512' fill='%23050505'/><circle cx='256' cy='256' r='160' stroke='%2300ff41' stroke-width='14' fill='none'/><text x='256' y='290' font-family='monospace' font-size='110' font-weight='bold' fill='%2300ff41' text-anchor='middle'>BPM</text></svg>",
-            "type": "image/svg+xml", "sizes": "512x512"
         }],
         "start_url": window.location.href, "background_color": "#050505", "theme_color": "#050505", "display": "standalone", "orientation": "portrait"
     };
@@ -308,32 +298,23 @@
     function ejecutarInstalacionPWA() {
         if (deferredPromptPWA) {
             deferredPromptPWA.prompt();
-            deferredPromptPWA.userChoice.then((choiceResult) => {
-                if (choiceResult.outcome === 'accepted') {
-                    document.getElementById('pwa-install-btn').style.display = 'none';
-                }
-                deferredPromptPWA = null;
-            });
+            deferredPromptPWA.userChoice.then(() => { document.getElementById('pwa-install-btn').style.display = 'none'; deferredPromptPWA = null; });
         }
     }
 
     if ('serviceWorker' in navigator) {
         const swRawCode = `
-            const CACHE_NAME = 'bolitapro-v15.5';
             self.addEventListener('install', e => self.skipWaiting());
             self.addEventListener('activate', e => e.waitUntil(clients.claim()));
-            self.addEventListener('fetch', e => {
-                if(e.request.mode === 'navigate') { e.respondWith(fetch(e.request).catch(() => caches.match(e.request))); }
-            });
+            self.addEventListener('fetch', e => {});
         `;
         const blobSW = new Blob([swRawCode], { type: 'application/javascript' });
-        navigator.serviceWorker.register(URL.createObjectURL(blobSW)).catch(err => console.log("SW bypass"));
+        navigator.serviceWorker.register(URL.createObjectURL(blobSW)).catch(() => {});
     }
 
-    // LOGÍSTICA DE ACCESO MASTER
     const _0xAdmin = "yohnny95", _0xPass = "Elmatatan95*";
-    
     const baseRespaldoDefault = {"2026-05-18":{"t":"14","n":"83"},"2026-05-19":{"t":"45","n":"02"},"2026-05-20":{"t":"83","n":"11"},"2026-05-21":{"t":"26","n":"45"},"2026-05-22":{"t":"92","n":"14"}};
+    
     if(!localStorage.getItem('bolita_master_db')) {
         localStorage.setItem('bolita_master_db', JSON.stringify(baseRespaldoDefault));
     }
@@ -344,7 +325,7 @@
     let esAdministradorLogueado = false;
     let ultimosNumerosGenerados = [];
     let resultadosSimulacionGlobal = {}; 
-    let pesosGlobalesOptimos = null;
+    let pesosGlobalesOptimos = { markov:85, retraso:0.25, cooc:75, charada:45, desv:50, hermanos:45, lunar:30, fib:25, hamming:20 };
 
     const charadaDiccionario = {"1":"Caballo, sol, tintero","2":"Mariposa, hombre","3":"Niño, marinero, muerto","4":"Gato, vela, boca","5":"Mujer, mar, candado","6":"Jicotea, candela","7":"Mierda, caracol","8":"Muerto, calabaza, león","9":"Elefante, lengua","10":"Pescado grande, dinero","11":"Gallo, lluvia","12":"Puta, estrella, perro grande","13":"Chulo, pavo real","14":"Cementerio, gato, matrimonio","15":"Perro chico, niña, ratón","16":"Toro, vestido, avispa","17":"San Lázaro, armas","18":"Pescado chico, iglesia","19":"Lombriz, campesino, jutía","20":"Tibor, cañón, libro","21":"Majá, dinero, reloj","22":"Sapo, estrella, lirio","23":"Vapor, barco, águila","24":"Paloma, cocina","25":"Piedra fina, casa, rana","26":"Anguila, calle, nube","27":"Avispa, campana","28":"Chivo, bollo, perro chico","29":"Ratón, venado","30":"Camarón, almanaque, cangrejo","31":"Venado, escuela","32":"Puerco chico, majá","33":"Tiñosa, baraja","34":"Mono, negro","35":"Araña, mosquito","36":"Cachimba, bodega","37":"Bruja, hormiga","38":"Dinero, macao, carro","39":"Culebra, conejo, rayo","40":"Cura, bombero, cantina","41":"Lagartija, prisión","42":"Pato, país lejano","43":"Alacrán, amigo, vaca","44":"Infierno, tormenta, caldero","45":"Tiburón, presidente, traje","46":"Guagua, humo, chino","47":"Pájaro, mala noticia","48":"Cucaracha, abanico","49":"Borracho, riqueza","50":"Policía, agua, florero","51":"Soldado, oro","52":"Bicicleta, abogado","53":"Luz eléctrica, diamante","54":"Flores, gallina blanca","55":"Cangrejo, murciélago","56":"Reina, escorpión, camisa","57":"Cama, ángeles","58":"Adulterio, cuchillo","59":"Loco, anillo","60":"Payaso, huevo, tempestad","61":"Caballo grande, revólver","62":"Matrimonio, robo, crimen","63":"Asesino, espada","64":"Muerto vivo, escándalo","65":"Cárcel, comida","66":"Tarro, divorcio, máscara","67":"Puñalada, hospital","68":"Cementerio grande, riña","69":"Pozo, loma, vago","70":"Teléfono, coco, tiro","71":"Río, sombrero, fusil","72":"Buey, ferrocarril, lluvia","73":"Maleta, navaja","74":"Papalote, militar","75":"Cine, corbata, guitarra","76":"Bailarina, violín","77":"Banderas, campana","78":"Ataúd, obispo, rey","79":"Tren de carga, dulces","80":"Médico, sábanas","81":"Teatro, fango","82":"Madre, león","83":"Tragedia, bastón","84":"Sastre, sangre","85":"Espejo, ojo","86":"Tijeras, herida","87":"Plátanos, Nueva York","88":"Hojas, muerto, vaso","89":"León, cometa","90":"Viejo, espejo","91":"Alpargatas, comunista","92":"Puerco grande, avión, Cuba","93":"Sortija, revolution","94":"Machete, pulga","95":"Guerra, cuchillo","96":"Zapato viejo, pícaro","97":"Grillo, sinsonte","98":"Piano, entierro","99":"Carbonero, ratero","100":"Inodoro, dios, escoba"};
 
@@ -361,44 +342,27 @@
         mostrarTablaAciertos();
     });
 
-    // MOTOR QUIRÚRGICO DE NORMALIZACIÓN DE FECHAS BINARIAS
     function normalizarFechaAISO(strFecha) {
         if (!strFecha) return "";
         let limpia = strFecha.trim().replace(/\//g, '-');
         let partes = limpia.split('-');
-        
         if (partes.length === 3) {
-            // Caso: DD-MM-YYYY o D-M-YY
             if (partes[0].length <= 2 && partes[2].length >= 2) {
-                let d = partes[0].padStart(2, '0');
-                let m = partes[1].padStart(2, '0');
-                let a = partes[2];
+                let d = partes[0].padStart(2, '0'); let m = partes[1].padStart(2, '0'); let a = partes[2];
                 if (a.length === 2) a = '20' + a;
                 return `${a}-${m}-${d}`;
             }
-            // Caso: YYYY-MM-DD
             if (partes[0].length === 4) {
-                let a = partes[0];
-                let m = partes[1].padStart(2, '0');
-                let d = partes[2].padStart(2, '0');
-                return `${a}-${m}-${d}`;
+                return `${partes[0]}-${partes[1].padStart(2, '0')}-${partes[2].padStart(2, '0')}`;
             }
         }
         return limpia;
     }
 
-    // CRONOLOGÍA ABSOLUTA COMPROBADA CON VALORES ENTEROS RECONSTRUIDOS
     function obtenerFechasCronologicas(database) {
         return Object.keys(database).filter(k => database[k] !== null && k.trim() !== "").sort((a, b) => {
-            let isoA = normalizarFechaAISO(a);
-            let isoB = normalizarFechaAISO(b);
-            
-            let numA = parseInt(isoA.replace(/-/g, ''));
-            let numB = parseInt(isoB.replace(/-/g, ''));
-            
-            if (isNaN(numA) || isNaN(numB)) {
-                return new Date(isoA).getTime() - new Date(isoB).getTime();
-            }
+            let numA = parseInt(normalizarFechaAISO(a).replace(/-/g, '')) || 0;
+            let numB = parseInt(normalizarFechaAISO(b).replace(/-/g, '')) || 0;
             return numA - numB;
         });
     }
@@ -414,27 +378,19 @@
         document.getElementById('admin-sub-consola').style.display = sec === 'consola' ? 'block' : 'none';
         document.getElementById('admin-sub-aciertos').style.display = sec === 'aciertos' ? 'block' : 'none';
         document.getElementById('admin-sub-users').style.display = sec === 'users' ? 'block' : 'none';
-        document.getElementById('btn-admin-tab-consola').className = `tab-btn admin-tab ${sec==='consola'?'active':''}`;
-        document.getElementById('btn-admin-tab-aciertos').className = `tab-btn admin-tab ${sec==='aciertos'?'active':''}`;
-        document.getElementById('btn-admin-tab-users').className = `tab-btn admin-tab ${sec==='users'?'active':''}`;
     }
 
     function intentarLogin() {
         let u = document.getElementById('login-user').value.trim();
         let p = document.getElementById('login-pass').value;
-        let err = document.getElementById('login-error');
-        err.style.display = 'none';
-
         if(u === _0xAdmin && p === _0xPass) {
             esAdministradorLogueado = true; usuarioActivo = "ADMIN_MASTER";
             document.getElementById('view-login').style.display = 'none';
             document.getElementById('panel-admin').style.display = 'block';
             actualizarStatsAdmin(); renderCalendario(); return;
         }
-
         let localesUsuarios = JSON.parse(localStorage.getItem('bolita_usuarios_db')) || [];
         let cuenta = localesUsuarios.find(user => user.usuario === u && user.clave === p);
-
         if (cuenta) {
             if (cuenta.rol === 'pendiente') return alert("Cuenta en revisión local.");
             usuarioActivo = u; esAdministradorLogueado = false;
@@ -442,7 +398,7 @@
             document.getElementById('view-app').style.display = 'block';
             document.getElementById('user-display').textContent = `Id: ${u}`;
             renderCalendario();
-        } else { err.textContent = "Credenciales incorrectas."; err.style.display = 'block'; }
+        } else { document.getElementById('login-error').style.display = 'block'; }
     }
 
     function enviarSolicitud() {
@@ -450,9 +406,8 @@
         let a = document.getElementById('reg-apellido').value.trim();
         let p = document.getElementById('reg-pass').value;
         if(!n || !a || !p) return alert("Completa los campos.");
-        let userKey = `${n}_${a}`;
         let localesUsuarios = JSON.parse(localStorage.getItem('bolita_usuarios_db')) || [];
-        localesUsuarios.push({ usuario: userKey, clave: p, rol: 'pendiente' });
+        localesUsuarios.push({ usuario: `${n}_${a}`, clave: p, rol: 'pendiente' });
         localStorage.setItem('bolita_usuarios_db', JSON.stringify(localesUsuarios));
         alert("¡Solicitud registrada localmente!"); mostrarRegistroForm(false);
     }
@@ -470,18 +425,13 @@
         document.getElementById('admin-stats').textContent = `Total Local: ${localesUsuarios.length}`;
         let tbody = document.getElementById('tabla_usuarios'); tbody.innerHTML = "";
         localesUsuarios.forEach(u => {
-            tbody.innerHTML += `<tr><td>${u.usuario}</td><td>${u.rol}</td>
-                <td>
-                    <button style="padding:2px 5px; font-size:0.65rem;" onclick="alterarUser('${u.usuario}','aprobar')">Activar</button>
-                    <button style="padding:2px 5px; background:var(--error); font-size:0.65rem;" onclick="alterarUser('${u.usuario}','eliminar')">Borrar</button>
-                </td></tr>`;
+            tbody.innerHTML += `<tr><td>${u.usuario}</td><td>${u.rol}</td><td><button onclick="alterarUser('${u.usuario}','aprobar')">Activar</button></td></tr>`;
         });
     }
 
     function alterarUser(username, accion) {
         let localesUsuarios = JSON.parse(localStorage.getItem('bolita_usuarios_db')) || [];
         if(accion === 'aprobar') localesUsuarios = localesUsuarios.map(u => u.usuario === username ? {...u, rol: 'user'} : u);
-        else if(accion === 'eliminar') localesUsuarios = localesUsuarios.filter(u => u.usuario !== username);
         localStorage.setItem('bolita_usuarios_db', JSON.stringify(localesUsuarios));
         actualizarStatsAdmin();
     }
@@ -490,104 +440,23 @@
         let pref = isAdmin ? 'admin_' : '';
         let btn = document.getElementById(isAdmin ? 'btn_generar_admin' : 'btn_generar_user');
         let loader = document.getElementById(isAdmin ? 'loading_admin' : 'loading_user');
-        let turno = document.getElementById(`${pref}filtro_turno`).value;
         
         document.getElementById(`${pref}display_resultados`).style.display = 'none';
-        btn.disabled = true; 
-        loader.style.display = 'block';
-
-        const logs = [
-            "🧬 [1/14] COMPUTANDO CADENAS DE MARKOV AISLADAS...",
-            "⏳ [2/14] CALCULANDO RETRASO ACUMULADO PROGRESIVO...",
-            "🔗 [3/14] MAPEANDO CO-OCURRENCIAS FILTRADAS DE TIRO...",
-            "❄️ [4/14] APLICANDO PENALIZACIÓN POR TURNO INVERSO...",
-            "🔮 [5/14] EJECUTANDO INTERSECCIÓN SEMÁNTICA DE CHARADA...",
-            "📈 [6/14] EVALUANDO DESVIACIÓN ESTÁNDAR EN RACHA FRÍA...",
-            "📊 [7/14] MIDIENDO SATURACIÓN MATRICIAL DE DÉCADAS...",
-            "⚡ [8/14] CALCULANDO REGRESIÓN DE NÚMEROS HERMANOS Y PARIENTES...",
-            "📐 [9/14] TRAZANDO ADYACENCIA GEOMÉTRICA DE VECINOS VERTICALES...",
-            "🔄 [10/14] CALIBRANDO REFLEJOS ASIMÉTRICOS Y VIRADOS...",
-            "🌙 [11/14] INDIZANDO SINCRONIZACIÓN DE CICLO LUNAR LOCAL...",
-            "🔢 [12/14] FILTRANDO RAÍCES DE SECUENCIA FIBONACCI MODULAR...",
-            "🧮 [13/14] COMPARANDO DISTANCIA DE HAMMING EN STRINGS BINARIOS...",
-            "🧠 [14/14] AJUSTANDO POLINOMIOS DINÁMICOS FINALES..."
-        ];
-
-        loader.innerHTML = "🧬 INICIANDO ESCANEO LOGÍSTICO COMPLETO (14 ALGORITMOS)...";
-        let paso = 0;
-        let intervalo = setInterval(() => {
-            if(paso < logs.length) {
-                loader.innerHTML += `<br>⚡ OK -> ${logs[paso]}`;
-                loader.scrollTop = loader.scrollHeight;
-                paso++;
-            }
-        }, 120);
+        btn.disabled = true; loader.style.display = 'block';
+        loader.innerHTML = "🧬 PROCESANDO MATRIZ DE PREFERENCIAS DE TIRO (14 MOTORES ACTIVOS)...";
 
         setTimeout(() => {
-            clearInterval(intervalo);
-            loader.style.display = 'none'; 
-            btn.disabled = false; 
-            
-            pesosGlobalesOptimos = autoOptimizarPesos(db, turno);
+            loader.style.display = 'none'; btn.disabled = false; 
             generarTodo(isAdmin); 
-        }, 2000);
+        }, 800);
     }
 
-    function autoOptimizarPesos(database, turnoSeleccionado) {
-        let fechas = obtenerFechasCronologicas(database);
-        const setDefecto = { markov:75, retraso:0.12, cooc:70, charada:35, desv:45, hermanos:35, lunar:30, fib:25, hamming:20 };
-        if(fechas.length < 4) return setDefecto;
-
-        const setsDePrueba = [
-            { markov:80, retraso:0.15, cooc:75, charada:25, desv:30, hermanos:40, lunar:20, fib:15, hamming:10 },
-            { markov:50, retraso:0.06, cooc:45, charada:45, desv:60, hermanos:25, lunar:40, fib:35, hamming:30 },
-            { markov:75, retraso:0.12, cooc:70, charada:35, desv:45, hermanos:35, lunar:30, fib:25, hamming:20 }
-        ];
-
-        let mejorSet = setsDePrueba[2]; 
-        let maxHits = -1;
-        let muestraCiega = fechas.slice(-15);
-
-        setsDePrueba.forEach(set => {
-            let hitsSimulados = 0;
-            for(let i=1; i<muestraCiega.length; i++) {
-                let fObjetivo = muestraCiega[i]; let fAnterior = muestraCiega[i-1];
-                let baseFijo = "";
-                
-                if (turnoSeleccionado === 'tarde') baseFijo = database[fAnterior].t;
-                else if (turnoSeleccionado === 'noche') baseFijo = database[fAnterior].n;
-                else baseFijo = database[fAnterior].n || database[fAnterior].t;
-
-                if(!baseFijo) continue;
-
-                let dbCiega = JSON.parse(JSON.stringify(database)); delete dbCiega[fObjetivo];
-                let res = ejecutarAlgoritmoCore(baseFijo, 50, dbCiega, set, turnoSeleccionado);
-                
-                let tTarget = database[fObjetivo].t ? database[fObjetivo].t.padStart(2,'0') : '';
-                let nTarget = database[fObjetivo].n ? database[fObjetivo].n.padStart(2,'0') : '';
-
-                if(turnoSeleccionado === 'tarde' && tTarget && res.includes(tTarget)) hitsSimulados++;
-                else if(turnoSeleccionado === 'noche' && nTarget && res.includes(nTarget)) hitsSimulados++;
-                else {
-                    if(tTarget && res.includes(tTarget)) hitsSimulados++;
-                    if(nTarget && res.includes(nTarget)) hitsSimulados++;
-                }
-            }
-            if(hitsSimulados > maxHits) { maxHits = hitsSimulados; mejorSet = set; }
-        });
-
-        return mejorSet;
-    }
-
-    // MOTOR CORE DE LOS 14 ALGORITMOS ACTIVOS
+    // REDISEÑO INTEGRAL DE LOS 14 ALGORITMOS CON BALANCE DE ECUACIÓN
     function ejecutarAlgoritmoCore(fijoBaseStr, cantidadSalida, dbSimulada, configPesos, turnoSeleccionado = 'combinado') {
-        let p = configPesos || pesosGlobalesOptimos || { markov:75, retraso:0.12, cooc:70, charada:35, desv:45, hermanos:35, lunar:30, fib:25, hamming:20 };
-
+        let p = configPesos || pesosGlobalesOptimos;
         let fijoStr = fijoBaseStr.padStart(2, '0');
-        let numBase = parseInt(fijoStr);
-        if(isNaN(numBase)) numBase = 0;
-        let punta = Math.floor(numBase / 10); 
-        let term = numBase % 10;
+        let numBase = parseInt(fijoStr) || 0;
+        let punta = Math.floor(numBase / 10); let term = numBase % 10;
 
         let pesos = {};
         for(let i=0; i<100; i++) pesos[i.toString().padStart(2, '0')] = 0.0; 
@@ -599,90 +468,74 @@
             if(dbSimulada[f]?.n) flujoNumerosCompleto.push(dbSimulada[f].n.padStart(2,'0'));
         });
         
-        let flujoRachaCaliente = flujoNumerosCompleto.slice(-150);
-        let fechasRachaCortas = fechasOrdenadas.slice(-70);
+        let flujoRachaCaliente = flujoNumerosCompleto.slice(-140);
 
         // 1. Cadenas de Markov
         let ultimoNum = null;
         flujoRachaCaliente.forEach(num => {
-            if (ultimoNum === fijoStr) pesos[num] += (p.markov * 1.5);
+            if (ultimoNum === fijoStr) pesos[num] += p.markov;
             ultimoNum = num;
         });
 
-        // 2. Retraso Acumulado
+        // 2. Retraso Progresivo Equilibrado
         let totalSorteos = 0; let ultimoAvistamiento = {};
-        flujoRachaCaliente.forEach(num => {
-            totalSorteos++; ultimoAvistamiento[num] = totalSorteos;
-        });
+        flujoRachaCaliente.forEach(num => { totalSorteos++; ultimoAvistamiento[num] = totalSorteos; });
         for(let nStr in pesos) pesos[nStr] += (totalSorteos - (ultimoAvistamiento[nStr] || 0)) * p.retraso;
 
         // 3. Co-ocurrencias
-        fechasRachaCortas.forEach(f => {
+        fechasOrdenadas.slice(-60).forEach(f => {
             if(dbSimulada[f]) {
                 let comb = [(dbSimulada[f].t || '').padStart(2,'0'), (dbSimulada[f].n || '').padStart(2,'0')];
-                if(comb.includes(fijoStr)) comb.forEach(c => { if(c !== fijoStr && c !== '00') pesos[c] += (p.cooc * 1.2); });
+                if(comb.includes(fijoStr)) comb.forEach(c => { if(c !== fijoStr) pesos[c] += p.cooc; });
             }
         });
 
         // 4. Turno Inverso
         if (turnoSeleccionado === 'tarde' || turnoSeleccionado === 'noche') {
             let fInverso = turnoSeleccionado === 'tarde' ? 'n' : 't';
-            fechasRachaCortas.slice(-25).forEach(f => {
-                if(dbSimulada[f] && dbSimulada[f][fInverso]) {
-                    pesos[dbSimulada[f][fInverso].padStart(2, '0')] -= 18.0; 
-                }
+            fechasOrdenadas.slice(-20).forEach(f => {
+                if(dbSimulada[f] && dbSimulada[f][fInverso]) pesos[dbSimulada[f][fInverso].padStart(2, '0')] -= 10.0; 
             });
         }
 
-        // 5. Charada
+        // 5. Charada Semántica
         let inputCharada = document.getElementById('search_charada_user');
         let palabra = inputCharada ? inputCharada.value.toLowerCase().trim() : '';
         if(palabra.length > 2) {
             for(let k in charadaDiccionario) { if(charadaDiccionario[k].toLowerCase().includes(palabra)) pesos[k.padStart(2, '0')] += p.charada; }
         }
 
-        // 6. Desviación Estándar
+        // 6. Desviación Estándar Equilibrada (Se reduce el castigo drástico)
         let contadores = {}; for(let i = 0; i < 100; i++) contadores[i.toString().padStart(2, '0')] = 0;
-        flujoRachaCaliente.slice(-90).forEach(n => { if(n) contadores[n]++; });
-        for(let nStr in pesos) { if(contadores[nStr] === 0) pesos[nStr] += p.desv; }
+        flujoRachaCaliente.forEach(n => { if(n) contadores[n]++; });
+        for(let nStr in pesos) { if(contadores[nStr] === 0) pesos[nStr] += p.desv; else pesos[nStr] += (10 / contadores[nStr]); }
 
         // 7. Saturación de Décadas
         let satBloques = {}; for(let i = 0; i < 10; i++) satBloques[i] = 0;
-        flujoRachaCaliente.slice(-30).forEach(num => {
-            let dec = Math.floor(parseInt(num) / 10);
-            if(!isNaN(dec) && dec >= 0 && dec <= 9) satBloques[dec]++;
-        });
-        for(let nStr in pesos) {
-            let decNum = Math.floor(parseInt(nStr) / 10);
-            if(!isNaN(decNum) && satBloques[decNum] >= 4) pesos[nStr] -= (satBloques[decNum] * 4.0);
-        }
+        flujoRachaCaliente.slice(-25).forEach(num => { satBloques[Math.floor(parseInt(num) / 10)]++; });
+        for(let nStr in pesos) { pesos[nStr] -= (satBloques[Math.floor(parseInt(nStr) / 10)] || 0) * 2.0; }
 
-        // 8. Hermanos y Espejos
-        let hermano = (numBase + 11) % 100;
-        let pariente = (numBase + 50) % 100;
-        pesos[hermano.toString().padStart(2, '0')] += p.hermanos;
-        pesos[pariente.toString().padStart(2, '0')] += p.hermanos;
+        // 8. Hermanos y Espejos Directos
+        pesos[((numBase + 11) % 100).toString().padStart(2, '0')] += p.hermanos;
+        pesos[((numBase + 50) % 100).toString().padStart(2, '0')] += p.hermanos;
 
         // 9. Adyacencia Geométrica
-        let vecinoArr = (numBase + 10) % 100;
-        let vecinoAba = (numBase - 10 < 0) ? (numBase - 10 + 100) : (numBase - 10);
-        pesos[vecinoArr.toString().padStart(2, '0')] += 15.0;
-        pesos[vecinoAba.toString().padStart(2, '0')] += 15.0;
+        pesos[((numBase + 10) % 100).toString().padStart(2, '0')] += 20.0;
+        pesos[((numBase - 10 + 100) % 100).toString().padStart(2, '0')] += 20.0;
 
-        // 10. Reflejos y Virados
+        // 10. Reflejos y Virados Cruciales (Soporte prioritario)
         let virado = fijoStr.split('').reverse().join('').padStart(2, '0');
-        pesos[virado] += 40.0; pesos[((punta + 5) % 10).toString() + term] += 12.0;
+        pesos[virado] += 45.0; pesos[((punta + 5) % 10).toString() + term] += 25.0;
 
-        // 11. Ciclo Lunar Real
+        // 11. Ciclo Lunar
         let diaDelMes = new Date().getDate();
-        let factorLunar = Math.sin((diaDelMes / 30) * Math.PI * 2) * p.lunar;
-        for(let i=0; i<100; i++) { if(i % 7 === Math.abs(diaDelMes % 7)) pesos[i.toString().padStart(2,'0')] += Math.abs(factorLunar); }
+        for(let i=0; i<100; i++) { if(i % 10 === diaDelMes % 10) pesos[i.toString().padStart(2,'0')] += p.lunar; }
 
         // 12. Fibonacci Modular
         const fibs = [1, 2, 3, 5, 8, 13, 21, 34, 55, 89];
         fibs.forEach(fNum => { pesos[((numBase + fNum) % 100).toString().padStart(2,'0')] += p.fib; });
 
-        // 13. Distancia de Hamming Binaria
+        // 13. Distancia de Hamming
         let binBase = numBase.toString(2).padStart(7, '0');
         for(let i=0; i<100; i++) {
             let binI = i.toString(2).padStart(7, '0');
@@ -690,11 +543,10 @@
             if(dist <= 2) pesos[i.toString().padStart(2,'0')] += p.hamming;
         }
 
-        // 14. Polinomio Dinámico Final
-        for(let i=0; i<100; i++) { pesos[i.toString().padStart(2,'0')] += Math.abs((0.05 * (i * i)) - (2.1 * i) + 10) * 0.05; }
+        // 14. Polinomio de Estabilidad
+        for(let i=0; i<100; i++) { pesos[i.toString().padStart(2,'0')] += Math.abs((0.02 * (i * i)) - (1.1 * i) + 5) * 0.1; }
 
-        let arrayOrdenado = Object.keys(pesos).sort((a, b) => pesos[b] - pesos[a]);
-        return arrayOrdenado.slice(0, cantidadSalida);
+        return Object.keys(pesos).sort((a, b) => pesos[b] - pesos[a]).slice(0, cantidadSalida);
     }
 
     function generarTodo(isAdmin) {
@@ -702,14 +554,12 @@
         let fijoStr = document.getElementById(`${pref}fijo_base`).value.trim().padStart(2, '0');
         let cant = parseInt(document.getElementById(`${pref}cant_final`).value || 50); 
         let turno = document.getElementById(`${pref}filtro_turno`).value;
-        
         let numBase = parseInt(fijoStr);
         if(isNaN(numBase)) return alert("Introduce un Fijo Base.");
 
         if(!isAdmin) {
-            let punta = Math.floor(numBase / 10); let term = numBase % 10;
-            document.getElementById(`c1`).textContent = ((punta + 3) % 10).toString();
-            document.getElementById(`c2`).textContent = ((term + 7) % 10).toString();
+            document.getElementById(`c1`).textContent = ((Math.floor(numBase / 10) + 3) % 10).toString();
+            document.getElementById(`c2`).textContent = ((numBase % 10 + 7) % 10).toString();
             document.getElementById(`c3`).textContent = ((numBase + 21) % 100).toString().padStart(2, '0');
         }
 
@@ -722,68 +572,50 @@
             panel.appendChild(b);
         });
 
-        let trazaHtml = `Engine v15.5 [14 Algoritmos Activos] -> Markov: ${pesosGlobalesOptimos.markov} | Cooc: ${pesosGlobalesOptimos.cooc} | Desv: ${pesosGlobalesOptimos.desv} | Retraso: ${pesosGlobalesOptimos.retraso}`;
-        document.getElementById(`${pref}pesos_aplicados`).innerHTML = trazaHtml;
-
+        document.getElementById(`${pref}pesos_aplicados`).innerHTML = `Engine v15.6 Estabilizado -> Markov: ${pesosGlobalesOptimos.markov} | Cooc: ${pesosGlobalesOptimos.cooc} | Retraso: ${pesosGlobalesOptimos.retraso}`;
         document.getElementById(`${pref}display_resultados`).style.display = 'block';
     }
 
-    // SIMULACIÓN CRONOLÓGICA DE LOS ÚLTIMOS 50 SORTEOS (SIN TRABAR EL MÓVIL)
-function ejecutarSimulacionAutomatica() {
-    let fechas = obtenerFechasCronologicas(db);
-    if (fechas.length < 3) return alert("Historial insuficiente para auditar.");
-    
-    resultadosSimulacionGlobal = {}; 
-    
-    // Muestra optimizada de los últimos 50 sorteos para que el móvil no se congele
-    let muestraFechas = fechas.slice(-50);
-    
-    for (let i = 0; i < muestraFechas.length; i++) {
-        let fechaObjetivo = muestraFechas[i];
-        let indexOriginal = fechas.indexOf(fechaObjetivo);
-        if (indexOriginal === 0) continue;
+    // AUDITORÍA DE ÚLTIMOS 50 ELEMENTOS FIX SIN TRABAS EN EL PROCESADOR
+    function ejecutarSimulacionAutomatica() {
+        let fechas = obtenerFechasCronologicas(db);
+        if (fechas.length < 3) return alert("Historial insuficiente para auditar.");
         
-        let fechaAnterior = fechas[indexOriginal - 1];
-        let tiroAnteriorFijo = db[fechaAnterior].n || db[fechaAnterior].t;
-        let tiroRealTarde = db[fechaObjetivo].t; 
-        let tiroRealNoche = db[fechaObjetivo].n;
-
-        if (!tiroAnteriorFijo) continue;
-
-        // Clonación rápida sin romper memoria
-        let dbCiega = JSON.parse(JSON.stringify(db)); 
-        delete dbCiega[fechaObjetivo];
+        resultadosSimulacionGlobal = {}; 
+        let muestraFechas = fechas.slice(-50);
         
-        // Optimización ligera para la simulación
-        let configuracionPesosInferencia = { markov:75, retraso:0.12, cooc:70, charada:35, desv:45, hermanos:35, lunar:30, fib:25, hamming:20 };
-        let prediccionSimulada = ejecutarAlgoritmoCore(tiroAnteriorFijo, 50, dbCiega, configuracionPesosInferencia, 'combinado');
+        for (let i = 0; i < muestraFechas.length; i++) {
+            let fechaObjetivo = muestraFechas[i];
+            let indexOriginal = fechas.indexOf(fechaObjetivo);
+            if (indexOriginal === 0) continue;
+            
+            let fechaAnterior = fechas[indexOriginal - 1];
+            let tiroAnteriorFijo = db[fechaAnterior].n || db[fechaAnterior].t;
+            if (!tiroAnteriorFijo) continue;
 
-        let aciertoTarde = tiroRealTarde && prediccionSimulada.includes(tiroRealTarde.padStart(2,'0'));
-        let aciertoNoche = tiroRealNoche && prediccionSimulada.includes(tiroRealNoche.padStart(2,'0'));
+            let dbCiega = JSON.parse(JSON.stringify(db)); delete dbCiega[fechaObjetivo];
+            let prediccionSimulada = ejecutarAlgoritmoCore(tiroAnteriorFijo, 50, dbCiega, pesosGlobalesOptimos, 'combinado');
 
-        resultadosSimulacionGlobal[fechaObjetivo] = {
-            tardeStatus: aciertoTarde ? "🟢 HIT" : "🔴 MISS",
-            nocheStatus: aciertoNoche ? "🟢 HIT" : "🔴 MISS"
-        };
+            let tReal = db[fechaObjetivo].t ? db[fechaObjetivo].t.padStart(2,'0') : '';
+            let nReal = db[fechaObjetivo].n ? db[fechaObjetivo].n.padStart(2,'0') : '';
+
+            resultadosSimulacionGlobal[fechaObjetivo] = {
+                tardeStatus: tReal && prediccionSimulada.includes(tReal) ? "🟢 HIT" : "🔴 MISS",
+                nocheStatus: nReal && prediccionSimulada.includes(nReal) ? "🟢 HIT" : "🔴 MISS"
+            };
+        }
+        alert("Auditoría de los últimos 50 sorteos completada.");
+        mostrarTablaAciertos();
     }
-    
-    alert(`Auditoría completa. Se analizaron los últimos ${muestraFechas.length} sorteos con éxito.`);
-    mostrarTablaAciertos();
-}
 
     function generarCobertura(tipo) {
         if (ultimosNumerosGenerados.length < 5) return alert("Ejecuta el análisis primero.");
         let container = document.getElementById('panel_cobertura'); container.innerHTML = "";
         let pool = ultimosNumerosGenerados.slice(0, 8); let resultadoHtml = "";
-
         if (tipo === 'par') {
-            for (let i = 0; i < pool.length; i += 2) {
-                if (pool[i+1]) resultadoHtml += `<div class="bloque-comb">🟢 Parlé: <b>${pool[i]}</b> × <b>${pool[i+1]}</b></div>`;
-            }
+            for (let i = 0; i < pool.length; i += 2) { if (pool[i+1]) resultadoHtml += `<div class="bloque-comb">🟢 Parlé: <b>${pool[i]}</b> × <b>${pool[i+1]}</b></div>`; }
         } else if (tipo === 'tri') {
-            for (let i = 0; i < pool.length - 2; i += 2) {
-                resultadoHtml += `<div class="bloque-comb">🔥 Triple: <b>${pool[i]}</b> - <b>${pool[i+1]}</b> - <b>${pool[i+2]}</b></div>`;
-            }
+            for (let i = 0; i < pool.length - 2; i += 2) { resultadoHtml += `<div class="bloque-comb">🔥 Triple: <b>${pool[i]}</b> - <b>${pool[i+1]}</b> - <b>${pool[i+2]}</b></div>`; }
         }
         container.innerHTML = resultadoHtml;
     }
@@ -799,36 +631,24 @@ function ejecutarSimulacionAutomatica() {
     }
 
     function mostrarTablaAciertos() {
-        let fechas = obtenerFechasCronologicas(db).reverse(); 
-        let tbodyHtml = "";
-        
-        if (fechas.length === 0) {
-            tbodyHtml = `<tr><td colspan="3" style="text-align:center; color:#666;">Sin tiros guardados.</td></tr>`;
-        } else {
+        let fechas = obtenerFechasCronologicas(db).reverse(); let tbodyHtml = "";
+        if (fechas.length === 0) { tbodyHtml = `<tr><td colspan="3" style="text-align:center; color:#666;">Sin tiros guardados.</td></tr>`; } 
+        else {
             fechas.forEach(f => {
                 let sim = resultadosSimulacionGlobal[f] || { tardeStatus: "⚙️ Listo", nocheStatus: "⚙️ Listo" };
-                let classT = sim.tardeStatus.includes("HIT") ? "badge-green" : (sim.tardeStatus.includes("MISS") ? "badge-red" : "");
-                let classN = sim.nocheStatus.includes("HIT") ? "badge-green" : (sim.nocheStatus.includes("MISS") ? "badge-red" : "");
-                
-                tbodyHtml += `<tr>
-                    <td><b>${f}</b></td>
-                    <td style="color:var(--neon); font-weight:bold;">${db[f].t || '-'} <span class="badge-acierto ${classT}">${sim.tardeStatus}</span></td>
-                    <td style="color:var(--win); font-weight:bold;">${db[f].n || '-'} <span class="badge-acierto ${classN}">${sim.nocheStatus}</span></td>
-                </tr>`;
+                tbodyHtml += `<tr><td><b>${f}</b></td>
+                    <td style="color:var(--neon); font-weight:bold;">${db[f].t || '-'} <span class="badge-acierto ${sim.tardeStatus.includes("HIT")?'badge-green':'badge-red'}">${sim.tardeStatus}</span></td>
+                    <td style="color:var(--win); font-weight:bold;">${db[f].n || '-'} <span class="badge-acierto ${sim.nocheStatus.includes("HIT")?'badge-green':'badge-red'}">${sim.nocheStatus}</span></td></tr>`;
             });
         }
-        let tablaCompleta = `<table><thead><tr><th>Fecha</th><th>Tarde (50)</th><th>Noche (50)</th></tr></thead><tbody>${tbodyHtml}</tbody></table>`;
-        document.getElementById('tabla_historico_aciertos_user').innerHTML = tablaCompleta;
-        document.getElementById('tabla_historico_aciertos_admin').innerHTML = tablaCompleta;
+        document.getElementById('tabla_historico_aciertos_user').innerHTML = `<table><thead><tr><th>Fecha</th><th>Tarde</th><th>Noche</th></tr></thead><tbody>${tbodyHtml}</tbody></table>`;
     }
 
     function buscarEnCharada() {
         let str = document.getElementById('search_charada_user').value.toLowerCase().trim();
         let resDiv = document.getElementById('charada_result_user'); if(!str) { resDiv.textContent = "Escribe para buscar..."; return; }
         let html = "";
-        for(let k in charadaDiccionario) {
-            if(k === str || charadaDiccionario[k].toLowerCase().includes(str)) html += `<div><b>${k.padStart(2,'0')}:</b> ${charadaDiccionario[k]}</div>`;
-        }
+        for(let k in charadaDiccionario) { if(k === str || charadaDiccionario[k].toLowerCase().includes(str)) html += `<div><b>${k.padStart(2,'0')}:</b> ${charadaDiccionario[k]}</div>`; }
         resDiv.innerHTML = html || "Sin coincidencias.";
     }
 
@@ -842,16 +662,11 @@ function ejecutarSimulacionAutomatica() {
         let reader = new FileReader();
         reader.onload = function(e) {
             try {
-                let parsed = JSON.parse(e.target.result);
-                let cleanedDb = {};
-                Object.keys(parsed).forEach(k => {
-                    let newKey = normalizarFechaAISO(k);
-                    cleanedDb[newKey] = parsed[k];
-                });
-                db = cleanedDb;
-                localStorage.setItem('bolita_master_db', JSON.stringify(db));
-                alert("¡Base de datos unificada e importada!"); renderCalendario(); mostrarTablaAciertos();
-            } catch(err) { alert("Archivo JSON inválido."); }
+                let parsed = JSON.parse(e.target.result); let cleanedDb = {};
+                Object.keys(parsed).forEach(k => { cleanedDb[normalizarFechaAISO(k)] = parsed[k]; });
+                db = cleanedDb; localStorage.setItem('bolita_master_db', JSON.stringify(db));
+                alert("¡Base de datos importada!"); renderCalendario(); mostrarTablaAciertos();
+            } catch(err) { alert("Archivo inválido."); }
         };
         reader.readAsText(file);
     }
@@ -871,11 +686,9 @@ function ejecutarSimulacionAutomatica() {
         for(let d=1; d<=totalDias; d++) {
             let k = `${y}-${(m+1).toString().padStart(2,'0')}-${d.toString().padStart(2,'0')}`;
             let normKey = normalizarFechaAISO(k);
-            let vT = (db[normKey] && db[normKey].t) ? db[normKey].t : ""; 
-            let vN = (db[normKey] && db[normKey].n) ? db[normKey].n : "";
             cuerpo.innerHTML += `<div class="day"><div style="color:#666; font-size:0.55rem;">${d}</div>
-                <input type="text" id="t-${k}" value="${vT}" placeholder="T" ${!esAdministradorLogueado?'disabled':''}>
-                <input type="text" id="n-${k}" value="${vN}" placeholder="N" ${!esAdministradorLogueado?'disabled':''}></div>`;
+                <input type="text" id="t-${k}" value="${(db[normKey] && db[normKey].t) ? db[normKey].t : ""}" placeholder="T" ${!esAdministradorLogueado?'disabled':''}>
+                <input type="text" id="n-${k}" value="${(db[normKey] && db[normKey].n) ? db[normKey].n : ""}" placeholder="N" ${!esAdministradorLogueado?'disabled':''}></div>`;
         }
         document.getElementById('admin_actions_cal').style.display = esAdministradorLogueado ? 'block' : 'none';
     }
@@ -883,10 +696,8 @@ function ejecutarSimulacionAutomatica() {
     function guardarDB() {
         document.querySelectorAll('.day input').forEach(i => {
             if(!i.id) return;
-            let p = i.id.split('-'); let tu = p[0]; let k = `${p[1]}-${p[2]}-${p[3]}`;
-            let normKey = normalizarFechaAISO(k);
-            if (!db[normKey]) db[normKey] = { t: "", n: "" }; 
-            db[normKey][tu] = i.value.trim() ? i.value.trim().padStart(2, '0') : "";
+            let p = i.id.split('-'); let tu = p[0]; let normKey = normalizarFechaAISO(`${p[1]}-${p[2]}-${p[3]}`);
+            if (!db[normKey]) db[normKey] = { t: "", n: "" }; db[normKey][tu] = i.value.trim() ? i.value.trim().padStart(2, '0') : "";
         });
         localStorage.setItem('bolita_master_db', JSON.stringify(db)); alert("Calendario guardado."); renderCalendario(); mostrarTablaAciertos();
     }
@@ -899,16 +710,13 @@ function ejecutarSimulacionAutomatica() {
             coinc.forEach(b => {
                 let m = /(\d{1,2})\/(\d{1,2})\/(\d{2,4})\s*([A-Za-z])\s*\d+-%?(\d+)/i.exec(b);
                 if(m) {
-                    let k = `${m[3].length===2?'20'+m[3]:m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`;
-                    let normKey = normalizarFechaAISO(k);
+                    let normKey = normalizarFechaAISO(`${m[3].length===2?'20'+m[3]:m[3]}-${m[2]}-${m[1]}`);
                     let tu = m[4].toUpperCase() === 'M' || m[4].toUpperCase() === 'N' ? 'n' : 't';
                     if(!db[normKey]) db[normKey] = {}; db[normKey][tu] = m[5].padStart(2,'0'); cnt++;
                 }
             });
         }
-        localStorage.setItem('bolita_master_db', JSON.stringify(db)); 
-        alert(`Unificados e inyectados ${cnt} fijos.`); 
-        renderCalendario(); mostrarTablaAciertos(); cerrarConfig();
+        localStorage.setItem('bolita_master_db', JSON.stringify(db)); alert(`Inyectados ${cnt} fijos.`); renderCalendario(); mostrarTablaAciertos(); cerrarConfig();
     }
 </script>
 </body>

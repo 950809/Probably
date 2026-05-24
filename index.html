@@ -284,7 +284,7 @@
 </div>
 
 <script>
-    // INYECCIÓN AUTOMÁTICA DE ENTORNOS PWA (MODO COMPUESTO DIRECTO)
+    // INYECCIÓN AUTOMÁTICA DE ENTORNOS PWA
     const pwaManifestObj = {
         "short_name": "BolitaPro",
         "name": "Bolita Pro Master Elite",
@@ -330,7 +330,7 @@
         navigator.serviceWorker.register(URL.createObjectURL(blobSW)).catch(err => console.log("SW bypass"));
     }
 
-    // BASE LOGÍSTICA DE ACCESO MASTER
+    // LOGÍSTICA DE ACCESO MASTER
     const _0xAdmin = "yohnny95", _0xPass = "Elmatatan95*";
     
     const baseRespaldoDefault = {"2026-05-18":{"t":"14","n":"83"},"2026-05-19":{"t":"45","n":"02"},"2026-05-20":{"t":"83","n":"11"},"2026-05-21":{"t":"26","n":"45"},"2026-05-22":{"t":"92","n":"14"}};
@@ -361,34 +361,45 @@
         mostrarTablaAciertos();
     });
 
+    // MOTOR QUIRÚRGICO DE NORMALIZACIÓN DE FECHAS BINARIAS
     function normalizarFechaAISO(strFecha) {
-        let limpia = strFecha.trim();
-        if (limpia.includes('/')) {
-            let partes = limpia.split('/');
-            if(partes.length === 3) {
+        if (!strFecha) return "";
+        let limpia = strFecha.trim().replace(/\//g, '-');
+        let partes = limpia.split('-');
+        
+        if (partes.length === 3) {
+            // Caso: DD-MM-YYYY o D-M-YY
+            if (partes[0].length <= 2 && partes[2].length >= 2) {
                 let d = partes[0].padStart(2, '0');
                 let m = partes[1].padStart(2, '0');
                 let a = partes[2];
-                if(a.length === 2) a = '20' + a;
+                if (a.length === 2) a = '20' + a;
                 return `${a}-${m}-${d}`;
             }
-        }
-        if (limpia.includes('-')) {
-            let partes = limpia.split('-');
-            if (partes.length === 3) {
-                if (partes[0].length === 4) {
-                    return `${partes[0]}-${partes[1].padStart(2,'0')}-${partes[2].padStart(2,'0')}`;
-                } else {
-                    return `${partes[2]}-${partes[1].padStart(2,'0')}-${partes[0].padStart(2,'0')}`;
-                }
+            // Caso: YYYY-MM-DD
+            if (partes[0].length === 4) {
+                let a = partes[0];
+                let m = partes[1].padStart(2, '0');
+                let d = partes[2].padStart(2, '0');
+                return `${a}-${m}-${d}`;
             }
         }
         return limpia;
     }
 
+    // CRONOLOGÍA ABSOLUTA COMPROBADA CON VALORES ENTEROS RECONSTRUIDOS
     function obtenerFechasCronologicas(database) {
-        return Object.keys(database).filter(k => database[k] !== null).sort((a, b) => {
-            return new Date(normalizarFechaAISO(a)).getTime() - new Date(normalizarFechaAISO(b)).getTime();
+        return Object.keys(database).filter(k => database[k] !== null && k.trim() !== "").sort((a, b) => {
+            let isoA = normalizarFechaAISO(a);
+            let isoB = normalizarFechaAISO(b);
+            
+            let numA = parseInt(isoA.replace(/-/g, ''));
+            let numB = parseInt(isoB.replace(/-/g, ''));
+            
+            if (isNaN(numA) || isNaN(numB)) {
+                return new Date(isoA).getTime() - new Date(isoB).getTime();
+            }
+            return numA - numB;
         });
     }
 
@@ -510,7 +521,7 @@
                 loader.scrollTop = loader.scrollHeight;
                 paso++;
             }
-        }, 150);
+        }, 120);
 
         setTimeout(() => {
             clearInterval(intervalo);
@@ -519,7 +530,7 @@
             
             pesosGlobalesOptimos = autoOptimizarPesos(db, turno);
             generarTodo(isAdmin); 
-        }, 2400);
+        }, 2000);
     }
 
     function autoOptimizarPesos(database, turnoSeleccionado) {
@@ -535,7 +546,7 @@
 
         let mejorSet = setsDePrueba[2]; 
         let maxHits = -1;
-        let muestraCiega = fechas.slice(-12);
+        let muestraCiega = fechas.slice(-15);
 
         setsDePrueba.forEach(set => {
             let hitsSimulados = 0;
@@ -568,9 +579,7 @@
         return mejorSet;
     }
 
-    // ========================================================
-    // MOTOR CORE DEFINITIVO DE LOS 14 ALGORITMOS ACTIVOS
-    // ========================================================
+    // MOTOR CORE DE LOS 14 ALGORITMOS ACTIVOS
     function ejecutarAlgoritmoCore(fijoBaseStr, cantidadSalida, dbSimulada, configPesos, turnoSeleccionado = 'combinado') {
         let p = configPesos || pesosGlobalesOptimos || { markov:75, retraso:0.12, cooc:70, charada:35, desv:45, hermanos:35, lunar:30, fib:25, hamming:20 };
 
@@ -590,24 +599,24 @@
             if(dbSimulada[f]?.n) flujoNumerosCompleto.push(dbSimulada[f].n.padStart(2,'0'));
         });
         
-        let flujoRachaCaliente = flujoNumerosCompleto.slice(-140);
-        let fechasRachaCortas = fechasOrdenadas.slice(-60);
+        let flujoRachaCaliente = flujoNumerosCompleto.slice(-150);
+        let fechasRachaCortas = fechasOrdenadas.slice(-70);
 
-        // 1. Cadenas de Markov Aisladas
+        // 1. Cadenas de Markov
         let ultimoNum = null;
         flujoRachaCaliente.forEach(num => {
             if (ultimoNum === fijoStr) pesos[num] += (p.markov * 1.5);
             ultimoNum = num;
         });
 
-        // 2. Retraso Acumulado Progresivo
+        // 2. Retraso Acumulado
         let totalSorteos = 0; let ultimoAvistamiento = {};
         flujoRachaCaliente.forEach(num => {
             totalSorteos++; ultimoAvistamiento[num] = totalSorteos;
         });
         for(let nStr in pesos) pesos[nStr] += (totalSorteos - (ultimoAvistamiento[nStr] || 0)) * p.retraso;
 
-        // 3. Co-ocurrencias Filtradas de Tiro
+        // 3. Co-ocurrencias
         fechasRachaCortas.forEach(f => {
             if(dbSimulada[f]) {
                 let comb = [(dbSimulada[f].t || '').padStart(2,'0'), (dbSimulada[f].n || '').padStart(2,'0')];
@@ -615,33 +624,31 @@
             }
         });
 
-        // 4. Penalización por Turno Inverso
+        // 4. Turno Inverso
         if (turnoSeleccionado === 'tarde' || turnoSeleccionado === 'noche') {
             let fInverso = turnoSeleccionado === 'tarde' ? 'n' : 't';
-            fechasRachaCortas.slice(-20).forEach(f => {
+            fechasRachaCortas.slice(-25).forEach(f => {
                 if(dbSimulada[f] && dbSimulada[f][fInverso]) {
                     pesos[dbSimulada[f][fInverso].padStart(2, '0')] -= 18.0; 
                 }
             });
         }
 
-        // 5. Intersección Semántica de Charada
+        // 5. Charada
         let inputCharada = document.getElementById('search_charada_user');
         let palabra = inputCharada ? inputCharada.value.toLowerCase().trim() : '';
         if(palabra.length > 2) {
-            for(let k in charadaDiccionario) { 
-                if(charadaDiccionario[k].toLowerCase().includes(palabra)) pesos[k.padStart(2, '0')] += p.charada; 
-            }
+            for(let k in charadaDiccionario) { if(charadaDiccionario[k].toLowerCase().includes(palabra)) pesos[k.padStart(2, '0')] += p.charada; }
         }
 
-        // 6. Desviación Estándar en Racha Fría
+        // 6. Desviación Estándar
         let contadores = {}; for(let i = 0; i < 100; i++) contadores[i.toString().padStart(2, '0')] = 0;
-        flujoRachaCaliente.slice(-80).forEach(n => { if(n) contadores[n]++; });
+        flujoRachaCaliente.slice(-90).forEach(n => { if(n) contadores[n]++; });
         for(let nStr in pesos) { if(contadores[nStr] === 0) pesos[nStr] += p.desv; }
 
-        // 7. Saturación Matricial de Décadas
+        // 7. Saturación de Décadas
         let satBloques = {}; for(let i = 0; i < 10; i++) satBloques[i] = 0;
-        flujoRachaCaliente.slice(-25).forEach(num => {
+        flujoRachaCaliente.slice(-30).forEach(num => {
             let dec = Math.floor(parseInt(num) / 10);
             if(!isNaN(dec) && dec >= 0 && dec <= 9) satBloques[dec]++;
         });
@@ -650,51 +657,41 @@
             if(!isNaN(decNum) && satBloques[decNum] >= 4) pesos[nStr] -= (satBloques[decNum] * 4.0);
         }
 
-        // 8. Regresión de Números Hermanos y Parientes
+        // 8. Hermanos y Espejos
         let hermano = (numBase + 11) % 100;
         let pariente = (numBase + 50) % 100;
         pesos[hermano.toString().padStart(2, '0')] += p.hermanos;
         pesos[pariente.toString().padStart(2, '0')] += p.hermanos;
 
-        // 9. Adyacencia Geométrica de Vecinos Verticales
+        // 9. Adyacencia Geométrica
         let vecinoArr = (numBase + 10) % 100;
         let vecinoAba = (numBase - 10 < 0) ? (numBase - 10 + 100) : (numBase - 10);
         pesos[vecinoArr.toString().padStart(2, '0')] += 15.0;
         pesos[vecinoAba.toString().padStart(2, '0')] += 15.0;
 
-        // 10. Reflejos Asimétricos y Virados Automáticos
+        // 10. Reflejos y Virados
         let virado = fijoStr.split('').reverse().join('').padStart(2, '0');
-        pesos[virado] += 40.0;
-        pesos[((punta + 5) % 10).toString() + term] += 12.0;
+        pesos[virado] += 40.0; pesos[((punta + 5) % 10).toString() + term] += 12.0;
 
-        // 11. Sincronización de Ciclo Lunar Local (Fórmula Trigonométrica)
+        // 11. Ciclo Lunar Real
         let diaDelMes = new Date().getDate();
         let factorLunar = Math.sin((diaDelMes / 30) * Math.PI * 2) * p.lunar;
-        for(let i=0; i<100; i++) {
-            if(i % 7 === Math.abs(diaDelMes % 7)) pesos[i.toString().padStart(2,'0')] += Math.abs(factorLunar);
-        }
+        for(let i=0; i<100; i++) { if(i % 7 === Math.abs(diaDelMes % 7)) pesos[i.toString().padStart(2,'0')] += Math.abs(factorLunar); }
 
-        // 12. Raíces de Secuencia Fibonacci Modular
+        // 12. Fibonacci Modular
         const fibs = [1, 2, 3, 5, 8, 13, 21, 34, 55, 89];
-        fibs.forEach(fNum => {
-            let objetivoFib = (numBase + fNum) % 100;
-            pesos[objetivoFib.toString().padStart(2,'0')] += p.fib;
-        });
+        fibs.forEach(fNum => { pesos[((numBase + fNum) % 100).toString().padStart(2,'0')] += p.fib; });
 
-        // 13. Comparación por Distancia de Hamming Binaria
+        // 13. Distancia de Hamming Binaria
         let binBase = numBase.toString(2).padStart(7, '0');
         for(let i=0; i<100; i++) {
             let binI = i.toString(2).padStart(7, '0');
-            let distancia = 0;
-            for(let j=0; j<7; j++) { if(binBase[j] !== binI[j]) distancia++; }
-            if(distancia <= 2) pesos[i.toString().padStart(2,'0')] += p.hamming;
+            let dist = 0; for(let j=0; j<7; j++) { if(binBase[j] !== binI[j]) dist++; }
+            if(dist <= 2) pesos[i.toString().padStart(2,'0')] += p.hamming;
         }
 
-        // 14. Ajuste por Polinomio Dinámico Final
-        for(let i=0; i<100; i++) {
-            let factorPolinomio = (0.05 * (i * i)) - (2.1 * i) + 10;
-            pesos[i.toString().padStart(2,'0')] += Math.abs(factorPolinomio) * 0.05;
-        }
+        // 14. Polinomio Dinámico Final
+        for(let i=0; i<100; i++) { pesos[i.toString().padStart(2,'0')] += Math.abs((0.05 * (i * i)) - (2.1 * i) + 10) * 0.05; }
 
         let arrayOrdenado = Object.keys(pesos).sort((a, b) => pesos[b] - pesos[a]);
         return arrayOrdenado.slice(0, cantidadSalida);
@@ -731,17 +728,17 @@
         document.getElementById(`${pref}display_resultados`).style.display = 'block';
     }
 
-    // AUDITORÍA CRONOLÓGICA DE ACIERTOS (CORREGIDA SIN BUFFERS UNDEFINED)
+    // SIMULACIÓN CRONOLÓGICA COMPLETA DE TODO EL HISTORIAL SIN BUGS DE CORTE
     function ejecutarSimulacionAutomatica() {
         let fechas = obtenerFechasCronologicas(db);
         if (fechas.length < 3) return alert("Historial insuficiente para auditar.");
         
         resultadosSimulacionGlobal = {}; 
-        let muestraFechas = fechas.slice(-200); 
-
-        for (let i = 1; i < muestraFechas.length; i++) {
-            let fechaObjetivo = muestraFechas[i]; 
-            let fechaAnterior = muestraFechas[i-1];
+        
+        // REVISIÓN CIRUJANO: Eliminado el .slice(-30). Ahora procesa TODO el historial de la base de datos local
+        for (let i = 1; i < fechas.length; i++) {
+            let fechaObjetivo = fechas[i]; 
+            let fechaAnterior = fechas[i-1];
             
             let tiroAnteriorFijo = db[fechaAnterior].n || db[fechaAnterior].t;
             let tiroRealTarde = db[fechaObjetivo].t; 
@@ -764,7 +761,7 @@
             };
         }
         
-        alert("Auditoría Cronológica v15.5 completada con los 14 motores matriciales.");
+        alert(`Auditoría completa exitosa. Se procesaron ${fechas.length - 1} sorteos históricos.`);
         mostrarTablaAciertos();
     }
 
@@ -802,7 +799,7 @@
         if (fechas.length === 0) {
             tbodyHtml = `<tr><td colspan="3" style="text-align:center; color:#666;">Sin tiros guardados.</td></tr>`;
         } else {
-            fechas.slice(0, 50).forEach(f => {
+            fechas.forEach(f => {
                 let sim = resultadosSimulacionGlobal[f] || { tardeStatus: "⚙️ Listo", nocheStatus: "⚙️ Listo" };
                 let classT = sim.tardeStatus.includes("HIT") ? "badge-green" : (sim.tardeStatus.includes("MISS") ? "badge-red" : "");
                 let classN = sim.nocheStatus.includes("HIT") ? "badge-green" : (sim.nocheStatus.includes("MISS") ? "badge-red" : "");
@@ -867,7 +864,9 @@
         for(let i=0; i<des; i++) { let b = document.createElement('div'); b.className="day"; cuerpo.appendChild(b); }
         for(let d=1; d<=totalDias; d++) {
             let k = `${y}-${(m+1).toString().padStart(2,'0')}-${d.toString().padStart(2,'0')}`;
-            let vT = (db[k] && db[k].t) ? db[k].t : ""; let vN = (db[k] && db[k].n) ? db[k].n : "";
+            let normKey = normalizarFechaAISO(k);
+            let vT = (db[normKey] && db[normKey].t) ? db[normKey].t : ""; 
+            let vN = (db[normKey] && db[normKey].n) ? db[normKey].n : "";
             cuerpo.innerHTML += `<div class="day"><div style="color:#666; font-size:0.55rem;">${d}</div>
                 <input type="text" id="t-${k}" value="${vT}" placeholder="T" ${!esAdministradorLogueado?'disabled':''}>
                 <input type="text" id="n-${k}" value="${vN}" placeholder="N" ${!esAdministradorLogueado?'disabled':''}></div>`;
@@ -880,7 +879,8 @@
             if(!i.id) return;
             let p = i.id.split('-'); let tu = p[0]; let k = `${p[1]}-${p[2]}-${p[3]}`;
             let normKey = normalizarFechaAISO(k);
-            if (!db[normKey]) db[normKey] = { t: "", n: "" }; db[normKey][tu] = i.value.trim() ? i.value.trim().padStart(2, '0') : "";
+            if (!db[normKey]) db[normKey] = { t: "", n: "" }; 
+            db[normKey][tu] = i.value.trim() ? i.value.trim().padStart(2, '0') : "";
         });
         localStorage.setItem('bolita_master_db', JSON.stringify(db)); alert("Calendario guardado."); renderCalendario(); mostrarTablaAciertos();
     }

@@ -760,12 +760,15 @@
         resultadosSimulacionGlobal = {}; 
         let procesados = 0;
 
-        // Recorremos cronológicamente todas las fechas para validar aciertos
+        // 1. Pre-renderizar una optimización fija para no recalcularla en cada vuelta del bucle
+        let configuracionPesosFijos = pesosGlobalesOptimos || { markov:65, retraso:0.05, cooc:60, charada:35, lunar:45, fib:25, desv:40, hermanos:30, regresion:18, entropia:25 };
+
+        // 2. Ejecutar el bucle de forma eficiente
         for (let i = 1; i < fechas.length; i++) {
             let fechaObjetivo = fechas[i]; 
             let isoObjetivo = normalizarFechaAISO(fechaObjetivo);
             
-            // Si el usuario eligió un mes específico (ej: "2026-05"), salta los días que no correspondan
+            // Si elegiste un mes y este día no pertenece a él, saltarlo de inmediato sin consumir procesador
             if (mesSeleccionado !== "todos") {
                 if (!isoObjetivo.startsWith(mesSeleccionado)) {
                     continue; 
@@ -779,10 +782,12 @@
 
             if (!tiroAnteriorFijo) continue;
 
-            let dbCiega = JSON.parse(JSON.stringify(db)); 
-            delete dbCiega[fechaObjetivo];
+            // Creamos una copia rápida simulada
+            let dbCiega = {};
+            for (let f in db) { if (f !== fechaObjetivo) dbCiega[f] = db[f]; }
             
-            let prediccionSimulada = ejecutarAlgoritmoCore(tiroAnteriorFijo, 50, dbCiega, null, 'combinado');
+            // Pasamos la configuración fija directamente para evitar bucles anidados lentos
+            let prediccionSimulada = ejecutarAlgoritmoCore(tiroAnteriorFijo, 50, dbCiega, configuracionPesosFijos, 'combinado');
 
             let aciertoTarde = tiroRealTarde && prediccionSimulada.includes(tiroRealTarde.padStart(2,'0'));
             let aciertoNoche = tiroRealNoche && prediccionSimulada.includes(tiroRealNoche.padStart(2,'0'));
@@ -797,7 +802,7 @@
         if(procesados === 0) {
             alert("No hay fijos cargados que coincidan con el mes seleccionado.");
         } else {
-            alert(`Auditoría de rango [${mesSeleccionado.toUpperCase()}] completada.`);
+            alert(`Auditoría completada exitosamente (${procesados} días analizados).`);
         }
         mostrarTablaAciertos();
     }

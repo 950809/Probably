@@ -4,12 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bolita Pro Master - Consola Global Elite v15.0</title>
-    
-    <meta name="theme-color" content="#050505">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="BolitaPro">
-    
     <style>
         :root { --neon: #00ff41; --dark: #050505; --panel: #0d1117; --win: #ffeb3b; --error: #ff3333; --cyber: #00bcd4; }
         body { font-family: 'Segoe UI', monospace; background: var(--dark); color: var(--neon); margin: 0; padding: 10px; -webkit-user-select: none; user-select: none; }
@@ -19,277 +13,273 @@
         .main-form, .login-form { display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 10px; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
-        input, select, textarea { background: #000; border: 1px solid var(--neon); color: var(--neon); padding: 8px; font-family: monospace; border-radius: 4px; font-size: 0.85rem; width: 100%; box-sizing: border-box; }
-        input:focus, select:focus { outline: none; box-shadow: 0 0 5px var(--neon); }
         
-        button { background: transparent; border: 1px solid var(--neon); color: var(--neon); padding: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; border-radius: 4px; transition: 0.2s; font-size: 0.8rem; }
-        button:hover { background: var(--neon); color: #000; }
-        button:disabled { border-color: #333; color: #333; cursor: not-allowed; background: transparent; }
+        label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; color: #888; margin-bottom: -4px; display: block; }
+        input[type="text"], input[type="password"], select, textarea { 
+            background: #000; border: 1px solid #333; color: var(--neon); padding: 8px; 
+            font-size: 0.85rem; border-radius: 4px; box-sizing: border-box; font-family: inherit; width: 100%;
+        }
+        input:focus, select:focus, textarea:focus { border-color: var(--cyber); outline: none; }
         
-        .panel { background: var(--panel); border: 1px dashed var(--neon); padding: 10px; border-radius: 6px; margin-top: 10px; }
-        .grid-panel { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 8px; }
-        .box { background: #000; border: 1px solid var(--neon); text-align: center; padding: 8px 0; font-size: 1rem; font-weight: bold; border-radius: 4px; color: #fff; }
+        button { 
+            background: #000; border: 1px solid var(--neon); color: var(--neon); padding: 9px; 
+            font-size: 0.75rem; text-transform: uppercase; font-weight: bold; cursor: pointer; 
+            border-radius: 4px; transition: 0.2s; font-family: inherit; width: 100%;
+        }
+        button:hover { background: var(--neon); color: #000; box-shadow: 0 0 8px var(--neon); }
+        button:disabled { border-color: #333; color: #444; background: #020202; cursor: not-allowed; box-shadow: none; }
         
-        .destacado-top10 { border-color: var(--cyber); color: var(--cyber); box-shadow: 0 0 3px var(--cyber); }
+        .panel-resultados { 
+            margin-top: 12px; border: 1px dashed var(--cyber); padding: 10px; border-radius: 4px; 
+            background: var(--panel); display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; 
+        }
+        .box { 
+            background: #000; border: 1px solid #222; padding: 8px 0; text-align: center; 
+            font-size: 0.9rem; font-weight: bold; border-radius: 4px; color: #fff;
+        }
+        .destacado-top10 { border-color: var(--win); color: var(--win); text-shadow: 0 0 3px rgba(255,235,59,0.5); }
         
-        .tab-bar { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 10px; }
-        .tab-btn { background: #111; border: 1px solid #333; color: #888; font-size: 0.75rem; padding: 6px; }
-        .tab-btn.active { border-color: var(--neon); color: var(--neon); background: var(--panel); }
+        .tab-bar { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 12px; border-bottom: 1px solid #222; padding-bottom: 8px; }
+        .tab-btn { background: #000; border: 1px solid #333; color: #666; padding: 6px; font-size: 0.65rem; }
+        .tab-btn.active { color: var(--neon); border-color: var(--neon); background: rgba(0,255,65,0.05); }
         
-        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-top: 8px; text-align: center; }
-        .cal-header { font-size: 0.6rem; color: #888; font-weight: bold; text-transform: uppercase; padding-bottom: 2px; }
-        .day { background: #000; border: 1px solid #222; padding: 3px 1px; border-radius: 3px; min-height: 38px; display: flex; flex-direction: column; justify-content: space-between; }
-        .day input { padding: 1px; font-size: 0.65rem; text-align: center; border: none; border-bottom: 1px solid #333; border-radius: 0; margin-top: 1px; background: transparent; color: #fff; }
+        .admin-tabs { grid-template-columns: 1fr 1fr 1fr !important; }
+        .tab-btn.admin-tab.active { color: var(--cyber) !important; border-color: var(--cyber) !important; background: rgba(0,188,212,0.05) !important; }
         
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; overflow-y: auto; padding: 10px 0; }
-        .modal-content { max-width: 440px; margin: auto; background: var(--panel); border: 1px solid var(--neon); padding: 12px; border-radius: 6px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.75rem; }
+        th, td { border: 1px solid #222; padding: 6px; text-align: center; }
+        th { background: #000; color: #888; font-weight: normal; font-size: 0.65rem; text-transform: uppercase; }
+        tr:nth-child(even) { background: #080d14; }
         
-        table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.75rem; text-align: left; }
-        th, td { padding: 5px; border-bottom: 1px solid #222; }
-        th { color: var(--neon); text-transform: uppercase; font-size: 0.65rem; }
+        .badge-acierto { font-size: 0.65rem; padding: 1px 3px; border-radius: 3px; margin-left: 2px; font-weight: normal; display: inline-block; }
+        .badge-green { background: rgba(0,255,65,0.15); color: #00ff41; border: 1px solid var(--neon); }
+        .badge-red { background: rgba(255,51,51,0.15); color: #ff3333; border: 1px solid var(--error); }
         
-        .calc-box { background: #000; border: 1px solid #333; padding: 6px; border-radius: 4px; text-align: center; }
-        .calc-box span { display: block; font-size: 1.1rem; font-weight: bold; color: #fff; margin-top: 2px; }
+        .loader-consola { 
+            background: #000; border: 1px solid var(--error); color: var(--error); padding: 8px; 
+            font-size: 0.6rem; font-family: monospace; border-radius: 4px; height: 110px; 
+            overflow-y: auto; white-space: pre-wrap; margin-top: 8px; display: none; line-height: 1.3;
+        }
         
-        .charada-box { background: #000; border: 1px solid #222; padding: 6px; border-radius: 4px; max-height: 90px; overflow-y: auto; font-size: 0.75rem; color: #ccc; white-space: pre-line; margin-top: 4px; }
-        .loader { display: none; text-align: left; color: var(--win); font-size: 0.72rem; font-weight: bold; margin: 12px 0; letter-spacing: 0.5px; line-height: 1.4; border: 1px dashed var(--win); padding: 12px; border-radius: 4px; background: rgba(255,235,59,0.02); font-family: monospace; max-height: 220px; overflow-y: auto; }
-        .bloque-comb { font-size: 0.75rem; color: #fff; background: #000; border: 1px solid var(--cyber); padding: 5px; border-radius: 4px; margin-bottom: 4px; font-family: monospace; }
+        .mini-card { background: #000; border: 1px solid #222; padding: 6px; border-radius: 4px; text-align: center; }
+        .mini-card span { font-size: 0.9rem; font-weight: bold; color: #fff; }
         
-        .badge-acierto { padding: 2px 4px; border-radius: 3px; font-size: 0.65rem; font-weight: bold; }
-        .badge-green { background: #003300; color: #00ff00; border: 1px solid #00ff00; }
-        .badge-red { background: #330000; color: #ff3333; border: 1px solid #ff3333; }
-        .pesos-info { font-size: 0.62rem; color: var(--cyber); margin-top: 5px; line-height: 1.3; font-family: monospace; }
+        .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-top: 8px; }
+        .cal-header { text-align: center; font-size: 0.55rem; color: #555; text-transform: uppercase; font-weight: bold; }
+        .day { background: #000; border: 1px solid #111; padding: 3px; min-height: 42px; border-radius: 3px; display: flex; flex-direction: column; justify-content: space-between; }
+        .day input { font-size: 0.6rem !important; padding: 1px !important; text-align: center; border-color: #222 !important; margin-top: 2px; }
         
-        .filtro-sim-box { display: flex; flex-direction: column; gap: 5px; margin-bottom: 8px; border: 1px dashed #333; padding: 6px; border-radius: 4px; background: rgba(0,0,0,0.3); }
+        .btn-config { background: #000; border: 1px solid var(--cyber); color: var(--cyber); padding: 4px; font-size: 0.65rem; border-radius: 4px; float: right; margin-top: -3px; width: auto !important; }
+        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:1000; padding:10px; box-sizing:border-box; overflow-y:auto; }
+        .modal-content { max-width:440px; background:var(--panel); border:1px solid var(--cyber); margin:20px auto; padding:12px; border-radius:6px; }
+        
+        .bloque-comb { background:#000; border-left:2px solid var(--win); padding:5px; margin-top:4px; font-size:0.75rem; color:#fff; }
     </style>
 </head>
 <body>
 
 <div class="container">
-
     <div id="view-login" style="display: block;">
-        <h2>Identificación de Terminal</h2>
+        <h2>CONEXIÓN TERMINAL SECURE_SHELL</h2>
         <div class="login-form">
-            <input type="text" id="login-user" placeholder="USUARIO ACCESO">
-            <input type="password" id="login-pass" placeholder="PASSWORD DISPOSITIVO">
-            <button onclick="intentarLogin()">Acceder al Sistema</button>
-            <div id="login-error" style="color:var(--error); font-size:0.75rem; text-align:center; display:none;"></div>
-            <p style="font-size:0.7rem; text-align:center; color:#666; margin-top:10px;">
-                ¿Dispositivo nuevo? <span style="color:var(--neon); cursor:pointer;" onclick="mostrarRegistroForm(true)">Solicitar Acceso Local</span>
-            </p>
+            <div>
+                <label>Usuario Operador</label>
+                <input type="text" id="login-user" placeholder="root_id">
+            </div>
+            <div>
+                <label>Palabra Clave</label>
+                <input type="password" id="login-pass" placeholder="••••••••">
+            </div>
+            <button onclick="intentarLogin()">Establecer Enlace</button>
+            <div style="text-align: center; margin-top: 5px;">
+                <a href="#" style="color:var(--cyber); font-size:0.65rem; text-decoration:none;" onclick="mostrarRegistroForm(true)">[ Solicitar Acceso Terminal Local ]</a>
+            </div>
+            <div id="login-error" style="color:var(--error); font-size:0.7rem; text-align:center; display:none; margin-top:5px;"></div>
         </div>
     </div>
 
     <div id="view-register" style="display: none;">
-        <h2>Solicitud de Registro Local</h2>
+        <h2>REGISTRO DE OPERADOR LOCAL</h2>
         <div class="login-form">
-            <input type="text" id="reg-nombre" placeholder="TU NOMBRE">
-            <input type="text" id="reg-apellido" placeholder="TU APELLIDO">
-            <input type="password" id="reg-pass" placeholder="PASSWORD SOLICITADA">
-            <button style="border-color:var(--win); color:var(--win);" onclick="enviarSolicitud()">Registrar en Memoria</button>
-            <button style="border-color:#555; color:#888;" onclick="mostrarRegistroForm(false)">Volver Atrás</button>
+            <div class="grid-2">
+                <div><label>Nombre</label><input type="text" id="reg-nombre"></div>
+                <div><label>Apellido</label><input type="text" id="reg-apellido"></div>
+            </div>
+            <div><label>Clave Solicitada</label><input type="password" id="reg-pass"></div>
+            <button onclick="enviarSolicitud()">Grabar Solicitud en LocalStorage</button>
+            <button style="border-color:#555; color:#555;" onclick="mostrarRegistroForm(false)">Regresar</button>
         </div>
     </div>
 
     <div id="view-app" style="display: none;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-            <span id="user-display" style="font-size:0.7rem; color:#aaa; font-weight:bold;"></span>
-            <div style="display:flex; gap:4px;">
-                <button style="padding:3px 6px; font-size:0.65rem;" onclick="abrirConfig()">Base de Datos</button>
-                <button style="padding:3px 6px; font-size:0.65rem; border-color:var(--error); color:var(--error);" onclick="cerrarSesionEfectiva()">Salir</button>
-            </div>
+        <div style="font-size:0.6rem; margin-bottom:6px; color:#555;">
+            <span id="user-display" style="color:var(--neon);"></span> 
+            <button style="width:auto; padding:2px 6px; font-size:0.55rem; border-color:#444; color:#aa3333; float:right; margin-top:-2px;" onclick="cerrarSesionEfectiva()">Desconectar</button>
+            <button class="btn-config" onclick="abrirConfig()">⚙️ BASE</button>
         </div>
-
+        
         <div class="tab-bar">
-            <button id="btn-user-tab-calc" class="tab-btn active" onclick="switchUserSection('calc')">Algoritmo Predictivo</button>
-            <button id="btn-user-tab-hist" class="tab-btn" onclick="switchUserSection('hist')">Panel de Rendimiento</button>
+            <button id="btn-user-tab-calc" class="tab-btn active" onclick="switchUserSection('calc')">MATRIZ DE CÁLCULO</button>
+            <button id="btn-user-tab-hist" class="tab-btn" onclick="switchUserSection('hist')">PANEL DE RENDIMIENTO</button>
         </div>
 
         <div id="user-sec-calc" style="display: block;">
             <div class="main-form">
                 <div class="grid-3">
                     <div>
-                        <label style="font-size:0.55rem; color:#888; display:block; margin-bottom:2px;">FIJO RECIENTE</label>
-                        <input type="number" id="fijo_base" placeholder="Ej. 83" maxlength="2" oninput="if(this.value.length > 2) this.value = this.value.slice(0,2);">
+                        <label>Fijo Base</label>
+                        <input type="text" id="user_fijo_base" placeholder="Ej: 14" maxlength="2">
                     </div>
                     <div>
-                        <label style="font-size:0.55rem; color:#888; display:block; margin-bottom:2px;">ENFOQUE TURNO</label>
-                        <select id="filtro_turno">
-                            <option value="combinado" selected>Combinado</option>
-                            <option value="tarde">Solo Tardes</option>
-                            <option value="noche">Solo Noches</option>
+                        <label>Turno Target</label>
+                        <select id="user_filtro_turno">
+                            <option value="combinado">Combinado</option>
+                            <option value="tarde">Tarde</option>
+                            <option value="noche">Noche</option>
                         </select>
                     </div>
                     <div>
-                        <label style="font-size:0.55rem; color:#888; display:block; margin-bottom:2px;">LIMITACIÓN POOL</label>
-                        <select id="cant_final" class="cant_select"></select>
+                        <label>Volumen</label>
+                        <select id="user_cant_final" class="cant_select"></select>
                     </div>
                 </div>
                 
-                <div style="margin-top:2px;">
-                    <label style="font-size:0.6rem; color:#888; display:block; margin-bottom:2px;">INTERSECCIÓN CHARADA</label>
-                    <input type="text" id="search_charada_user" placeholder="Buscar palabra..." oninput="buscarEnCharada()">
-                    <div id="charada_result_user" class="charada-box">Escribe para buscar...</div>
+                <div>
+                    <label>Inyección de Charada (Opcional)</label>
+                    <input type="text" id="search_charada_user" placeholder="Escribe palabra a buscar..." oninput="buscarEnCharada()">
+                    <div id="charada_result_user" style="font-size:0.6rem; color:var(--cyber); margin-top:2px; max-height:30px; overflow-y:auto;"></div>
                 </div>
 
-                <button id="btn_generar_user" style="margin-top:5px; border-color:var(--neon);" onclick="activarProcesoCalculo(false)">Ejecutar Análisis Inteligente</button>
+                <button id="btn_generar_user" onclick="activarProcesoCalculo(false)">Procesar Algoritmos Complejos</button>
             </div>
 
-            <div id="loading_user" class="loader"></div>
+            <div id="loading_user" class="loader-consola"></div>
 
-            <div id="display_resultados" style="display: none;">
-                <div class="grid-2" style="margin-bottom:8px;">
-                    <div class="calc-box"><label style="font-size:0.55rem; color:#888;">CÁLCULO C1</label><span id="c1">-</span></div>
-                    <div class="calc-box"><label style="font-size:0.55rem; color:#888;">CÁLCULO C2</label><span id="c2">-</span></div>
+            <div id="user_display_resultados" style="display: none;">
+                <h2>PROYECCIÓN ENERGÉTICA DE NÚCLEOS</h2>
+                <div class="grid-3" style="margin-bottom:8px;">
+                    <div class="mini-card"><label>Cruz T1</label><span id="c1">-</span></div>
+                    <div class="mini-card"><label>Cruz T2</label><span id="c2">-</span></div>
+                    <div class="mini-card"><label>Secuencia</label><span id="c3">-</span></div>
                 </div>
-                <div class="calc-box" style="margin-bottom:8px;"><label style="font-size:0.55rem; color:#888;">MATRIZ DIRECTA C3</label><span id="c3">-</span></div>
-
-                <div class="panel">
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <label style="font-size:0.65rem; color:var(--neon); font-weight:bold; text-transform:uppercase;">Pirámide de Probabilidades</label>
-                        <span style="font-size:0.55rem; color:var(--win); font-weight:bold;">🤖 Pesos Auto-Ajustados</span>
-                    </div>
-                    <div id="panel_res" class="grid-panel"></div>
-                    <div id="user_pesos_aplicados" class="pesos-info"></div>
+                <div id="user_panel_res" class="panel-resultados"></div>
+                
+                <h2 style="margin-top:12px; border-color:var(--win);">COBERTURAS RECOMENDADAS</h2>
+                <div class="grid-2">
+                    <button style="border-color:var(--win); color:var(--win);" onclick="generarCobertura('par')">Estructurar Parlés</button>
+                    <button style="border-color:var(--win); color:var(--win);" onclick="generarCobertura('tri')">Estructurar Triples</button>
                 </div>
-
-                <div class="panel" style="border-color: var(--cyber);">
-                    <label style="font-size:0.65rem; color:var(--cyber); font-weight:bold; text-transform:uppercase;">Sistemas Combinatorios (Ahorro)</label>
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; margin-top:6px; margin-bottom:6px;">
-                        <button style="font-size:0.65rem; border-color:var(--cyber); color:var(--cyber); padding:4px;" onclick="generarCobertura('par')">Parlés (Parejas)</button>
-                        <button style="font-size:0.65rem; border-color:var(--cyber); color:var(--cyber); padding:4px;" onclick="generarCobertura('tri')">Triples (Bloques)</button>
-                    </div>
-                    <div id="panel_cobertura" style="max-height: 100px; overflow-y: auto; margin-top: 4px;"></div>
-                </div>
+                <div id="panel_cobertura" style="margin-top:6px;"></div>
             </div>
         </div>
 
-        <div id="user-sec-hist" style="none;">
-            <div class="panel" style="margin-top:0;">
-                <label style="font-size:0.65rem; color:var(--win); font-weight:bold; text-transform:uppercase; display:block; margin-bottom:6px;">Auditoría Histórica (2009 - Hoy)</label>
-                
-                <div class="filtro-sim-box">
-                    <label style="font-size:0.55rem; color:#aaa;">RANGO DE AUDITORÍA TARGET:</label>
-                    <div style="display:grid; grid-template-columns: 1.2fr 1fr; gap:5px;">
-                        <select id="user_select_mes_simular" style="font-size:0.75rem; padding:4px;"></select>
-                        <button style="font-size:0.65rem; padding:4px; border-color:var(--win); color:var(--win);" onclick="ejecutarSimulacionAutomatica(false)">Auditar Rango</button>
-                    </div>
-                </div>
-
-                <div id="tabla_historico_aciertos_user" style="margin-top:8px; max-height: 350px; overflow-y: auto;"></div>
+        <div id="user-sec-hist" style="display: none;">
+            <h2>RANGO DE AUDITORÍA TARGET</h2>
+            <div class="grid-2" style="margin-bottom:10px;">
+                <select id="user_select_mes_simular"></select>
+                <button onclick="ejecutarSimulacionAutomatica(false)">Auditar Rango</button>
             </div>
+            <h2>HISTÓRICO LOCAL Y AUDITORÍA CIEGA</h2>
+            <div id="tabla_historico_aciertos_user" style="max-height: 280px; overflow-y: auto;"></div>
         </div>
     </div>
 
     <div id="panel-admin" style="display: none;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-            <span style="font-size:0.7rem; color:var(--win); font-weight:bold;">CONSOLA MASTER ROOT</span>
-            <div style="display:flex; gap:4px;">
-                <button style="padding:3px 6px; font-size:0.65rem;" onclick="abrirConfig()">Base de Datos</button>
-                <button style="padding:3px 6px; font-size:0.65rem; border-color:var(--error); color:var(--error);" onclick="cerrarAdmin()">Salir</button>
-            </div>
+        <div style="font-size:0.6rem; margin-bottom:6px; color:var(--cyber);">
+            OPERANDO: MASTER_ADMIN (LOCAL_HOST)
+            <button style="width:auto; padding:2px 6px; font-size:0.55rem; border-color:#444; color:#aa3333; float:right; margin-top:-2px;" onclick="cerrarAdmin()">Cerrar Consola</button>
+            <button class="btn-config" onclick="abrirConfig()">⚙️ BASE</button>
         </div>
 
-        <div class="tab-bar">
-            <button id="btn-admin-tab-consola" class="tab-btn admin-tab active" onclick="switchAdminSection('consola')">Inyección</button>
-            <button id="btn-admin-tab-aciertos" class="tab-btn admin-tab" onclick="switchAdminSection('aciertos')">Aciertos</button>
-            <button id="btn-admin-tab-users" class="tab-btn admin-tab" onclick="switchAdminSection('users')">Usuarios</button>
+        <div class="tab-bar admin-tabs">
+            <button id="btn-admin-tab-consola" class="tab-btn admin-tab active" onclick="switchAdminSection('consola')">CALCULADORA</button>
+            <button id="btn-admin-tab-aciertos" class="tab-btn admin-tab" onclick="switchAdminSection('aciertos')">AUDITORÍA</button>
+            <button id="btn-admin-tab-users" class="tab-btn admin-tab" onclick="switchAdminSection('users')">USUARIOS LOCALES</button>
         </div>
 
         <div id="admin-sub-consola" style="display: block;">
-            <div class="panel" style="margin-top:0; border-color:var(--win);">
-                <label style="font-size:0.65rem; color:var(--win); font-weight:bold; text-transform:uppercase;">Inyectar Fijos de Hoy</label>
-                <div class="grid-2" style="margin-top:6px; margin-bottom:6px;">
-                    <input type="number" id="fijo_hoy_tarde" placeholder="Tarde" maxlength="2">
-                    <input type="number" id="fijo_hoy_noche" placeholder="Noche" maxlength="2">
+            <div class="main-form">
+                <div class="grid-3">
+                    <div><label>Fijo Base</label><input type="text" id="admin_fijo_base" placeholder="Ej: 83" maxlength="2"></div>
+                    <div>
+                        <label>Turno</label>
+                        <select id="admin_filtro_turno">
+                            <option value="combinado">Combinado</option>
+                            <option value="tarde">Tarde</option>
+                            <option value="noche">Noche</option>
+                        </select>
+                    </div>
+                    <div><label>Volumen</label><select id="admin_cant_final" class="cant_select"></select></div>
                 </div>
-                <button style="width:100%; border-color:var(--win); color:var(--win); font-size:0.7rem; padding:6px;" onclick="guardarFijosDeHoy()">Confirmar Fijos</button>
+                <button id="btn_generar_admin" onclick="activarProcesoCalculo(true)">Forzar Análisis de Raíz</button>
             </div>
-
-            <div class="panel" style="border-color:#9c27b0;">
-                <label style="font-size:0.65rem; color:#e040fb; font-weight:bold; text-transform:uppercase;">Calcular desde Admin</label>
-                <div class="grid-3" style="margin-top:6px; margin-bottom:6px;">
-                    <input type="number" id="admin_fijo_base" placeholder="Fijo">
-                    <select id="admin_filtro_turno">
-                        <option value="combinado" selected>Combinado</option>
-                        <option value="tarde">Tardes</option>
-                        <option value="noche">Noches</option>
-                    </select>
-                    <select id="admin_cant_final" class="cant_select"></select>
-                </div>
-                <button id="btn_generar_admin" style="width:100%; border-color:#e040fb; color:#e040fb; font-size:0.7rem; padding:6px;" onclick="activarProcesoCalculo(true)">Calcular Matriz Admin</button>
-                <div id="loading_admin" class="loader" style="color:#e040fb; border-color:#e040fb;"></div>
-                
-                <div id="admin_display_resultados" style="display: none; margin-top:8px;">
-                    <div id="admin_panel_res" class="grid-panel"></div>
-                    <div id="admin_pesos_aplicados" class="pesos-info" style="color:#e040fb;"></div>
-                </div>
+            <div id="loading_admin" class="loader-consola"></div>
+            <div id="admin_display_resultados" style="display: none;">
+                <h2>VISTA DE OPERADOR CRÍTICO</h2>
+                <div id="admin_panel_res" class="panel-resultados"></div>
+            </div>
+            
+            <h2 style="margin-top:15px;">ENTRADA RÁPIDA: HOY</h2>
+            <div class="grid-3">
+                <div><label>Fijo Tarde</label><input type="text" id="fijo_hoy_tarde" maxlength="2"></div>
+                <div><label>Fijo Noche</label><input type="text" id="fijo_hoy_noche" maxlength="2"></div>
+                <div style="display:flex; align-items:flex-end;"><button style="border-color:var(--win); color:var(--win);" onclick="guardarFijosDeHoy()">Inyectar</button></div>
             </div>
         </div>
 
         <div id="admin-sub-aciertos" style="display: none;">
-            <div class="panel" style="margin-top:0;">
-                <label style="font-size:0.65rem; color:var(--win); font-weight:bold; text-transform:uppercase; display:block; margin-bottom:6px;">Monitoreo Global Admin</label>
-                
-                <div class="filtro-sim-box">
-                    <label style="font-size:0.55rem; color:#aaa;">RANGO DE AUDITORÍA TARGET (ADMIN):</label>
-                    <div style="display:grid; grid-template-columns: 1.2fr 1fr; gap:5px;">
-                        <select id="admin_select_mes_simular" style="font-size:0.75rem; padding:4px;"></select>
-                        <button style="font-size:0.65rem; padding:4px; border-color:var(--win); color:var(--win);" onclick="ejecutarSimulacionAutomatica(true)">Auditar Rango</button>
-                    </div>
-                </div>
-
-                <div id="tabla_historico_aciertos_admin" style="max-height: 350px; overflow-y: auto;"></div>
+            <h2>RANGO DE AUDITORÍA TARGET (ADMIN)</h2>
+            <div class="grid-2" style="margin-bottom:10px;">
+                <select id="admin_select_mes_simular"></select>
+                <button onclick="ejecutarSimulacionAutomatica(true)">Auditar Rango</button>
             </div>
+            <h2>HISTÓRICO Y PREDICTIVIDAD</h2>
+            <div id="tabla_historico_aciertos_admin" style="max-height: 280px; overflow-y: auto;"></div>
         </div>
 
         <div id="admin-sub-users" style="display: none;">
-            <div class="panel" style="margin-top:0;">
-                <label style="font-size:0.65rem; color:var(--neon); font-weight:bold; text-transform:uppercase;">Terminales Registradas</label>
-                <div id="admin-stats" style="font-size:0.65rem; color:#888; margin-top:2px;"></div>
-                <table>
-                    <thead><tr><th>Usuario</th><th>Estado</th><th>Acciones</th></tr></thead>
-                    <tbody id="tabla_usuarios"></tbody>
-                </table>
-            </div>
+            <h2>CONTROL DE SESIONES INTERNAS</h2>
+            <div style="font-size:0.65rem; color:#888; margin-bottom:6px;" id="admin-stats">Total Local: 0</div>
+            <table>
+                <thead><tr><th>Usuario</th><th>Estado</th><th>Acciones</th></tr></thead>
+                <tbody id="tabla_usuarios"></tbody>
+            </table>
         </div>
     </div>
-
 </div>
 
 <div id="modal-db" class="modal">
     <div class="modal-content">
-        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--neon); padding-bottom:4px; margin-bottom:10px;">
-            <span style="font-size:0.75rem; font-weight:bold; color:var(--neon);">CALENDARIO Y BBDD LOCAL</span>
-            <button style="padding:2px 6px; font-size:0.6rem; border-color:var(--error); color:var(--error);" onclick="cerrarConfig()">Cerrar</button>
+        <h2 style="color:var(--cyber); border-color:var(--cyber);">GESTOR DE ARCHIVOS DE DATOS (LOCAL_STORAGE)</h2>
+        
+        <div class="grid-2" style="margin-bottom:10px;">
+            <button style="border-color:var(--cyber); color:var(--cyber);" onclick="exportarBaseDatos()">📥 Exportar .JSON</button>
+            <button style="border-color:var(--cyber); color:var(--cyber);" onclick="document.getElementById('file-import').click()">📤 Importar .JSON</button>
+        </div>
+        <input type="file" id="file-import" style="display:none;" accept=".json" onchange="importarBaseDatos(event)">
+
+        <h2>CALENDARIO HISTÓRICO MANUAL</h2>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <button style="width:auto; padding:2px 8px;" onclick="moverMes(-1)">◀</button>
+            <span id="mes_label" style="font-size:0.8rem; font-weight:bold; color:#fff;">-</span>
+            <button style="width:auto; padding:2px 8px;" onclick="moverMes(1)">▶</button>
+        </div>
+        
+        <div class="cal-grid">
+            <div class="cal-header">Lu</div><div class="cal-header">Ma</div><div class="cal-header">Mi</div>
+            <div class="cal-header">Ju</div><div class="cal-header">Vi</div><div class="cal-header">Sá</div><div class="cal-header">Do</div>
+        </div>
+        <div id="cuerpo_cal" class="cal-grid" style="max-height:180px; overflow-y:auto; border-bottom:1px solid #222; padding-bottom:5px;"></div>
+        
+        <div id="admin_actions_cal" style="margin-top:6px; display:none;">
+            <button style="border-color:var(--neon); color:var(--neon);" onclick="guardarDB()">Guardar Cambios del Calendario</button>
         </div>
 
-        <label style="font-size:0.6rem; color:#888; display:block;">COPIAS DE SEGURIDAD (JSON)</label>
-        <div class="grid-2" style="margin-top:4px; margin-bottom:10px;">
-            <button style="font-size:0.65rem; padding:5px;" onclick="exportarBaseDatos()">Exportar</button>
-            <button style="font-size:0.65rem; padding:5px; border-color:var(--cyber); color:var(--cyber);" onclick="document.getElementById('file_import_db').click()">Importar</button>
-        </div>
-        <input type="file" id="file_import_db" style="display:none;" accept=".json" onchange="importarBaseDatos(event)">
+        <h2 style="margin-top:12px;">IMPORTACIÓN MASIVA POR CADENA RAW</h2>
+        <textarea id="import_raw_text" rows="3" placeholder="Formato: DD/MM/AAAA T 00-00-00&#10;Ej: 18/5/26 M 34-14-83" style="font-size:0.65rem;"></textarea>
+        <button style="margin-top:4px; border-color:var(--error); color:var(--error);" onclick="procesarTextoImportado()">Procesar Bloque de Texto</button>
 
-        <div id="admin_actions_cal" style="display:block; border-top:1px dashed #333; padding-top:6px; margin-bottom:10px;">
-            <label style="font-size:0.6rem; color:var(--win); display:block; margin-bottom:2px;">IMPORTACIÓN MASIVA SMS/WEB</label>
-            <textarea id="import_raw_text" rows="2" placeholder="Pega el bloque de texto..." style="font-size:0.7rem; background:#000; color:#fff; border-color:#555;"></textarea>
-            <button style="width:100%; font-size:0.65rem; padding:5px; margin-top:4px; border-color:var(--win); color:var(--win);" onclick="procesarTextoImportado()">Procesar Bloque</button>
-        </div>
-
-        <div style="border-top:1px dashed #333; padding-top:6px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
-                <button style="padding:2px 6px; font-size:0.65rem;" onclick="moverMes(-1)">&lt;</button>
-                <span id="mes_label" style="font-size:0.7rem; font-weight:bold; color:#fff;">-</span>
-                <button style="padding:2px 6px; font-size:0.65rem;" onclick="moverMes(1)">&gt;</button>
-            </div>
-            <div class="cal-grid">
-                <div class="cal-header">L</div><div class="cal-header">M</div><div class="cal-header">M</div>
-                <div class="cal-header">J</div><div class="cal-header">V</div><div class="cal-header">S</div><div class="cal-header">D</div>
-            </div>
-            <div id="cuerpo_cal" class="cal-grid"></div>
-            <button id="btn_guardar_cal_modal" style="width:100%; margin-top:8px; font-size:0.65rem; border-color:var(--neon); padding:5px;" onclick="guardarDB()">Guardar Calendario Local</button>
-        </div>
+        <button style="margin-top:12px; border-color:#555; color:#555;" onclick="cerrarConfig()">Cerrar Ventana</button>
     </div>
 </div>
 
@@ -341,11 +331,11 @@
         if (limpia.includes('-')) {
             let partes = limpia.split('-');
             if (partes.length === 3) {
-                if (partes[0].length === 4) {
-                    return `${partes[0]}-${partes[1].padStart(2,'0')}-${partes[2].padStart(2,'0')}`;
-                } else {
-                    return `${partes[2]}-${partes[1].padStart(2,'0')}-${partes[0].padStart(2,'0')}`;
-                }
+                let a = partes[0].length === 4 ? partes[0] : partes[2];
+                let m = partes[1].padStart(2, '0');
+                let d = partes[0].length === 4 ? partes[2] : partes[0];
+                if(a.length === 2) a = '20' + a;
+                return `${a}-${m}-${d.padStart(2,'0')}`;
             }
         }
         return limpia;
@@ -357,7 +347,6 @@
         });
     }
 
-    // Nueva función para poblar selectores de meses basados en las fechas existentes de tu BBDD
     function actualizarSelectoresMeses() {
         const nombresMeses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
         let fechas = obtenerFechasCronologicas(db);
@@ -367,7 +356,6 @@
             let iso = normalizarFechaAISO(f);
             let partes = iso.split('-');
             if(partes.length === 3) {
-                // Guarda formato "AAAA-MM"
                 setsMesAnio.add(`${partes[0]}-${partes[1]}`);
             }
         });
@@ -509,7 +497,7 @@
                 loader.scrollTop = loader.scrollHeight;
                 paso++;
             }
-        }, 250);
+        }, 180);
 
         setTimeout(() => {
             clearInterval(intervalo);
@@ -518,7 +506,7 @@
             
             pesosGlobalesOptimos = autoOptimizarPesos(db, turno);
             generarTodo(isAdmin); 
-        }, 4500);
+        }, 3500);
     }
 
     function autoOptimizarPesos(database, turnoSeleccionado) {
@@ -594,7 +582,7 @@
             ultimoNum = num;
         });
 
-        // 2. RETRASO CONTROLADO EN VENTANA CORTA
+        // 2. RETRASO CONTROLADO
         let totalSorteos = 0; let ultimoAvistamiento = {};
         flujoRachaCaliente.forEach(num => {
             totalSorteos++; ultimoAvistamiento[num] = totalSorteos;
@@ -609,7 +597,7 @@
             }
         });
 
-        // 4. FILTRADO AGRESIVO POR TURNO ESPECÍFICO
+        // 4. FILTRADO POR TURNO ESPECÍFICO
         if (turnoSeleccionado === 'tarde' || turnoSeleccionado === 'noche') {
             let fInverso = turnoSeleccionado === 'tarde' ? 'n' : 't';
             fechasRachaCortas.slice(-30).forEach(f => {
@@ -627,38 +615,32 @@
             for(let k in charadaDiccionario) { if(charadaDiccionario[k].toLowerCase().includes(palabra)) pesos[k.padStart(2, '0')] += pActivos.charada; }
         }
 
-        // 6. CICLO LUNAR SCONTRÓLADO (ALGORITMO 5)
+        // 6. CICLO LUNAR SCONTRÓLADO
         let totalDiasCargados = fechasOrdenadas.length || 1;
         let pseudoFaseLunar = (totalDiasCargados % 29);
         for(let nStr in pesos) {
             if (parseInt(nStr) % 29 === pseudoFaseLunar) pesos[nStr] += pActivos.lunar;
         }
 
-        // 7. ESPIRAL DE FIBONACCI RECURSIVA (ALGORITMO 6)
+        // 7. ESPIRAL DE FIBONACCI RECURSIVA
         let seriesFib = [1, 2, 3, 5, 8, 13, 21, 34, 55, 89];
         seriesFib.forEach(fibVal => {
             let objetivoFib = (numBase + fibVal) % 100;
             pesos[objetivoFib.toString().padStart(2, '0')] += pActivos.fib;
         });
 
-        // 8. DESVIACIÓN ESTÁNDAR HISTÓRICA (ALGORITMO 7)
+        // 8. DESVIACIÓN ESTÁNDAR HISTÓRICA
         let contadores = {}; 
         for(let i = 0; i < 100; i++) contadores[i.toString().padStart(2, '0')] = 0;
-        
-        flujoRachaCaliente.slice(-100).forEach(n => {
-            if(n) contadores[n.padStart(2, '0')]++;
-        });
-        for(let nStr in pesos) { 
-            if(contadores[nStr] === 0) pesos[nStr] += pActivos.desv; 
-        }
+        flujoRachaCaliente.slice(-100).forEach(n => { if(n) contadores[n.padStart(2, '0')]++; });
+        for(let nStr in pesos) { if(contadores[nStr] === 0) pesos[nStr] += pActivos.desv; }
 
-        // 9. REGRESIÓN DE HERMANOS Y ESPEJOS PARALELOS (ALGORITMO 8)
-        let hermano = (numBase + 11) % 100;
-        let pariente = (numBase + 50) % 100;
+        // 9. REGRESIÓN DE HERMANOS Y ESPEJOS PARALELOS
+        let hermano = (numBase + 11) % 100; let pariente = (numBase + 50) % 100;
         pesos[hermano.toString().padStart(2, '0')] += pActivos.hermanos;
         pesos[pariente.toString().padStart(2, '0')] += pActivos.hermanos;
 
-        // 10. REGRESIÓN LOGÍSTICA LINEAL RECIENTE (ALGORITMO 9)
+        // 10. REGRESIÓN LOGÍSTICA LINEAL RECIENTE
         if (flujoRachaCaliente.length > 3) {
             let delta1 = parseInt(flujoRachaCaliente[flujoRachaCaliente.length - 1]) || 0;
             let delta2 = parseInt(flujoRachaCaliente[flujoRachaCaliente.length - 2]) || 0;
@@ -666,13 +648,13 @@
             pesos[pendientePredecible.toString().padStart(2, '0')] += pActivos.regresion;
         }
 
-        // 11. REGLA DE ADYACENCIA (VECINOS DE MATRIZ) (ALGORITMO 10)
+        // 11. REGLA DE ADYACENCIA
         let vecinoArriba = (numBase + 10) % 100;
         let vecinoAbajo = (numBase - 10 < 0) ? (numBase - 10 + 100) : (numBase - 10);
         pesos[vecinoArriba.toString().padStart(2, '0')] += 15.0;
         pesos[vecinoAbajo.toString().padStart(2, '0')] += 15.0;
 
-        // 12. ENTROPÍA DE SHANNON DE DÍGITOS (ALGORITMO 11)
+        // 12. ENTROPÍA DE SHANNON DE DÍGITOS
         let conteoDigitos = {};
         flujoRachaCaliente.slice(-40).forEach(num => {
             if(num) {
@@ -685,25 +667,21 @@
             pesos[nStr] += (scoreEntropia * pActivos.entropia);
         }
 
-        // 13. RESGUARDOS FIJOS Y REFLEJOS AUTOMÁTICOS (ALGORITMO 12)
+        // 13. RESGUARDOS FIJOS Y REFLEJOS AUTOMÁTICOS
         let virado = fijoStr.split('').reverse().join('').padStart(2, '0');
-        pesos[virado] += 45.0; 
-        pesos[((punta + 5) % 10).toString() + term] += 15.0;
+        pesos[virado] += 45.0; pesos[((punta + 5) % 10).toString() + term] += 15.0;
 
-        // 14. DISTRIBUCIÓN DE DENSIDAD DE NÚCLEO (KDE PSEUDO) (ALGORITMO 13)
+        // 14. DISTRIBUCIÓN DE DENSIDAD DE NÚCLEO
         flujoRachaCaliente.slice(-10).forEach(ant => {
             let valAnt = parseInt(ant);
             if(!isNaN(valAnt)) {
                 let ent1 = (valAnt + 1) % 100; let ent2 = (valAnt - 1 + 100) % 100;
-                pesos[ent1.toString().padStart(2,'0')] += 5.0;
-                pesos[ent2.toString().padStart(2,'0')] += 5.0;
+                pesos[ent1.toString().padStart(2,'0')] += 5.0; pesos[ent2.toString().padStart(2,'0')] += 5.0;
             }
         });
 
-        // 15. SATURACIÓN CRÍTICA DE DÉCADAS (ALGORITMO 14)
-        let saturacionBloques = {}; 
-        for(let i = 0; i < 10; i++) saturacionBloques[i] = 0;
-        
+        // 15. SATURACIÓN CRÍTICA DE DÉCADAS
+        let saturacionBloques = {}; for(let i = 0; i < 10; i++) saturacionBloques[i] = 0;
         flujoRachaCaliente.slice(-20).forEach(num => {
             if(num) {
                 let decada = Math.floor(parseInt(num) / 10);
@@ -712,9 +690,7 @@
         });
         for(let nStr in pesos) {
             let decadaNum = Math.floor(parseInt(nStr) / 10);
-            if(!isNaN(decadaNum) && saturacionBloques[decadaNum] >= 4) {
-                pesos[nStr] -= (saturacionBloques[decadaNum] * 5.0);
-            }
+            if(!isNaN(decadaNum) && saturacionBloques[decadaNum] >= 4) pesos[nStr] -= (saturacionBloques[decadaNum] * 5.0);
         }
 
         let arrayOrdenado = Object.keys(pesos).sort((a, b) => pesos[b] - pesos[a]);
@@ -739,7 +715,7 @@
 
         ultimosNumerosGenerados = ejecutarAlgoritmoCore(fijoStr, cant, db, pesosGlobalesOptimos, turno);
 
-        let panel = document.getElementById(`${pref}panel_res`); panel.innerHTML = "";
+        let panel = document.getElementById(`${pref}panel_res`). panel.innerHTML = "";
         ultimosNumerosGenerados.forEach((n, index) => {
             let b = document.createElement('div'); b.className = "box"; b.textContent = n;
             if(index < 10) b.className += " destacado-top10";
@@ -749,44 +725,39 @@
         document.getElementById(`${pref}display_resultados`).style.display = 'block';
     }
 
-    // Modificado para recibir un parámetro isAdmin y filtrar de forma selectiva por mes
     function ejecutarSimulacionAutomatica(isAdmin) {
-        let fechas = obtenerFechasCronologicas(db);
-        if (fechas.length < 2) return alert("Historial insuficiente para auditar.");
+        let fechasRaw = Object.keys(db);
+        if (fechasRaw.length < 2) return alert("Historial insuficiente para auditar.");
         
         let selectorId = isAdmin ? 'admin_select_mes_simular' : 'user_select_mes_simular';
-        let mesSeleccionado = document.getElementById(selectorId).value; // Ej: "todos" o "2026-05"
+        let mesSeleccionado = document.getElementById(selectorId).value; 
 
         resultadosSimulacionGlobal = {}; 
         let procesados = 0;
 
-        // 1. Pre-renderizar una optimización fija para no recalcularla en cada vuelta del bucle
+        let fechasCronologicas = obtenerFechasCronologicas(db);
         let configuracionPesosFijos = pesosGlobalesOptimos || { markov:65, retraso:0.05, cooc:60, charada:35, lunar:45, fib:25, desv:40, hermanos:30, regresion:18, entropia:25 };
 
-        // 2. Ejecutar el bucle de forma eficiente
-        for (let i = 1; i < fechas.length; i++) {
-            let fechaObjetivo = fechas[i]; 
+        for (let i = 1; i < fechasCronologicas.length; i++) {
+            let fechaObjetivo = fechasCronologicas[i]; 
             let isoObjetivo = normalizarFechaAISO(fechaObjetivo);
             
-            // Si elegiste un mes y este día no pertenece a él, saltarlo de inmediato sin consumir procesador
             if (mesSeleccionado !== "todos") {
                 if (!isoObjetivo.startsWith(mesSeleccionado)) {
                     continue; 
                 }
             }
 
-            let fechaAnterior = fechas[i-1];
+            let fechaAnterior = fechasCronologicas[i-1];
             let tiroAnteriorFijo = db[fechaAnterior].n || db[fechaAnterior].t;
             let tiroRealTarde = db[fechaObjetivo].t; 
             let tiroRealNoche = db[fechaObjetivo].n;
 
             if (!tiroAnteriorFijo) continue;
 
-            // Creamos una copia rápida simulada
             let dbCiega = {};
-            for (let f in db) { if (f !== fechaObjetivo) dbCiega[f] = db[f]; }
+            for (let key in db) { if (key !== fechaObjetivo) dbCiega[key] = db[key]; }
             
-            // Pasamos la configuración fija directamente para evitar bucles anidados lentos
             let prediccionSimulada = ejecutarAlgoritmoCore(tiroAnteriorFijo, 50, dbCiega, configuracionPesosFijos, 'combinado');
 
             let aciertoTarde = tiroRealTarde && prediccionSimulada.includes(tiroRealTarde.padStart(2,'0'));
@@ -800,11 +771,11 @@
         }
         
         if(procesados === 0) {
-            alert("No hay fijos cargados que coincidan con el mes seleccionado.");
+            alert("No hay registros en la base de datos que coincidan con ese mes.");
         } else {
-            alert(`Auditoría completada exitosamente (${procesados} días analizados).`);
+            alert(`Auditoría de rango [${mesSeleccionado}] completada. Encontrados ${procesados} registros.`);
         }
-        mostrarTablaAciertos();
+        mostrarTablaAciertos(mesSeleccionado);
     }
 
     function generarCobertura(tipo) {
@@ -828,34 +799,44 @@
         let t = document.getElementById('fijo_hoy_tarde').value.trim();
         let n = document.getElementById('fijo_hoy_noche').value.trim();
         let hoy = new Date().toISOString().split('T')[0];
-        if(!db[hoy]) db[hoy] = {};
-        db[hoy]['t'] = t ? t.padStart(2, '0') : ""; db[hoy]['n'] = n ? n.padStart(2, '0') : "";
+        let normHoy = normalizarFechaAISO(hoy);
+        if(!db[normHoy]) db[normHoy] = {};
+        db[normHoy]['t'] = t ? t.padStart(2, '0') : ""; db[normHoy]['n'] = n ? n.padStart(2, '0') : "";
         localStorage.setItem('bolita_master_db', JSON.stringify(db));
-        alert("Guardado local."); 
+        alert("Guardado local exitoso."); 
         actualizarSelectoresMeses();
         mostrarTablaAciertos(); 
         renderCalendario();
     }
 
-    function mostrarTablaAciertos() {
+    function mostrarTablaAciertos(mesFiltroActivo = "todos") {
         let fechas = obtenerFechasCronologicas(db).reverse(); 
         let tbodyHtml = "";
+        let mostrados = 0;
         
-        if (fechas.length === 0) {
-            tbodyHtml = `<tr><td colspan="3" style="text-align:center; color:#666;">Sin tiros guardados.</td></tr>`;
-        } else {
-            fechas.slice(0, 50).forEach(f => {
-                let sim = resultadosSimulacionGlobal[f] || { tardeStatus: "⚙️ Listo", nocheStatus: "⚙️ Listo" };
-                let classT = sim.tardeStatus.includes("HIT") ? "badge-green" : (sim.tardeStatus.includes("MISS") ? "badge-red" : "");
-                let classN = sim.nocheStatus.includes("HIT") ? "badge-green" : (sim.nocheStatus.includes("MISS") ? "badge-red" : "");
-                
-                tbodyHtml += `<tr>
-                    <td><b>${f}</b></td>
-                    <td style="color:var(--neon); font-weight:bold;">${db[f].t || '-'} <span class="badge-acierto ${classT}">${sim.tardeStatus}</span></td>
-                    <td style="color:var(--win); font-weight:bold;">${db[f].n || '-'} <span class="badge-acierto ${classN}">${sim.nocheStatus}</span></td>
-                </tr>`;
-            });
+        fechas.forEach(f => {
+            let iso = normalizarFechaAISO(f);
+            
+            if (mesFiltroActivo !== "todos") {
+                if (!iso.startsWith(mesFiltroActivo)) return; 
+            }
+
+            let sim = resultadosSimulacionGlobal[f] || { tardeStatus: "⚙️ Listo", nocheStatus: "⚙️ Listo" };
+            let classT = sim.tardeStatus.includes("HIT") ? "badge-green" : (sim.tardeStatus.includes("MISS") ? "badge-red" : "");
+            let classN = sim.nocheStatus.includes("HIT") ? "badge-green" : (sim.nocheStatus.includes("MISS") ? "badge-red" : "");
+            
+            tbodyHtml += `<tr>
+                <td><b>${f}</b></td>
+                <td style="color:var(--neon); font-weight:bold;">${db[f].t || '-'} <span class="badge-acierto ${classT}">${sim.tardeStatus}</span></td>
+                <td style="color:var(--win); font-weight:bold;">${db[f].n || '-'} <span class="badge-acierto ${classN}">${sim.nocheStatus}</span></td>
+            </tr>`;
+            mostrados++;
+        });
+
+        if (mostrados === 0) {
+            tbodyHtml = `<tr><td colspan="3" style="text-align:center; color:#666;">Sin tiros para mostrar en este rango.</td></tr>`;
         }
+        
         let tablaCompleta = `<table><thead><tr><th>Fecha</th><th>Tarde (50)</th><th>Noche (50)</th></tr></thead><tbody>${tbodyHtml}</tbody></table>`;
         document.getElementById('tabla_historico_aciertos_user').innerHTML = tablaCompleta;
         document.getElementById('tabla_historico_aciertos_admin').innerHTML = tablaCompleta;
@@ -912,10 +893,12 @@
         for(let i=0; i<des; i++) { let b = document.createElement('div'); b.className="day"; cuerpo.appendChild(b); }
         for(let d=1; d<=totalDias; d++) {
             let k = `${y}-${(m+1).toString().padStart(2,'0')}-${d.toString().padStart(2,'0')}`;
-            let vT = (db[k] && db[k].t) ? db[k].t : ""; let vN = (db[k] && db[k].n) ? db[k].n : "";
+            let normKey = normalizarFechaAISO(k);
+            let vT = (db[normKey] && db[normKey].t) ? db[normKey].t : ""; 
+            let vN = (db[normKey] && db[normKey].n) ? db[normKey].n : "";
             cuerpo.innerHTML += `<div class="day"><div style="color:#666; font-size:0.55rem;">${d}</div>
-                <input type="text" id="t-${k}" value="${vT}" placeholder="T" ${!esAdministradorLogueado?'disabled':''}>
-                <input type="text" id="n-${k}" value="${vN}" placeholder="N" ${!esAdministradorLogueado?'disabled':''}></div>`;
+                <input type="text" id="t-${normKey}" value="${vT}" placeholder="T" ${!esAdministradorLogueado?'disabled':''}>
+                <input type="text" id="n-${normKey}" value="${vN}" placeholder="N" ${!esAdministradorLogueado?'disabled':''}></div>`;
         }
         document.getElementById('admin_actions_cal').style.display = esAdministradorLogueado ? 'block' : 'none';
     }
@@ -968,27 +951,21 @@
         const blobManifest = new Blob([JSON.stringify(contenidoManifest)], {type: 'application/json'});
         const urlManifest = URL.createObjectURL(blobManifest);
         let tagManifest = document.createElement('link');
-        tagManifest.rel = 'manifest';
-        tagManifest.href = urlManifest;
-        document.head.appendChild(tagManifest);
+        tagManifest.rel = 'manifest'; tagManifest.href = urlManifest; document.head.appendChild(tagManifest);
 
         if ('serviceWorker' in navigator) {
             const codigoServiceWorker = `
                 const CACHE_NAME = 'bolitapro-v15-cache';
                 self.addEventListener('install', e => { self.skipWaiting(); });
                 self.addEventListener('activate', e => { e.waitUntil(clients.claim()); });
-                self.addEventListener('fetch', e => {
-                    e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
-                });
+                self.addEventListener('fetch', e => { e.respondWith(fetch(e.request).catch(() => caches.match(e.request))); });
             `;
             const blobSW = new Blob([codigoServiceWorker], {type: 'application/javascript'});
             const urlSW = URL.createObjectURL(blobSW);
-            
-            navigator.serviceWorker.register(urlSW, { scope: './' })
-                .then(() => console.log('PWA: Service Worker de contingencia local activado con éxito.'))
-                .catch(err => console.error('PWA: Error en el registro del entorno aislado.', err));
+            navigator.serviceWorker.register(urlSW, { scope: './' }).catch(err => console.error(err));
         }
     }
 </script>
+
 </body>
 </html>

@@ -59,6 +59,8 @@
         .badge-green { background: #003300; color: #00ff00; border: 1px solid #00ff00; }
         .badge-red { background: #330000; color: #ff3333; border: 1px solid #ff3333; }
         .pesos-info { font-size: 0.62rem; color: var(--cyber); margin-top: 5px; line-height: 1.3; font-family: monospace; }
+        
+        .filtro-sim-box { display: flex; flex-direction: column; gap: 5px; margin-bottom: 8px; border: 1px dashed #333; padding: 6px; border-radius: 4px; background: rgba(0,0,0,0.3); }
     </style>
 </head>
 <body>
@@ -162,12 +164,18 @@
             </div>
         </div>
 
-        <div id="user-sec-hist" style="display: none;">
+        <div id="user-sec-hist" style="none;">
             <div class="panel" style="margin-top:0;">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                    <label style="font-size:0.65rem; color:var(--win); font-weight:bold; text-transform:uppercase;">Auditoría Histórica (2009 - Hoy)</label>
-                    <button style="font-size:0.6rem; padding:4px 8px; border-color:var(--win); color:var(--win);" onclick="ejecutarSimulacionAutomatica()">Correr Simulación Completa</button>
+                <label style="font-size:0.65rem; color:var(--win); font-weight:bold; text-transform:uppercase; display:block; margin-bottom:6px;">Auditoría Histórica (2009 - Hoy)</label>
+                
+                <div class="filtro-sim-box">
+                    <label style="font-size:0.55rem; color:#aaa;">RANGO DE AUDITORÍA TARGET:</label>
+                    <div style="display:grid; grid-template-columns: 1.2fr 1fr; gap:5px;">
+                        <select id="user_select_mes_simular" style="font-size:0.75rem; padding:4px;"></select>
+                        <button style="font-size:0.65rem; padding:4px; border-color:var(--win); color:var(--win);" onclick="ejecutarSimulacionAutomatica(false)">Auditar Rango</button>
+                    </div>
                 </div>
+
                 <div id="tabla_historico_aciertos_user" style="margin-top:8px; max-height: 350px; overflow-y: auto;"></div>
             </div>
         </div>
@@ -221,10 +229,16 @@
 
         <div id="admin-sub-aciertos" style="display: none;">
             <div class="panel" style="margin-top:0;">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                    <label style="font-size:0.65rem; color:var(--win); font-weight:bold; text-transform:uppercase;">Monitoreo Global</label>
-                    <button style="font-size:0.6rem; padding:2px 6px; border-color:var(--win); color:var(--win);" onclick="ejecutarSimulacionAutomatica()">Simular Auditoría</button>
+                <label style="font-size:0.65rem; color:var(--win); font-weight:bold; text-transform:uppercase; display:block; margin-bottom:6px;">Monitoreo Global Admin</label>
+                
+                <div class="filtro-sim-box">
+                    <label style="font-size:0.55rem; color:#aaa;">RANGO DE AUDITORÍA TARGET (ADMIN):</label>
+                    <div style="display:grid; grid-template-columns: 1.2fr 1fr; gap:5px;">
+                        <select id="admin_select_mes_simular" style="font-size:0.75rem; padding:4px;"></select>
+                        <button style="font-size:0.65rem; padding:4px; border-color:var(--win); color:var(--win);" onclick="ejecutarSimulacionAutomatica(true)">Auditar Rango</button>
+                    </div>
                 </div>
+
                 <div id="tabla_historico_aciertos_admin" style="max-height: 350px; overflow-y: auto;"></div>
             </div>
         </div>
@@ -307,9 +321,8 @@
             }
         });
         renderCalendario();
+        actualizarSelectoresMeses();
         mostrarTablaAciertos();
-        
-        // Ejecución de la configuración PWA Automatizada
         inicializarPWA();
     });
 
@@ -344,6 +357,34 @@
         });
     }
 
+    // Nueva función para poblar selectores de meses basados en las fechas existentes de tu BBDD
+    function actualizarSelectoresMeses() {
+        const nombresMeses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+        let fechas = obtenerFechasCronologicas(db);
+        let setsMesAnio = new Set();
+
+        fechas.forEach(f => {
+            let iso = normalizarFechaAISO(f);
+            let partes = iso.split('-');
+            if(partes.length === 3) {
+                // Guarda formato "AAAA-MM"
+                setsMesAnio.add(`${partes[0]}-${partes[1]}`);
+            }
+        });
+
+        let codigosOrdenados = Array.from(setsMesAnio).sort().reverse();
+        
+        let opcionesHtml = `<option value="todos">-- Analizar Historial Completo --</option>`;
+        codigosOrdenados.forEach(c => {
+            let p = c.split('-');
+            let nombreLargo = `${nombresMeses[parseInt(p[1]) - 1]} ${p[0]}`;
+            opcionesHtml += `<option value="${c}">${nombreLargo}</option>`;
+        });
+
+        document.getElementById('user_select_mes_simular').innerHTML = opcionesHtml;
+        document.getElementById('admin_select_mes_simular').innerHTML = opcionesHtml;
+    }
+
     function switchUserSection(sec) {
         document.getElementById('user-sec-calc').style.display = sec === 'calc' ? 'block' : 'none';
         document.getElementById('user-sec-hist').style.display = sec === 'hist' ? 'block' : 'none';
@@ -370,7 +411,7 @@
             esAdministradorLogueado = true; usuarioActivo = "ADMIN_MASTER";
             document.getElementById('view-login').style.display = 'none';
             document.getElementById('panel-admin').style.display = 'block';
-            actualizarStatsAdmin(); renderCalendario(); return;
+            actualizarStatsAdmin(); actualizarSelectoresMeses(); renderCalendario(); return;
         }
 
         let localesUsuarios = JSON.parse(localStorage.getItem('bolita_usuarios_db')) || [];
@@ -382,6 +423,7 @@
             document.getElementById('view-login').style.display = 'none';
             document.getElementById('view-app').style.display = 'block';
             document.getElementById('user-display').textContent = `Id: ${u}`;
+            actualizarSelectoresMeses();
             renderCalendario();
         } else { err.textContent = "Credenciales incorrectas."; err.style.display = 'block'; }
     }
@@ -707,17 +749,30 @@
         document.getElementById(`${pref}display_resultados`).style.display = 'block';
     }
 
-    function ejecutarSimulacionAutomatica() {
+    // Modificado para recibir un parámetro isAdmin y filtrar de forma selectiva por mes
+    function ejecutarSimulacionAutomatica(isAdmin) {
         let fechas = obtenerFechasCronologicas(db);
-        if (fechas.length < 10) return alert("Historial insuficiente para auditar.");
+        if (fechas.length < 2) return alert("Historial insuficiente para auditar.");
         
-        resultadosSimulacionGlobal = {}; 
-        let muestraFechas = fechas.slice(-50); 
+        let selectorId = isAdmin ? 'admin_select_mes_simular' : 'user_select_mes_simular';
+        let mesSeleccionado = document.getElementById(selectorId).value; // Ej: "todos" o "2026-05"
 
-        for (let i = 1; i < muestraFechas.length; i++) {
-            let fechaObjetivo = muestraFechas[i]; 
-            let fechaAnterior = muestraFechas[i-1];
+        resultadosSimulacionGlobal = {}; 
+        let procesados = 0;
+
+        // Recorremos cronológicamente todas las fechas para validar aciertos
+        for (let i = 1; i < fechas.length; i++) {
+            let fechaObjetivo = fechas[i]; 
+            let isoObjetivo = normalizarFechaAISO(fechaObjetivo);
             
+            // Si el usuario eligió un mes específico (ej: "2026-05"), salta los días que no correspondan
+            if (mesSeleccionado !== "todos") {
+                if (!isoObjetivo.startsWith(mesSeleccionado)) {
+                    continue; 
+                }
+            }
+
+            let fechaAnterior = fechas[i-1];
             let tiroAnteriorFijo = db[fechaAnterior].n || db[fechaAnterior].t;
             let tiroRealTarde = db[fechaObjetivo].t; 
             let tiroRealNoche = db[fechaObjetivo].n;
@@ -736,9 +791,14 @@
                 tardeStatus: aciertoTarde ? "🟢 HIT" : "🔴 MISS",
                 nocheStatus: aciertoNoche ? "🟢 HIT" : "🔴 MISS"
             };
+            procesados++;
         }
         
-        alert("Auditoría Cronológica v15.0 completada. ¡Revisa la tabla!");
+        if(procesados === 0) {
+            alert("No hay fijos cargados que coincidan con el mes seleccionado.");
+        } else {
+            alert(`Auditoría de rango [${mesSeleccionado.toUpperCase()}] completada.`);
+        }
         mostrarTablaAciertos();
     }
 
@@ -766,7 +826,10 @@
         if(!db[hoy]) db[hoy] = {};
         db[hoy]['t'] = t ? t.padStart(2, '0') : ""; db[hoy]['n'] = n ? n.padStart(2, '0') : "";
         localStorage.setItem('bolita_master_db', JSON.stringify(db));
-        alert("Guardado local."); mostrarTablaAciertos(); renderCalendario();
+        alert("Guardado local."); 
+        actualizarSelectoresMeses();
+        mostrarTablaAciertos(); 
+        renderCalendario();
     }
 
     function mostrarTablaAciertos() {
@@ -821,7 +884,10 @@
                 });
                 db = cleanedDb;
                 localStorage.setItem('bolita_master_db', JSON.stringify(db));
-                alert("¡Base de datos unificada e importada!"); renderCalendario(); mostrarTablaAciertos();
+                alert("¡Base de datos unificada e importada!"); 
+                actualizarSelectoresMeses();
+                renderCalendario(); 
+                mostrarTablaAciertos();
             } catch(err) { alert("Archivo JSON inválido."); }
         };
         reader.readAsText(file);
@@ -856,7 +922,11 @@
             let normKey = normalizarFechaAISO(k);
             if (!db[normKey]) db[normKey] = { t: "", n: "" }; db[normKey][tu] = i.value.trim() ? i.value.trim().padStart(2, '0') : "";
         });
-        localStorage.setItem('bolita_master_db', JSON.stringify(db)); alert("Calendario guardado."); renderCalendario(); mostrarTablaAciertos();
+        localStorage.setItem('bolita_master_db', JSON.stringify(db)); 
+        alert("Calendario guardado."); 
+        actualizarSelectoresMeses();
+        renderCalendario(); 
+        mostrarTablaAciertos();
     }
 
     function procesarTextoImportado() {
@@ -876,10 +946,10 @@
         }
         localStorage.setItem('bolita_master_db', JSON.stringify(db)); 
         alert(`Unificados e inyectados ${cnt} fijos.`); 
+        actualizarSelectoresMeses();
         renderCalendario(); mostrarTablaAciertos(); cerrarConfig();
     }
 
-    // INFRAESTRUCTURA TÉCNICA PARA ACTIVACIÓN PWA AUTOMÁTICA (BLOB URI DRIVEN)
     function inicializarPWA() {
         const contenidoManifest = {
             "short_name": "BolitaPro",

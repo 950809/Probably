@@ -631,18 +631,27 @@
     }
 
     function mostrarTablaAciertos() {
-        let fechas = obtenerFechasCronologicas(db).reverse(); let tbodyHtml = "";
-        if (fechas.length === 0) { tbodyHtml = `<tr><td colspan="3" style="text-align:center; color:#666;">Sin tiros guardados.</td></tr>`; } 
-        else {
-            fechas.forEach(f => {
-                let sim = resultadosSimulacionGlobal[f] || { tardeStatus: "⚙️ Listo", nocheStatus: "⚙️ Listo" };
-                tbodyHtml += `<tr><td><b>${f}</b></td>
-                    <td style="color:var(--neon); font-weight:bold;">${db[f].t || '-'} <span class="badge-acierto ${sim.tardeStatus.includes("HIT")?'badge-green':'badge-red'}">${sim.tardeStatus}</span></td>
-                    <td style="color:var(--win); font-weight:bold;">${db[f].n || '-'} <span class="badge-acierto ${sim.nocheStatus.includes("HIT")?'badge-green':'badge-red'}">${sim.nocheStatus}</span></td></tr>`;
-            });
-        }
-        document.getElementById('tabla_historico_aciertos_user').innerHTML = `<table><thead><tr><th>Fecha</th><th>Tarde</th><th>Noche</th></tr></thead><tbody>${tbodyHtml}</tbody></table>`;
+    let fechas = obtenerFechasCronologicas(db).reverse(); 
+    let tbodyHtml = "";
+    
+    if (fechas.length === 0) { 
+        tbodyHtml = `<tr><td colspan="3" style="text-align:center; color:#666;">Sin tiros guardados.</td></tr>`; 
+    } else {
+        fechas.forEach(f => {
+            let sim = resultadosSimulacionGlobal[f] || { tardeStatus: "⚙️ Listo", nocheStatus: "⚙️ Listo" };
+            tbodyHtml += `<tr><td><b>${f}</b></td>
+                <td style="color:var(--neon); font-weight:bold;">${db[f].t || '-'} <span class="badge-acierto ${sim.tardeStatus.includes("HIT")?'badge-green':'badge-red'}">${sim.tardeStatus}</span></td>
+                <td style="color:var(--win); font-weight:bold;">${db[f].n || '-'} <span class="badge-acierto ${sim.nocheStatus.includes("HIT")?'badge-green':'badge-red'}">${sim.nocheStatus}</span></td></tr>`;
+        });
     }
+    
+    // CORRECCIÓN: Inyecta la tabla en ambos contenedores para asegurar que se vea en cualquier pestaña
+    let tablaUser = document.getElementById('tabla_historico_aciertos_user');
+    let tablaAdmin = document.getElementById('tabla_historico_aciertos_admin');
+    
+    if(tablaUser) tablaUser.innerHTML = `<table><thead><tr><th>Fecha</th><th>Tarde</th><th>Noche</th></tr></thead><tbody>${tbodyHtml}</tbody></table>`;
+    if(tablaAdmin) tablaAdmin.innerHTML = `<table><thead><tr><th>Fecha</th><th>Tarde</th><th>Noche</th></tr></thead><tbody>${tbodyHtml}</tbody></table>`;
+}
 
     function buscarEnCharada() {
         let str = document.getElementById('search_charada_user').value.toLowerCase().trim();

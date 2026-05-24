@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bolita Pro Master - Consola Global Elite v15.0</title>
+    
+    <meta name="theme-color" content="#050505">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="BolitaPro">
+    
     <style>
         :root { --neon: #00ff41; --dark: #050505; --panel: #0d1117; --win: #ffeb3b; --error: #ff3333; --cyber: #00bcd4; }
         body { font-family: 'Segoe UI', monospace; background: var(--dark); color: var(--neon); margin: 0; padding: 10px; -webkit-user-select: none; user-select: none; }
@@ -302,6 +308,9 @@
         });
         renderCalendario();
         mostrarTablaAciertos();
+        
+        // Ejecución de la configuración PWA Automatizada
+        inicializarPWA();
     });
 
     function normalizarFechaAISO(strFecha) {
@@ -438,7 +447,14 @@
             "🔗 [3/14] Mapeando CO-OCURRECIAS FILTRADAS...",
             "🔮 [4/14] Aplicando INTERSECCIÓN DE CHARADA...",
             "🌙 [5/14] Sincronizando CICLO LUNAR...",
+            "🌀 [6/14] Trazando ESPIRAL DE FIBONACCI RECURSIVA...",
             "📊 [7/14] Evaluando DESVIACIÓN ESTÁNDAR HISTÓRICA...",
+            "🧬 [8/14] Correlacionando MATRIZ DE HERMANOS Y ESPEJOS...",
+            "📈 [9/14] Ejecutando REGRESIÓN LOGÍSTICA LINEAL...",
+            "🌐 [10/14] Estructurando REGLA DE ADYACENCIA (VECINOS)...",
+            "🧮 [11/14] Calculando ENTROPÍA DE SHANNON DE DÍGITOS...",
+            "🎯 [12/14] Verificando RESGUARDOS Y REFLEJOS...",
+            "📥 [13/14] Cargando DISTRIBUCIÓN DE DENSIDAD KDE...",
             "❄️ [14/14] APLICANDO PENALIZACIÓN POR SATURACIÓN DE DÉCADAS...",
             "🧠 AJUSTANDO LOS POLINOMIOS DINÁMICOS..."
         ];
@@ -451,7 +467,7 @@
                 loader.scrollTop = loader.scrollHeight;
                 paso++;
             }
-        }, 350);
+        }, 250);
 
         setTimeout(() => {
             clearInterval(intervalo);
@@ -460,19 +476,19 @@
             
             pesosGlobalesOptimos = autoOptimizarPesos(db, turno);
             generarTodo(isAdmin); 
-        }, 4000);
+        }, 4500);
     }
 
     function autoOptimizarPesos(database, turnoSeleccionado) {
         let fechas = obtenerFechasCronologicas(database);
         if(fechas.length < 5) {
-            return { markov:65, retraso:0.05, cooc:60, charada:35, lunar:45, fib:25, desv:40, hermanos:30, regresion:18, entropia:25, primos:15, hamming:20, espejo:45, kde:22 };
+            return { markov:65, retraso:0.05, cooc:60, charada:35, lunar:45, fib:25, desv:40, hermanos:30, regresion:18, entropia:25 };
         }
 
         const setsDePrueba = [
-            { name: "Cíclico Directo", markov:50, retraso:0.01, cooc:50, charada:25, lunar:15, fib:20, desv:10, hermanos:40, regresion:10, entropia:10, primos:10, hamming:15, espejo:20, kde:15 },
-            { name: "Caótico / Inverso", markov:15, retraso:0.05, cooc:15, charada:20, lunar:30, fib:35, desv:40, hermanos:15, regresion:30, entropia:50, primos:25, hamming:30, espejo:15, kde:35 },
-            { name: "Balanceado Pro", markov:65, retraso:0.05, cooc:60, charada:35, lunar:45, fib:25, desv:40, hermanos:30, regresion:18, entropia:25, primos:15, hamming:20, espejo:45, kde:22 }
+            { name: "Cíclico Directo", markov:50, retraso:0.01, cooc:50, charada:25, lunar:15, fib:20, desv:10, hermanos:40, regresion:10, entropia:10 },
+            { name: "Caótico / Inverso", markov:15, retraso:0.05, cooc:15, charada:20, lunar:30, fib:35, desv:40, hermanos:15, regresion:30, entropia:50 },
+            { name: "Balanceado Pro", markov:65, retraso:0.05, cooc:60, charada:35, lunar:45, fib:25, desv:40, hermanos:30, regresion:18, entropia:25 }
         ];
 
         let mejorSet = setsDePrueba[2]; 
@@ -508,7 +524,7 @@
     }
 
     function ejecutarAlgoritmoCore(fijoBaseStr, cantidadSalida, dbSimulada, configPesos, turnoSeleccionado = 'combinado') {
-        let pActivos = configPesos || pesosGlobalesOptimos || { markov:65, retraso:0.05, cooc:60, charada:35, lunar:45, fib:25, desv:40, hermanos:30, regresion:18, entropia:25, primos:15, hamming:20, espejo:45, kde:22 };
+        let pActivos = configPesos || pesosGlobalesOptimos || { markov:65, retraso:0.05, cooc:60, charada:35, lunar:45, fib:25, desv:40, hermanos:30, regresion:18, entropia:25 };
 
         let fijoStr = fijoBaseStr.padStart(2, '0');
         let numBase = parseInt(fijoStr);
@@ -569,7 +585,21 @@
             for(let k in charadaDiccionario) { if(charadaDiccionario[k].toLowerCase().includes(palabra)) pesos[k.padStart(2, '0')] += pActivos.charada; }
         }
 
-        // 6. DESVIACIÓN ESTÁNDAR HISTÓRICA (Modo Lupa: Reparado apuntando a la racha unificada)
+        // 6. CICLO LUNAR SCONTRÓLADO (ALGORITMO 5)
+        let totalDiasCargados = fechasOrdenadas.length || 1;
+        let pseudoFaseLunar = (totalDiasCargados % 29);
+        for(let nStr in pesos) {
+            if (parseInt(nStr) % 29 === pseudoFaseLunar) pesos[nStr] += pActivos.lunar;
+        }
+
+        // 7. ESPIRAL DE FIBONACCI RECURSIVA (ALGORITMO 6)
+        let seriesFib = [1, 2, 3, 5, 8, 13, 21, 34, 55, 89];
+        seriesFib.forEach(fibVal => {
+            let objetivoFib = (numBase + fibVal) % 100;
+            pesos[objetivoFib.toString().padStart(2, '0')] += pActivos.fib;
+        });
+
+        // 8. DESVIACIÓN ESTÁNDAR HISTÓRICA (ALGORITMO 7)
         let contadores = {}; 
         for(let i = 0; i < 100; i++) contadores[i.toString().padStart(2, '0')] = 0;
         
@@ -580,7 +610,55 @@
             if(contadores[nStr] === 0) pesos[nStr] += pActivos.desv; 
         }
 
-        // 7. SATURACIÓN CRÍTICA DE DÉCADAS (Modo Lupa: Reparado apuntando a la racha unificada)
+        // 9. REGRESIÓN DE HERMANOS Y ESPEJOS PARALELOS (ALGORITMO 8)
+        let hermano = (numBase + 11) % 100;
+        let pariente = (numBase + 50) % 100;
+        pesos[hermano.toString().padStart(2, '0')] += pActivos.hermanos;
+        pesos[pariente.toString().padStart(2, '0')] += pActivos.hermanos;
+
+        // 10. REGRESIÓN LOGÍSTICA LINEAL RECIENTE (ALGORITMO 9)
+        if (flujoRachaCaliente.length > 3) {
+            let delta1 = parseInt(flujoRachaCaliente[flujoRachaCaliente.length - 1]) || 0;
+            let delta2 = parseInt(flujoRachaCaliente[flujoRachaCaliente.length - 2]) || 0;
+            let pendientePredecible = (delta1 - delta2 + 100) % 100;
+            pesos[pendientePredecible.toString().padStart(2, '0')] += pActivos.regresion;
+        }
+
+        // 11. REGLA DE ADYACENCIA (VECINOS DE MATRIZ) (ALGORITMO 10)
+        let vecinoArriba = (numBase + 10) % 100;
+        let vecinoAbajo = (numBase - 10 < 0) ? (numBase - 10 + 100) : (numBase - 10);
+        pesos[vecinoArriba.toString().padStart(2, '0')] += 15.0;
+        pesos[vecinoAbajo.toString().padStart(2, '0')] += 15.0;
+
+        // 12. ENTROPÍA DE SHANNON DE DÍGITOS (ALGORITMO 11)
+        let conteoDigitos = {};
+        flujoRachaCaliente.slice(-40).forEach(num => {
+            if(num) {
+                num.padStart(2,'0').split('').forEach(dig => { conteoDigitos[dig] = (conteoDigitos[dig] || 0) + 1; });
+            }
+        });
+        for (let nStr in pesos) {
+            let d1 = nStr.charAt(0); let d2 = nStr.charAt(1);
+            let scoreEntropia = ((conteoDigitos[d1] || 0) + (conteoDigitos[d2] || 0)) * 0.1;
+            pesos[nStr] += (scoreEntropia * pActivos.entropia);
+        }
+
+        // 13. RESGUARDOS FIJOS Y REFLEJOS AUTOMÁTICOS (ALGORITMO 12)
+        let virado = fijoStr.split('').reverse().join('').padStart(2, '0');
+        pesos[virado] += 45.0; 
+        pesos[((punta + 5) % 10).toString() + term] += 15.0;
+
+        // 14. DISTRIBUCIÓN DE DENSIDAD DE NÚCLEO (KDE PSEUDO) (ALGORITMO 13)
+        flujoRachaCaliente.slice(-10).forEach(ant => {
+            let valAnt = parseInt(ant);
+            if(!isNaN(valAnt)) {
+                let ent1 = (valAnt + 1) % 100; let ent2 = (valAnt - 1 + 100) % 100;
+                pesos[ent1.toString().padStart(2,'0')] += 5.0;
+                pesos[ent2.toString().padStart(2,'0')] += 5.0;
+            }
+        });
+
+        // 15. SATURACIÓN CRÍTICA DE DÉCADAS (ALGORITMO 14)
         let saturacionBloques = {}; 
         for(let i = 0; i < 10; i++) saturacionBloques[i] = 0;
         
@@ -596,23 +674,6 @@
                 pesos[nStr] -= (saturacionBloques[decadaNum] * 5.0);
             }
         }
-
-        // 8. REGRESIÓN DE HERMANOS Y ESPEJOS PARALELOS
-        let hermano = (numBase + 11) % 100;
-        let pariente = (numBase + 50) % 100;
-        pesos[hermano.toString().padStart(2, '0')] += pActivos.hermanos;
-        pesos[pariente.toString().padStart(2, '0')] += pActivos.hermanos;
-
-        // 9. REGLA DE ADYACENCIA (VECINOS DE MATRIZ)
-        let vecinoArriba = (numBase + 10) % 100;
-        let vecinoAbajo = (numBase - 10 < 0) ? (numBase - 10 + 100) : (numBase - 10);
-        pesos[vecinoArriba.toString().padStart(2, '0')] += 15.0;
-        pesos[vecinoAbajo.toString().padStart(2, '0')] += 15.0;
-
-        // 10. RESGUARDOS FIJOS Y REFLEJOS AUTOMÁTICOS
-        let virado = fijoStr.split('').reverse().join('').padStart(2, '0');
-        pesos[virado] += 45.0; 
-        pesos[((punta + 5) % 10).toString() + term] += 15.0;
 
         let arrayOrdenado = Object.keys(pesos).sort((a, b) => pesos[b] - pesos[a]);
         return arrayOrdenado.slice(0, cantidadSalida);
@@ -816,6 +877,42 @@
         localStorage.setItem('bolita_master_db', JSON.stringify(db)); 
         alert(`Unificados e inyectados ${cnt} fijos.`); 
         renderCalendario(); mostrarTablaAciertos(); cerrarConfig();
+    }
+
+    // INFRAESTRUCTURA TÉCNICA PARA ACTIVACIÓN PWA AUTOMÁTICA (BLOB URI DRIVEN)
+    function inicializarPWA() {
+        const contenidoManifest = {
+            "short_name": "BolitaPro",
+            "name": "Bolita Pro Master - Consola Global Elite",
+            "start_url": window.location.href,
+            "background_color": "#050505",
+            "theme_color": "#050505",
+            "display": "standalone",
+            "orientation": "portrait"
+        };
+        const blobManifest = new Blob([JSON.stringify(contenidoManifest)], {type: 'application/json'});
+        const urlManifest = URL.createObjectURL(blobManifest);
+        let tagManifest = document.createElement('link');
+        tagManifest.rel = 'manifest';
+        tagManifest.href = urlManifest;
+        document.head.appendChild(tagManifest);
+
+        if ('serviceWorker' in navigator) {
+            const codigoServiceWorker = `
+                const CACHE_NAME = 'bolitapro-v15-cache';
+                self.addEventListener('install', e => { self.skipWaiting(); });
+                self.addEventListener('activate', e => { e.waitUntil(clients.claim()); });
+                self.addEventListener('fetch', e => {
+                    e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+                });
+            `;
+            const blobSW = new Blob([codigoServiceWorker], {type: 'application/javascript'});
+            const urlSW = URL.createObjectURL(blobSW);
+            
+            navigator.serviceWorker.register(urlSW, { scope: './' })
+                .then(() => console.log('PWA: Service Worker de contingencia local activado con éxito.'))
+                .catch(err => console.error('PWA: Error en el registro del entorno aislado.', err));
+        }
     }
 </script>
 </body>

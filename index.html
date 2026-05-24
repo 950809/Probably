@@ -728,42 +728,48 @@
         document.getElementById(`${pref}display_resultados`).style.display = 'block';
     }
 
-    // SIMULACIÓN CRONOLÓGICA COMPLETA DE TODO EL HISTORIAL SIN BUGS DE CORTE
-    function ejecutarSimulacionAutomatica() {
-        let fechas = obtenerFechasCronologicas(db);
-        if (fechas.length < 3) return alert("Historial insuficiente para auditar.");
+    // SIMULACIÓN CRONOLÓGICA DE LOS ÚLTIMOS 50 SORTEOS (SIN TRABAR EL MÓVIL)
+function ejecutarSimulacionAutomatica() {
+    let fechas = obtenerFechasCronologicas(db);
+    if (fechas.length < 3) return alert("Historial insuficiente para auditar.");
+    
+    resultadosSimulacionGlobal = {}; 
+    
+    // Muestra optimizada de los últimos 50 sorteos para que el móvil no se congele
+    let muestraFechas = fechas.slice(-50);
+    
+    for (let i = 0; i < muestraFechas.length; i++) {
+        let fechaObjetivo = muestraFechas[i];
+        let indexOriginal = fechas.indexOf(fechaObjetivo);
+        if (indexOriginal === 0) continue;
         
-        resultadosSimulacionGlobal = {}; 
+        let fechaAnterior = fechas[indexOriginal - 1];
+        let tiroAnteriorFijo = db[fechaAnterior].n || db[fechaAnterior].t;
+        let tiroRealTarde = db[fechaObjetivo].t; 
+        let tiroRealNoche = db[fechaObjetivo].n;
+
+        if (!tiroAnteriorFijo) continue;
+
+        // Clonación rápida sin romper memoria
+        let dbCiega = JSON.parse(JSON.stringify(db)); 
+        delete dbCiega[fechaObjetivo];
         
-        // REVISIÓN CIRUJANO: Eliminado el .slice(-30). Ahora procesa TODO el historial de la base de datos local
-        for (let i = 1; i < fechas.length; i++) {
-            let fechaObjetivo = fechas[i]; 
-            let fechaAnterior = fechas[i-1];
-            
-            let tiroAnteriorFijo = db[fechaAnterior].n || db[fechaAnterior].t;
-            let tiroRealTarde = db[fechaObjetivo].t; 
-            let tiroRealNoche = db[fechaObjetivo].n;
+        // Optimización ligera para la simulación
+        let configuracionPesosInferencia = { markov:75, retraso:0.12, cooc:70, charada:35, desv:45, hermanos:35, lunar:30, fib:25, hamming:20 };
+        let prediccionSimulada = ejecutarAlgoritmoCore(tiroAnteriorFijo, 50, dbCiega, configuracionPesosInferencia, 'combinado');
 
-            if (!tiroAnteriorFijo) continue;
+        let aciertoTarde = tiroRealTarde && prediccionSimulada.includes(tiroRealTarde.padStart(2,'0'));
+        let aciertoNoche = tiroRealNoche && prediccionSimulada.includes(tiroRealNoche.padStart(2,'0'));
 
-            let dbCiega = JSON.parse(JSON.stringify(db)); 
-            delete dbCiega[fechaObjetivo];
-            
-            let configuracionPesosInferencia = autoOptimizarPesos(dbCiega, 'combinado');
-            let prediccionSimulada = ejecutarAlgoritmoCore(tiroAnteriorFijo, 50, dbCiega, configuracionPesosInferencia, 'combinado');
-
-            let aciertoTarde = tiroRealTarde && prediccionSimulada.includes(tiroRealTarde.padStart(2,'0'));
-            let aciertoNoche = tiroRealNoche && prediccionSimulada.includes(tiroRealNoche.padStart(2,'0'));
-
-            resultadosSimulacionGlobal[fechaObjetivo] = {
-                tardeStatus: aciertoTarde ? "🟢 HIT" : "🔴 MISS",
-                nocheStatus: aciertoNoche ? "🟢 HIT" : "🔴 MISS"
-            };
-        }
-        
-        alert(`Auditoría completa exitosa. Se procesaron ${fechas.length - 1} sorteos históricos.`);
-        mostrarTablaAciertos();
+        resultadosSimulacionGlobal[fechaObjetivo] = {
+            tardeStatus: aciertoTarde ? "🟢 HIT" : "🔴 MISS",
+            nocheStatus: aciertoNoche ? "🟢 HIT" : "🔴 MISS"
+        };
     }
+    
+    alert(`Auditoría completa. Se analizaron los últimos ${muestraFechas.length} sorteos con éxito.`);
+    mostrarTablaAciertos();
+}
 
     function generarCobertura(tipo) {
         if (ultimosNumerosGenerados.length < 5) return alert("Ejecuta el análisis primero.");

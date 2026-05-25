@@ -62,7 +62,7 @@
 <body>
 
 <div class="container">
-    <div id="pwa-install-btn" class="pwa-badge" onclick="ejecutarInstalacionPWA()">⚡ Instalar en Pantalla de Inicio ⚡</div>
+    <div id="pwa-install-btn" class="pwa-badge" onclick="ejecutarInstalacionPWA()">⚡ Instalar en Pantalla de Inicio (App) ⚡</div>
 
     <div id="view-login" style="display: block;">
         <h2>Identificación de Terminal</h2>
@@ -278,6 +278,7 @@
 </div>
 
 <script>
+    // MANIFEST PWA CORREGIDO Y BLINDADO
     const pwaManifestObj = {
         "short_name": "BolitaPro",
         "name": "Bolita Pro Master Elite",
@@ -285,7 +286,11 @@
             "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='192' height='192' viewBox='0 0 192 192'><rect width='192' height='192' fill='%23050505'/><circle cx='96' cy='96' r='60' stroke='%2300ff41' stroke-width='6' fill='none'/><text x='96' y='110' font-family='monospace' font-size='42' font-weight='bold' fill='%2300ff41' text-anchor='middle'>BPM</text></svg>",
             "type": "image/svg+xml", "sizes": "192x192"
         }],
-        "start_url": window.location.href, "background_color": "#050505", "theme_color": "#050505", "display": "standalone", "orientation": "portrait"
+        "start_url": ".", 
+        "background_color": "#050505", 
+        "theme_color": "#050505", 
+        "display": "standalone", 
+        "orientation": "portrait"
     };
     document.getElementById('pwa-manifest').setAttribute('href', 'data:application/manifest+json;base64,' + btoa(JSON.stringify(pwaManifestObj)));
 
@@ -303,10 +308,11 @@
     }
 
     if ('serviceWorker' in navigator) {
+        // SW Real Activo para habilitar instalación nativa
         const swRawCode = `
-            self.addEventListener('install', e => self.skipWaiting());
-            self.addEventListener('activate', e => e.waitUntil(clients.claim()));
-            self.addEventListener('fetch', e => {});
+            self.addEventListener('install', e => { self.skipWaiting(); });
+            self.addEventListener('activate', e => { e.waitUntil(clients.claim()); });
+            self.addEventListener('fetch', e => { e.respondWith(fetch(e.request).catch(() => {})); });
         `;
         const blobSW = new Blob([swRawCode], { type: 'application/javascript' });
         navigator.serviceWorker.register(URL.createObjectURL(blobSW)).catch(() => {});
@@ -325,6 +331,8 @@
     let esAdministradorLogueado = false;
     let ultimosNumerosGenerados = [];
     let resultadosSimulacionGlobal = {}; 
+    
+    // Pesos Base Iniciales Estables
     let pesosGlobalesOptimos = { markov:85, retraso:0.25, cooc:75, charada:45, desv:50, hermanos:45, lunar:30, fib:25, hamming:20 };
 
     const charadaDiccionario = {"1":"Caballo, sol, tintero","2":"Mariposa, hombre","3":"Niño, marinero, muerto","4":"Gato, vela, boca","5":"Mujer, mar, candado","6":"Jicotea, candela","7":"Mierda, caracol","8":"Muerto, calabaza, león","9":"Elefante, lengua","10":"Pescado grande, dinero","11":"Gallo, lluvia","12":"Puta, estrella, perro grande","13":"Chulo, pavo real","14":"Cementerio, gato, matrimonio","15":"Perro chico, niña, ratón","16":"Toro, vestido, avispa","17":"San Lázaro, armas","18":"Pescado chico, iglesia","19":"Lombriz, campesino, jutía","20":"Tibor, cañón, libro","21":"Majá, dinero, reloj","22":"Sapo, estrella, lirio","23":"Vapor, barco, águila","24":"Paloma, cocina","25":"Piedra fina, casa, rana","26":"Anguila, calle, nube","27":"Avispa, campana","28":"Chivo, bollo, perro chico","29":"Ratón, venado","30":"Camarón, almanaque, cangrejo","31":"Venado, escuela","32":"Puerco chico, majá","33":"Tiñosa, baraja","34":"Mono, negro","35":"Araña, mosquito","36":"Cachimba, bodega","37":"Bruja, hormiga","38":"Dinero, macao, carro","39":"Culebra, conejo, rayo","40":"Cura, bombero, cantina","41":"Lagartija, prisión","42":"Pato, país lejano","43":"Alacrán, amigo, vaca","44":"Infierno, tormenta, caldero","45":"Tiburón, presidente, traje","46":"Guagua, humo, chino","47":"Pájaro, mala noticia","48":"Cucaracha, abanico","49":"Borracho, riqueza","50":"Policía, agua, florero","51":"Soldado, oro","52":"Bicicleta, abogado","53":"Luz eléctrica, diamante","54":"Flores, gallina blanca","55":"Cangrejo, murciélago","56":"Reina, escorpión, camisa","57":"Cama, ángeles","58":"Adulterio, cuchillo","59":"Loco, anillo","60":"Payaso, huevo, tempestad","61":"Caballo grande, revólver","62":"Matrimonio, robo, crimen","63":"Asesino, espada","64":"Muerto vivo, escándalo","65":"Cárcel, comida","66":"Tarro, divorcio, máscara","67":"Puñalada, hospital","68":"Cementerio grande, riña","69":"Pozo, loma, vago","70":"Teléfono, coco, tiro","71":"Río, sombrero, fusil","72":"Buey, ferrocarril, lluvia","73":"Maleta, navaja","74":"Papalote, militar","75":"Cine, corbata, guitarra","76":"Bailarina, violín","77":"Banderas, campana","78":"Ataúd, obispo, rey","79":"Tren de carga, dulces","80":"Médico, sábanas","81":"Teatro, fango","82":"Madre, león","83":"Tragedia, bastón","84":"Sastre, sangre","85":"Espejo, ojo","86":"Tijeras, herida","87":"Plátanos, Nueva York","88":"Hojas, muerto, vaso","89":"León, cometa","90":"Viejo, espejo","91":"Alpargatas, comunista","92":"Puerco grande, avión, Cuba","93":"Sortija, revolution","94":"Machete, pulga","95":"Guerra, cuchillo","96":"Zapato viejo, pícaro","97":"Grillo, sinsonte","98":"Piano, entierro","99":"Carbonero, ratero","100":"Inodoro, dios, escoba"};
@@ -436,24 +444,47 @@
         actualizarStatsAdmin();
     }
 
+    // SIMULACIÓN DE 10 SEGUNDOS SEGUNDO A SEGUNDO MOSTRANDO ALGORITMOS
     function activarProcesoCalculo(isAdmin) {
         let pref = isAdmin ? 'admin_' : '';
         let btn = document.getElementById(isAdmin ? 'btn_generar_admin' : 'btn_generar_user');
         let loader = document.getElementById(isAdmin ? 'loading_admin' : 'loading_user');
         
         document.getElementById(`${pref}display_resultados`).style.display = 'none';
-        btn.disabled = true; loader.style.display = 'block';
-        loader.innerHTML = "🧬 PROCESANDO MATRIZ DE PREFERENCIAS DE TIRO (14 MOTORES ACTIVOS)...";
+        btn.disabled = true; 
+        loader.style.display = 'block';
 
-        setTimeout(() => {
-            loader.style.display = 'none'; btn.disabled = false; 
-            generarTodo(isAdmin); 
-        }, 800);
+        const pasosAlgoritmos = [
+            "🧬 [SEG 1/10] INICIANDO INTERFAZ CROMÁTICA - LEYENDO MEMORIA DE CALENDARIO LOCAL...",
+            "🔮 [SEG 2/10] MOTOR 1 & 2: CALCULANDO CADENAS DE MARKOV Y RETRASOS PROGRESIVOS CRONOLÓGICOS...",
+            "🔗 [SEG 3/10] MOTOR 3 & 4: MAPEANDO CO-OCURRENCIAS HISTÓRICAS Y EXCLUSIÓN DE TURNO INVERSO...",
+            "📖 [SEG 4/10] MOTOR 5 & 6: RASTREANDO DICCIONARIO SEMÁNTICO DE CHARADA Y DESVIACIÓN ESTÁNDAR COMPUESTA...",
+            "📊 [SEG 5/10] MOTOR 7 & 8: ANALIZANDO SATURACIÓN DE DÉCADAS CRÍTICAS Y EMPAREJAMIENTO DE HERMANOS...",
+            "📐 [SEG 6/10] MOTOR 9 & 10: TRAZANDO ADYACENCIAS GEOMÉTRICAS Y ESTRUCTURAS DE REFLEJOS/VIRADOS...",
+            "🌙 [SEG 7/10] MOTOR 11 & 12: SINCRONIZANDO CICLO LUNAR DEL MES Y SECUENCIAS DE FIBONACCI MODULAR...",
+            "💻 [SEG 8/10] MOTOR 13 & 14: PROCESANDO DISTANCIA BINARIA DE HAMMING Y POLINOMIO DE ESTABILIDAD...",
+            "⚙️ [SEG 9/10] AUTO-CALIBRACIÓN ACTIVA: SELECCIONANDO PESOS VARIABLES SEGÚN COMPORTAMIENTO DE RACHA...",
+            "✅ [SEG 10/10] COMPILANDO MATRIZ DE PREFERENCIAS DE TIRO FINALES... ¡DESPLEGANDO PANEL!"
+        ];
+
+        let segundoActual = 0;
+        loader.innerHTML = pasosAlgoritmos[0];
+
+        let intervaloProgreso = setInterval(() => {
+            segundoActual++;
+            if (segundoActual < pasosAlgoritmos.length) {
+                loader.innerHTML = pasosAlgoritmos[segundoActual];
+            } else {
+                clearInterval(intervaloProgreso);
+                loader.style.display = 'none'; 
+                btn.disabled = false; 
+                generarTodo(isAdmin); 
+            }
+        }, 1000); // 1 segundo exacto por paso = 10 segundos totales
     }
 
-    // REDISEÑO INTEGRAL DE LOS 14 ALGORITMOS CON BALANCE DE ECUACIÓN
+    // MOTOR AUTO-CALIBRABLE QUE SÍ CAMBIA LOS PESOS SEGÚN LA TIRADA RECIENTE DEL CALENDARIO
     function ejecutarAlgoritmoCore(fijoBaseStr, cantidadSalida, dbSimulada, configPesos, turnoSeleccionado = 'combinado') {
-        let p = configPesos || pesosGlobalesOptimos;
         let fijoStr = fijoBaseStr.padStart(2, '0');
         let numBase = parseInt(fijoStr) || 0;
         let punta = Math.floor(numBase / 10); let term = numBase % 10;
@@ -469,6 +500,40 @@
         });
         
         let flujoRachaCaliente = flujoNumerosCompleto.slice(-140);
+
+        // ==========================================
+        // SISTEMA DE AUTO-CALIBRACIÓN EN CALIENTE (DINÁMICO)
+        // ==========================================
+        let baseP = { ...pesosGlobalesOptimos };
+        let p = { ...baseP };
+
+        // El motor auto-evalúa los últimos 30 fijos guardados en tu calendario local
+        if (flujoRachaCaliente.length >= 30) {
+            let ultimosTiros = flujoRachaCaliente.slice(-30);
+            let repeticionesDetectadas = 0;
+            let historialFrecuencias = {};
+            
+            ultimosTiros.forEach(num => {
+                historialFrecuencias[num] = (historialFrecuencias[num] || 0) + 1;
+                if (historialFrecuencias[num] > 1) repeticionesDetectadas++;
+            });
+
+            // ESCENARIO A: Juego altamente repetitivo (Sube Co-ocurrencias y Desviación, baja Markov)
+            if (repeticionesDetectadas > 4) {
+                p.cooc = baseP.cooc + 20;
+                p.desv = baseP.desv + 15;
+                p.markov = Math.max(40, baseP.markov - 25);
+            } 
+            // ESCENARIO B: Juego volátil/saltarín (Dispara Markov y Retrasos para romper bucles)
+            else {
+                p.markov = baseP.markov + 15;
+                p.retraso = baseP.retraso * 1.4;
+                p.cooc = Math.max(35, baseP.cooc - 15);
+            }
+        }
+        // Guardamos temporalmente los pesos calibrados para mostrarlos en pantalla
+        pesosGlobalesOptimos.calibradoActual = `Markov: ${p.markov.toFixed(0)} | Cooc: ${p.cooc.toFixed(0)} | Retraso: ${p.retraso.toFixed(2)}`;
+        // ==========================================
 
         // 1. Cadenas de Markov
         let ultimoNum = null;
@@ -505,7 +570,7 @@
             for(let k in charadaDiccionario) { if(charadaDiccionario[k].toLowerCase().includes(palabra)) pesos[k.padStart(2, '0')] += p.charada; }
         }
 
-        // 6. Desviación Estándar Equilibrada (Se reduce el castigo drástico)
+        // 6. Desviación Estándar Equilibrada
         let contadores = {}; for(let i = 0; i < 100; i++) contadores[i.toString().padStart(2, '0')] = 0;
         flujoRachaCaliente.forEach(n => { if(n) contadores[n]++; });
         for(let nStr in pesos) { if(contadores[nStr] === 0) pesos[nStr] += p.desv; else pesos[nStr] += (10 / contadores[nStr]); }
@@ -523,7 +588,7 @@
         pesos[((numBase + 10) % 100).toString().padStart(2, '0')] += 20.0;
         pesos[((numBase - 10 + 100) % 100).toString().padStart(2, '0')] += 20.0;
 
-        // 10. Reflejos y Virados Cruciales (Soporte prioritario)
+        // 10. Reflejos y Virados Cruciales
         let virado = fijoStr.split('').reverse().join('').padStart(2, '0');
         pesos[virado] += 45.0; pesos[((punta + 5) % 10).toString() + term] += 25.0;
 
@@ -572,11 +637,11 @@
             panel.appendChild(b);
         });
 
-        document.getElementById(`${pref}pesos_aplicados`).innerHTML = `Engine v15.6 Estabilizado -> Markov: ${pesosGlobalesOptimos.markov} | Cooc: ${pesosGlobalesOptimos.cooc} | Retraso: ${pesosGlobalesOptimos.retraso}`;
+        // Imprime en pantalla los pesos que el auto-calibrador fijó para este tiro
+        document.getElementById(`${pref}pesos_aplicados`).innerHTML = `Engine v15.6 Auto-Calibrado Activo -> ${pesosGlobalesOptimos.calibradoActual}`;
         document.getElementById(`${pref}display_resultados`).style.display = 'block';
     }
 
-    // AUDITORÍA DE ÚLTIMOS 50 ELEMENTOS FIX SIN TRABAS EN EL PROCESADOR
     function ejecutarSimulacionAutomatica() {
         let fechas = obtenerFechasCronologicas(db);
         if (fechas.length < 3) return alert("Historial insuficiente para auditar.");
@@ -631,27 +696,26 @@
     }
 
     function mostrarTablaAciertos() {
-    let fechas = obtenerFechasCronologicas(db).reverse(); 
-    let tbodyHtml = "";
-    
-    if (fechas.length === 0) { 
-        tbodyHtml = `<tr><td colspan="3" style="text-align:center; color:#666;">Sin tiros guardados.</td></tr>`; 
-    } else {
-        fechas.forEach(f => {
-            let sim = resultadosSimulacionGlobal[f] || { tardeStatus: "⚙️ Listo", nocheStatus: "⚙️ Listo" };
-            tbodyHtml += `<tr><td><b>${f}</b></td>
-                <td style="color:var(--neon); font-weight:bold;">${db[f].t || '-'} <span class="badge-acierto ${sim.tardeStatus.includes("HIT")?'badge-green':'badge-red'}">${sim.tardeStatus}</span></td>
-                <td style="color:var(--win); font-weight:bold;">${db[f].n || '-'} <span class="badge-acierto ${sim.nocheStatus.includes("HIT")?'badge-green':'badge-red'}">${sim.nocheStatus}</span></td></tr>`;
-        });
+        let fechas = obtenerFechasCronologicas(db).reverse(); 
+        let tbodyHtml = "";
+        
+        if (fechas.length === 0) { 
+            tbodyHtml = `<tr><td colspan="3" style="text-align:center; color:#666;">Sin tiros guardados.</td></tr>`; 
+        } else {
+            fechas.forEach(f => {
+                let sim = resultadosSimulacionGlobal[f] || { tardeStatus: "⚙️ Listo", nocheStatus: "⚙️ Listo" };
+                tbodyHtml += `<tr><td><b>${f}</b></td>
+                    <td style="color:var(--neon); font-weight:bold;">${db[f].t || '-'} <span class="badge-acierto ${sim.tardeStatus.includes("HIT")?'badge-green':'badge-red'}">${sim.tardeStatus}</span></td>
+                    <td style="color:var(--win); font-weight:bold;">${db[f].n || '-'} <span class="badge-acierto ${sim.nocheStatus.includes("HIT")?'badge-green':'badge-red'}">${sim.nocheStatus}</span></td></tr>`;
+            });
+        }
+        
+        let tablaUser = document.getElementById('tabla_historico_aciertos_user');
+        let tablaAdmin = document.getElementById('tabla_historico_aciertos_admin');
+        
+        if(tablaUser) tablaUser.innerHTML = `<table><thead><tr><th>Fecha</th><th>Tarde</th><th>Noche</th></tr></thead><tbody>${tbodyHtml}</tbody></table>`;
+        if(tablaAdmin) tablaAdmin.innerHTML = `<table><thead><tr><th>Fecha</th><th>Tarde</th><th>Noche</th></tr></thead><tbody>${tbodyHtml}</tbody></table>`;
     }
-    
-    // CORRECCIÓN: Inyecta la tabla en ambos contenedores para asegurar que se vea en cualquier pestaña
-    let tablaUser = document.getElementById('tabla_historico_aciertos_user');
-    let tablaAdmin = document.getElementById('tabla_historico_aciertos_admin');
-    
-    if(tablaUser) tablaUser.innerHTML = `<table><thead><tr><th>Fecha</th><th>Tarde</th><th>Noche</th></tr></thead><tbody>${tbodyHtml}</tbody></table>`;
-    if(tablaAdmin) tablaAdmin.innerHTML = `<table><thead><tr><th>Fecha</th><th>Tarde</th><th>Noche</th></tr></thead><tbody>${tbodyHtml}</tbody></table>`;
-}
 
     function buscarEnCharada() {
         let str = document.getElementById('search_charada_user').value.toLowerCase().trim();

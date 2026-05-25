@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bolita Pro Master - Consola Bugatti Chiron v19.3 Ultra</title>
+    <title>Bolita Pro Master - Consola Bugatti Chiron v19.4 Inversa</title>
     
     <meta name="theme-color" content="#050505">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -150,7 +150,7 @@
                 <div class="panel">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <label style="font-size:0.65rem; color:var(--neon); font-weight:bold; text-transform:uppercase;">Pirámide de Probabilidades</label>
-                        <span style="font-size:0.55rem; color:var(--win); font-weight:bold;">🏎️ Bugatti v19.3 Ultra</span>
+                        <span style="font-size:0.55rem; color:var(--win); font-weight:bold;">🏎️ Bugatti v19.4 Inversa</span>
                     </div>
                     <div id="panel_res" class="grid-panel"></div>
                     <div id="user_pesos_aplicados" class="pesos-info"></div>
@@ -359,18 +359,18 @@
     let resultadosSimulacionGlobal = {}; 
     
     let pesosGlobalesOptimos = { 
-        markov:110, retraso:0.35, cooc:95, charada:55, desv:60, hermanos:50, lunar:35, fib:25, hamming:20,
-        genetic: 75, clusters: 70, lstm: 90, vectorCharada: 50, backtestConf: 55
+        markov:120, retraso:0.40, cooc:100, charada:60, desv:50, hermanos:45, lunar:30, fib:20, hamming:15,
+        genetic: 80, clusters: 75, lstm: 95, vectorCharada: 45, backtestConf: 50
     };
 
-    const charadaDiccionario = {"1":"Caballo, sol, tintero","2":"Mariposa, hombre","3":"Niño, marinero, muerto","4":"Gato, vela, boca","5":"Mujer, mar, candado","6":"Jicotea, candela","7":"Mierda, caracol","8":"Muerto, calabaza, león","9":"Elefante, lengua","10":"Pescado grande, dinero","11":"Gallo, lluvia","12":"Puta, estrella, perro grande","13":"Chulo, pavo real","14":"Cementerio, gato, matrimonio","15":"Perro chico, niña, ratón","16":"Toro, vestido, avispa","17":"San Lázaro, armas","18":"Pescado chico, iglesia","19":"Lombriz, campesino, jutía","20":"Tibor, cañón, libro","21":"Majá, dinero, reloj","22":"Sapo, estrella, lirio","23":"Vapor, barco, águila","24":"Paloma, cocina","25":"Piedra fina, casa, rana","26":"Anguila, calle, nube","27":"Avispa, campana","28":"Chivo, bollo, perro chico","29":"Ratón, venado","30":"Camarón, almanaque, cangrejo","31":"Venado, escuela","32":"Puerco chico, majá","33":"Tiñosa, baraja","34":"Mono, negro","35":"Araña, mosquito","36":"Cachimba, bodega","37":"Bruja, hormiga","38":"Dinero, macao, carro","39":"Culebra, conejo, rayo","40":"Cura, bombero, cantina","41":"Lagartija, prisión","42":"Pato, país lejano","43":"Alacrán, amigo, vaca","44":"Infierno, tormenta, caldero","45":"Tiburón, president, traje","46":"Guagua, humo, chino","47":"Pájaro, mala noticia","48":"Cucaracha, abanico","49":"Borracho, riqueza","50":"Policía, agua, florero","51":"Soldado, oro","52":"Bicicleta, abogado","53":"Luz eléctrica, diamante","54":"Flores, gallina blanca","55":"Cangrejo, murciélago","56":"Reina, escorpión, camisa","57":"Cama, ángeles","58":"Adulterio, cuchillo","59":"Loco, anillo","60":"Payaso, huevo, tempestad","61":"Caballo grande, revólver","62":"Matrimonio, robo, crimen","63":"Asesino, espada","64":"Muerto vivo, escándalo","65":"Cárcel, comida","66":"Tarro, divorcio, máscara","67":"Puñalada, hospital","68":"Cementerio grande, riña","69":"Pozo, loma, vago","70":"Teléfono, coco, tiro","71":"Río, sombrero, fusil","72":"Buey, ferrocarril, lluvia","73":"Maleta, navaja","74":"Papalote, militar","75":"Cine, corbata, guitarra","76":"Bailarina, violín","77":"Banderas, campana","78":"Ataúd, obispo, rey","79":"Tren de carga, dulces","80":"Médico, sábanas","81":"Teatro, fango","82":"Madre, león","83":"Tragedia, bastón","84":"Sastre, sangre","85":"Espejo, ojo","86":"Tijeras, herida","87":"Plátanos, Nueva York","88":"Hojas, muerto, vaso","89":"León, cometa","90":"Viejo, espejo","91":"Alpargatas, comunista","92":"Puerco grande, avión, Cuba","93":"Sortija, revolución","94":"Machete, pulga","95":"Guerra, cuchillo","96":"Zapato viejo, pícaro","97":"Grillo, sinsonte","98":"Piano, entierro","99":"Carbonero, ratero","100":"Inodoro, dios, escoba"};
+    const charadaDiccionario = {"1":"Caballo, sol, tintero","2":"Mariposa, hombre","3":"Niño, marinero, muerto","4":"Gato, vela, boca","5":"Mujer, mar, candado","6":"Jicotea, candela","7":"Mierda, caracol","8":"Muerto, calabaza, león","9":"Elefante, lengua","10":"Pescado grande, dinero","11":"Gallo, lluvia","12":"Puta, estrella, perro grande","13":"Chulo, pavo real","14":"Cementerio, gato, matrimonio","15":"Perro chico, niña, ratón","16":"Toro, vestido, avispa","17":"San Lázaro, armas","18":"Pescado chico, iglesia","19":"Lombriz, campesino, jutía","20":"Tibor, cañón, libro","21":"Majá, dinero, reloj","22":"Sapo, estrella, lirio","23":"Vapor, barco, águila","24":"Paloma, cocina","25":"Piedra fina, casa, rana","26":"Anguila, calle, nube","27":"Avispa, campana","28":"Chivo, bollo, perro chico","29":"Ratón, venado","30":"Camarón, almanaque, cangrejo","31":"Venado, escuela","32":"Puerco chico, majá","33":"Tiñosa, baraja","34":"Mono, negro","35":"Araña, mosquito","36":"Cachimba, bodega","37":"Bruja, hormiga","38":"Dinero, macao, carro","39":"Culebra, conejo, rayo","40":"Cura, bombero, cantina","41":"Lagartija, prisión","42":"Pato, país lejano","43":"Alacrán, amigo, vaca","44":"Infierno, tormenta, caldero","45":"Tiburón, president, traje","46":"Guagua, humo, chino","47":"Pájaro, mala noticia","48":"Cucaracha, abanico","49":"Borracho, riqueza","50":"Policía, agua, florero","51":"Soldado, oro","52":"Bicicleta, abogado","53":"Luz eléctrica, diamante","54":"Flores, gallina blanca","55":"Cangrejo, murciélago","56":"Reina, escorpión, camisa","57":"Cama, ángeles","58":"Adulterio, cuchillo","59":"Loco, anillo","60":"Payaso, huevo, tempestad","61":"Caballo grande, revólver","62":"Matrimonio, robo, crimen","63":"Asesino, espada","64":"Muerto vivo, escándalo","65":"Cárcel, comida","66":"Tarro, divorcio, máscara","67":"Puñalada, hospital","68":"Cementerio grande, riña","69":"Pozo, loma, vago","70":"Teléfono, coco, tiro","71":"Río, sombrero, fusil","72":"Buey, ferrocarril, lluvia","73":"Maleta, navaja","74":"Papalote, militar","75":"Cine, corbata, guitarra","76":"Bailarina, violín","77":"Banderas, campana","78":"Ataúd, obispo, rey","79":"Tren de carga, dulces","80":"Médico, sábanas","81":"Teatro, fango","82":"Madre, león","83":"Tragedia, bastón","84":"Sastre, sangre","85":"Espejo, ojo","86":"Tijeras, herida","87":"Plátanos, Nueva York","88":"Hojas, muerto, vaso","89":"León, cometa","90":"Viejo, espejo","91":"Alpargatas, comunista","92":"Puerco grande, avión, Cuba","93":"Sortija, revolution","94":"Machete, pulga","95":"Guerra, cuchillo","96":"Zapato viejo, pícaro","97":"Grillo, sinsonte","98":"Piano, entierro","99":"Carbonero, ratero","100":"Inodoro, dios, escoba"};
 
     window.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.cant_select').forEach(sel => {
             sel.innerHTML = "";
             for(let i=10; i<=100; i+=10) {
                 let opt = document.createElement('option'); opt.value = i; opt.textContent = `${i} Números`;
-                if(i===30) opt.selected = true; // Por defecto ahora enfoca un pool más cerrado de 30 para obligar a concentrar verdes
+                if(i===40) opt.selected = true; // Pool intermedio inverso de 40 números para mayor balance en testeo
                 sel.appendChild(opt);
             }
         });
@@ -420,10 +420,10 @@
         loader.style.display = 'block';
 
         const pasosAlgoritmos = [
-            "🚀 [FILTRO 1/3] APLICANDO ENFOQUE CRÍTICO TEMPORAL - AISLANDO RACHA DE LOS ÚLTIMOS 6 MESES (85% RELEVANCIA)...",
-            "🧬 [FILTRO 2/3] ACTIVANDO NÚCLEO DE INTERSECCIÓN ESTRICTA - EXIGIENDO COINCIDENCIA MÍNIMA DE REGLAS COOC/MARKOV...",
-            "📐 [FILTRO 3/3] INYECTANDO TRIPLE FILTRADO ULTRA - EXPULSANDO NÚMEROS SIN APROBACIÓN DE MULTI-FAMILIAS DE ALGORITMOS...",
-            "🧠 CALIBRANDO CONSOLA CHIRON V19.3... COMPILANDO FILTROS COMPLETOS..."
+            "🔄 [INVERSIÓN 1/3] EXPANDIENDO VENTANA TEMPORAL - BALANCEANDO PESOS DEL HISTORIAL PROFUNDO...",
+            "📊 [INVERSIÓN 2/3] DESACTIVANDO INTERSECCIÓN ESTRICTA - PASANDO A MODELO DE ACUMULACIÓN POR SUMA...",
+            "🧬 [INVERSIÓN 3/3] RECALIBRANDO POOL DIVERSIFICADO... COMPILANDO CORE ACUMULATIVO V19.4...",
+            "🧠 AJUSTANDO MOTORES BUGATTI CHIRON EN MODO COBERTURA..."
         ];
 
         let segundoActual = 0;
@@ -439,60 +439,47 @@
                 btn.disabled = false; 
                 generarTodo(isAdmin); 
             }
-        }, 800);
+        }, 600);
     }
 
     function ejecutarAlgoritmoCore(fijoBaseStr, cantidadSalida, dbSimulada, configPesos, turnoSeleccionado = 'combinado') {
         let fijoStr = fijoBaseStr.padStart(2, '0');
         let numBase = parseInt(fijoStr) || 0;
-        let punta = Math.floor(numBase / 10); let term = numBase % 10;
 
         let pesos = {};
-        let activacionesPorNumero = {}; // Guarda cuántas familias de algoritmos aprueban cada número
-        
         for(let i=0; i<100; i++) {
-            let nStr = i.toString().padStart(2, '0');
-            pesos[nStr] = 0.0;
-            activacionesPorNumero[nStr] = { markovFamily: false, coocFamily: false, aiFamily: false, geometricFamily: false };
+            pesos[i.toString().padStart(2, '0')] = 0.0;
         }
 
         let fechasOrdenadas = obtenerFechasCronologicas(dbSimulada);
         let totalFechas = fechasOrdenadas.length;
 
-        // FILTRO 1: VENTANA DE TIEMPO COMPUESTA (Ponderación asimétrica del pasado)
+        // CAMBIO INVERSO 1: MEMORIA COMPUESTA TOTAL (No asilamos solo el presente, repartimos el peso)
         let flujoNumerosCompleto = [];
-        let pesosFechas = [];
-
         fechasOrdenadas.forEach((f, idx) => {
             let antiguedad = totalFechas - idx;
-            let factorPesoHistorial = 0.05; // 5% por defecto para el pasado profundo (2009 en adelante)
+            let factorPesoHistorial = 0.35; // Peso robusto base al pasado profundo
             
-            if (antiguedad <= 60) {
-                factorPesoHistorial = 0.85; // 85% para los últimos 2 meses (Racha viva muy reciente)
-            } else if (antiguedad <= 240) {
-                factorPesoHistorial = 0.10; // 10% para el tramo intermedio de memoria
+            if (antiguedad <= 90) {
+                factorPesoHistorial = 0.65; // Peso suavizado al presente para evitar cortes drásticos
             }
 
-            if(dbSimulada[f]?.t) {
-                flujoNumerosCompleto.push({num: dbSimulada[f].t.padStart(2,'0'), pesoHist: factorPesoHistorial, fecha: f});
-            }
-            if(dbSimulada[f]?.n) {
-                flujoNumerosCompleto.push({num: dbSimulada[f].n.padStart(2,'0'), pesoHist: factorPesoHistorial, fecha: f});
-            }
+            if(dbSimulada[f]?.t) flujoNumerosCompleto.push({num: dbSimulada[f].t.padStart(2,'0'), pesoHist: factorPesoHistorial});
+            if(dbSimulada[f]?.n) flujoNumerosCompleto.push({num: dbSimulada[f].n.padStart(2,'0'), pesoHist: factorPesoHistorial});
         });
         
         let p = { ...pesosGlobalesOptimos };
 
-        // FAMILIA 1: MARKOV Y RETRASOS PONDERADOS
+        // MOTOR 1: MARKOV MULTI-HISTORIAL
         let ultimoNum = null;
         flujoNumerosCompleto.forEach(item => {
             if (ultimoNum === fijoStr) {
                 pesos[item.num] += (p.markov * item.pesoHist);
-                activacionesPorNumero[item.num].markovFamily = true;
             }
             ultimoNum = item.num;
         });
 
+        // MOTOR 2: DISTANCIA DE RETRASO ACUMULATIVA
         let totalSorteos = flujoNumerosCompleto.length;
         let ultimoAvistamiento = {};
         flujoNumerosCompleto.forEach((item, idx) => { ultimoAvistamiento[item.num] = idx; });
@@ -501,58 +488,51 @@
             pesos[nStr] += distanciaRetraso * p.retraso;
         }
 
-        // FAMILIA 2: CO-OCURRENCIAS MULTIDIMENSIONALES Y CRUCE TURNO
+        // MOTOR 3: CO-OCURRENCIAS POR SUMA DIRECTA
         fechasOrdenadas.forEach((f, idx) => {
             if(dbSimulada[f]) {
                 let antiguedad = totalFechas - idx;
-                let factorPesoHistorial = antiguedad <= 60 ? 0.85 : (antiguedad <= 240 ? 0.10 : 0.05);
+                let factorPesoHistorial = antiguedad <= 90 ? 0.61 : 0.39;
                 let comb = [(dbSimulada[f].t || '').padStart(2,'0'), (dbSimulada[f].n || '').padStart(2,'0')];
                 if(comb.includes(fijoStr)) {
                     comb.forEach(c => { 
-                        if(c !== fijoStr) {
-                            pesos[c] += (p.cooc * factorPesoHistorial); 
-                            activacionesPorNumero[c].coocFamily = true;
-                        }
+                        if(c !== fijoStr) pesos[c] += (p.cooc * factorPesoHistorial); 
                     });
                 }
             }
         });
 
-        // FAMILIA 3: GEOMETRÍA MODULAR, HERMANOS Y ESPEJOS
+        // MOTOR 4: GEOMETRÍA COMPLETA (HERMANOS, ESPEJOS, VIRADOS)
         let virado = fijoStr.split('').reverse().join('').padStart(2, '0');
-        pesos[virado] += 45.0; activacionesPorNumero[virado].geometricFamily = true;
+        pesos[virado] += 50.0;
         
         let hermanoEspejo = ((numBase + 50) % 100).toString().padStart(2, '0');
-        pesos[hermanoEspejo] += p.hermanos; activacionesPorNumero[hermanoEspejo].geometricFamily = true;
+        pesos[hermanoEspejo] += p.hermanos;
 
         pesos[((numBase + 11) % 100).toString().padStart(2, '0')] += p.hermanos;
-        pesos[((numBase + 10) % 100).toString().padStart(2, '0')] += 20.0;
-        pesos[((numBase - 10 + 100) % 100).toString().padStart(2, '0')] += 20.0;
+        pesos[((numBase + 10) % 100).toString().padStart(2, '0')] += 25.0;
+        pesos[((numBase - 10 + 100) % 100).toString().padStart(2, '0')] += 25.0;
 
-        // FAMILIA 4: INTELIGENCIA ARTIFICIAL LOCAL (LSTM SIMULADA + CLÚSTERES K-MEANS + EVOLUTIVO)
+        // MOTOR 5: RED GENERAL ACUMULATIVA (CLUSTERES + FRECUENCIA)
         let contadoresFrecuencia = {}; for(let i = 0; i < 100; i++) contadoresFrecuencia[i.toString().padStart(2, '0')] = 0;
-        let muestraRachaCaliente = flujoNumerosCompleto.slice(-100);
+        let muestraRachaCaliente = flujoNumerosCompleto.slice(-150);
         muestraRachaCaliente.forEach(item => { contadoresFrecuencia[item.num]++; });
         
         for (let i = 0; i < 100; i++) {
             let nStr = i.toString().padStart(2, '0');
-            if (contadoresFrecuencia[nStr] >= 3) { 
-                pesos[nStr] += p.clusters; 
-                activacionesPorNumero[nStr].aiFamily = true;
-            }
+            pesos[nStr] += contadoresFrecuencia[nStr] * (p.clusters * 0.4);
         }
 
         if (muestraRachaCaliente.length >= 4) {
-            let patronLstm = muestraRachaCaliente.slice(-4).map(item => parseInt(item.num) || 0);
+            let patronLstm = muestraRachaCaliente.slice(-5).map(item => parseInt(item.num) || 0);
             let sumaModularLSTM = patronLstm.reduce((acc, curr) => acc + curr, 0) % 100;
             pesos[sumaModularLSTM.toString().padStart(2, '0')] += p.lstm;
-            activacionesPorNumero[sumaModularLSTM.toString().padStart(2, '0')].aiFamily = true;
         }
 
         let mutacionGeneticaFavorable = ((numBase * 7) + 13) % 100;
         pesos[mutacionGeneticaFavorable.toString().padStart(2, '0')] += p.genetic;
 
-        // EXTRAS EXTERNOS (CHARADA SEMÁNTICA)
+        // CHARADA EXTERNA
         let inputCharada = document.getElementById('search_charada_user');
         let palabra = inputCharada ? inputCharada.value.toLowerCase().trim() : '';
         if(palabra.length > 2) {
@@ -561,26 +541,15 @@
             }
         }
 
-        // FILTRO 2: INTERSECCIÓN ESTRICTA Y ELIMINACIÓN DE RUIDO
-        // Un número solo conserva su puntuación si es validado por al menos 3 familias distintas de algoritmos
-        for(let i=0; i<100; i++) {
-            let nStr = i.toString().padStart(2, '0');
-            let flags = activacionesPorNumero[nStr];
-            let totalFamiliasQueAprueban = (flags.markovFamily ? 1 : 0) + (flags.coocFamily ? 1 : 0) + (flags.aiFamily ? 1 : 0) + (flags.geometricFamily ? 1 : 0);
-            
-            // Si no tiene intersección en al menos 2 familias, castigamos drásticamente su peso para sacarlo del tablero
-            if (totalFamiliasQueAprueban < 2) {
-                pesos[nStr] *= 0.15; 
-            }
-        }
-
+        // CAMBIO INVERSO 2: NO HAY COHÉRCITO DE INTERSECCIÓN.
+        // Los motores cooperan de forma libre sumando sus fuerzas directamente.
         return Object.keys(pesos).sort((a, b) => pesos[b] - pesos[a]).slice(0, cantidadSalida);
     }
 
     function generarTodo(isAdmin) {
         let pref = isAdmin ? 'admin_' : '';
         let fijoStr = document.getElementById(`${pref}fijo_base`).value.trim().padStart(2, '0');
-        let cant = parseInt(document.getElementById(`${pref}cant_final`).value || 30); 
+        let cant = parseInt(document.getElementById(`${pref}cant_final`).value || 40); 
         let turno = document.getElementById(`${pref}filtro_turno`).value;
         let numBase = parseInt(fijoStr);
         if(isNaN(numBase)) return alert("Introduce un Fijo Base.");
@@ -600,19 +569,17 @@
             panel.appendChild(b);
         });
 
-        document.getElementById(`${pref}pesos_aplicados`).innerHTML = `⚙️ Filtros 19.3 Activos | Ventana Temporal + Intersección Estricta OK`;
+        document.getElementById(`${pref}pesos_aplicados`).innerHTML = `⚙️ Core Inverso v19.4 Activo | Modelo Acumulativo de Suma Libre OK`;
         document.getElementById(`${pref}display_resultados`).style.display = 'block';
     }
 
     function ejecutarSimulacionAutomatica() {
         let fechas = obtenerFechasCronologicas(db);
-        if (fechas.length < 5) return alert("Historial insuficiente para auditar con triple filtro.");
+        if (fechas.length < 5) return alert("Historial insuficiente para simular.");
         
         resultadosSimulacionGlobal = {};
         let totalHits = 0; let totalMisses = 0; let totalTirosContados = 0;
-
-        // Por defecto en la simulación estricta evaluamos con el pool óptimo de 30 números para exprimir la efectividad real
-        let cantPoolSimulacion = 30; 
+        let cantPoolSimulacion = parseInt(document.getElementById('cant_final').value || 40); 
 
         for (let i = 4; i < fechas.length; i++) {
             let fechaObjetivo = fechas[i];
@@ -658,7 +625,7 @@
         document.getElementById('stat_admin_tot_tiros').textContent = totalTirosContados;
         document.getElementById('stats_globales_contenedor_admin').style.display = 'block';
 
-        alert(`Auditoría v19.3 Completa.\nEficiencia Verde: ${pctVerdes}%\nMargen Rojo: ${pctRojos}%`);
+        alert(`Auditoría Inversa v19.4 Finalizada.\nEficiencia Verde: ${pctVerdes}%\nMargen Rojo: ${pctRojos}%`);
         mostrarTablaAciertos();
     }
 

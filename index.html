@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bolita Pro Master - Consola Bugatti Chiron v19.1</title>
+    <title>Bolita Pro Master - Consola Bugatti Chiron v19.2</title>
     
     <meta name="theme-color" content="#050505">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -58,6 +58,12 @@
         .badge-gray { background: #222; color: #888; border: 1px solid #444; }
         .pesos-info { font-size: 0.62rem; color: var(--cyber); margin-top: 5px; line-height: 1.3; word-break: break-all; }
         .pwa-badge { display: none; background: #002244; border: 1px solid var(--cyber); color: var(--cyber); padding: 6px; text-align: center; border-radius: 4px; font-size: 0.7rem; font-weight: bold; margin-bottom: 10px; cursor: pointer; text-transform: uppercase; }
+        
+        /* DISEÑO DE PANEL DE AUDITORÍA GLOBAL DIRECTO */
+        .panel-stats-global { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 6px; margin-bottom: 4px; }
+        .stat-card { background: #000; border: 1px solid #333; padding: 6px; border-radius: 4px; text-align: center; }
+        .stat-card-title { font-size: 0.55rem; color: #888; text-transform: uppercase; display: block; }
+        .stat-card-value { font-size: 0.95rem; font-weight: bold; display: block; margin-top: 2px; }
     </style>
 </head>
 <body>
@@ -145,7 +151,7 @@
                 <div class="panel">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <label style="font-size:0.65rem; color:var(--neon); font-weight:bold; text-transform:uppercase;">Pirámide de Probabilidades</label>
-                        <span style="font-size:0.55rem; color:var(--win); font-weight:bold;">🏎️ Bugatti v19.1</span>
+                        <span style="font-size:0.55rem; color:var(--win); font-weight:bold;">🏎️ Bugatti v19.2</span>
                     </div>
                     <div id="panel_res" class="grid-panel"></div>
                     <div id="user_pesos_aplicados" class="pesos-info"></div>
@@ -168,6 +174,17 @@
                     <label style="font-size:0.65rem; color:var(--win); font-weight:bold; text-transform:uppercase;">Auditoría de Histórico Completo</label>
                     <button style="font-size:0.6rem; padding:4px 8px; border-color:var(--win); color:var(--win);" onclick="ejecutarSimulacionAutomatica()">Correr Simulación Total</button>
                 </div>
+                
+                <div id="stats_globales_contenedor_user" style="display: none; margin-bottom: 8px; border-bottom: 1px dashed #333; padding-bottom: 8px;">
+                    <div class="panel-stats-global">
+                        <div class="stat-card" style="border-color: var(--neon);"><span class="stat-card-title" style="color:var(--neon);">Rendimiento Verde</span><span id="stat_user_green_pct" class="stat-card-value" style="color:#00ff00;">0.0%</span></div>
+                        <div class="stat-card" style="border-color: var(--error);"><span class="stat-card-title" style="color:var(--error);">Margen Rojo</span><span id="stat_user_red_pct" class="stat-card-value" style="color:#ff3333;">0.0%</span></div>
+                    </div>
+                    <div style="font-size: 0.6rem; text-align: center; color: #aaa;">
+                        Muestra total evaluada: <span id="stat_user_tot_tiros" style="color:var(--win); font-weight:bold;">0</span> tiros combinados.
+                    </div>
+                </div>
+
                 <div id="tabla_historico_aciertos_user" style="margin-top:8px; max-height: 350px; overflow-y: auto;"></div>
             </div>
         </div>
@@ -225,6 +242,17 @@
                     <label style="font-size:0.65rem; color:var(--win); font-weight:bold; text-transform:uppercase;">Monitoreo Global</label>
                     <button style="font-size:0.6rem; padding:2px 6px; border-color:var(--win); color:var(--win);" onclick="ejecutarSimulacionAutomatica()">Simular Auditoría</button>
                 </div>
+                
+                <div id="stats_globales_contenedor_admin" style="display: none; margin-bottom: 8px; border-bottom: 1px dashed #333; padding-bottom: 8px;">
+                    <div class="panel-stats-global">
+                        <div class="stat-card" style="border-color: var(--neon);"><span class="stat-card-title" style="color:var(--neon);">Rendimiento Verde</span><span id="stat_admin_green_pct" class="stat-card-value" style="color:#00ff00;">0.0%</span></div>
+                        <div class="stat-card" style="border-color: var(--error);"><span class="stat-card-title" style="color:var(--error);">Margen Rojo</span><span id="stat_admin_red_pct" class="stat-card-value" style="color:#ff3333;">0.0%</span></div>
+                    </div>
+                    <div style="font-size: 0.6rem; text-align: center; color: #aaa;">
+                        Muestra total evaluada: <span id="stat_admin_tot_tiros" style="color:var(--win); font-weight:bold;">0</span> tiros combinados.
+                    </div>
+                </div>
+
                 <div id="tabla_historico_aciertos_admin" style="max-height: 350px; overflow-y: auto;"></div>
             </div>
         </div>
@@ -393,7 +421,7 @@
         loader.style.display = 'block';
 
         const pasosAlgoritmos = [
-            "🏎️ [SEG 1/10] INICIALIZANDO EMBRAGUE CRÍTICO BUGATTI V19.1 - MAPEO DE CRONOLOGÍA COMPLETA...",
+            "🏎️ [SEG 1/10] INICIALIZANDO EMBRAGUE CRÍTICO BUGATTI V19.2 - MAPEO DE CRONOLOGÍA COMPLETA...",
             "🧬 [SEG 2/10] M1 - M4: PROCESANDO MARKOV EXTENDIDO, RETRASOS ACUMULADOS Y CO-OCURRENCIAS MULTIDIMENSIONALES...",
             "📖 [SEG 3/10] M5 - M8: FILTRANDO CHARADA SEMÁNTICA, DESVIACIÓN ESTÁNDAR COMPUESTA Y SATURACIÓN DE DÉCADAS...",
             "📐 [SEG 4/10] M9 - M12: COMPUTANDO ESPEJOS, REFLEJOS, ADYACENCIAS GEOMÉTRICAS, CICLO LUNAR Y FIBONACCI...",
@@ -483,7 +511,7 @@
         flujoRachaCaliente.forEach(num => { totalSorteos++; ultimoAvistamiento[num] = totalSorteos; });
         for(let nStr in pesos) pesos[nStr] += (totalSorteos - (ultimoAvistamiento[nStr] || 0)) * p.retraso;
 
-        fechasOrdenadas.slice(-60).forEach(f => {
+        fechasOrdenadas.forEach(f => {
             if(dbSimulada[f]) {
                 let comb = [(dbSimulada[f].t || '').padStart(2,'0'), (dbSimulada[f].n || '').padStart(2,'0')];
                 if(comb.includes(fijoStr)) comb.forEach(c => { if(c !== fijoStr) pesos[c] += p.cooc; });
@@ -603,14 +631,17 @@
         document.getElementById(`${pref}display_resultados`).style.display = 'block';
     }
 
-    // CORRECCIÓN "MODO LUPA v19.1": SIMULACIÓN GLOBAL INTEGRADA PARA LEER TODO EL HISTORIAL (DE 2009 ADELANTE)
+    // SIMULACIÓN HISTÓRICA INTEGRAL COMPLETA (CRUZANDO CON LOS 19 MOTORES DINÁMICOS)
     function ejecutarSimulacionAutomatica() {
         let fechas = obtenerFechasCronologicas(db);
         if (fechas.length < 3) return alert("Historial insuficiente en la base de datos para auditar.");
         
         resultadosSimulacionGlobal = {};
         
-        // El bucle procesa absolutamente todo lo que esté guardado para cruzar datos verdaderos de cualquier época
+        let totalHits = 0;
+        let totalMisses = 0;
+        let totalTirosContados = 0;
+
         for (let i = 1; i < fechas.length; i++) {
             let fechaObjetivo = fechas[i];
             let fechaAnterior = fechas[i - 1];
@@ -618,23 +649,55 @@
             let tiroAnteriorFijo = db[fechaAnterior].n || db[fechaAnterior].t;
             if (!tiroAnteriorFijo) continue;
 
-            // Recorta la base de datos temporalmente simulando el aislamiento en el tiempo
+            // Modo Aislamiento de Memoria Ciega
             let dbCiega = {};
             for (let j = 0; j < i; j++) {
                 dbCiega[fechas[j]] = db[fechas[j]];
             }
 
+            // Los 19 motores corren en caliente simulación por simulación
             let prediccionSimulada = ejecutarAlgoritmoCore(tiroAnteriorFijo, 50, dbCiega, pesosGlobalesOptimos, 'combinado');
 
             let tReal = db[fechaObjetivo].t ? db[fechaObjetivo].t.padStart(2,'0') : '';
             let nReal = db[fechaObjetivo].n ? db[fechaObjetivo].n.padStart(2,'0') : '';
 
+            let statusTarde = "⚙️ Listo";
+            let statusNoche = "⚙️ Listo";
+
+            if(tReal) {
+                totalTirosContados++;
+                if(prediccionSimulada.includes(tReal)) { statusTarde = "🟢 HIT"; totalHits++; } 
+                else { statusTarde = "🔴 MISS"; totalMisses++; }
+            }
+            if(nReal) {
+                totalTirosContados++;
+                if(prediccionSimulada.includes(nReal)) { statusNoche = "🟢 HIT"; totalHits++; } 
+                else { statusNoche = "🔴 MISS"; totalMisses++; }
+            }
+
             resultadosSimulacionGlobal[fechaObjetivo] = {
-                tardeStatus: tReal && prediccionSimulada.includes(tReal) ? "🟢 HIT" : "🔴 MISS",
-                nocheStatus: nReal && prediccionSimulada.includes(nReal) ? "🟢 HIT" : "🔴 MISS"
+                tardeStatus: statusTarde,
+                nocheStatus: statusNoche
             };
         }
-        alert("¡Auditoría de inteligencia completada sobre todo el historial cronológico!");
+
+        // CALCULAR PORCENTAJES DE VERDES Y ROJOS TOTALES
+        let pctVerdes = totalTirosContados > 0 ? ((totalHits / totalTirosContados) * 100).toFixed(1) : "0.0";
+        let pctRojos = totalTirosContados > 0 ? ((totalMisses / totalTirosContados) * 100).toFixed(1) : "0.0";
+
+        // ASIGNAR VALORES AL PANEL VISUAL DEL USUARIO
+        document.getElementById('stat_user_green_pct').textContent = `${pctVerdes}%`;
+        document.getElementById('stat_user_red_pct').textContent = `${pctRojos}%`;
+        document.getElementById('stat_user_tot_tiros').textContent = totalTirosContados;
+        document.getElementById('stats_globales_contenedor_user').style.display = 'block';
+
+        // ASIGNAR VALORES AL PANEL VISUAL DEL ADMIN
+        document.getElementById('stat_admin_green_pct').textContent = `${pctVerdes}%`;
+        document.getElementById('stat_admin_red_pct').textContent = `${pctRojos}%`;
+        document.getElementById('stat_admin_tot_tiros').textContent = totalTirosContados;
+        document.getElementById('stats_globales_contenedor_admin').style.display = 'block';
+
+        alert(`Auditoría completada.\nEficiencia Verde: ${pctVerdes}%\nMargen Rojo: ${pctRojos}%`);
         mostrarTablaAciertos();
     }
 
@@ -806,7 +869,7 @@
         document.getElementById('admin-stats').textContent = `Total Local: ${localesUsuarios.length}`;
         let tbody = document.getElementById('tabla_usuarios'); tbody.innerHTML = "";
         localesUsuarios.forEach(u => {
-            tbody.innerHTML += `<tr><td>${u.usuario}</td><td>${u.rol}</td><td><button onclick="alterarUser('${u.usuario}','aprobar')">Activar</button></td></tr>`;
+            tbody.innerHTML += `<tr><td>${u.usuario}</td><td>${u.rol}</td><td><button onclick=\"alterarUser('${u.usuario}','aprobar')\">Activar</button></td></tr>`;
         });
     }
 

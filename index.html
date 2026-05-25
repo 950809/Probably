@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bolita Pro Master - Consola Bugatti Chiron v19.4 Inversa</title>
+    <title>Bolita Pro Master - Consola Bugatti Chiron v19.5 Umbral</title>
     
     <meta name="theme-color" content="#050505">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -124,7 +124,7 @@
                         </select>
                     </div>
                     <div>
-                        <label style="font-size:0.55rem; color:#888; display:block; margin-bottom:2px;">LIMITACIÓN POOL</label>
+                        <label style="font-size:0.55rem; color:#888; display:block; margin-bottom:2px;">FILTRO DINÁMICO</label>
                         <select id="cant_final" class="cant_select"></select>
                     </div>
                 </div>
@@ -150,7 +150,7 @@
                 <div class="panel">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <label style="font-size:0.65rem; color:var(--neon); font-weight:bold; text-transform:uppercase;">Pirámide de Probabilidades</label>
-                        <span style="font-size:0.55rem; color:var(--win); font-weight:bold;">🏎️ Bugatti v19.4 Inversa</span>
+                        <span style="font-size:0.55rem; color:var(--win); font-weight:bold;">🏎️ Bugatti v19.5 Dynamic</span>
                     </div>
                     <div id="panel_res" class="grid-panel"></div>
                     <div id="user_pesos_aplicados" class="pesos-info"></div>
@@ -359,20 +359,19 @@
     let resultadosSimulacionGlobal = {}; 
     
     let pesosGlobalesOptimos = { 
-        markov:120, retraso:0.40, cooc:100, charada:60, desv:50, hermanos:45, lunar:30, fib:20, hamming:15,
-        genetic: 80, clusters: 75, lstm: 95, vectorCharada: 45, backtestConf: 50
+        markov:140, retraso:0.55, cooc:110, charada:50, desv:60, hermanos:50, lunar:25, fib:20, hamming:10,
+        genetic: 90, clusters: 85, lstm: 110, vectorCharada: 40, backtestConf: 60
     };
 
     const charadaDiccionario = {"1":"Caballo, sol, tintero","2":"Mariposa, hombre","3":"Niño, marinero, muerto","4":"Gato, vela, boca","5":"Mujer, mar, candado","6":"Jicotea, candela","7":"Mierda, caracol","8":"Muerto, calabaza, león","9":"Elefante, lengua","10":"Pescado grande, dinero","11":"Gallo, lluvia","12":"Puta, estrella, perro grande","13":"Chulo, pavo real","14":"Cementerio, gato, matrimonio","15":"Perro chico, niña, ratón","16":"Toro, vestido, avispa","17":"San Lázaro, armas","18":"Pescado chico, iglesia","19":"Lombriz, campesino, jutía","20":"Tibor, cañón, libro","21":"Majá, dinero, reloj","22":"Sapo, estrella, lirio","23":"Vapor, barco, águila","24":"Paloma, cocina","25":"Piedra fina, casa, rana","26":"Anguila, calle, nube","27":"Avispa, campana","28":"Chivo, bollo, perro chico","29":"Ratón, venado","30":"Camarón, almanaque, cangrejo","31":"Venado, escuela","32":"Puerco chico, majá","33":"Tiñosa, baraja","34":"Mono, negro","35":"Araña, mosquito","36":"Cachimba, bodega","37":"Bruja, hormiga","38":"Dinero, macao, carro","39":"Culebra, conejo, rayo","40":"Cura, bombero, cantina","41":"Lagartija, prisión","42":"Pato, país lejano","43":"Alacrán, amigo, vaca","44":"Infierno, tormenta, caldero","45":"Tiburón, president, traje","46":"Guagua, humo, chino","47":"Pájaro, mala noticia","48":"Cucaracha, abanico","49":"Borracho, riqueza","50":"Policía, agua, florero","51":"Soldado, oro","52":"Bicicleta, abogado","53":"Luz eléctrica, diamante","54":"Flores, gallina blanca","55":"Cangrejo, murciélago","56":"Reina, escorpión, camisa","57":"Cama, ángeles","58":"Adulterio, cuchillo","59":"Loco, anillo","60":"Payaso, huevo, tempestad","61":"Caballo grande, revólver","62":"Matrimonio, robo, crimen","63":"Asesino, espada","64":"Muerto vivo, escándalo","65":"Cárcel, comida","66":"Tarro, divorcio, máscara","67":"Puñalada, hospital","68":"Cementerio grande, riña","69":"Pozo, loma, vago","70":"Teléfono, coco, tiro","71":"Río, sombrero, fusil","72":"Buey, ferrocarril, lluvia","73":"Maleta, navaja","74":"Papalote, militar","75":"Cine, corbata, guitarra","76":"Bailarina, violín","77":"Banderas, campana","78":"Ataúd, obispo, rey","79":"Tren de carga, dulces","80":"Médico, sábanas","81":"Teatro, fango","82":"Madre, león","83":"Tragedia, bastón","84":"Sastre, sangre","85":"Espejo, ojo","86":"Tijeras, herida","87":"Plátanos, Nueva York","88":"Hojas, muerto, vaso","89":"León, cometa","90":"Viejo, espejo","91":"Alpargatas, comunista","92":"Puerco grande, avión, Cuba","93":"Sortija, revolution","94":"Machete, pulga","95":"Guerra, cuchillo","96":"Zapato viejo, pícaro","97":"Grillo, sinsonte","98":"Piano, entierro","99":"Carbonero, ratero","100":"Inodoro, dios, escoba"};
 
     window.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.cant_select').forEach(sel => {
-            sel.innerHTML = "";
-            for(let i=10; i<=100; i+=10) {
-                let opt = document.createElement('option'); opt.value = i; opt.textContent = `${i} Números`;
-                if(i===40) opt.selected = true; // Pool intermedio inverso de 40 números para mayor balance en testeo
-                sel.appendChild(opt);
-            }
+            sel.innerHTML = `
+                <option value="std_1" selected>Desviación Estándar 1σ (Filtro Dinámico)</option>
+                <option value="25">Fijo Corto (25 Números)</option>
+                <option value="35">Fijo Medio (35 Números)</option>
+            `;
         });
         renderCalendario();
         mostrarTablaAciertos();
@@ -420,10 +419,9 @@
         loader.style.display = 'block';
 
         const pasosAlgoritmos = [
-            "🔄 [INVERSIÓN 1/3] EXPANDIENDO VENTANA TEMPORAL - BALANCEANDO PESOS DEL HISTORIAL PROFUNDO...",
-            "📊 [INVERSIÓN 2/3] DESACTIVANDO INTERSECCIÓN ESTRICTA - PASANDO A MODELO DE ACUMULACIÓN POR SUMA...",
-            "🧬 [INVERSIÓN 3/3] RECALIBRANDO POOL DIVERSIFICADO... COMPILANDO CORE ACUMULATIVO V19.4...",
-            "🧠 AJUSTANDO MOTORES BUGATTI CHIRON EN MODO COBERTURA..."
+            "📊 [DINÁMICO 1/3] EVALUANDO INTENSIDAD DE PATRONES EN HISTORIAL COMPLETO...",
+            "🧬 [DINÁMICO 2/3] CALCULANDO MEDIA DE FUERZA Y DESVIACIÓN ESTÁNDAR σ...",
+            "🧠 [DINÁMICO 3/3] ELIMINANDO NÚMEROS RUIDO POR DEBAJO DEL UMBRAL... CORRIENDO V19.5..."
         ];
 
         let segundoActual = 0;
@@ -439,30 +437,24 @@
                 btn.disabled = false; 
                 generarTodo(isAdmin); 
             }
-        }, 600);
+        }, 500);
     }
 
-    function ejecutarAlgoritmoCore(fijoBaseStr, cantidadSalida, dbSimulada, configPesos, turnoSeleccionado = 'combinado') {
+    function ejecutarAlgoritmoCore(fijoBaseStr, modoFiltro, dbSimulada, configPesos, turnoSeleccionado = 'combinado') {
         let fijoStr = fijoBaseStr.padStart(2, '0');
         let numBase = parseInt(fijoStr) || 0;
 
         let pesos = {};
-        for(let i=0; i<100; i++) {
-            pesos[i.toString().padStart(2, '0')] = 0.0;
-        }
+        for(let i=0; i<100; i++) { pesos[i.toString().padStart(2, '0')] = 0.0; }
 
         let fechasOrdenadas = obtenerFechasCronologicas(dbSimulada);
         let totalFechas = fechasOrdenadas.length;
 
-        // CAMBIO INVERSO 1: MEMORIA COMPUESTA TOTAL (No asilamos solo el presente, repartimos el peso)
         let flujoNumerosCompleto = [];
         fechasOrdenadas.forEach((f, idx) => {
             let antiguedad = totalFechas - idx;
-            let factorPesoHistorial = 0.35; // Peso robusto base al pasado profundo
-            
-            if (antiguedad <= 90) {
-                factorPesoHistorial = 0.65; // Peso suavizado al presente para evitar cortes drásticos
-            }
+            let factorPesoHistorial = 0.40;
+            if (antiguedad <= 90) factorSample = 0.70;
 
             if(dbSimulada[f]?.t) flujoNumerosCompleto.push({num: dbSimulada[f].t.padStart(2,'0'), pesoHist: factorPesoHistorial});
             if(dbSimulada[f]?.n) flujoNumerosCompleto.push({num: dbSimulada[f].n.padStart(2,'0'), pesoHist: factorPesoHistorial});
@@ -470,16 +462,14 @@
         
         let p = { ...pesosGlobalesOptimos };
 
-        // MOTOR 1: MARKOV MULTI-HISTORIAL
+        // MARKOV MULTI-VENTANA
         let ultimoNum = null;
         flujoNumerosCompleto.forEach(item => {
-            if (ultimoNum === fijoStr) {
-                pesos[item.num] += (p.markov * item.pesoHist);
-            }
+            if (ultimoNum === fijoStr) { pesos[item.num] += (p.markov * item.pesoHist); }
             ultimoNum = item.num;
         });
 
-        // MOTOR 2: DISTANCIA DE RETRASO ACUMULATIVA
+        // RETRASO ACUMULADO REESCALADO
         let totalSorteos = flujoNumerosCompleto.length;
         let ultimoAvistamiento = {};
         flujoNumerosCompleto.forEach((item, idx) => { ultimoAvistamiento[item.num] = idx; });
@@ -488,68 +478,60 @@
             pesos[nStr] += distanciaRetraso * p.retraso;
         }
 
-        // MOTOR 3: CO-OCURRENCIAS POR SUMA DIRECTA
+        // CO-OCURRENCIAS POTENCIADAS
         fechasOrdenadas.forEach((f, idx) => {
             if(dbSimulada[f]) {
-                let antiguedad = totalFechas - idx;
-                let factorPesoHistorial = antiguedad <= 90 ? 0.61 : 0.39;
                 let comb = [(dbSimulada[f].t || '').padStart(2,'0'), (dbSimulada[f].n || '').padStart(2,'0')];
                 if(comb.includes(fijoStr)) {
-                    comb.forEach(c => { 
-                        if(c !== fijoStr) pesos[c] += (p.cooc * factorPesoHistorial); 
-                    });
+                    comb.forEach(c => { if(c !== fijoStr) pesos[c] += p.cooc; });
                 }
             }
         });
 
-        // MOTOR 4: GEOMETRÍA COMPLETA (HERMANOS, ESPEJOS, VIRADOS)
+        // GEOMETRÍA DE OPERADORES
         let virado = fijoStr.split('').reverse().join('').padStart(2, '0');
-        pesos[virado] += 50.0;
-        
+        pesos[virado] += 60.0;
         let hermanoEspejo = ((numBase + 50) % 100).toString().padStart(2, '0');
         pesos[hermanoEspejo] += p.hermanos;
-
         pesos[((numBase + 11) % 100).toString().padStart(2, '0')] += p.hermanos;
-        pesos[((numBase + 10) % 100).toString().padStart(2, '0')] += 25.0;
-        pesos[((numBase - 10 + 100) % 100).toString().padStart(2, '0')] += 25.0;
 
-        // MOTOR 5: RED GENERAL ACUMULATIVA (CLUSTERES + FRECUENCIA)
-        let contadoresFrecuencia = {}; for(let i = 0; i < 100; i++) contadoresFrecuencia[i.toString().padStart(2, '0')] = 0;
-        let muestraRachaCaliente = flujoNumerosCompleto.slice(-150);
-        muestraRachaCaliente.forEach(item => { contadoresFrecuencia[item.num]++; });
+        // CRUNCH RECIENTE (LSTM Y MUTACIÓN)
+        let muestraRachaCaliente = flujoNumerosCompleto.slice(-120);
+        muestraRachaCaliente.forEach(item => { pesos[item.num] += (p.clusters * 0.3); });
         
-        for (let i = 0; i < 100; i++) {
-            let nStr = i.toString().padStart(2, '0');
-            pesos[nStr] += contadoresFrecuencia[nStr] * (p.clusters * 0.4);
+        if (muestraRachaCaliente.length >= 5) {
+            let sumaModular = muestraRachaCaliente.slice(-5).reduce((acc, curr) => acc + parseInt(curr.num), 0) % 100;
+            pesos[sumaModular.toString().padStart(2, '0')] += p.lstm;
         }
 
-        if (muestraRachaCaliente.length >= 4) {
-            let patronLstm = muestraRachaCaliente.slice(-5).map(item => parseInt(item.num) || 0);
-            let sumaModularLSTM = patronLstm.reduce((acc, curr) => acc + curr, 0) % 100;
-            pesos[sumaModularLSTM.toString().padStart(2, '0')] += p.lstm;
+        // FILTRADO INTELIGENTE V19.5: DESVIACIÓN ESTÁNDAR
+        let valoresPesos = Object.values(pesos);
+        let sumaTotal = valoresPesos.reduce((a, b) => a + b, 0);
+        let media = sumaTotal / 100;
+        let varianza = valoresPesos.reduce((a, b) => a + Math.pow(b - media, 2), 0) / 100;
+        let desviacionEstandar = Math.sqrt(varianza);
+
+        // Los números se ordenan de mayor a menor fuerza
+        let ordenados = Object.keys(pesos).sort((a, b) => pesos[b] - pesos[a]);
+
+        if (modoFiltro === 'std_1') {
+            // El umbral dinámico exige superar la media + el impacto de la desviación estándar
+            let umbralCorte = media + (desviacionEstandar * 0.85); 
+            let filtradosPorUmbral = ordenados.filter(nStr => pesos[nStr] >= umbralCorte);
+            
+            // Margen de seguridad dinámico: mínimo 20 números, máximo 35 para no diluir
+            if (filtradosPorUmbral.length < 20) return ordenados.slice(0, 20);
+            if (filtradosPorUmbral.length > 35) return ordenados.slice(0, 35);
+            return filtradosPorUmbral;
+        } else {
+            return ordenados.slice(0, parseInt(modoFiltro));
         }
-
-        let mutacionGeneticaFavorable = ((numBase * 7) + 13) % 100;
-        pesos[mutacionGeneticaFavorable.toString().padStart(2, '0')] += p.genetic;
-
-        // CHARADA EXTERNA
-        let inputCharada = document.getElementById('search_charada_user');
-        let palabra = inputCharada ? inputCharada.value.toLowerCase().trim() : '';
-        if(palabra.length > 2) {
-            for(let k in charadaDiccionario) { 
-                if(charadaDiccionario[k].toLowerCase().includes(palabra)) pesos[k.padStart(2, '0')] += p.charada; 
-            }
-        }
-
-        // CAMBIO INVERSO 2: NO HAY COHÉRCITO DE INTERSECCIÓN.
-        // Los motores cooperan de forma libre sumando sus fuerzas directamente.
-        return Object.keys(pesos).sort((a, b) => pesos[b] - pesos[a]).slice(0, cantidadSalida);
     }
 
     function generarTodo(isAdmin) {
         let pref = isAdmin ? 'admin_' : '';
         let fijoStr = document.getElementById(`${pref}fijo_base`).value.trim().padStart(2, '0');
-        let cant = parseInt(document.getElementById(`${pref}cant_final`).value || 40); 
+        let filtroModo = document.getElementById(`${pref}cant_final`).value; 
         let turno = document.getElementById(`${pref}filtro_turno`).value;
         let numBase = parseInt(fijoStr);
         if(isNaN(numBase)) return alert("Introduce un Fijo Base.");
@@ -560,7 +542,7 @@
             document.getElementById(`c3`).textContent = ((numBase + 21) % 100).toString().padStart(2, '0');
         }
 
-        ultimosNumerosGenerados = ejecutarAlgoritmoCore(fijoStr, cant, db, pesosGlobalesOptimos, turno);
+        ultimosNumerosGenerados = ejecutarAlgoritmoCore(fijoStr, filtroModo, db, pesosGlobalesOptimos, turno);
 
         let panel = document.getElementById(`${pref}panel_res`); panel.innerHTML = "";
         ultimosNumerosGenerados.forEach((n, index) => {
@@ -569,7 +551,7 @@
             panel.appendChild(b);
         });
 
-        document.getElementById(`${pref}pesos_aplicados`).innerHTML = `⚙️ Core Inverso v19.4 Activo | Modelo Acumulativo de Suma Libre OK`;
+        document.getElementById(`${pref}pesos_aplicados`).innerHTML = `🎯 Umbral Dinámico Activo: Exportados ${ultimosNumerosGenerados.length} números óptimos sin ruido.`;
         document.getElementById(`${pref}display_resultados`).style.display = 'block';
     }
 
@@ -579,7 +561,7 @@
         
         resultadosSimulacionGlobal = {};
         let totalHits = 0; let totalMisses = 0; let totalTirosContados = 0;
-        let cantPoolSimulacion = parseInt(document.getElementById('cant_final').value || 40); 
+        let filtroModo = document.getElementById('cant_final').value; 
 
         for (let i = 4; i < fechas.length; i++) {
             let fechaObjetivo = fechas[i];
@@ -591,7 +573,7 @@
             let dbCiega = {};
             for (let j = 0; j < i; j++) { dbCiega[fechas[j]] = db[fechas[j]]; }
 
-            let prediccionSimulada = ejecutarAlgoritmoCore(tiroAnteriorFijo, cantPoolSimulacion, dbCiega, pesosGlobalesOptimos, 'combinado');
+            let prediccionSimulada = ejecutarAlgoritmoCore(tiroAnteriorFijo, filtroModo, dbCiega, pesosGlobalesOptimos, 'combinado');
 
             let tReal = db[fechaObjetivo].t ? db[fechaObjetivo].t.padStart(2,'0') : '';
             let nReal = db[fechaObjetivo].n ? db[fechaObjetivo].n.padStart(2,'0') : '';
@@ -625,7 +607,7 @@
         document.getElementById('stat_admin_tot_tiros').textContent = totalTirosContados;
         document.getElementById('stats_globales_contenedor_admin').style.display = 'block';
 
-        alert(`Auditoría Inversa v19.4 Finalizada.\nEficiencia Verde: ${pctVerdes}%\nMargen Rojo: ${pctRojos}%`);
+        alert(`Auditoría de Control v19.5 Completa.\nEficiencia Verde: ${pctVerdes}%\nMargen Rojo: ${pctRojos}%`);
         mostrarTablaAciertos();
     }
 

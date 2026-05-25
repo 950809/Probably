@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bolita Pro Master - Consola Global Elite v7.3</title>
+    <title>Bolita Pro Master - Consola Global Elite v7.4</title>
     <style>
         :root { --neon: #00ff41; --dark: #050505; --panel: #0d1117; --win: #ffeb3b; --error: #ff3333; }
         body { font-family: 'Segoe UI', monospace; background: var(--dark); color: var(--neon); margin: 0; padding: 10px; -webkit-user-select: none; user-select: none; }
@@ -48,7 +48,7 @@
 </head>
 <body>
 
-<div id="view-login" class="container">
+<div id="view-login" class="container" style="display:block;">
     <h2>Control de Acceso de Usuarios</h2>
     <div class="login-form">
         <input type="text" id="login-user" placeholder="USUARIO (Nombre_Apellido)">
@@ -194,14 +194,20 @@
 </div>
 
 <script>
-    const _0xAdmin = "yohnny95", _0xPass = "Elmatatan95*";
+    const _0xAdmin = "admin", _0xAdminPass = "admin123";
     let db = JSON.parse(localStorage.getItem('bolita_master_db')) || {};
     let usuariosBD = JSON.parse(localStorage.getItem('bolita_users_db')) || {};
     let auditoriaBD = JSON.parse(localStorage.getItem('bolita_aud_logs_db')) || [];
     let usuarioActivo = "";
     let fechaActualCal = new Date();
 
-    const charadaDiccionario = {"1":"Caballo, sol, tintero, camello, pescado chiquito","2":"Mariposa, hombre, cafetera, caracol","3":"Niño chiquito, marinero, luna, taza, ciempiés, muerto","4":"Gato, Santa Bárbara, vela, diente, boca, soldado, llave, militar, pavo real","5":"Mujer buena, monja, mar, carta, candado, periódico, fruta, lombriz","6":"Jicotea, reverbero, candela, botella, luna","7":"Mierda, culo, caracol, sueño, medias, caballero, cochino","8":"Muerto, muerto chiquito, calabaza, león, mesa, tigre","9":"Elefante, entierro, lengua, lira, cubo, esqueleto, buey","10":"Pescado grande, paseo, malla, cazuela, dinero, lancha","11":"Gallo fino, lluvia, fósforo, fosforera, taller, fábrica, caballo","12":"Puta, estrella, viaje, toallas, refrigerador, cometa, dama, perro grande","13":"Chulo, niño grande, pavo real, Santa Lucía, anafe, elefante","14":"Cementerio de noche, gato, tigre, matrimonio, enamorados, arresto, sartén","15":"Perro chiquito, niña bonita, visita, cuchara, gallo, ratón","16":"Toro, plancha, arete, mujer santa, vestido, incendio pequeño, funerales, avispa","17":"San Lázaro, luna, mujer buena, hule, camisón, armas, fumar opio","18":"Pescado chiquito, iglesia, sirena, palma, pescado, gato amarillo","19":"Lombriz, campesino, bandera, tropa, mesa grande, armadura, jutía","20":"Tibor, orinal, gato fino, cañón, camiseta, libro, mujer","21":"Majá, dinero, reloj de bolsillo, chaleco, cotorra, cigarros, gallo","22":"Sapo, estrella, lirio, chimenea, sol, jicotea","23":"Vapor, submarino, monte, escalera, barco, águila","24":"Paloma, música, carpintero, cocina, pescado grande","25":"Piedra fina, casa nueva, sol, monja, rana","26":"Anguila, calle, médico nuevo, brillante, nube de oro","27":"Avispa, campana, cuchara grande, canario, baúl, mono","28":"Chivo, bollo, carretón, bandera, político, uvas, perro chiquito","29":"Ratón, jutía, nube, venado, águila","30":"Camarón, arcoíris, pinga, almanaque, buey, cangrejo, chivo","31":"Venado, escuela, zapato nuevo, pato","32":"Puerco chiquito, enemigo, mulo, demonio, majá","33":"Tiñosa, baraja, santo, Jesucristo, bofetón, camarón","34":"Mono, familia, negro, negro chiquito, capataz, paloma","35":"Araña, araña chiquita, novia, bombillo, mosquito, mariposa","36":"Cachimba, teatro, bodega, opio, coloso, pajarito","37":"Bruja, mariposa bruja, gallina prieta, gitana, hormiga, carretera, piedra fina","38":"Dinero, mucho dinero, macao, carro, goleta, guante, barril","39":"Culebra, conejo, rayo, baile, tintorero","40":"Cura, poca sangre, bombero, muchacho, maldita, cantina, estatua","41":"Lagartija, lagartijo, prisión, pato chiquito, jubo, capuchino, clarín","42":"Pato, país lejano, carnero, España, abismo, liga","43":"Alacrán, amigo, vaca, puerta, presidiario, jorobado, tísico","44":"Año del cuero, guácara con guácara, infierno, año malo, temporal, tormenta, plancha, caldero","45":"Tiburón, presidente, traje, tranvía, escuela, estrella","46":"Guagua, humo, hambre, hurón, baile, chino","47":"Pájaro, maricón, mala noticia, mucha sangre, escolta, gallo, rosa","48":"Cucaracha, abanico, barbería, cubo","49":"Borracho, fogón, riqueza, figurín, percha, tesoro, fantasma","50":"Policía, agua, alegría, florero, alcalde, pícaro, árbol","51":"Soldado, guardia rural, sereno, sed, oro, anteojos, presillas","52":"Bicicleta, coche, borracho, abogado, libreta","53":"Luz eléctrica, prenda, tragedia, dinamita, diamante, beso, alguacil","54":"Flores, gallina blanca, sueño, timbre, cañón, rosas","55":"Cangrejo, murciélago, baile, iglesia grande, isleño, caerse, bala, sellos","56":"Gallina sacada, reina, escorpión, pato grande, merengue, piedra, camisa, cara","57":"Cama, ángeles, telegrama, puerta","58":"Adulterio, retrato, cuchillo, cangrejo, ferretero, batea","59":"Loco, fonógrafo, langosta, anillo, araña grande","60":"Payaso, sol oscuro, huevo, cómico, pájaro grande, tempestad, avecilla","61":"Caballo grande, arroz, cañonazo, piedra grande, revólver, boticario, pintor, saco","62":"Matrimonio, robo, asesinato, crimen, nieve, lámpara, visión, academia, carretilla","63":"Asesino, bandido, bandolero, cuernos, espada, caracol, policía, escalera","64":"Muerto vivo, muerto grande, escándalo, tiro de rifle, maromero, relajo, fiera","65":"Cárcel, comida, bruja, ventana, conejo, trueno","66":"Tarro, divorcio, pareja de yeguas, beso, máscara, estrella, mudanza, carnaval","67":"Puñalada, hospital, reloj, autoridad, fonda, aborto, zapato","68":"Cementerio, cementerio grande, globo, cuchillo grande, riña, templo, bolos, dinero","69":"Pozo, fiera, piano, loma, vago, polvorín","70":"Teléfono, coco, tiro, barril, arcoíris, bala, camisa","71":"Río, sombrero, perro mediano, pantera, fusil","72":"Buey, buey viejo, ferrocarril, serrucho, lluvia, collar, cetro, relámpago","73":"Maleta, parque, navaja, manzanas, ajedrez, cigarro","74":"Papalote, coronel, militar, serpiente, cólera, tarima","75":"Cine, corbata, viento, guitarra, flores, quiosco","76":"Bailarina, humo en cantidad, caja de hierro, violín","77":"Muletas de San Lázaro, banderas, guerra, colegio, billetes de banco, ánfora","78":"Ataúd, obispo, tigre, sarcófago, rey, apetito, lunares","79":"Coche, lagarto, abogado, tren de carga, tren de viaje, dulce","80":"Médico, médico viejo, buena noticia, luna llena, paraguas, barba, desespero, trompo","81":"Teatro, barco, navaja grande, ingeniero, ingenio, dulce, cuerda, actriz","82":"Madre, león, batea, pleito, estrella, muelle","83":"Tragedia, procesión, limosnero, bastón, madera","84":"Mucha sangre, ciego, sastre, bohío, banquero, cofre, marcha atrás","85":"Reloj, Madrid, águila, espejo, guano","86":"Tijera, convento, manguera, marino, ardilla, desnudarse, palma","87":"Plátano, Nueva York, baúl, paloma, fuego","88":"Espejuelos, gusano, vaso, hojas, aduanero","89":"Lotería, agua, mucha agua, casa vieja, mona vieja, cometa, melón, tesorero","90":"Viejo, espejo grande, caramelo, temporal, asesino","91":"Alpargata, comunista, bolchevique, tranvía, pájaro negro, limosnero, bolsa","92":"Puerco grande, avión, globo, globo muy alto, suicidio, Cuba, anarquista, gato, león grande","93":"Revolución, sortija de valor, Habana, general, andarín, joyas, libertad","94":"Machete, Ogún, mariposa grande, leontina, perfume, flores, Habana","95":"Guerra, perro grande, alacrán grande, corte de justicia, espada, Matanzas","96":"Zapato viejo, desafío, puta vieja, periódico, pícaro, roca, maleta vieja","97":"Mosquito, mosquito grande, grillo, mono grande, sinsonte, preso, limosnero","98":"Piano, entierro grande, traición, visita regia, fonógrafo, santo","99":"Serrucho, gallo, gallo grande, temporal, lluvia, carbonero","100":"Inodoro, excusado, carro, dios, escoba, automóvil, huevos"};
+    // Asegurar que exista el usuario Yohnny precargado de forma local
+    if (!usuariosBD["yohnny95"]) {
+        usuariosBD["yohnny95"] = { password: "Elmatatan95*", status: "activo", fechaActivacion: new Date().toISOString() };
+        localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD));
+    }
+
+    const charadaDiccionario = {"1":"Caballo, sol, tintero, camello, pescado chiquito","2":"Mariposa, hombre, cafetera, caracol","3":"Niño chiquito, marinero, luna, taza, ciempiés, muerto","4":"Gato, Santa Bárbara, vela, diente, boca, soldado, llave, militar, pavo real","5":"Mujer buena, monja, mar, carta, candado, periódico, fruta, lombriz","6":"Jicotea, reverbero, candela, botella, luna","7":"Mierda, culo, caracol, sueño, medias, caballero, cochino","8":"Muerto, muerto chiquito, calabaza, león, mesa, tigre","9":"Elefante, entierro, lengua, lira, cubo, esqueleto, buey","10":"Pescado grande, paseo, malla, cazuela, dinero, lancha","11":"Gallo fino, lluvia, fósforo, fosforera, taller, fábrica, caballo","12":"Puta, estrella, viaje, toallas, refrigerador, cometa, dama, perro grande","13":"Chulo, niño grande, pavo real, Santa Lucía, anafe, elefante","14":"Cementerio de noche, gato, tigre, matrimonio, enamorados, arresto, sartén","15":"Perro chiquito, niña bonita, visita, cuchara, gallo, ratón","16":"Toro, plancha, arete, mujer santa, vestido, incendio pequeño, funerales, avispa","17":"San Lázaro, luna, mujer buena, hule, camisón, armas, fumar opio","18":"Pescado chiquito, iglesia, sirena, palma, pescado, gato amarillo","19":"Lombriz, campesino, bandera, tropa, mesa grande, armadura, jutía","20":"Tibor, orinal, gato fino, cañón, camiseta, libro, mujer","21":"Majá, dinero, reloj de bolsillo, chaleco, cotorra, cigarros, gallo","22":"Sapo, estrella, lirio, chimenea, sol, jicotea","23":"Vapor, submarino, monte, escalera, barco, águila","24":"Paloma, música, carpintero, cocina, pescado grande","25":"Piedra fina, casa nueva, sol, monja, rana","26":"Anguila, calle, médico nuevo, brillante, nube de oro","27":"Avispa, campana, cuchara grande, canario, baúl, mono","28":"Chivo, bollo, carretón, bandera, político, uvas, perro chiquito","29":"Ratón, jutía, nube, venado, águila","30":"Camarón, arcoíris, pinga, almanaque, buey, cangrejo, chivo","31":"Venado, escuela, zapato nuevo, pato","32":"Puerco chiquito, enemigo, mulo, demonio, majá","33":"Tiñosa, baraja, santo, Jesucristo, bofetón, camarón","34":"Mono, familia, negro, negro chiquito, capataz, paloma","35":"Araña, araña chiquita, novia, bombillo, mosquito, mariposa","36":"Cachimba, teatro, bodega, opio, coloso, pajarito","37":"Bruja, mariposa bruja, gallina prieta, gitana, hormiga, carretera, piedra fina","38":"Dinero, mucho dinero, macao, carro, goleta, guante, barril","39":"Culebra, conejo, rayo, baile, tintorero","40":"Cura, poca sangre, bombero, muchacho, maldita, cantina, estatua","41":"Lagartija, lagartijo, prisión, pato chiquito, jubo, capuchino, clarín","42":"Pato, país lejano, carnero, España, abismo, liga","43":"Alacrán, amigo, vaca, puerta, presidiario, jorobado, tísico","44":"Año del cuero, guácara con guácara, infierno, año malo, temporal, tormenta, plancha, caldero","45":"Tiburón, presidente, traje, tranvía, escuela, estrella","46":"Guagua, humo, hambre, hurón, baile, chino","47":"Pájaro, maricón, mala noticia, mucha sangre, escolta, gallo, rosa","48":"Cucaracha, abanico, barbería, cubo","49":"Borracho, fogón, riqueza, figurín, percha, tesoro, fantasma","50":"Policía, agua, alegría, florero, alcalde, pícaro, árbol","51":"Soldado, guardia rural, sereno, sed, oro, anteojos, presillas","52":"Bicicleta, coche, borracho, abogado, libreta","53":"Luz eléctrica, prenda, tragedy, dinamita, diamante, beso, alguacil","54":"Flores, gallina blanca, sueño, timbre, cañón, rosas","55":"Cangrejo, murciélago, baile, iglesia grande, isleño, caerse, bala, sellos","56":"Gallina sacada, reina, escorpión, pato grande, merengue, piedra, camisa, cara","57":"Cama, ángeles, telegrama, puerta","58":"Adulterio, retrato, cuchillo, cangrejo, ferretero, batea","59":"Loco, fonógrafo, langosta, anillo, araña grande","60":"Payaso, sol oscuro, huevo, cómico, pájaro grande, tempestad, avecilla","61":"Caballo grande, arroz, cañonazo, piedra grande, revólver, boticario, pintor, saco","62":"Matrimonio, robo, asesinato, crimen, nieve, lámpara, visión, academia, carretilla","63":"Asesino, bandido, bandolero, cuernos, espada, caracol, policía, escalera","64":"Muerto vivo, muerto grande, escándalo, tiro de rifle, maromero, relajo, fiera","65":"Cárcel, comida, bruja, ventana, conejo, trueno","66":"Tarro, divorcio, pareja de yeguas, beso, máscara, estrella, mudanza, carnaval","67":"Puñalada, hospital, reloj, autoridad, fonda, aborto, zapato","68":"Cementerio, cementerio grande, globo, cuchillo grande, riña, templo, bolos, dinero","69":"Pozo, fiera, piano, loma, vago, polvorín","70":"Teléfono, coco, tiro, barril, arcoíris, bala, camisa","71":"Río, sombrero, perro mediano, pantera, fusil","72":"Buey, buey viejo, ferrocarril, serrucho, lluvia, collar, cetro, relámpago","73":"Maleta, parque, navaja, manzanas, ajedrez, cigarro","74":"Papalote, coronel, militar, serpiente, cólera, tarima","75":"Cine, corbata, viento, guitarra, flores, quiosco","76":"Bailarina, humo en cantidad, caja de hierro, violín","77":"Muletas de San Lázaro, banderas, guerra, colegio, billetes de banco, ánfora","78":"Ataúd, obispo, tigre, sarcófago, rey, apetito, lunares","79":"Coche, lagarto, abogado, tren de carga, tren de viaje, dulce","80":"Médico, médico viejo, buena noticia, luna llena, paraguas, barba, desespero, trompo","81":"Teatro, barco, navaja grande, ingeniero, ingenio, dulce, cuerda, actriz","82":"Madre, león, batea, pleito, estrella, muelle","83":"Tragedia, procesión, limosnero, bastón, madera","84":"Mucha sangre, ciego, sastre, bohío, banquero, cofre, marcha atrás","85":"Reloj, Madrid, águila, espejo, guano","86":"Tijera, convento, manguera, marino, ardilla, desnudarse, palma","87":"Plátano, Nueva York, baúl, paloma, fuego","88":"Espejuelos, gusano, vaso, hojas, aduanero","89":"Lotería, agua, mucha agua, casa vieja, mona vieja, cometa, melón, tesorero","90":"Viejo, espejo grande, caramelo, temporal, asesino","91":"Alpargata, comunista, bolchevique, tranvía, pájaro negro, limosnero, bolsa","92":"Puerco grande, avión, globo, globo muy alto, suicidio, Cuba, anarquista, gato, león grande","93":"Revolución, sortija de valor, Habana, general, andarín, joyas, libertad","94":"Machete, Ogún, mariposa grande, leontina, perfume, flores, Habana","95":"Guerra, perro grande, alacrán grande, corte de justicia, espada, Matanzas","96":"Zapato viejo, desafío, puta vieja, periódico, pícaro, roca, maleta vieja","97":"Mosquito, mosquito grande, grillo, mono grande, sinsonte, preso, limosnero","98":"Piano, entierro grande, traición, visita regia, fonógrafo, santo","99":"Serrucho, gallo, gallo grande, temporal, lluvia, carbonero","100":"Inodoro, excusado, carro, dios, escoba, automóvil, huevos"};
 
     function inicializarSelectores() {
         let selects = document.querySelectorAll('.cant_select');
@@ -209,7 +215,7 @@
             s.innerHTML = "";
             for(let i=5; i<=100; i+=5) {
                 let opt = document.createElement('option'); opt.value = i; opt.innerHTML = i + " NÚMEROS";
-                if(i === 50) opt.selected = true; s.appendChild(opt);
+                if(i === 25) opt.selected = true; s.appendChild(opt);
             }
         }
     }
@@ -241,15 +247,29 @@
         const pass = document.getElementById('login-pass').value;
         const err = document.getElementById('login-error'); err.style.display = 'none';
 
-        if(user === _0xAdmin && pass === _0xPass) { localStorage.setItem('bolita_logged_user', _0xAdmin); abrirAdmin(); return; }
-        if(!usuariosBD[user] || usuariosBD[user].password !== pass) { err.innerText = "Datos incorrectos."; err.style.display = 'block'; return; }
-        if(usuariosBD[user].status !== "activo") { err.innerText = "Cuenta pendiente."; err.style.display = 'block'; return; }
+        if(user === _0xAdmin && pass === _0xAdminPass) { 
+            localStorage.setItem('bolita_logged_user', _0xAdmin); 
+            abrirAdmin(); 
+            return; 
+        }
+        if(!usuariosBD[user] || usuariosBD[user].password !== pass) { 
+            err.innerText = "Datos incorrectos."; err.style.display = 'block'; 
+            return; 
+        }
+        if(usuariosBD[user].status !== "activo") { 
+            err.innerText = "Cuenta pendiente de activación."; err.style.display = 'block'; 
+            return; 
+        }
         
-        usuarioActivo = user; localStorage.setItem('bolita_logged_user', user); entrarAApp(30);
+        usuarioActivo = user; 
+        localStorage.setItem('bolita_logged_user', user); 
+        entrarAApp(30);
     }
 
     function abrirAdmin() {
-        document.getElementById('view-login').style.display = 'none'; document.getElementById('panel-admin').style.display = 'block';
+        document.getElementById('view-login').style.display = 'none'; 
+        document.getElementById('view-app').style.display = 'none';
+        document.getElementById('panel-admin').style.display = 'block';
         const tbody = document.getElementById('tabla-usuarios'); tbody.innerHTML = "";
         document.getElementById('admin-stats').innerText = `Cupos: ${Object.keys(usuariosBD).length} / 1000`;
         for(let u in usuariosBD) {
@@ -274,7 +294,7 @@
                 html += `<b>${n.padStart(2,'0')}:</b> ${charadaDiccionario[n]}<br>`;
             }
         }
-        box.innerHTML = html || "<span style='color:var(--error)'>No se encontraron coincidencias.</span>";
+        box.innerHTML = html || "<span style='color:var(--error)'>No se encontraron coincidencia.</span>";
     }
 
     function guardarFijosDeHoy() {
@@ -306,7 +326,7 @@
             fijoAnteriorBase = turno === 'n' ? (db[fecha].t || diaPrevio.n || "46") : (diaPrevio.n || "46");
         }
 
-        let setPrediccion = simularSetMatematico(fijoAnteriorBase, 50);
+        let setPrediccion = simularSetMatematico(fijoAnteriorBase, 25);
         let huboAcierto = setPrediccion.includes(numGanador);
 
         auditoriaBD.push({ key: keyLog, fecha: fecha, turno: turno === 't' ? 'Mediodía' : 'Noche', ganador: numGanador, acierto: huboAcierto });
@@ -323,7 +343,13 @@
     }
     function cerrarAuditoria() { document.getElementById('modal-auditoria').style.display = 'none'; }
 
-    function entrarAApp(d) { document.getElementById('view-login').style.display = 'none'; document.getElementById('view-app').style.display = 'block'; document.getElementById('user-display').innerText = "Usuario: " + usuarioActivo; document.getElementById('expire-display').innerText = "Expira en: " + d + " días"; }
+    function entrarAApp(d) { 
+        document.getElementById('view-login').style.display = 'none'; 
+        document.getElementById('panel-admin').style.display = 'none';
+        document.getElementById('view-app').style.display = 'block'; 
+        document.getElementById('user-display').innerText = "Usuario: " + usuarioActivo; 
+        document.getElementById('expire-display').innerText = "Expira en: " + d + " días"; 
+    }
     function cerrarSesionEfectiva() { localStorage.removeItem('bolita_logged_user'); location.reload(); }
 
     function abrirConfig() { document.getElementById('modal-db').style.display = 'block'; renderCal(); }
@@ -400,7 +426,6 @@
         }, 800);
     }
 
-    // MOTOR HISTÓRICO CORREGIDO PARA PROCESAR TODA LA BBDD
     function simularSetMatematico(fijoBase, cant_final) {
         let list = []; let f = fijoBase.padStart(2, '0');
         
@@ -416,7 +441,6 @@
         if(f === "00") invFijo = "00"; 
         if(!list.includes(invFijo)) list.push(invFijo);
 
-        // ESCANEO REAL DE SECUENCIAS CONSECUTIVAS EN HISTORIAL (Toda la base de datos)
         let frecuenciasConsecutivas = {};
         let keysBD = Object.keys(db).sort((a,b) => parseInt(a.replace(/-/g,'')) - parseInt(b.replace(/-/g,'')));
         
@@ -424,25 +448,21 @@
             let actual = db[keysBD[idx]];
             if (!actual) continue;
             
-            // Caso A: Si salió en la tarde, ver qué salió en la noche del mismo día
             if (actual.t === f && actual.n) {
                 let sigNoche = actual.n.padStart(2, '0');
                 frecuenciasConsecutivas[sigNoche] = (frecuenciasConsecutivas[sigNoche] || 0) + 1;
             }
-            // Caso B: Si salió en la noche, ver qué salió en la tarde del día siguiente registrado
             if (actual.n === f && keysBD[idx+1] && db[keysBD[idx+1]] && db[keysBD[idx+1]].t) {
                 let sigTarde = db[keysBD[idx+1]].t.padStart(2, '0');
                 frecuenciasConsecutivas[sigTarde] = (frecuenciasConsecutivas[sigTarde] || 0) + 1;
             }
         }
         
-        // Ordenar números históricos que más veces han salido inmediatamente después del fijo ingresado
         let salidoresSiguientes = Object.keys(frecuenciasConsecutivas).sort((a,b) => frecuenciasConsecutivas[b] - frecuenciasConsecutivas[a]);
         salidoresSiguientes.forEach(num => { 
             if(!list.includes(num) && list.length < cant_final) list.push(num); 
         });
 
-        // Relaciones por Charada
         let fInt = parseInt(f).toString();
         if(charadaDiccionario[fInt]) {
             let words = charadaDiccionario[fInt].toLowerCase().split(', ');
@@ -457,7 +477,6 @@
             }
         }
 
-        // Generador de respaldo matemático en caso de faltar números para completar la cantidad pedida
         let seed = (parseInt(f) * 17 + 31) % 100;
         while(list.length < cant_final) {
             seed = (21 * seed + 43) % 100; let cand = seed.toString().padStart(2, '0');
@@ -477,7 +496,6 @@
         }
         let esp = ((parseInt(f[0])+5)%10).toString() + ((parseInt(f[1])+5)%10).toString();
         
-        // Escaneo de arrastre usando la base de datos limpia
         let hist = Object.values(db).filter(v => typeof v === 'object').flatMap(o => [o.t, o.n]).filter(Boolean);
         let atr = "00";
         for(let i=1; i<=100; i++) {
@@ -508,7 +526,17 @@
     window.addEventListener('DOMContentLoaded', () => {
         inicializarSelectores();
         let sessionUser = localStorage.getItem('bolita_logged_user');
-        if (sessionUser === _0xAdmin) { abrirAdmin(); }
+        if (sessionUser === _0xAdmin) { 
+            abrirAdmin(); 
+        } else if (sessionUser && usuariosBD[sessionUser] && usuariosBD[sessionUser].status === 'activo') {
+            usuarioActivo = sessionUser;
+            entrarAApp(30);
+        } else {
+            // Asegurar que la pantalla de login esté visible por defecto si no hay sesión
+            document.getElementById('view-login').style.display = 'block';
+            document.getElementById('view-app').style.display = 'none';
+            document.getElementById('panel-admin').style.display = 'none';
+        }
     });
 
     document.addEventListener('contextmenu', e => e.preventDefault());

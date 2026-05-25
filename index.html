@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bolita Pro Master - Consola Bugatti v20.0 Tradicional</title>
+    <title>Bolita Pro Master - Consola Bugatti Chiron v21.0 Tradicional</title>
     
     <meta name="theme-color" content="#050505">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link class="crypto-manifest" id="pwa-manifest" rel="shortcut icon" href="#">
+    <link rel="crypto-manifest" id="pwa-manifest">
 
     <style>
-        :root { --neon: #00ff41; --dark: #050505; --panel: #0d1117; --win: #ffeb3b; --error: #ff3333; --cyber: #00bcd4; }
+        :root { --neon: #00ff41; --dark: #050505; --panel: #0d1117; --win: #ffeb3b; --error: #ff3333; --cyber: #00bcd4; --bugatti: #1e88e5; }
         body { font-family: 'Segoe UI', monospace; background: var(--dark); color: var(--neon); margin: 0; padding: 10px; -webkit-user-select: none; user-select: none; }
         .container { max-width: 480px; margin: auto; border: 1px solid var(--neon); padding: 12px; border-radius: 8px; box-sizing: border-box; }
         h2 { font-size: 0.8rem; text-align: center; border-bottom: 1px solid var(--neon); padding-bottom: 6px; text-transform: uppercase; margin-bottom: 12px; margin-top: 5px; }
@@ -45,7 +45,7 @@
         th, td { padding: 5px; border-bottom: 1px solid #222; text-align: left; }
         th { color: var(--neon); text-transform: uppercase; font-size: 0.65rem; }
         
-        .calc-box { background: #000; border: 1px solid #333; padding: 6px; border-radius: 4px; text-align: center; }
+        .calc-box { background: #000; border: 1px solid #333; padding: 6px; border-radius: 4px; text-align: center; font-size: 0.75rem; }
         .calc-box span { display: block; font-size: 1.1rem; font-weight: bold; color: #fff; margin-top: 2px; }
         .charada-box { background: #000; border: 1px solid #222; padding: 6px; border-radius: 4px; max-height: 90px; overflow-y: auto; font-size: 0.75rem; color: #ccc; white-space: pre-line; margin-top: 4px; }
         .loader { display: none; color: var(--win); font-size: 0.72rem; border: 1px dashed var(--win); padding: 12px; border-radius: 4px; background: rgba(255,235,59,0.02); font-family: monospace; }
@@ -60,32 +60,34 @@
         .stat-card { background: #000; border: 1px solid #333; padding: 6px; border-radius: 4px; text-align: center; }
         .stat-card-title { font-size: 0.55rem; color: #888; text-transform: uppercase; display: block; }
         .stat-card-value { font-size: 0.95rem; font-weight: bold; display: block; margin-top: 2px; }
+
+        .piramide-container { font-family: monospace; font-size: 0.85rem; color: var(--cyber); text-align: center; background: #000; padding: 8px; border: 1px solid #222; border-radius: 4px; margin-top: 4px; letter-spacing: 3px; line-height: 1.2; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div id="view-login" style="display: block;">
-        <h2>Identificación de Terminal</h2>
+        <h2>Chiron Terminal Authentication</h2>
         <div class="login-form">
             <input type="text" id="login-user" placeholder="USUARIO ACCESO">
             <input type="password" id="login-pass" placeholder="PASSWORD DISPOSITIVO">
-            <button onclick="intentarLogin()">Acceder al Sistema</button>
-            <div id="login-error" style="color:var(--error); font-size:0.75rem; text-align:center; display:none;">Credenciales incorrectas locales.</div>
+            <button onclick="intentarLogin()">Acceder a Consola</button>
+            <div id="login-error" style="color:var(--error); font-size:0.75rem; text-align:center; display:none;">Credenciales locales inválidas.</div>
             <p style="font-size:0.7rem; text-align:center; color:#666; margin-top:10px;">
-                ¿Terminal nueva? <span style="color:var(--neon); cursor:pointer;" onclick="mostrarRegistroForm(true)">Registrar Localmente</span>
+                ¿Nueva terminal? <span style="color:var(--neon); cursor:pointer;" onclick="mostrarRegistroForm(true)">Registrar en Base Local</span>
             </p>
         </div>
     </div>
 
     <div id="view-register" style="display: none;">
-        <h2>Solicitud de Registro Local</h2>
+        <h2>Solicitud Registro de Terminal</h2>
         <div class="login-form">
-            <input type="text" id="reg-nombre" placeholder="TU NOMBRE">
-            <input type="text" id="reg-apellido" placeholder="TU APELLIDO">
+            <input type="text" id="reg-nombre" placeholder="NOMBRE">
+            <input type="text" id="reg-apellido" placeholder="APELLIDO">
             <input type="password" id="reg-pass" placeholder="PASSWORD DISPOSITIVO">
-            <button style="border-color:var(--win); color:var(--win);" onclick="enviarSolicitud()">Registrar en Memoria</button>
-            <button style="border-color:#555; color:#888;" onclick="mostrarRegistroForm(false)">Volver Atrás</button>
+            <button style="border-color:var(--win); color:var(--win);" onclick="enviarSolicitud()">Salvar Registro</button>
+            <button style="border-color:#555; color:#888;" onclick="mostrarRegistroForm(false)">Regresar</button>
         </div>
     </div>
 
@@ -93,13 +95,13 @@
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
             <span id="user-display" style="font-size:0.7rem; color:#aaa; font-weight:bold;"></span>
             <div style="display:flex; gap:4px;">
-                <button style="padding:3px 6px; font-size:0.65rem;" onclick="abrirConfig()">Base de Datos</button>
-                <button style="padding:3px 6px; font-size:0.65rem; border-color:var(--error); color:var(--error);" onclick="cerrarSesionEfectiva()">Salir</button>
+                <button style="padding:3px 6px; font-size:0.65rem;" onclick="abrirConfig()">Calendario BBDD</button>
+                <button style="padding:3px 6px; font-size:0.65rem; border-color:var(--error); color:var(--error);" onclick="cerrarSesionEfectiva()">Desconectar</button>
             </div>
         </div>
 
         <div class="tab-bar">
-            <button id="btn-user-tab-calc" class="tab-btn active" onclick="switchUserSection('calc')">Cálculos Tradicionales</button>
+            <button id="btn-user-tab-calc" class="tab-btn active" onclick="switchUserSection('calc')">Cálculos de la Abuela</button>
             <button id="btn-user-tab-hist" class="tab-btn" onclick="switchUserSection('hist')">Auditoría / Backtest</button>
         </div>
 
@@ -107,40 +109,45 @@
             <div class="main-form">
                 <div class="grid-3">
                     <div>
-                        <label style="font-size:0.55rem; color:#888; display:block; margin-bottom:2px;">FIJO BASE</label>
+                        <label style="font-size:0.55rem; color:#888; display:block; margin-bottom:2px;">FIJO ANTERIOR</label>
                         <input type="number" id="fijo_base" placeholder="Ej. 83" maxlength="2" oninput="if(this.value.length > 2) this.value = this.value.slice(0,2);">
                     </div>
                     <div>
                         <label style="font-size:0.55rem; color:#888; display:block; margin-bottom:2px;">MÉTODO CALLE</label>
                         <select id="filtro_turno">
-                            <option value="combinado" selected>Cruces de la Abuela</option>
+                            <option value="tradicional" selected>Cruces de la Abuela</option>
                         </select>
                     </div>
                     <div>
                         <label style="font-size:0.55rem; color:#888; display:block; margin-bottom:2px;">TAMAÑO POOL</label>
                         <select id="cant_final">
-                            <option value="25" selected>Pool Corto (25 Números)</option>
+                            <option value="25" selected>Pool Fijo (25 Números)</option>
                             <option value="35">Pool Abierto (35 Números)</option>
                         </select>
                     </div>
                 </div>
                 
-                <div style="margin-top:2px;">
-                    <label style="font-size:0.6rem; color:#888; display:block; margin-bottom:2px;">INTERSECCIÓN CHARADA</label>
-                    <input type="text" id="search_charada_user" placeholder="Buscar palabra de la charada..." oninput="buscarEnCharada()">
-                    <div id="charada_result_user" class="charada-box">Escribe para buscar...</div>
+                <div>
+                    <label style="font-size:0.6rem; color:#888; display:block; margin-bottom:2px;">INTERSECCIÓN DE SUEÑOS / CHARADA</label>
+                    <input type="text" id="search_charada_user" placeholder="Escribe palabra (ej: caballo, gato, muerto)..." oninput="buscarEnCharada()">
+                    <div id="charada_result_user" class="charada-box">Escribe para interceptar la charada...</div>
                 </div>
 
-                <button id="btn_generar_user" style="margin-top:5px; border-color:var(--neon);" onclick="activarProcesoCalculo(false)">Correr Cruces Tradicionales</button>
+                <button id="btn_generar_user" style="margin-top:5px; border-color:var(--cyber); color:var(--cyber);" onclick="activarProcesoCalculo()">Correr Motores Tradicionales</button>
             </div>
 
             <div id="loading_user" class="loader"></div>
 
             <div id="display_resultados" style="display: none;">
+                <div class="panel" style="border-color: var(--cyber);">
+                    <label style="font-size:0.65rem; color:var(--cyber); font-weight:bold; text-transform:uppercase;">Pirámide de Reducción Tradicional</label>
+                    <div id="piramide_despliegue" class="piramide-container"></div>
+                </div>
+
                 <div class="panel">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <label style="font-size:0.65rem; color:var(--neon); font-weight:bold; text-transform:uppercase;">Números Clave Resultantes (Cruces de la Calle)</label>
-                        <span style="font-size:0.55rem; color:var(--win); font-weight:bold;">👵🏽 Tradicional v20.0</span>
+                        <label style="font-size:0.65rem; color:var(--neon); font-weight:bold; text-transform:uppercase;">Pool de Números Clave Resultantes</label>
+                        <span style="font-size:0.55rem; color:var(--win); font-weight:bold;">👵🏽 Algoritmo Ancestral v21.0</span>
                     </div>
                     <div id="panel_res" class="grid-panel"></div>
                     <div id="user_pesos_aplicados" class="pesos-info"></div>
@@ -151,17 +158,17 @@
         <div id="user-sec-hist" style="display: none;">
             <div class="panel" style="margin-top:0;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                    <label style="font-size:0.65rem; color:var(--win); font-weight:bold; text-transform:uppercase;">Historial de Rendimiento Local</label>
-                    <button style="font-size:0.6rem; padding:4px 8px; border-color:var(--win); color:var(--win);" onclick="ejecutarSimulacionAutomatica()">Correr Backtest Total</button>
+                    <label style="font-size:0.65rem; color:var(--win); font-weight:bold; text-transform:uppercase;">Rendimiento del Algoritmo de la Abuela</label>
+                    <button style="font-size:0.6rem; padding:4px 8px; border-color:var(--win); color:var(--win);" onclick="ejecutarSimulacionAutomatica()">Ejecutar Backtest Completo</button>
                 </div>
                 
                 <div id="stats_globales_contenedor_user" style="display: none; margin-bottom: 8px; border-bottom: 1px dashed #333; padding-bottom: 8px;">
                     <div class="panel-stats-global">
-                        <div class="stat-card" style="border-color: var(--neon);"><span class="stat-card-title" style="color:var(--neon);">EFECTIVIDAD (HIT)</span><span id="stat_user_green_pct" class="stat-card-value" style="color:#00ff00;">0.0%</span></div>
-                        <div class="stat-card" style="border-color: var(--error);"><span class="stat-card-title" style="color:var(--error);">MARGEN ERROR (MISS)</span><span id="stat_user_red_pct" class="stat-card-value" style="color:#ff3333;">0.0%</span></div>
+                        <div class="stat-card" style="border-color: var(--neon);"><span class="stat-card-title" style="color:var(--neon);">HIT PERCENTAGE</span><span id="stat_user_green_pct" class="stat-card-value" style="color:#00ff00;">0.0%</span></div>
+                        <div class="stat-card" style="border-color: var(--error);"><span class="stat-card-title" style="color:var(--error);">MISS PERCENTAGE</span><span id="stat_user_red_pct" class="stat-card-value" style="color:#ff3333;">0.0%</span></div>
                     </div>
                     <div style="font-size: 0.6rem; text-align: center; color: #aaa;">
-                        Tiros evaluados en base histórica: <span id="stat_user_tot_tiros" style="color:var(--win); font-weight:bold;">0</span>.
+                        Tiros procesados del registro histórico: <span id="stat_user_tot_tiros" style="color:var(--win); font-weight:bold;">0</span>.
                     </div>
                 </div>
 
@@ -174,24 +181,35 @@
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
             <span style="font-size:0.7rem; color:var(--win); font-weight:bold;">CONSOLA MASTER ROOT (ADMIN)</span>
             <div style="display:flex; gap:4px;">
-                <button style="padding:3px 6px; font-size:0.65rem;" onclick="abrirConfig()">BBDD</button>
-                <button style="padding:3px 6px; font-size:0.65rem; border-color:var(--error); color:var(--error);" onclick="cerrarAdmin()">Salir</button>
+                <button style="padding:3px 6px; font-size:0.65rem;" onclick="abrirConfig()">Ver BBDD</button>
+                <button style="padding:3px 6px; font-size:0.65rem; border-color:var(--error); color:var(--error);" onclick="cerrarAdmin()">Salir Admin</button>
             </div>
         </div>
-        <div class="panel" style="border-color:var(--win);">
-            <label style="font-size:0.65rem; color:var(--win); font-weight:bold; text-transform:uppercase;">Inyectar Resultados de Hoy</label>
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:6px; margin-bottom:6px;">
-                <input type="number" id="fijo_hoy_tarde" placeholder="Tarde">
-                <input type="number" id="fijo_hoy_noche" placeholder="Noche">
-            </div>
-            <button style="width:100%; border-color:var(--win); color:var(--win); font-size:0.7rem;" onclick="guardarFijosDeHoy()">Guardar Fijos del Día</button>
+
+        <div class="tab-bar">
+            <button id="btn-admin-tab-consola" class="tab-btn active" onclick="switchAdminSection('consola')">Inyectar Datos</button>
+            <button id="btn-admin-tab-users" class="tab-btn" onclick="switchAdminSection('users')">Gestionar Terminales</button>
         </div>
-        <div class="panel">
-            <label style="font-size:0.65rem; color:var(--neon); font-weight:bold; text-transform:uppercase;">Terminales Conectadas</label>
-            <table>
-                <thead><tr><th>Usuario</th><th>Estado</th><th>Acción</th></tr></thead>
-                <tbody id="tabla_usuarios"></tbody>
-            </table>
+
+        <div id="admin-sub-consola" style="display:block;">
+            <div class="panel" style="border-color:var(--win); margin-top:0;">
+                <label style="font-size:0.65rem; color:var(--win); font-weight:bold; text-transform:uppercase;">Salvar Resultados del Día</label>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:6px; margin-bottom:6px;">
+                    <input type="number" id="fijo_hoy_tarde" placeholder="Tarde (Ej: 24)">
+                    <input type="number" id="fijo_hoy_noche" placeholder="Noche (Ej: 83)">
+                </div>
+                <button style="width:100%; border-color:var(--win); color:var(--win); font-size:0.7rem;" onclick="guardarFijosDeHoy()">Inyectar Fijos</button>
+            </div>
+        </div>
+
+        <div id="admin-sub-users" style="display:none;">
+            <div class="panel" style="margin-top:0;">
+                <label style="font-size:0.65rem; color:var(--neon); font-weight:bold; text-transform:uppercase;">Terminales Registradas Locales</label>
+                <table>
+                    <thead><tr><th>Usuario</th><th>Rol</th><th>Acción</th></tr></thead>
+                    <tbody id="tabla_usuarios"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -199,13 +217,13 @@
 <div id="modal-db" class="modal">
     <div class="modal-content">
         <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--neon); padding-bottom:4px; margin-bottom:10px;">
-            <span style="font-size:0.75rem; font-weight:bold; color:var(--neon);">DATOS HISTÓRICOS LOCALES</span>
+            <span style="font-size:0.75rem; font-weight:bold; color:var(--neon);">HISTORIAL SINCRO LOCAL</span>
             <button style="padding:2px 6px; font-size:0.6rem; border-color:var(--error); color:var(--error);" onclick="cerrarConfig()">Cerrar</button>
         </div>
 
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:10px;">
-            <button style="font-size:0.65rem;" onclick="exportarBaseDatos()">Exportar JSON</button>
-            <button style="font-size:0.65rem; border-color:var(--cyber); color:var(--cyber);" onclick="document.getElementById('file_import_db').click()">Importar JSON</button>
+            <button style="font-size:0.65rem;" onclick="exportarBaseDatos()">Respaldar JSON</button>
+            <button style="font-size:0.65rem; border-color:var(--cyber); color:var(--cyber);" onclick="document.getElementById('file_import_db').click()">Cargar JSON</button>
         </div>
         <input type="file" id="file_import_db" style="display:none;" accept=".json" onchange="importarBaseDatos(event)">
 
@@ -220,7 +238,7 @@
                 <div class="cal-header">J</div><div class="cal-header">V</div><div class="cal-header">S</div><div class="cal-header">D</div>
             </div>
             <div id="cuerpo_cal" class="cal-grid"></div>
-            <button style="width:100%; margin-top:8px; font-size:0.65rem; border-color:var(--neon);" onclick="guardarDB()">Salvar Cambios Calendario</button>
+            <button style="width:100%; margin-top:8px; font-size:0.65rem; border-color:var(--neon);" onclick="guardarDB()">Salvar Modificaciones</button>
         </div>
     </div>
 </div>
@@ -228,7 +246,7 @@
 <script>
     const _0xAdmin = "yohnny95", _0xPass = "Elmatatan95*";
     
-    // Base de datos de ejemplo cargada localmente
+    // Base de datos de respaldo pre-cargada
     const baseRespaldoDefault = {
         "2026-05-18":{"t":"14","n":"83"},
         "2026-05-19":{"t":"45","n":"02"},
@@ -285,16 +303,23 @@
         document.getElementById('btn-user-tab-hist').className = `tab-btn ${sec==='hist'?'active':''}`;
     }
 
+    function switchAdminSection(sec) {
+        document.getElementById('admin-sub-consola').style.display = sec === 'consola' ? 'block' : 'none';
+        document.getElementById('admin-sub-users').style.display = sec === 'users' ? 'block' : 'none';
+        document.getElementById('btn-admin-tab-consola').className = `tab-btn ${sec==='consola'?'active':''}`;
+        document.getElementById('btn-admin-tab-users').className = `tab-btn ${sec==='users'?'active':''}`;
+    }
+
     function activarProcesoCalculo() {
         let btn = document.getElementById('btn_generar_user');
         let loader = document.getElementById('loading_user');
-        document.getElementById(`display_resultados`).style.display = 'none';
+        document.getElementById('display_resultados').style.display = 'none';
         btn.disabled = true; loader.style.display = 'block';
 
         let pasos = [
-            "👵🏽 RECOGIENDO REGLAS DE LA CALLE ANTERIORES...",
-            "⚔️ EJECUTANDO CRUCES POR DECENAS Y EQUIVALENTES DE LA ABUELA...",
-            "🏁 FILTRANDO POOL LIMPIO SIN COMPLICACIONES CIENTÍFICAS..."
+            "⚡ INICIALIZANDO CONSOLA CHIRON TRADICIONAL...",
+            "📐 CONSTRUYENDO PIRÁMIDE DE REDUCCIÓN DE LA CALLE...",
+            "🔮 EXTRAYENDO EQUIVALENTES, HERMANOS Y CRUCES DE LA ABUELA..."
         ];
 
         let p = 0; loader.innerHTML = pasos[0];
@@ -308,7 +333,24 @@
         }, 400);
     }
 
-    // EL ALGORITMO ORIGINAL RECUPERADO (BACK TO BASICS)
+    // EL ALGORITMO ORIGINAL RECUPERADO (PIRÁMIDE + CRUCES TRADICIONALES DE LA CALLE)
+    function generarPiramideNumerica(fijoStr) {
+        // Se arma la base tradicional concatenando el fijo con la fecha o una constante mística de la calle (ej: 1234)
+        let base = fijoStr + "1234"; 
+        let filas = [base];
+        
+        while (base.length > 1) {
+            let nuevaFila = "";
+            for (let i = 0; i < base.length - 1; i++) {
+                let suma = (parseInt(base[i]) + parseInt(base[i+1])) % 10;
+                nuevaFila += suma.toString();
+            }
+            filas.push(nuevaFila);
+            base = nuevaFila;
+        }
+        return filas;
+    }
+
     function ejecutarAlgoritmoCalle(fijoBaseStr, cantidadPool, dbSimulada) {
         let fijoStr = fijoBaseStr.padStart(2, '0');
         let numBase = parseInt(fijoStr) || 0;
@@ -316,58 +358,77 @@
         let puntuacionCalle = {};
         for(let i=0; i<100; i++) { puntuacionCalle[i.toString().padStart(2, '0')] = 0; }
 
-        // 1. EL CRUCE TRADICIONAL DIRECTO (EQUIVALENTES DE LA ABUELA)
+        // 1. EL VIRADO SAGRADO
         let virado = fijoStr.split('').reverse().join('').padStart(2, '0');
-        puntuacionCalle[virado] += 100; // El virado es sagrado
+        puntuacionCalle[virado] += 120;
 
+        // 2. EQUIVALENTE DIRECTO DE LA ABUELA (Terminal Espejo +50)
         let terminalEspejo = ((numBase + 50) % 100).toString().padStart(2, '0');
-        puntuacionCalle[terminalEspejo] += 80; // Sumar 50 (Inverso directo)
+        puntuacionCalle[terminalEspejo] += 90;
 
+        // 3. LOS HERMANOS DE LA CALLE (+11 y -11 modular)
         let hermanoFijo = ((numBase + 11) % 100).toString().padStart(2, '0');
-        let hermanoMenos = ((numBase + 89) % 100).toString().padStart(2, '0'); // -11 modular
-        puntuacionCalle[hermanoFijo] += 60;
-        puntuacionCalle[hermanoMenos] += 60;
+        let hermanoMenos = ((numBase + 89) % 100).toString().padStart(2, '0');
+        puntuacionCalle[hermanoFijo] += 70;
+        puntuacionCalle[hermanoMenos] += 70;
 
-        // 2. CRUCE POR DECENA (El arrastre de la calle)
+        // 4. CRUCE POR DECENAS COMPLETO
         let decenaBase = Math.floor(numBase / 10);
         for(let i=0; i<10; i++) {
             let numDecenaStr = (decenaBase * 10 + i).toString().padStart(2, '0');
-            puntuacionCalle[numDecenaStr] += 40; // Vecinos de racha
+            puntuacionCalle[numDecenaStr] += 40; 
         }
 
-        // 3. REPETICIONES DEL ÚLTIMO MES (Acompañantes comunes)
-        let fechas = obtenerFechasCronologicas(dbSimulada).slice(-20); // Últimos 20 días
-        fechas.forEach(f => {
-            if(dbSimulada[f].t) puntuacionCalle[dbSimulada[f].t.padStart(2,'0')] += 15;
-            if(dbSimulada[f].n) puntuacionCalle[dbSimulada[f].n.padStart(2,'0')] += 15;
+        // 5. EXTRACCIÓN DE ELEMENTOS DE LA PIRÁMIDE
+        let piramide = generarPiramideNumerica(fijoStr);
+        piramide.forEach(fila => {
+            if (fila.length >= 2) {
+                let numExtraido = fila.substring(0, 2);
+                if (puntuacionCalle[numExtraido] !== undefined) {
+                    puntuacionCalle[numExtraido] += 35; // Peso por aparecer en la reducción mística
+                }
+            }
         });
 
-        // Ordenar de mayor a menor puntaje acumulado
+        // 6. ADHERENCIA DE HISTORIAL RECIENTE
+        let fechas = obtenerFechasCronologicas(dbSimulada).slice(-15);
+        fechas.forEach(f => {
+            if(dbSimulada[f].t) puntuacionCalle[dbSimulada[f].t.padStart(2,'0')] += 10;
+            if(dbSimulada[f].n) puntuacionCalle[dbSimulada[f].n.padStart(2,'0')] += 10;
+        });
+
+        // Ordenar de mayor a menor peso acumulado
         let ordenados = Object.keys(puntuacionCalle).sort((a, b) => puntuacionCalle[b] - puntuacionCalle[a]);
         return ordenados.slice(0, parseInt(cantidadPool));
     }
 
     function generarTodo() {
-        let fijoStr = document.getElementById(`fijo_base`).value.trim().padStart(2, '0');
-        let cantidadPool = document.getElementById(`cant_final`).value;
-        if(isNaN(parseInt(fijoStr))) return alert("Por favor, introduce el Fijo de la última tirada.");
+        let fijoStr = document.getElementById('fijo_base').value.trim().padStart(2, '0');
+        let cantidadPool = document.getElementById('cant_final').value;
+        if(isNaN(parseInt(fijoStr))) return alert("Introduce el Fijo base para arrancar los motores.");
 
+        // Mostrar la pirámide visualmente en pantalla
+        let piramide = generarPiramideNumerica(fijoStr);
+        let contenedorPiramide = document.getElementById('piramide_despliegue');
+        contenedorPiramide.innerHTML = piramide.join("<br>");
+
+        // Ejecutar los cruces reales de la calle
         ultimosNumerosGenerados = ejecutarAlgoritmoCalle(fijoStr, cantidadPool, db);
 
-        let panel = document.getElementById(`panel_res`); panel.innerHTML = "";
+        let panel = document.getElementById('panel_res'); panel.innerHTML = "";
         ultimosNumerosGenerados.forEach((n, idx) => {
             let b = document.createElement('div'); b.className = "box"; b.textContent = n;
-            if(idx < 10) b.className += " destacado-top10"; // Marcar los 10 más pesados de la calle
+            if(idx < 10) b.className += " destacado-top10"; // Los 10 más pesados se visten de Bugatti (oro)
             panel.appendChild(b);
         });
 
-        document.getElementById(`user_pesos_aplicados`).textContent = `🎯 Cruce completado. Pool de ${ultimosNumerosGenerados.length} números listo para jugar.`;
-        document.getElementById(`display_resultados`).style.display = 'block';
+        document.getElementById('user_pesos_aplicados').textContent = `🎯 Reducción completada. Pool de ${ultimosNumerosGenerados.length} números optimizado por cruce tradicional callejero.`;
+        document.getElementById('display_resultados').style.display = 'block';
     }
 
     function ejecutarSimulacionAutomatica() {
         let fechas = obtenerFechasCronologicas(db);
-        if (fechas.length < 3) return alert("Faltan datos en el calendario local para evaluar.");
+        if (fechas.length < 3) return alert("Faltan datos en el calendario para correr la auditoría.");
         
         resultadosSimulacionGlobal = {};
         let totalHits = 0; let totalMisses = 0; let totalTiros = 0;
@@ -412,7 +473,7 @@
         document.getElementById('stat_user_tot_tiros').textContent = totalTiros;
         document.getElementById('stats_globales_contenedor_user').style.display = 'block';
 
-        alert(`Backtest Finalizado.\nResultados de la Calle: ${pctVerdes}% HITS.`);
+        alert(`Backtest Finalizado exitosamente.\nEfectividad Tradicional: ${pctVerdes}% HITS.`);
         mostrarTablaAciertos();
     }
 
@@ -435,15 +496,15 @@
 
     function buscarEnCharada() {
         let str = document.getElementById('search_charada_user').value.toLowerCase().trim();
-        let resDiv = document.getElementById('charada_result_user'); if(!str) { resDiv.textContent = "Escribe para buscar..."; return; }
+        let resDiv = document.getElementById('charada_result_user'); if(!str) { resDiv.textContent = "Escribe para interceptar la charada..."; return; }
         let html = "";
         for(let k in charadaDiccionario) { if(k === str || charadaDiccionario[k].toLowerCase().includes(str)) html += `<div><b>${k.padStart(2,'0')}:</b> ${charadaDiccionario[k]}</div>`; }
-        resDiv.innerHTML = html || "Sin coincidencias.";
+        resDiv.innerHTML = html || "Sin coincidencias en el libro de la charada.";
     }
 
     function exportarBaseDatos() {
         let blob = new Blob([localStorage.getItem('bolita_master_db') || "{}"], { type: "application/json" });
-        let url = URL.createObjectURL(blob); let a = document.createElement('a'); a.href = url; a.download = `bolita_backup.json`; a.click();
+        let url = URL.createObjectURL(blob); let a = document.createElement('a'); a.href = url; a.download = `chiron_backup.json`; a.click();
     }
 
     function importarBaseDatos(event) {
@@ -454,8 +515,8 @@
                 let parsed = JSON.parse(e.target.result); let cleanedDb = {};
                 Object.keys(parsed).forEach(k => { cleanedDb[normalizarFechaAISO(k)] = parsed[k]; });
                 db = cleanedDb; localStorage.setItem('bolita_master_db', JSON.stringify(db));
-                alert("¡Datos cargados!"); renderCalendario(); mostrarTablaAciertos();
-            } catch(err) { alert("Archivo JSON no compatible."); }
+                alert("¡Base de Datos acoplada con éxito!"); renderCalendario(); mostrarTablaAciertos();
+            } catch(err) { alert("Archivo JSON corrupto o no compatible."); }
         };
         reader.readAsText(file);
     }
@@ -487,7 +548,7 @@
             let p = i.id.split('-'); let tu = p[0]; let normKey = normalizarFechaAISO(`${p[1]}-${p[2]}-${p[3]}`);
             if (!db[normKey]) db[normKey] = { t: "", n: "" }; db[normKey][tu] = i.value.trim() ? i.value.trim().padStart(2, '0') : "";
         });
-        localStorage.setItem('bolita_master_db', JSON.stringify(db)); alert("Historial local guardado."); renderCalendario(); mostrarTablaAciertos();
+        localStorage.setItem('bolita_master_db', JSON.stringify(db)); alert("Cambios sincronizados en la memoria local."); renderCalendario(); mostrarTablaAciertos();
     }
 
     function guardarFijosDeHoy() {
@@ -497,7 +558,7 @@
         if(!db[hoy]) db[hoy] = {};
         db[hoy]['t'] = t ? t.padStart(2, '0') : ""; db[hoy]['n'] = n ? n.padStart(2, '0') : "";
         localStorage.setItem('bolita_master_db', JSON.stringify(db));
-        alert("Fijos inyectados hoy."); mostrarTablaAciertos(); renderCalendario();
+        alert("Fijos del día inyectados correctamente."); mostrarTablaAciertos(); renderCalendario();
     }
     
     function intentarLogin() {
@@ -515,7 +576,7 @@
             usuarioActivo = u; esAdministradorLogueado = false;
             document.getElementById('view-login').style.display = 'none';
             document.getElementById('view-app').style.display = 'block';
-            document.getElementById('user-display').textContent = `Terminal: ${u}`;
+            document.getElementById('user-display').textContent = `Chiron Terminal ID: ${u}`;
             renderCalendario();
         } else { document.getElementById('login-error').style.display = 'block'; }
     }
@@ -524,11 +585,11 @@
         let n = document.getElementById('reg-nombre').value.trim();
         let a = document.getElementById('reg-apellido').value.trim();
         let p = document.getElementById('reg-pass').value;
-        if(!n || !a || !p) return alert("Campos vacíos.");
+        if(!n || !a || !p) return alert("Completa todos los campos de autenticación.");
         let localesUsuarios = JSON.parse(localStorage.getItem('bolita_usuarios_db')) || [];
         localesUsuarios.push({ usuario: `${n}_${a}`, clave: p, rol: 'user' });
         localStorage.setItem('bolita_usuarios_db', JSON.stringify(localesUsuarios));
-        alert("Terminal registrada. Ya puedes iniciar sesión."); mostrarRegistroForm(false);
+        alert("Terminal registrada localmente. Ya puedes entrar."); mostrarRegistroForm(false);
     }
 
     function mostrarRegistroForm(ver) {
@@ -543,7 +604,7 @@
         let localesUsuarios = JSON.parse(localStorage.getItem('bolita_usuarios_db')) || [];
         let tbody = document.getElementById('tabla_usuarios'); tbody.innerHTML = "";
         localesUsuarios.forEach(u => {
-            tbody.innerHTML += `<tr><td>${u.usuario}</td><td>Activo</td><td>-</td></tr>`;
+            tbody.innerHTML += `<tr><td>${u.usuario}</td><td>${u.rol}</td><td>Active</td></tr>`;
         });
     }
 </script>

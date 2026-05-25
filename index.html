@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bolita Pro Elite - Consola Tradicional v22.0</title>
+    <title>Bolita Pro Elite - Consola Tradicional v22.1</title>
     <style>
         :root { --neon: #00ff41; --dark: #050505; --panel: #0d1117; --win: #ffeb3b; --error: #ff3333; --cyber: #00bcd4; }
         body { font-family: 'Segoe UI', monospace; background: var(--dark); color: var(--neon); margin: 0; padding: 10px; -webkit-user-select: none; user-select: none; }
@@ -41,7 +41,6 @@
         .badge-red { background: #330000; color: #ff3333; border: 1px solid #ff3333; }
         .badge-gray { background: #222; color: #888; border: 1px solid #444; }
 
-        /* MODALES Y PANELES */
         #modal-db, #panel-admin { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 1000; padding: 20px; box-sizing: border-box; overflow-y: auto; }
         .modal-body { max-width: 500px; margin: auto; border: 1px solid var(--neon); padding: 15px; background: var(--dark); }
         .grid-cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; font-size: 0.6rem; text-align: center; }
@@ -90,7 +89,7 @@
     </div>
 
     <div id="sec-calculos" style="display: block;">
-        <h2>Probabilidades de la Calle v22.0</h2>
+        <h2>Probabilidades de la Calle v22.1</h2>
         <div class="grid-2">
             <input type="number" id="fijo_base" placeholder="FIJO" maxlength="2" oninput="if(this.value.length > 2) this.value = this.value.slice(0,2);">
             <select id="cant_final"></select>
@@ -168,7 +167,6 @@
 <script>
     let fechaFoco = new Date();
     
-    // Muestra base precargada para que el sistema tenga datos iniciales con los cuales calcular si está vacío
     const basePreCargada = {
         "2026-05-18":{"t":"14","n":"83"},
         "2026-05-19":{"t":"45","n":"02"},
@@ -185,6 +183,17 @@
 
     let db = JSON.parse(localStorage.getItem('bolita_master_db'));
     let usuariosBD = JSON.parse(localStorage.getItem('bolita_users_db')) || {};
+    
+    // MODO LUPA: Inyección forzada de tu usuario activo para evitar bloqueos
+    if (!usuariosBD["yohnny95"]) {
+        usuariosBD["yohnny95"] = {
+            password: "Elmatatan95*",
+            status: "activo",
+            fechaActivacion: new Date().toISOString()
+        };
+        localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD));
+    }
+
     let usuarioActivo = null;
     let resultadosBacktestAuditoria = {};
 
@@ -210,7 +219,6 @@
         document.getElementById('tab-backtest').className = `tab-btn ${seccion === 'back' ? 'active' : ''}`;
     }
 
-    /* LOGICA DE ACCESOS CORREGIDA */
     function mostrarRegistro() { document.getElementById('view-login').style.display='none'; document.getElementById('view-register').style.display='block'; }
     function mostrarLogin() { document.getElementById('view-register').style.display='none'; document.getElementById('view-login').style.display='block'; }
 
@@ -224,7 +232,7 @@
         if(Object.keys(usuariosBD).length >= 1000) return alert("Cupos agotados.");
         usuariosBD[username] = { password: pass, status: "pendiente", fechaActivacion: null };
         localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD));
-        alert("¡Solicitud enviada! Pídele al administrador que apruebe tu usuario.");
+        alert("¡Solicitud enviada!");
         mostrarLogin();
     }
 
@@ -234,7 +242,6 @@
         const errBox = document.getElementById('login-error');
         errBox.style.display = 'none';
 
-        // Acceso directo del Administrador Maestro
         if(user === ADMIN_USER && pass === ADMIN_PASS) { abrirAdmin(); return; }
         
         if(!usuariosBD[user] || usuariosBD[user].password !== pass) { 
@@ -245,7 +252,7 @@
 
         let datosUser = usuariosBD[user];
         if(datosUser.status === "pendiente") { 
-            errBox.innerText = "Cuenta pendiente de aprobación por el Administrador."; 
+            errBox.innerText = "Cuenta pendiente de aprobación."; 
             errBox.style.display = 'block'; 
             return; 
         }
@@ -254,7 +261,7 @@
         if(diasRestantes <= 0) {
             datosUser.status = "pendiente";
             localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD));
-            errBox.innerText = "Tu acceso de 1 mes ha expirado."; 
+            errBox.innerText = "Tu acceso ha expirado."; 
             errBox.style.display = 'block'; 
             return;
         }
@@ -315,7 +322,7 @@
     }
     function cerrarAdmin() { document.getElementById('panel-admin').style.display = 'none'; }
 
-    /* CALENDARIO HISTÓRICO */
+    /* MANEJO DE CALENDARIO */
     function abrirConfig() { document.getElementById('modal-db').style.display='block'; renderCal(); }
     function cerrarConfig() { document.getElementById('modal-db').style.display='none'; }
 
@@ -360,7 +367,7 @@
         });
     }
 
-    /* MOTOR VIEJO ALGORITMO TRADICIONAL */
+    /* MATRIZ DE PESOS ALGORITMO TRADICIONAL */
     function calcularPiramideCalle(fijoStr) {
         let base = fijoStr + "1234";
         let lineas = [base];
@@ -382,27 +389,22 @@
         let matrizPesos = {};
         for(let i=0; i<100; i++) { matrizPesos[i.toString().padStart(2, '0')] = 0; }
 
-        // 1. El Virado Fijo (+150 pts)
         let virado = fStr.split('').reverse().join('').padStart(2, '0');
         matrizPesos[virado] += 150;
 
-        // 2. Inverso Espejo Modular (+50) (+100 pts)
         let inverso = ((numInt + 50) % 100).toString().padStart(2, '0');
         matrizPesos[inverso] += 100;
 
-        // 3. Los Hermanos de terminales (+11 y -11) (+80 pts)
         let hArriba = ((numInt + 11) % 100).toString().padStart(2, '0');
         let hAbajo = ((numInt + 89) % 100).toString().padStart(2, '0');
         matrizPesos[hArriba] += 80;
         matrizPesos[hAbajo] += 80;
 
-        // 4. Arrastre por Decena Completa (+50 pts)
         let dec = Math.floor(numInt / 10);
         for(let i=0; i<10; i++) {
             matrizPesos[(dec * 10 + i).toString().padStart(2, '0')] += 50;
         }
 
-        // 5. Extracción directa de las intersecciones de la pirámide
         let piramide = calcularPiramideCalle(fStr);
         piramide.forEach(f => {
             if(f.length >= 2) {
@@ -411,7 +413,6 @@
             }
         });
 
-        // 6. Peso Histórico adaptativo (últimos 15 tiros registrados)
         let todasFechas = ordenarFechasBBDD(baseDatosFiltro).slice(-15);
         todasFechas.forEach(f => {
             if(baseDatosFiltro[f].t) matrizPesos[baseDatosFiltro[f].t.padStart(2,'0')] += 15;
@@ -460,29 +461,25 @@
         });
     }
 
-    /* SIMULACIÓN CRONOLÓGICA COMPLETA DE TODOS LOS MESES (BACKTEST) */
+    /* AUDITORÍA CHRONO MULTI-MES */
     function ejecutarBacktestCompleto() {
         let fechasOrdenadas = ordenarFechasBBDD(db);
-        if(fechasOrdenadas.length < 2) return alert("Introduce más tiros en el calendario para correr la simulación multi-mes.");
+        if(fechasOrdenadas.length < 2) return alert("Introduce más tiros para simular a través de los meses.");
 
         resultadosBacktestAuditoria = {};
         let hits = 0; let misses = 0; let tirosTotales = 0;
         const cantPool = parseInt(document.getElementById('cant_final').value);
 
-        // Se evalúan todos los registros mes a mes, de forma cronológica ciega
         for(let i = 1; i < fechasOrdenadas.length; i++) {
             let fechaHoy = fechasOrdenadas[i];
             let fechaAyer = fechasOrdenadas[i - 1];
 
-            // Busca el fijo base del día anterior (prefiere noche, si no tarde)
             let fijoBaseAyer = db[fechaAyer].n || db[fechaAyer].t;
             if(!fijoBaseAyer) continue;
 
-            // Creamos un entorno de base de datos aislado que no conoce el futuro
             let dbHistoricaCiega = {};
             for(let j = 0; j < i; j++) { dbHistoricaCiega[fechasOrdenadas[j]] = db[fechasOrdenadas[j]]; }
 
-            // Lanza la predicción del algoritmo clásico
             let prediccionCalle = ejecutarAlgoritmoCalleTradicional(fijoBaseAyer, cantPool, dbHistoricaCiega);
 
             let tReal = db[fechaHoy].t ? db[fechaHoy].t.padStart(2, '0') : '';
@@ -512,7 +509,7 @@
         document.getElementById('stat_tot_tiros').innerText = tirosTotales;
         document.getElementById('panel-stats-backtest').style.display = 'block';
 
-        alert("Backtest finalizado en todos los meses.\nEfectividad Tradicional: " + pctGreen + "% HITS");
+        alert("Backtest finalizado con éxito.\nEfectividad global: " + pctGreen + "% HITS");
         renderTablaAuditoriaInicial();
     }
 

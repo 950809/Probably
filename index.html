@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bolita Pro Elite - Consola Tradicional v22.2</title>
+    <title>Bolita Pro Elite - Consola Tradicional v22.3</title>
     <style>
         :root { --neon: #00ff41; --dark: #050505; --panel: #0d1117; --win: #ffeb3b; --error: #ff3333; --cyber: #00bcd4; }
         body { font-family: 'Segoe UI', monospace; background: var(--dark); color: var(--neon); margin: 0; padding: 10px; -webkit-user-select: none; user-select: none; }
@@ -89,7 +89,10 @@
     </div>
 
     <div id="sec-calculos" style="display: block;">
-        <h2>Probabilidades de la Calle v22.2 (Optimizado 50%+)</h2>
+        <h2>Probabilidades de la Calle v22.3</h2>
+        
+        <button style="background:var(--cyber); color:#000; margin-bottom:12px; font-size:0.75rem; padding:8px;" onclick="inyectarUltimoFijoBBDD()">⚡ Cargar Último Fijo del Historial</button>
+
         <div class="grid-2">
             <input type="number" id="fijo_base" placeholder="FIJO" maxlength="2" oninput="if(this.value.length > 2) this.value = this.value.slice(0,2);">
             <select id="cant_final"></select>
@@ -112,7 +115,7 @@
     </div>
 
     <div id="sec-backtest" style="display: none;">
-        <h2>Simulador de Efectividad Histórica (Todos los Meses)</h2>
+        <h2>Simulador de Efectividad Histórica</h2>
         <button style="background:var(--win); color:#000;" onclick="ejecutarBacktestCompleto()">Correr Simulación Completa</button>
         
         <div id="panel-stats-backtest" style="display:none; margin-top:12px;">
@@ -184,7 +187,6 @@
     let db = JSON.parse(localStorage.getItem('bolita_master_db'));
     let usuariosBD = JSON.parse(localStorage.getItem('bolita_users_db')) || {};
     
-    // MODO LUPA CRÍTICO: Credenciales aseguradas
     if (!usuariosBD["yohnny95"]) {
         usuariosBD["yohnny95"] = {
             password: "Elmatatan95*",
@@ -211,6 +213,18 @@
         verificarSesionGuardada();
         renderTablaAuditoriaInicial();
     };
+
+    function inyectarUltimoFijoBBDD() {
+        let fechas = ordenarFechasBBDD(db);
+        if(fechas.length === 0) return alert("No hay datos en el historial.");
+        let ultimaFecha = fechas[fechas.length - 1];
+        let ultimoFijo = db[ultimaFecha].n || db[ultimaFecha].t;
+        if(ultimoFijo) {
+            document.getElementById('fijo_base').value = ultimoFijo;
+        } else {
+            alert("No se encontró un fijo válido en el último día.");
+        }
+    }
 
     function switchSeccionApp(seccion) {
         document.getElementById('sec-calculos').style.display = seccion === 'calc' ? 'block' : 'none';
@@ -322,7 +336,7 @@
     }
     function cerrarAdmin() { document.getElementById('panel-admin').style.display = 'none'; }
 
-    /* MANEJO DE CALENDARIO */
+    /* REPARACIÓN MAESTRA DEL CALENDARIO (RECOLECCIÓN SEPARADA) */
     function abrirConfig() { document.getElementById('modal-db').style.display='block'; renderCal(); }
     function cerrarConfig() { document.getElementById('modal-db').style.display='none'; }
 
@@ -338,9 +352,9 @@
         for(let i=0; i<desfasaje; i++) contenedor.innerHTML += `<div></div>`;
         for(let d=1; d<=ultimoDia; d++) {
             const id = `${y}-${(m+1).toString().padStart(2,'0')}-${d.toString().padStart(2,'0')}`;
-            contenedor.innerHTML += `<div class="day">${d}<br>
-                <input type="text" id="T-${id}" value="${db[id]?.t || ''}" placeholder="T" maxlength="2">
-                <input type="text" id="N-${id}" value="${db[id]?.n || ''}" placeholder="N" maxlength="2">
+            contenedor.innerHTML += `<div class="day" data-fecha="${id}">${d}<br>
+                <input type="number" id="T-${id}" value="${db[id]?.t || ''}" placeholder="T" oninput="if(this.value.length > 2) this.value = this.value.slice(0,2);">
+                <input type="number" id="N-${id}" value="${db[id]?.n || ''}" placeholder="N" oninput="if(this.value.length > 2) this.value = this.value.slice(0,2);">
             </div>`;
         }
     }
@@ -348,11 +362,15 @@
     function moverMes(n) { fechaFoco.setMonth(fechaFoco.getMonth() + n); renderCal(); }
 
     function guardarDB() {
-        document.querySelectorAll('.day input').forEach(i => {
-            const [turno, fecha] = i.id.split('-');
-            if(i.value.trim()) {
-                if(!db[fecha]) db[fecha] = {};
-                db[fecha][turno === 'T' ? 't' : 'n'] = i.value.trim().padStart(2, '0');
+        document.querySelectorAll('.day[data-fecha]').forEach(bloque => {
+            const f = bloque.getAttribute('data-fecha');
+            const valT = document.getElementById(`T-${f}`).value.trim();
+            const valN = document.getElementById(`N-${f}`).value.trim();
+            
+            if(valT || valN) {
+                if(!db[f]) db[f] = {};
+                if(valT) db[f].t = valT.padStart(2, '0');
+                if(valN) db[f].n = valN.padStart(2, '0');
             }
         });
         localStorage.setItem('bolita_master_db', JSON.stringify(db));
@@ -381,7 +399,6 @@
         return lineas;
     }
 
-    /* MOTOR TRADICIONAL OPTIMIZADO PARA >50% */
     function ejecutarAlgoritmoCalleTradicional(fijoBaseStr, cantidadPool, baseDatosFiltro) {
         let fStr = fijoBaseStr.padStart(2, '0');
         let numInt = parseInt(fStr) || 0;
@@ -389,27 +406,22 @@
         let matrizPesos = {};
         for(let i=0; i<100; i++) { matrizPesos[i.toString().padStart(2, '0')] = 0; }
 
-        // 1. Virado (+150 pts)
         let virado = fStr.split('').reverse().join('').padStart(2, '0');
         matrizPesos[virado] += 150;
 
-        // 2. Espejo (+100 pts)
         let inverso = ((numInt + 50) % 100).toString().padStart(2, '0');
         matrizPesos[inverso] += 100;
 
-        // 3. Hermanos (+80 pts)
         let hArriba = ((numInt + 11) % 100).toString().padStart(2, '0');
         let hAbajo = ((numInt + 89) % 100).toString().padStart(2, '0');
         matrizPesos[hArriba] += 80;
         matrizPesos[hAbajo] += 80;
 
-        // 4. Arrastre por Decena (+50 pts)
         let dec = Math.floor(numInt / 10);
         for(let i=0; i<10; i++) {
             matrizPesos[(dec * 10 + i).toString().padStart(2, '0')] += 50;
         }
 
-        // 5. Pirámide (+40 pts)
         let piramide = calcularPiramideCalle(fStr);
         piramide.forEach(f => {
             if(f.length >= 2) {
@@ -418,11 +430,11 @@
             }
         });
 
-        // OPTIMIZACIÓN LUPA: Mayor peso al comportamiento repetidor de salidores (+35 pts por tiro)
+        // Peso equilibrado para balancear simulaciones reales continuas
         let todasFechas = ordenarFechasBBDD(baseDatosFiltro).slice(-15);
         todasFechas.forEach(f => {
-            if(baseDatosFiltro[f].t) matrizPesos[baseDatosFiltro[f].t.padStart(2,'0')] += 35;
-            if(baseDatosFiltro[f].n) matrizPesos[baseDatosFiltro[f].n.padStart(2,'0')] += 35;
+            if(baseDatosFiltro[f].t) matrizPesos[baseDatosFiltro[f].t.padStart(2,'0')] += 30;
+            if(baseDatosFiltro[f].n) matrizPesos[baseDatosFiltro[f].n.padStart(2,'0')] += 30;
         });
 
         let ordenadosUnicos = Object.keys(matrizPesos).sort((a, b) => matrizPesos[b] - matrizPesos[a]);
@@ -467,10 +479,9 @@
         });
     }
 
-    /* AUDITORÍA CHRONO MULTI-MES */
     function ejecutarBacktestCompleto() {
         let fechasOrdenadas = ordenarFechasBBDD(db);
-        if(fechasOrdenadas.length < 2) return alert("Introduce más tiros para simular a través de los meses.");
+        if(fechasOrdenadas.length < 2) return alert("Introduce más tiros para simular.");
 
         resultadosBacktestAuditoria = {};
         let hits = 0; let misses = 0; let tirosTotales = 0;
@@ -515,7 +526,7 @@
         document.getElementById('stat_tot_tiros').innerText = tirosTotales;
         document.getElementById('panel-stats-backtest').style.display = 'block';
 
-        alert("Backtest finalizado con éxito.\nNueva efectividad: " + pctGreen + "% HITS");
+        alert("Backtest finalizado con éxito.\nEfectividad global: " + pctGreen + "%");
         renderTablaAuditoriaInicial();
     }
 

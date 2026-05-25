@@ -264,6 +264,19 @@
     function eliminarUsuario(u) { if(confirm(`¿Eliminar a ${u}?`)) { delete usuariosBD[u]; localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD)); abrirAdmin(); } }
     function cerrarAdmin() { localStorage.removeItem('bolita_logged_user'); document.getElementById('panel-admin').style.display = 'none'; document.getElementById('view-login').style.display = 'block'; }
 
+    function buscarEnCharada() {
+        let query = document.getElementById('search_charada').value.trim().toLowerCase();
+        let box = document.getElementById('charada_result');
+        if(!query) { box.innerHTML = "Escribe arriba para buscar jales..."; return; }
+        let html = "";
+        for(let n in charadaDiccionario) {
+            if(n === query || charadaDiccionario[n].toLowerCase().includes(query)) {
+                html += `<b>${n.padStart(2,'0')}:</b> ${charadaDiccionario[n]}<br>`;
+            }
+        }
+        box.innerHTML = html || "<span style='color:var(--error)'>No se encontraron coincidencias.</span>";
+    }
+
     function guardarFijosDeHoy() {
         let t = document.getElementById('fijo_hoy_tarde').value.trim();
         let n = document.getElementById('fijo_hoy_noche').value.trim();
@@ -280,18 +293,17 @@
         location.reload();
     }
 
-    // AUDITORÍA REAL CORREGIDA DE FORMA QUIRÚRGICA
     function registrarAuditoriaReal(fecha, turno, numGanador) {
         let keyLog = `${fecha}_${turno}`;
         if (auditoriaBD.some(l => l.key === keyLog)) return;
 
-        let todasLasFechas = Object.keys(db).sort();
+        let todasLasFechas = Object.keys(db).sort((a,b) => parseInt(a.replace(/-/g,'')) - parseInt(b.replace(/-/g,'')));
         let idx = todasLasFechas.indexOf(fecha);
         let fijoAnteriorBase = "46"; 
         
         if (idx > 0) {
             let diaPrevio = db[todasLasFechas[idx-1]];
-            fijoAnteriorBase = turno === 'n' ? (diaPrevio.t || "46") : (diaPrevio.n || "46");
+            fijoAnteriorBase = turno === 'n' ? (db[fecha].t || diaPrevio.n || "46") : (diaPrevio.n || "46");
         }
 
         let setPrediccion = simularSetMatematico(fijoAnteriorBase, 50);
@@ -345,9 +357,9 @@
             let tVal = document.getElementById(`t_${k}`).value.trim();
             let nVal = document.getElementById(`n_${k}`).value.trim();
             if (tVal || nVal) {
-                db[k] = {};
-                if (tVal) db[k]['t'] = tVal.padStart(2, '0');
-                if (nVal) db[k]['n'] = nVal.padStart(2, '0');
+                if(!db[k]) db[k] = {};
+                db[k]['t'] = tVal ? tVal.padStart(2, '0') : '';
+                db[k]['n'] = nVal ? nVal.padStart(2, '0') : '';
             } else { delete db[k]; }
         }
         localStorage.setItem('bolita_master_db', JSON.stringify(db)); alert("Calendario sincronizado.");
@@ -388,6 +400,7 @@
         }, 800);
     }
 
+    // MOTOR HISTÓRICO CORREGIDO PARA PROCESAR TODA LA BBDD
     function simularSetMatematico(fijoBase, cant_final) {
         let list = []; let f = fijoBase.padStart(2, '0');
         
@@ -403,28 +416,48 @@
         if(f === "00") invFijo = "00"; 
         if(!list.includes(invFijo)) list.push(invFijo);
 
+        // ESCANEO REAL DE SECUENCIAS CONSECUTIVAS EN HISTORIAL (Toda la base de datos)
         let frecuenciasConsecutivas = {};
-        let keysBD = Object.keys(db).sort();
+        let keysBD = Object.keys(db).sort((a,b) => parseInt(a.replace(/-/g,'')) - parseInt(b.replace(/-/g,'')));
+        
         for (let idx = 0; idx < keysBD.length; idx++) {
             let actual = db[keysBD[idx]];
-            if (actual.t === f && actual.n) frecuenciasConsecutivas[actual.n] = (frecuenciasConsecutivas[actual.n] || 0) + 1;
-            if (actual.n === f && keysBD[idx+1] && db[keysBD[idx+1]].t) {
-                let sigTarde = db[keysBD[idx+1]].t;
+            if (!actual) continue;
+            
+            // Caso A: Si salió en la tarde, ver qué salió en la noche del mismo día
+            if (actual.t === f && actual.n) {
+                let sigNoche = actual.n.padStart(2, '0');
+                frecuenciasConsecutivas[sigNoche] = (frecuenciasConsecutivas[sigNoche] || 0) + 1;
+            }
+            // Caso B: Si salió en la noche, ver qué salió en la tarde del día siguiente registrado
+            if (actual.n === f && keysBD[idx+1] && db[keysBD[idx+1]] && db[keysBD[idx+1]].t) {
+                let sigTarde = db[keysBD[idx+1]].t.padStart(2, '0');
                 frecuenciasConsecutivas[sigTarde] = (frecuenciasConsecutivas[sigTarde] || 0) + 1;
             }
         }
+        
+        // Ordenar números históricos que más veces han salido inmediatamente después del fijo ingresado
         let salidoresSiguientes = Object.keys(frecuenciasConsecutivas).sort((a,b) => frecuenciasConsecutivas[b] - frecuenciasConsecutivas[a]);
-        salidoresSiguientes.forEach(num => { if(!list.includes(num) && list.length < cant_final) list.push(num); });
+        salidoresSiguientes.forEach(num => { 
+            if(!list.includes(num) && list.length < cant_final) list.push(num); 
+        });
 
+        // Relaciones por Charada
         let fInt = parseInt(f).toString();
         if(charadaDiccionario[fInt]) {
             let words = charadaDiccionario[fInt].toLowerCase().split(', ');
             for(let key in charadaDiccionario) {
                 let text = charadaDiccionario[key].toLowerCase();
-                words.forEach(w => { if(text.includes(w) && !list.includes(key.padStart(2,'0')) && list.length < cant_final) list.push(key.padStart(2,'0')); });
+                words.forEach(w => { 
+                    let formattedKey = key.padStart(2,'0');
+                    if(text.includes(w) && !list.includes(formattedKey) && list.length < cant_final) {
+                        list.push(formattedKey);
+                    }
+                });
             }
         }
 
+        // Generador de respaldo matemático en caso de faltar números para completar la cantidad pedida
         let seed = (parseInt(f) * 17 + 31) % 100;
         while(list.length < cant_final) {
             seed = (21 * seed + 43) % 100; let cand = seed.toString().padStart(2, '0');
@@ -443,7 +476,9 @@
             punta = n.slice(-2).padStart(2, '0'); p = n;
         }
         let esp = ((parseInt(f[0])+5)%10).toString() + ((parseInt(f[1])+5)%10).toString();
-        let hist = Object.values(db).filter(v => typeof v === 'object').flatMap(o => Object.values(o));
+        
+        // Escaneo de arrastre usando la base de datos limpia
+        let hist = Object.values(db).filter(v => typeof v === 'object').flatMap(o => [o.t, o.n]).filter(Boolean);
         let atr = "00";
         for(let i=1; i<=100; i++) {
             let c = ((parseInt(f) + i * 17) % 100).toString().padStart(2,'0');
@@ -458,7 +493,7 @@
 
         let hoy = new Date();
         let kHoy = `${hoy.getFullYear()}-${(hoy.getMonth()+1).toString().padStart(2,'0')}-${hoy.getDate().toString().padStart(2,'0')}`;
-        let gHoy = db[kHoy] ? Object.values(db[kHoy]) : [];
+        let gHoy = db[kHoy] ? [db[kHoy].t, db[kHoy].n].filter(Boolean) : [];
 
         document.getElementById(`${pref}display_resultados`).style.display = 'block';
         const panel = document.getElementById(`${pref}panel_res`); panel.innerHTML = "";

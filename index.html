@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bolita Pro Master - Consola Bugatti Chiron v21.0 Tradicional</title>
+    <title>Bolita Pro Master - Consola Bugatti Chiron v21.5 Tradicional</title>
     
     <meta name="theme-color" content="#050505">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="crypto-manifest" id="pwa-manifest">
+    <link class="crypto-manifest" id="pwa-manifest" rel="shortcut icon" href="#">
 
     <style>
         :root { --neon: #00ff41; --dark: #050505; --panel: #0d1117; --win: #ffeb3b; --error: #ff3333; --cyber: #00bcd4; --bugatti: #1e88e5; }
@@ -45,7 +45,7 @@
         th, td { padding: 5px; border-bottom: 1px solid #222; text-align: left; }
         th { color: var(--neon); text-transform: uppercase; font-size: 0.65rem; }
         
-        .calc-box { background: #000; border: 1px solid #333; padding: 6px; border-radius: 4px; text-align: center; font-size: 0.75rem; }
+        .calc-box { background: #000; border: 1px solid #333; padding: 6px; border-radius: 4px; text-align: center; }
         .calc-box span { display: block; font-size: 1.1rem; font-weight: bold; color: #fff; margin-top: 2px; }
         .charada-box { background: #000; border: 1px solid #222; padding: 6px; border-radius: 4px; max-height: 90px; overflow-y: auto; font-size: 0.75rem; color: #ccc; white-space: pre-line; margin-top: 4px; }
         .loader { display: none; color: var(--win); font-size: 0.72rem; border: 1px dashed var(--win); padding: 12px; border-radius: 4px; background: rgba(255,235,59,0.02); font-family: monospace; }
@@ -115,7 +115,7 @@
                     <div>
                         <label style="font-size:0.55rem; color:#888; display:block; margin-bottom:2px;">MÉTODO CALLE</label>
                         <select id="filtro_turno">
-                            <option value="tradicional" selected>Cruces de la Abuela</option>
+                            <option value="ancestral" selected>Cruces Tradicionales</option>
                         </select>
                     </div>
                     <div>
@@ -129,7 +129,7 @@
                 
                 <div>
                     <label style="font-size:0.6rem; color:#888; display:block; margin-bottom:2px;">INTERSECCIÓN DE SUEÑOS / CHARADA</label>
-                    <input type="text" id="search_charada_user" placeholder="Escribe palabra (ej: caballo, gato, muerto)..." oninput="buscarEnCharada()">
+                    <input type="text" id="search_charada_user" placeholder="Escribe palabra de la charada..." oninput="buscarEnCharada()">
                     <div id="charada_result_user" class="charada-box">Escribe para interceptar la charada...</div>
                 </div>
 
@@ -147,7 +147,7 @@
                 <div class="panel">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
                         <label style="font-size:0.65rem; color:var(--neon); font-weight:bold; text-transform:uppercase;">Pool de Números Clave Resultantes</label>
-                        <span style="font-size:0.55rem; color:var(--win); font-weight:bold;">👵🏽 Algoritmo Ancestral v21.0</span>
+                        <span style="font-size:0.55rem; color:var(--win); font-weight:bold;">👵🏽 Algoritmo Ancestral v21.5</span>
                     </div>
                     <div id="panel_res" class="grid-panel"></div>
                     <div id="user_pesos_aplicados" class="pesos-info"></div>
@@ -195,8 +195,8 @@
             <div class="panel" style="border-color:var(--win); margin-top:0;">
                 <label style="font-size:0.65rem; color:var(--win); font-weight:bold; text-transform:uppercase;">Salvar Resultados del Día</label>
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:6px; margin-bottom:6px;">
-                    <input type="number" id="fijo_hoy_tarde" placeholder="Tarde (Ej: 24)">
-                    <input type="number" id="fijo_hoy_noche" placeholder="Noche (Ej: 83)">
+                    <input type="number" id="fijo_hoy_tarde" placeholder="Tarde">
+                    <input type="number" id="fijo_hoy_noche" placeholder="Noche">
                 </div>
                 <button style="width:100%; border-color:var(--win); color:var(--win); font-size:0.7rem;" onclick="guardarFijosDeHoy()">Inyectar Fijos</button>
             </div>
@@ -246,7 +246,7 @@
 <script>
     const _0xAdmin = "yohnny95", _0xPass = "Elmatatan95*";
     
-    // Base de datos de respaldo pre-cargada
+    // Base de datos de ejemplo inicial si no existe
     const baseRespaldoDefault = {
         "2026-05-18":{"t":"14","n":"83"},
         "2026-05-19":{"t":"45","n":"02"},
@@ -317,9 +317,9 @@
         btn.disabled = true; loader.style.display = 'block';
 
         let pasos = [
-            "⚡ INICIALIZANDO CONSOLA CHIRON TRADICIONAL...",
-            "📐 CONSTRUYENDO PIRÁMIDE DE REDUCCIÓN DE LA CALLE...",
-            "🔮 EXTRAYENDO EQUIVALENTES, HERMANOS Y CRUCES DE LA ABUELA..."
+            "⚡ ENTRANDO A LA CONSOLA CHIRON TRADICIONAL...",
+            "📐 DIBUJANDO LA PIRÁMIDE MODULAR DE LA CALLE...",
+            "👵🏽 PROCESANDO CRUCES, VIRADOS Y TABLAS DE LA ABUELA..."
         ];
 
         let p = 0; loader.innerHTML = pasos[0];
@@ -333,12 +333,10 @@
         }, 400);
     }
 
-    // EL ALGORITMO ORIGINAL RECUPERADO (PIRÁMIDE + CRUCES TRADICIONALES DE LA CALLE)
+    // EL ALGORITMO DE LA CALLE RECUPERADO (PIRÁMIDE DE REDUCCIÓN + EQUIVALENTES DE LA ABUELA)
     function generarPiramideNumerica(fijoStr) {
-        // Se arma la base tradicional concatenando el fijo con la fecha o una constante mística de la calle (ej: 1234)
         let base = fijoStr + "1234"; 
         let filas = [base];
-        
         while (base.length > 1) {
             let nuevaFila = "";
             for (let i = 0; i < base.length - 1; i++) {
@@ -358,46 +356,46 @@
         let puntuacionCalle = {};
         for(let i=0; i<100; i++) { puntuacionCalle[i.toString().padStart(2, '0')] = 0; }
 
-        // 1. EL VIRADO SAGRADO
+        // Rule 1: El Virado Sagrado (+120 pts)
         let virado = fijoStr.split('').reverse().join('').padStart(2, '0');
         puntuacionCalle[virado] += 120;
 
-        // 2. EQUIVALENTE DIRECTO DE LA ABUELA (Terminal Espejo +50)
+        // Rule 2: Inverso Directo de la Abuela (+50 modular) (+90 pts)
         let terminalEspejo = ((numBase + 50) % 100).toString().padStart(2, '0');
         puntuacionCalle[terminalEspejo] += 90;
 
-        // 3. LOS HERMANOS DE LA CALLE (+11 y -11 modular)
+        // Rule 3: Los Hermanos (+11 y -11 modular) (+70 pts)
         let hermanoFijo = ((numBase + 11) % 100).toString().padStart(2, '0');
         let hermanoMenos = ((numBase + 89) % 100).toString().padStart(2, '0');
         puntuacionCalle[hermanoFijo] += 70;
         puntuacionCalle[hermanoMenos] += 70;
 
-        // 4. CRUCE POR DECENAS COMPLETO
+        // Rule 4: Arrastre total por Decena (+40 pts)
         let decenaBase = Math.floor(numBase / 10);
         for(let i=0; i<10; i++) {
             let numDecenaStr = (decenaBase * 10 + i).toString().padStart(2, '0');
             puntuacionCalle[numDecenaStr] += 40; 
         }
 
-        // 5. EXTRACCIÓN DE ELEMENTOS DE LA PIRÁMIDE
+        // Rule 5: Extracción de terminales de la Pirámide de Reducción (+35 pts)
         let piramide = generarPiramideNumerica(fijoStr);
         piramide.forEach(fila => {
             if (fila.length >= 2) {
                 let numExtraido = fila.substring(0, 2);
                 if (puntuacionCalle[numExtraido] !== undefined) {
-                    puntuacionCalle[numExtraido] += 35; // Peso por aparecer en la reducción mística
+                    puntuacionCalle[numExtraido] += 35; 
                 }
             }
         });
 
-        // 6. ADHERENCIA DE HISTORIAL RECIENTE
+        // Rule 6: Peso histórico de acompañantes cercanos (últimos 15 días)
         let fechas = obtenerFechasCronologicas(dbSimulada).slice(-15);
         fechas.forEach(f => {
             if(dbSimulada[f].t) puntuacionCalle[dbSimulada[f].t.padStart(2,'0')] += 10;
             if(dbSimulada[f].n) puntuacionCalle[dbSimulada[f].n.padStart(2,'0')] += 10;
         });
 
-        // Ordenar de mayor a menor peso acumulado
+        // Ordenar pool por los pesos tradicionales acumulados
         let ordenados = Object.keys(puntuacionCalle).sort((a, b) => puntuacionCalle[b] - puntuacionCalle[a]);
         return ordenados.slice(0, parseInt(cantidadPool));
     }
@@ -405,45 +403,49 @@
     function generarTodo() {
         let fijoStr = document.getElementById('fijo_base').value.trim().padStart(2, '0');
         let cantidadPool = document.getElementById('cant_final').value;
-        if(isNaN(parseInt(fijoStr))) return alert("Introduce el Fijo base para arrancar los motores.");
+        if(isNaN(parseInt(fijoStr))) return alert("Por favor, introduce el Fijo anterior.");
 
-        // Mostrar la pirámide visualmente en pantalla
+        // Desplegar pirámide visual
         let piramide = generarPiramideNumerica(fijoStr);
-        let contenedorPiramide = document.getElementById('piramide_despliegue');
-        contenedorPiramide.innerHTML = piramide.join("<br>");
+        document.getElementById('piramide_despliegue').innerHTML = piramide.join("<br>");
 
-        // Ejecutar los cruces reales de la calle
+        // Ejecutar los cruces reales recuperados
         ultimosNumerosGenerados = ejecutarAlgoritmoCalle(fijoStr, cantidadPool, db);
 
         let panel = document.getElementById('panel_res'); panel.innerHTML = "";
         ultimosNumerosGenerados.forEach((n, idx) => {
             let b = document.createElement('div'); b.className = "box"; b.textContent = n;
-            if(idx < 10) b.className += " destacado-top10"; // Los 10 más pesados se visten de Bugatti (oro)
+            if(idx < 10) b.className += " destacado-top10"; 
             panel.appendChild(b);
         });
 
-        document.getElementById('user_pesos_aplicados').textContent = `🎯 Reducción completada. Pool de ${ultimosNumerosGenerados.length} números optimizado por cruce tradicional callejero.`;
+        document.getElementById('user_pesos_aplicados').textContent = `🎯 Reducción completada. Pool de ${ultimosNumerosGenerados.length} números optimizado por cruce callejero tradicional.`;
         document.getElementById('display_resultados').style.display = 'block';
     }
 
+    // SIMULACIÓN Y AUDITORÍA TOTALMENTE ADAPTADA AL ALGORITMO VIEJO (ARREGLADO)
     function ejecutarSimulacionAutomatica() {
         let fechas = obtenerFechasCronologicas(db);
-        if (fechas.length < 3) return alert("Faltan datos en el calendario para correr la auditoría.");
+        if (fechas.length < 2) return alert("Sincroniza o introduce fijos en el calendario para hacer el backtest.");
         
         resultadosSimulacionGlobal = {};
         let totalHits = 0; let totalMisses = 0; let totalTiros = 0;
         let cantidadPool = document.getElementById('cant_final').value;
 
+        // Bucle cronológico real: evalúa cada día basándose en el anterior
         for (let i = 1; i < fechas.length; i++) {
             let fechaObjetivo = fechas[i];
             let fechaAnterior = fechas[i - 1];
             
+            // Tomamos el fijo de la noche (o tarde) anterior como base para calcular
             let tiroAnterior = db[fechaAnterior].n || db[fechaAnterior].t;
             if (!tiroAnterior) continue;
 
+            // Base de datos aislada en el tiempo para no hacer trampa en la simulación
             let dbCiega = {};
             for (let j = 0; j < i; j++) { dbCiega[fechas[j]] = db[fechas[j]]; }
 
+            // Generar pool de predicción tradicional usando el algoritmo de la calle
             let prediccion = ejecutarAlgoritmoCalle(tiroAnterior, cantidadPool, dbCiega);
 
             let tReal = db[fechaObjetivo].t ? db[fechaObjetivo].t.padStart(2,'0') : '';
@@ -468,12 +470,13 @@
         let pctVerdes = totalTiros > 0 ? ((totalHits / totalTiros) * 100).toFixed(1) : "0.0";
         let pctRojos = totalTiros > 0 ? ((totalMisses / totalTiros) * 100).toFixed(1) : "0.0";
 
+        // Actualizar los paneles en tiempo real (Adiós al 0.0% estancado)
         document.getElementById('stat_user_green_pct').textContent = `${pctVerdes}%`;
         document.getElementById('stat_user_red_pct').textContent = `${pctRojos}%`;
         document.getElementById('stat_user_tot_tiros').textContent = totalTiros;
         document.getElementById('stats_globales_contenedor_user').style.display = 'block';
 
-        alert(`Backtest Finalizado exitosamente.\nEfectividad Tradicional: ${pctVerdes}% HITS.`);
+        alert(`Simulación Chiron Completada.\nEfectividad Tradicional: ${pctVerdes}% HITS.`);
         mostrarTablaAciertos();
     }
 
@@ -499,7 +502,7 @@
         let resDiv = document.getElementById('charada_result_user'); if(!str) { resDiv.textContent = "Escribe para interceptar la charada..."; return; }
         let html = "";
         for(let k in charadaDiccionario) { if(k === str || charadaDiccionario[k].toLowerCase().includes(str)) html += `<div><b>${k.padStart(2,'0')}:</b> ${charadaDiccionario[k]}</div>`; }
-        resDiv.innerHTML = html || "Sin coincidencias en el libro de la charada.";
+        resDiv.innerHTML = html || "Sin coincidencias.";
     }
 
     function exportarBaseDatos() {
@@ -516,7 +519,7 @@
                 Object.keys(parsed).forEach(k => { cleanedDb[normalizarFechaAISO(k)] = parsed[k]; });
                 db = cleanedDb; localStorage.setItem('bolita_master_db', JSON.stringify(db));
                 alert("¡Base de Datos acoplada con éxito!"); renderCalendario(); mostrarTablaAciertos();
-            } catch(err) { alert("Archivo JSON corrupto o no compatible."); }
+            } catch(err) { alert("Archivo JSON no compatible."); }
         };
         reader.readAsText(file);
     }
@@ -548,7 +551,7 @@
             let p = i.id.split('-'); let tu = p[0]; let normKey = normalizarFechaAISO(`${p[1]}-${p[2]}-${p[3]}`);
             if (!db[normKey]) db[normKey] = { t: "", n: "" }; db[normKey][tu] = i.value.trim() ? i.value.trim().padStart(2, '0') : "";
         });
-        localStorage.setItem('bolita_master_db', JSON.stringify(db)); alert("Cambios sincronizados en la memoria local."); renderCalendario(); mostrarTablaAciertos();
+        localStorage.setItem('bolita_master_db', JSON.stringify(db)); alert("Historial local guardado."); renderCalendario(); mostrarTablaAciertos();
     }
 
     function guardarFijosDeHoy() {
@@ -558,7 +561,7 @@
         if(!db[hoy]) db[hoy] = {};
         db[hoy]['t'] = t ? t.padStart(2, '0') : ""; db[hoy]['n'] = n ? n.padStart(2, '0') : "";
         localStorage.setItem('bolita_master_db', JSON.stringify(db));
-        alert("Fijos del día inyectados correctamente."); mostrarTablaAciertos(); renderCalendario();
+        alert("Fijos inyectados hoy."); mostrarTablaAciertos(); renderCalendario();
     }
     
     function intentarLogin() {
@@ -585,11 +588,11 @@
         let n = document.getElementById('reg-nombre').value.trim();
         let a = document.getElementById('reg-apellido').value.trim();
         let p = document.getElementById('reg-pass').value;
-        if(!n || !a || !p) return alert("Completa todos los campos de autenticación.");
+        if(!n || !a || !p) return alert("Campos vacíos.");
         let localesUsuarios = JSON.parse(localStorage.getItem('bolita_usuarios_db')) || [];
         localesUsuarios.push({ usuario: `${n}_${a}`, clave: p, rol: 'user' });
         localStorage.setItem('bolita_usuarios_db', JSON.stringify(localesUsuarios));
-        alert("Terminal registrada localmente. Ya puedes entrar."); mostrarRegistroForm(false);
+        alert("Terminal registrada localmente. Ya puedes acceder."); mostrarRegistroForm(false);
     }
 
     function mostrarRegistroForm(ver) {

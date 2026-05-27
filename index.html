@@ -28,7 +28,7 @@
         .hot { background: #004411; color: var(--neon); border-color: var(--neon); }
         .ganador-oro { background: var(--win) !important; color: #000 !important; border: 2px solid #fff !important; font-weight: bold !important; box-shadow: 0 0 15px var(--win) !important; }
 
-        #modal-db, #panel-admin, #modal-auditoria { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 1000; padding: 15px; box-sizing: border-box; overflow-y: auto; }
+        #modal-db, #panel-admin, #modal-auditoria, #modal-usuarios-gestion { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 1000; padding: 15px; box-sizing: border-box; overflow-y: auto; }
         .modal-body { max-width: 600px; margin: auto; border: 1px solid var(--neon); padding: 15px; background: var(--dark); }
         .grid-cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; font-size: 0.75rem; text-align: center; margin-top: 15px; }
         .day { border: 1px solid #333; padding: 6px; background: #000; min-height: 55px; }
@@ -103,19 +103,9 @@
 <div id="panel-admin">
     <div class="modal-body">
         <h2>Panel Maestro del Administrador</h2>
-        <div id="admin-stats" style="font-size:0.8rem; text-align:center; margin-bottom:10px;"></div>
+        <div id="admin-stats" style="font-size:0.8rem; text-align:center; margin-bottom:15px; color: var(--win);"></div>
         
-        <table style="max-height: 120px; overflow-y: auto; display: block; border: 1px solid #333;">
-            <thead>
-                <tr>
-                    <th>Usuario</th>
-                    <th>Estado</th>
-                    <th>Días</th>
-                    <th>Acciones Administrativas</th>
-                </tr>
-            </thead>
-            <tbody id="tabla-usuarios"></tbody>
-        </table>
+        <button style="background: var(--neon); color: #000; margin-bottom: 15px;" onclick="abrirGestionUsuarios()">👥 GESTIONAR CUPOS Y LICENCIAS</button>
 
         <div class="admin-section-box" style="background: rgba(255, 235, 59, 0.02); border-color: var(--win);">
             <h3 style="font-size:0.75rem; text-align:center; color:var(--win); margin: 0 0 5px 0;">⚡ EXTRACTOR DIARIO (LA BOLITA CUBANA.COM)</h3>
@@ -160,6 +150,26 @@
     </div>
 </div>
 
+<div id="modal-usuarios-gestion">
+    <div class="modal-body">
+        <h2>Panel de Licencias e Inscripciones</h2>
+        <div style="max-height: 350px; overflow-y: auto; border: 1px solid var(--neon); background:#000;">
+            <table>
+                <thead style="position: sticky; top:0; background: var(--panel); z-index:10;">
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Estado</th>
+                        <th>Días</th>
+                        <th>Acciones Administrativas</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-usuarios"></tbody>
+            </table>
+        </div>
+        <button class="secondary" style="margin-top:20px; width:100%; padding:12px;" onclick="cerrarGestionUsuarios()">VOLVER AL PANEL MASTER</button>
+    </div>
+</div>
+
 <div id="modal-auditoria">
     <div class="modal-body" style="max-width: 650px;">
         <h2>Historial de Efectividad de la Página</h2>
@@ -180,8 +190,7 @@
                         <th>Acción</th>
                     </tr>
                 </thead>
-                <tbody id="tabla-auditoria-rows">
-                    </tbody>
+                <tbody id="tabla-auditoria-rows"></tbody>
             </table>
         </div>
         <button class="secondary" style="margin-top:20px; width:100%; padding:12px;" onclick="cerrarAuditoria()">VOLVER AL PANEL MASTER</button>
@@ -192,7 +201,7 @@
     <div class="modal-body">
         <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
             <button onclick="moverMes(-1)" style="background:var(--neon); border:none; padding:8px; color:#000; font-weight:bold; border-radius:4px;">◀ MES</button>
-            <span id="mes_label" style="color:var(--win); font-weight:bold; font-size:1.1rem; padding-top:4px;"></span>
+            <span id="mes_label" style="color:var(--win); font-weight:bold; font-size:11rem; padding-top:4px;"></span>
             <button onclick="moverMes(1)" style="background:var(--neon); border:none; padding:8px; color:#000; font-weight:bold; border-radius:4px;">MES ▶</button>
         </div>
         <div class="grid-cal" id="cuerpo_cal"></div>
@@ -249,7 +258,7 @@
         let p = document.getElementById('reg-pass').value;
         if(!nom || !ape || !p) return alert("Llena todos los campos.");
         let uKey = `${nom}_${ape}`;
-        if(usuariosBD[uKey]) return alert("Ese nombre ya existe.");
+        if(uKey === _0xAdmin || usuariosBD[uKey]) return alert("Ese nombre ya existe o está reservado.");
         usuariosBD[uKey] = { password: p, status: "pendiente", fechaActivacion: null };
         localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD));
         alert("Solicitud enviada."); mostrarRegistroForm(false);
@@ -283,18 +292,39 @@
         document.getElementById('view-login').style.display = 'none'; 
         document.getElementById('view-app').style.display = 'none';
         document.getElementById('panel-admin').style.display = 'block';
+        
+        // El conteo de cupos descuenta al admin de la lista visible de clientes
+        let totalClientes = Object.keys(usuariosBD).filter(u => u !== _0xAdmin).length;
+        document.getElementById('admin-stats').innerText = `Cupos de Clientes: ${totalClientes} / 1000`;
+    }
+
+    function abrirGestionUsuarios() {
+        document.getElementById('modal-usuarios-gestion').style.display = 'block';
         const tbody = document.getElementById('tabla-usuarios'); tbody.innerHTML = "";
-        document.getElementById('admin-stats').innerText = `Cupos: ${Object.keys(usuariosBD).length} / 1000`;
+        
+        let hayUsuarios = false;
         for(let u in usuariosBD) {
+            if(u === _0xAdmin) continue; // EXCLUSIÓN DE SEGURIDAD: Tu nombre no entra a la tabla
+            
+            hayUsuarios = true;
             let uData = usuariosBD[u];
             let txt = uData.status === 'activo' ? 'Bloquear' : 'Permitir 1 Mes';
             let col = uData.status === 'activo' ? '#ff9800' : 'var(--neon)';
             tbody.innerHTML += `<tr><td><b>${u}</b></td><td class="${uData.status === 'activo' ? 'status-active' : 'status-pending'}">${uData.status.toUpperCase()}</td><td>30 d</td><td><button class="btn-table" style="background:${col}; color:#000;" onclick="conmutarUsuario('${u}')">${txt}</button><button class="btn-table" style="background:var(--error); color:#fff;" onclick="eliminarUsuario('${u}')">Eliminar</button></td></tr>`;
         }
+        
+        if(!hayUsuarios) {
+            tbody.innerHTML = `<tr><td colspan="4" style="color:#555; padding:15px;">No hay solicitudes ni clientes en la base de datos.</td></tr>`;
+        }
     }
 
-    function conmutarUsuario(u) { if(usuariosBD[u].status === "pendiente") { usuariosBD[u].status = "activo"; } else { usuariosBD[u].status = "pendiente"; } localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD)); abrirAdmin(); }
-    function eliminarUsuario(u) { if(confirm(`¿Eliminar a ${u}?`)) { delete usuariosBD[u]; localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD)); abrirAdmin(); } }
+    function cerrarGestionUsuarios() {
+        document.getElementById('modal-usuarios-gestion').style.display = 'none';
+        abrirAdmin();
+    }
+
+    function conmutarUsuario(u) { if(usuariosBD[u].status === "pendiente") { usuariosBD[u].status = "activo"; } else { usuariosBD[u].status = "pendiente"; } localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD)); abrirGestionUsuarios(); }
+    function eliminarUsuario(u) { if(confirm(`¿Eliminar a ${u}?`)) { delete usuariosBD[u]; localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD)); abrirGestionUsuarios(); } }
     
     function cerrarAdmin() { 
         localStorage.removeItem('bolita_logged_user'); 
@@ -535,7 +565,6 @@
         }
     }
 
-    // NUEVOS ALGORITMOS DE CALLE TRADICIONALES INTEGRADOS
     function calcularCruzSanFrancisco() {
         let hoy = new Date();
         let d = hoy.getDate();
@@ -590,14 +619,12 @@
         let list = [];
         let f = fijoBase.padStart(2, '0');
         
-        // Inyectar algoritmos de calle prioritarios (Cruz y Pirámide)
         let tirosCruz = calcularCruzSanFrancisco();
         let tirosPiramide = calcularPiramideInversa();
         
         tirosCruz.forEach(n => { if(!list.includes(n) && list.length < cant_final) list.push(n); });
         tirosPiramide.forEach(n => { if(!list.includes(n) && list.length < cant_final) list.push(n); });
 
-        // Variación inversa nativa
         let v1 = ((parseInt(f) + 1) % 100).toString().padStart(2, '0');
         let v2 = ((parseInt(f) - 1 + 100) % 100).toString().padStart(2, '0');
         let v3 = (Math.floor(parseInt(f) / 2)).toString().padStart(2, '0'); 
@@ -610,7 +637,6 @@
         if(f === "00") invFijo = "00"; 
         if(!list.includes(invFijo) && list.length < cant_final) list.push(invFijo);
 
-        // Frecuencia consecutiva histórica
         let frecuenciasConsecutivas = {};
         let keysBD = Object.keys(db).sort((a,b) => parseInt(a.replace(/-/g,'')) - parseInt(b.replace(/-/g,'')));
         
@@ -633,7 +659,6 @@
             if(!list.includes(num) && list.length < cant_final) list.push(num); 
         });
 
-        // Relación por Charada Cubana
         let fInt = parseInt(f).toString();
         if(charadaDiccionario[fInt]) {
             let words = charadaDiccionario[fInt].toLowerCase().split(', ');
@@ -648,7 +673,6 @@
             }
         }
 
-        // Relleno seguro LCG
         let hoy = new Date();
         let kHoy = `${hoy.getFullYear()}-${(hoy.getMonth()+1).toString().padStart(2,'0')}-${hoy.getDate().toString().padStart(2,'0')}`;
         let offsetRepeticion = 0;

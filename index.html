@@ -506,7 +506,7 @@
             
             let k = `${año}-${mes.padStart(2,'0')}-${dia.padStart(2,'0')}`;
             // ESTA ES LA LÍNEA DE LA REGEX CORREGIDA:
-            const regexEstructuraCompleta = /([mMeEtT]||[eE])\s*([0-9])\s*-\s*([0-9])\s*-\s*([0-9])/g;
+            const regexEstructuraCompleta = /([mMeEtTsSnNeE])\s*([0-9])\s*-\s*([0-9])\s*-\s*([0-9])/g;
             let matchTiro;
             
             while ((matchTiro = regexEstructuraCompleta.exec(limpio)) !== null) {
@@ -514,7 +514,7 @@
                 let decena = matchTiro[3];
                 let unidad = matchTiro[4];
                 // ESTA LÍNEA SE CORRIGIÓ PARA TOMAR CORRECTAMENTE LOS COMPONENTES DEL FIJO:
-                let fijoExacto = matchTiro[3] + matchTiro[4];
+                let fijoExacto = decena + unidad;
                 
                 let turnoInterno = (identificadorTurno === 'm' || identificadorTurno === 't') ? 't' : 'n';
                 

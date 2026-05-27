@@ -190,6 +190,7 @@
                         <th>Turno</th>
                         <th>Fijo Real</th>
                         <th>Resultado</th>
+                        <th>Posición</th>
                         <th>Acción</th>
                     </tr>
                 </thead>
@@ -361,9 +362,39 @@
         }
     }
 
+    function guardarFijosDeHoy() {
+        let t = document.getElementById('fijo_hoy_tarde').value.trim();
+        let n = document.getElementById('fijo_hoy_noche').value.trim();
+        let hoy = new Date();
+        let fKey = `${hoy.getFullYear()}-${(hoy.getMonth()+1).toString().padStart(2,'0')}-${hoy.getDate().toString().padStart(2,'0')}`;
+        if(!t && !n) return alert("Escribe un fijo.");
+        if(!db[fKey]) db[fKey] = {};
+        
+        let flagGanador = false;
+
+        if(t) { 
+            db[fKey]['t'] = t.padStart(2, '0'); 
+            if(registrarAuditoriaReal(fKey, 't', t.padStart(2, '0'))) flagGanador = true; 
+        }
+        if(n) { 
+            db[fKey]['n'] = n.padStart(2, '0'); 
+            if(registrarAuditoriaReal(fKey, 'n', n.padStart(2, '0'))) flagGanador = true; 
+        }
+        
+        localStorage.setItem('bolita_master_db', JSON.stringify(db));
+        
+        if(flagGanador) {
+            iniciarMatrix();
+        } else {
+            alert("Fijos guardados y auditados correctamente.");
+            location.reload();
+        }
+    }
+
     function registrarAuditoriaReal(fecha, turno, numGanador) {
         let keyLog = `${fecha}_${turno}`;
         let yaExistia = auditoriaBD.some(l => l.key === keyLog);
+        if (yaExistia) return false;
 
         let todasLasFechas = Object.keys(db).sort((a,b) => parseInt(a.replace(/-/g,'')) - parseInt(b.replace(/-/g,'')));
         let idx = todasLasFechas.indexOf(fecha);
@@ -374,17 +405,25 @@
             fijoAnteriorBase = turno === 'n' ? (db[fecha].t || diaPrevio.n || "46") : (diaPrevio.n || "46");
         }
 
+        // Sincronización matemática estricta con el motor de generación visual
         let setPrediccion = simularSetMatematico(fijoAnteriorBase, 50);
-        let huboAcierto = setPrediccion.includes(numGanador);
+        let posicionEncontrada = setPrediccion.indexOf(numGanador);
+        let huboAcierto = posicionEncontrada !== -1;
+        let posTexto = huboAcierto ? `Posición ${posicionEncontrada + 1}` : "No estaba";
 
-        if (!yaExistia) {
-            auditoriaBD.push({ key: keyLog, fecha: fecha, turno: turno === 't' ? 'Mediodía' : 'Noche', ganador: numGanador, acierto: huboAcierto });
-            localStorage.setItem('bolita_aud_logs_db', JSON.stringify(auditoriaBD));
-        }
+        auditoriaBD.push({ 
+            key: keyLog, 
+            fecha: fecha, 
+            turno: turno === 't' ? 'Mediodía' : 'Noche', 
+            ganador: numGanador, 
+            acierto: huboAcierto,
+            posicion: posTexto 
+        });
+        
+        localStorage.setItem('bolita_aud_logs_db', JSON.stringify(auditoriaBD));
         return huboAcierto;
     }
 
-    // NUEVO MÓDULO: TABLA DE AUDITORÍA CON SISTEMA DE ELIMINACIÓN DE REGISTROS DE PRUEBA
     function abrirAuditoria() {
         document.getElementById('modal-auditoria').style.display = 'block';
         renderTablaAuditoria();
@@ -392,8 +431,8 @@
 
     function renderTablaAuditoria() {
         const tbody = document.getElementById('tabla-auditoria-rows'); 
-        if(auditoriaBD.length === 0) { 
-            tbody.innerHTML = `<tr><td colspan="5" style="color:#555; padding:15px;">No hay registros de auditoría guardados aún.</td></tr>`; 
+        if(!auditoriaBD || auditoriaBD.length === 0) { 
+            tbody.innerHTML = `<tr><td colspan="6" style="color:#555; padding:15px;">No hay registros de auditoría guardados aún.</td></tr>`; 
             document.getElementById('aud_num_modal').innerText = "0/0";
             document.getElementById('aud_pct_modal').innerText = "0%";
             return; 
@@ -403,12 +442,16 @@
         auditoriaBD.forEach((l, index) => { 
             if(l.acierto) hits++; 
             let resTxt = l.acierto ? '<span style="color:var(--neon); font-weight:bold;">★ ACERTADO</span>' : '<span style="color:#666">Fallo</span>';
+            let posEstilo = l.acierto ? 'color: var(--win); font-weight:bold;' : 'color: #555;';
+            let deDondeVienePos = l.posicion || (l.acierto ? "Encontrado" : "No estaba");
+
             html += `
                 <tr>
                     <td>${l.fecha}</td>
                     <td>${l.turno}</td>
                     <td style="color:var(--win); font-weight:bold; font-size:1rem;">${l.ganador}</td>
                     <td>${resTxt}</td>
+                    <td style="${posEstilo}">${deDondeVienePos}</td>
                     <td>
                         <button class="btn-table" style="background:var(--error); color:#fff; padding:3px 6px;" onclick="eliminarRegistroAuditoria(${index})">Borrar</button>
                     </td>
@@ -421,114 +464,80 @@
     }
 
     function eliminarRegistroAuditoria(index) {
-        if(confirm("¿Seguro que deseas eliminar este registro de acierto del historial? (Ideal para limpiar pruebas)")) {
+        if(confirm("¿Seguro que deseas eliminar este registro del historial?")) {
             auditoriaBD.splice(index, 1);
             localStorage.setItem('bolita_aud_logs_db', JSON.stringify(auditoriaBD));
-            renderTablaAuditoria(); // Refresca y recalcula la tabla en tiempo real
+            renderTablaAuditoria();
         }
-    }
-
-    function cerrarAuditoria() { document.getElementById('modal-auditoria').style.display = 'none'; }
-
-    function entrarAApp(d) { 
-        document.getElementById('view-login').style.display = 'none'; 
-        document.getElementById('panel-admin').style.display = 'none';
-        document.getElementById('view-app').style.display = 'block'; 
-        document.getElementById('user-display').innerText = "Usuario: " + usuarioActivo; 
-        document.getElementById('expire-display').innerText = "Expira en: " + d + " días"; 
-    }
-    function cerrarSesionEfectiva() { localStorage.removeItem('bolita_logged_user'); location.reload(); }
-
-    function abrirConfig() { document.getElementById('modal-db').style.display = 'block'; renderCal(); }
-    function cerrarConfig() { document.getElementById('modal-db').style.display = 'none'; }
-    function moverMes(dir) { fechaActualCal.setMonth(fechaActualCal.getMonth() + dir); renderCal(); }
-
-    function renderCal() {
-        const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-        const y = fechaActualCal.getFullYear(); const m = fechaActualCal.getMonth();
-        document.getElementById('mes_label').innerText = `${meses[m]} ${y}`;
-        const cuerpo = document.getElementById('cuerpo_cal'); cuerpo.innerHTML = "";
-        const totalDias = new Date(y, m + 1, 0).getDate();
-        
-        for (let d = 1; d <= totalDias; d++) {
-            let k = `${y}-${(m + 1).toString().padStart(2, '0')}-${d.toString().padStart(2, '0')}`;
-            let v = db[k] || { t: '', n: '' };
-            cbodyLine = `
-                <div class="day">
-                    <b style="color:#00ff41;">${d}</b><br>
-                    <input type="text" id="t_${k}" value="${v.t||''}" placeholder="T" maxlength="2">
-                    <input type="text" id="n_${k}" value="${v.n||''}" placeholder="N" maxlength="2">
-                </div>`;
-            cuerpo.innerHTML += cbodyLine;
-        }
-    }
-
-    function guardarDB() {
-        const y = fechaActualCal.getFullYear(); const m = fechaActualCal.getMonth();
-        const totalDias = new Date(y, m + 1, 0).getDate();
-        for (let d = 1; d <= totalDias; d++) {
-            let k = `${y}-${(m + 1).toString().padStart(2, '0')}-${d.toString().padStart(2, '0')}`;
-            let tVal = document.getElementById(`t_${k}`).value.trim();
-            let nVal = document.getElementById(`n_${k}`).value.trim();
-            if (tVal || nVal) {
-                if(!db[k]) db[k] = {};
-                db[k]['t'] = tVal ? tVal.padStart(2, '0') : '';
-                db[k]['n'] = nVal ? nVal.padStart(2, '0') : '';
-            } else { delete db[k]; }
-        }
-        localStorage.setItem('bolita_master_db', JSON.stringify(db)); alert("Calendario sincronizado.");
     }
 
     function procesarTextoImportado() {
-        const raw = document.getElementById('import_raw_text').value;
-        if(!raw.trim()) return alert("El cuadro de entrada está vacío.");
-        
-        const bloquesPorFecha = raw.split(/(?=\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4})/);
-        let contadorMapeados = 0;
-        
-        bloquesPorFecha.forEach(bloque => {
-            let limpio = block.trim();
-            if(!limpio) return;
-            
-            const matchFecha = limpio.match(/^(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{2,4})/);
-            if(!matchFecha) return;
-            
-            let b1 = matchFecha[1], b2 = matchFecha[2], b3 = matchFecha[3];
-            let año, mes, dia;
-            
-            if(b1.length === 4) { año = b1; mes = b2; dia = b3; }
-            else if(b3.length === 4) { año = b3; mes = b1; dia = b2; }
-            else {
-                let aCorto = parseInt(b3);
-                año = aCorto < 80 ? "20" + b3 : "19" + b3;
-                mes = b1; dia = b2;
+        try {
+            const raw = document.getElementById('import_raw_text').value;
+            if(!raw || !raw.trim()) {
+                alert("El cuadro de entrada está vacío.");
+                return;
             }
             
-            let k = `${año}-${mes.padStart(2,'0')}-${dia.padStart(2,'0')}`;
-            // ESTA ES LA LÍNEA DE LA REGEX CORREGIDA:
-            const regexEstructuraCompleta = /([mMeEtTsSnNeE])\s*([0-9])\s*-\s*([0-9])\s*-\s*([0-9])/g;
-            let matchTiro;
+            // Separador ultra estable por expresión regular global para evitar bloqueos de hilos
+            const bloquesPorFecha = raw.match(/\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4}[^]*?(?=\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4}|$)/g);
             
-            while ((matchTiro = regexEstructuraCompleta.exec(limpio)) !== null) {
-                let identificadorTurno = matchTiro[1].toLowerCase();
-                let decena = matchTiro[3];
-                let unidad = matchTiro[4];
-                // ESTA LÍNEA SE CORRIGIÓ PARA TOMAR CORRECTAMENTE LOS COMPONENTES DEL FIJO:
-                let fijoExacto = decena + unidad;
-                
-                let turnoInterno = (identificadorTurno === 'm' || identificadorTurno === 't') ? 't' : 'n';
-                
-                if(!db[k]) db[k] = {};
-                db[k][turnoInterno] = fijoExacto;
-                contadorMapeados++;
+            if(!bloquesPorFecha) {
+                alert("No se encontraron fechas válidas en el texto introducido.");
+                return;
             }
-        });
-        
-        localStorage.setItem('bolita_master_db', JSON.stringify(db));
-        alert(`Operación exitosa. Se han importado e inyectado ${contadorMapeados} fijos.`);
-        document.getElementById('import_raw_text').value = "";
-        renderCal();
+
+            let contadorMapeados = 0;
+            
+            bloquesPorFecha.forEach(bloque => {
+                let limpio = bloque.trim();
+                if(!limpio) return;
+                
+                const matchFecha = limpio.match(/(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{2,4})/);
+                if(!matchFecha) return;
+                
+                let b1 = matchFecha[1], b2 = matchFecha[2], b3 = matchFecha[3];
+                let año, mes, dia;
+                
+                if(b1.length === 4) { 
+                    año = b1; mes = b2; dia = b3; 
+                } else if(b3.length === 4) { 
+                    año = b3; mes = b1; dia = b2; 
+                } else {
+                    let aCorto = parseInt(b3);
+                    año = aCorto < 80 ? "20" + b3 : "19" + b3;
+                    mes = b1; dia = b2;
+                }
+                
+                let k = `${año}-${mes.padStart(2,'0')}-${dia.padStart(2,'0')}`;
+                
+                // Expresión regular simplificada y limpia que no cuelga el navegador
+                const regexEstructuraCompleta = /([mMeEtTsSnNeE])\s*([0-9])\s*-\s*([0-9])\s*-\s*([0-9])/g;
+                let matchTiro;
+                
+                while ((matchTiro = regexEstructuraCompleta.exec(limpio)) !== null) {
+                    let identificadorTurno = matchTiro[1].toLowerCase();
+                    let decena = matchTiro[3];
+                    let unidad = matchTiro[4];
+                    let fijoExacto = decena + unidad;
+                    
+                    let turnoInterno = (identificadorTurno === 'm' || identificadorTurno === 't') ? 't' : 'n';
+                    
+                    if(!db[k]) db[k] = {};
+                    db[k][turnoInterno] = fijoExacto;
+                    contadorMapeados++;
+                }
+            });
+            
+            localStorage.setItem('bolita_master_db', JSON.stringify(db));
+            alert(`Operación exitosa. Se han importado e inyectado ${contadorMapeados} fijos.`);
+            document.getElementById('import_raw_text').value = "";
+            renderCal();
+        } catch (error) {
+            alert("Error crítico en procesamiento: " + error.message);
+        }
     }
+
 
     // ALGORITMO MATEMÁTICO ORIGINAL PRESERVADO INTACTO
     function simularSetMatematico(fijoBase, cant_final) {

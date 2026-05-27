@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bolita Pro Master - Consola Global Elite v7.7</title>
+    <title>Bolita Pro Master - Consola Global Elite v7.6</title>
     <style>
         :root { --neon: #00ff41; --dark: #050505; --panel: #0d1117; --win: #ffeb3b; --error: #ff3333; }
         body { font-family: 'Segoe UI', monospace; background: var(--dark); color: var(--neon); margin: 0; padding: 10px; -webkit-user-select: none; user-select: none; }
@@ -44,23 +44,9 @@
         .charada-box { background: #000; border: 1px solid var(--neon); padding: 10px; margin-top: 5px; font-size: 0.85rem; color: #fff; max-height: 120px; overflow-y: auto; text-align: left; border-radius: 4px; display: block; width: 100%; box-sizing: border-box;}
         .contact-footer { margin-top: 15px; text-align: center; font-size: 0.75rem; color: #aaa; border-top: 1px dashed #333; padding-top: 10px; }
         .contact-footer a { color: var(--win); text-decoration: none; font-weight: bold; }
-
-        /* Canvas para el Efecto CMatrix */
-        #canvas-matrix { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; background: rgba(0,0,0,0.9); }
-        #matrix-overlay { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10000; text-align: center; font-family: 'Segoe UI', monospace; }
-        #matrix-overlay h1 { color: #fff; text-shadow: 0 0 20px var(--win), 0 0 40px var(--win); font-size: 3.5rem; margin: 0; animation: parpadeo 0.6s infinite alternate; }
-        #matrix-overlay p { color: var(--neon); font-size: 1.5rem; font-weight: bold; margin-top: 10px; text-shadow: 0 0 10px var(--neon); }
-        @keyframes parpadeo { from { opacity: 0.3; } to { opacity: 1; } }
     </style>
 </head>
 <body>
-
-<canvas id="canvas-matrix"></canvas>
-<div id="matrix-overlay">
-    <h1>¡GANADOR!</h1>
-    <p>Sorteo Acertado con Éxito</p>
-    <button style="margin-top:20px; width:auto; padding:12px 25px; background:var(--win); color:#000; cursor:pointer;" onclick="detenerMatrix(event)">CONTINUAR</button>
-</div>
 
 <div id="view-login" class="container" style="display:block;">
     <h2>Control de Acceso de Usuarios</h2>
@@ -122,10 +108,10 @@
         <table style="max-height: 120px; overflow-y: auto; display: block; border: 1px solid #333;">
             <thead>
                 <tr>
-                    <th style="width:30%;">Usuario</th>
-                    <th style="width:20%;">Estado</th>
-                    <th style="width:15%;">Días</th>
-                    <th style="width:35%;">Acciones Administrativas</th>
+                    <th>Usuario</th>
+                    <th>Estado</th>
+                    <th>Días</th>
+                    <th>Acciones Administrativas</th>
                 </tr>
             </thead>
             <tbody id="tabla-usuarios"></tbody>
@@ -170,7 +156,7 @@
         </div>
 
         <button style="margin-top:15px; background:var(--win); color:#000; width:100%; padding:12px; font-size:0.8rem; font-weight:bold;" onclick="abrirAuditoria()">📊 VER INFORME DE ACIERTOS Y RENDIMIENTO</button>
-        <button class="secondary" style="margin-top:15px; width:100%;" onclick="cerrarAdmin()">CERRAR SESIÓN MASTER</button>
+        <button class="secondary" style="margin-top:15px; width:100%;" onclick="cerrarAdmin()">SALIR DEL PANEL MASTER</button>
     </div>
 </div>
 
@@ -214,7 +200,7 @@
         
         <div style="margin-top: 20px; border-top: 1px dashed var(--neon); padding-top: 15px;">
             <h3 style="font-size: 0.75rem; text-align: center; color: var(--win);">📥 IMPORTADOR UNIVERSAL EN BRUTO</h3>
-            <textarea id="import_raw_text" placeholder="Pega los datos aquí. Formato estricto soportado: (ej: M 9-0-4 o E 5-3-7)"></textarea>
+            <textarea id="import_raw_text" placeholder="Pega los datos aquí. Soporta cualquier formato (ej: 12/31/06 E9-3-7 o 07-31-2012 E159)"></textarea>
             <button onclick="procesarTextoImportado()" style="background: transparent; color: var(--neon); border: 1px solid var(--neon); padding: 12px; font-size: 0.75rem; margin-top: 5px; width:100%; font-weight:bold;">PROCESAR E IMPORTAR DATOS</button>
         </div>
         <button onclick="cerrarConfig()" style="margin-top:20px; background:#333; color:#fff; width:100%; border:none; padding:10px; border-radius:4px;">VOLVER AL PANEL MASTER</button>
@@ -228,14 +214,13 @@
     let auditoriaBD = JSON.parse(localStorage.getItem('bolita_aud_logs_db')) || [];
     let usuarioActivo = "";
     let fechaActualCal = new Date();
-    let matrixInterval = null;
 
-    if (!usuariosBD[_0xAdmin]) {
-        usuariosBD[_0xAdmin] = { password: _0xPass, status: "activo", fechaActivacion: new Date().toISOString() };
+    if (!usuariosBD["yohnny95"]) {
+        usuariosBD["yohnny95"] = { password: "Elmatatan95*", status: "activo", fechaActivacion: new Date().toISOString() };
         localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD));
     }
 
-    const charadaDiccionario = {"1":"Caballo, sol, tintero, camello, pescado chiquito","2":"Mariposa, hombre, cafetera, caracol","3":"Niño chiquito, marinero, luna, taza, ciempiés, muerto","4":"Gato, Santa Bárbara, vela, diente, boca, soldier, llave, militar, pavo real","5":"Mujer buena, monja, mar, carta, candado, periódico, fruta, lombriz","6":"Jicotea, reverbero, candela, botella, luna","7":"Mierda, culo, caracol, sueño, medias, caballero, cochino","8":"Muerto, muerto chiquito, calabaza, león, mesa, tigre","9":"Elefante, entierro, lengua, lira, cubo, esqueleto, buey","10":"Pescado grande, paseo, malla, cazuela, dinero, lancha","11":"Gallo fino, lluvia, fósforo, fosforera, taller, fábrica, caballo","12":"Puta, estrella, viaje, toallas, refrigerador, cometa, dama, perro grande","13":"Chulo, niño grande, pavo real, Santa Lucía, anafe, idolo, elefante","14":"Cementerio de noche, gato, tigre, matrimonio, enamorados, arresto, sartén","15":"Perro chiquito, niña bonita, visita, cuchara, gallo, ratón","16":"Toro, plancha, arete, mujer santa, vestido, incendio pequeño, funerales, avispa","17":"San Lázaro, luna, mujer buena, hule, camisón, armas, fumar opio","18":"Pescado chiquito, iglesia, sirena, palma, pescado, gato amarillo","19":"Lombriz, campesino, bandera, tropa, mesa grande, armadura, jutía","20":"Tibor, orinal, gato fino, cañón, camiseta, libro, mujer","21":"Majá, dinero, reloj de bolsillo, chaleco, cotorra, cigarros, gallo","22":"Sapo, estrella, lirio, chimenea, sol, jicotea","23":"Vapor, submarino, monte, escalera, barco, águila","24":"Paloma, música, carpintero, cocina, pescado grande","25":"Piedra fina, casa nueva, sol, monja, rana","26":"Anguila, calle, médico nuevo, brillante, nube de oro","27":"Avispa, campana, cuchara grande, canario, baúl, mono","28":"Chivo, bollo, carretón, bandera, político, uvas, perro chiquito","29":"Ratón, jutía, nube, venado, águila","30":"Camarón, arcoíris, pinga, almanaque, buey, cangrejo, chivo","31":"Venado, escuela, zapato nuevo, pato","32":"Puerco chiquito, enemigo, mulo, demonio, majá","33":"Tiñosa, baraja, santo, Jesucristo, bofetón, camarón","34":"Mono, familia, negro, negro chiquito, capataz, paloma","35":"Araña, araña chiquita, novia, bombillo, mosquito, mariposa","36":"Cachimba, teatro, bodega, opio, coloso, pajarito","37":"Bruja, mariposa bruja, gallina prieta, gitana, hormiga, carretera, piedra fina","38":"Dinero, mucho dinero, macao, carro, goleta, guante, barril","39":"Culebra, conejo, rayo, baile, tintorero","40":"Cura, poca sangre, bombero, muchacho, maldita, cantina, estatua","41":"Lagartija, lagartijo, prisión, pato chiquito, jubo, capuchino, clarín","42":"Pato, país lejano, carnero, España, abismo, liga","43":"Alacrán, amigo, vaca, puerta, presidiario, jorobado, tísico","44":"Año del cuero, guácara con guácara, infierno, año malo, temporal, tormenta, plancha, caldero","45":"Tiburón, presidente, traje, tranvía, escuela, estrella","46":"Guagua, humo, hambre, hurón, baile, chino","47":"Pájaro, maricón, mala noticia, mucha sangre, escolta, gallo, rosa","48":"Cucaracha, abanico, barbería, cubo","49":"Borracho, fogón, riqueza, figurín, percha, tesoro, fantasma","50":"Policía, agua, alegría, florero, alcalde, pícaro, árbol","51":"Soldado, guardia rural, sereno, sed, oro, anteojos, presillas","52":"Bicicleta, coche, borracho, abogado, libreta","53":"Luz eléctrica, prenda, tragedy, dinamita, diamante, beso, alguacil","54":"Flores, gallina blanca, sueño, timbre, cañón, rosas","55":"Cangrejo, murciélago, baile, iglesia grande, isleño, caerse, bala, sellos","56":"Gallina sacada, reina, escorpión, pato grande, merengue, piedra, camisa, cara","57":"Cama, ángeles, telegrama, puerta","58":"Adulterio, retrato, cuchillo, cangrejo, ferretero, batea","59":"Loco, fonógrafo, langosta, anillo, araña grande","60":"Payaso, sol oscuro, huevo, cómico, pájaro grande, tempestad, avecilla","61":"Caballo grande, arroz, cañonazo, piedra grande, revólver, boticario, pintor, saco","62":"Matrimonio, robo, asesinato, crimen, nieve, lámpara, visión, academia, carretilla","63":"Asesino, bandido, bandolero, cuernos, espada, caracol, policía, escalera","64":"Muerto vivo, muerto grande, escándalo, tiro de rifle, maromero, relajo, fiera","65":"Cárcel, comida, bruja, ventana, conejo, trueno","66":"Tarro, divorcio, pareja de yeguas, beso, máscara, estrella, mudanza, carnaval","67":"Puñalada, hospital, reloj, autoridad, fonda, aborto, zapato","68":"Cementerio, cementerio grande, globo, cuchillo grande, riña, templo, bolos, dinero","69":"Pozo, fiera, piano, loma, vago, polvorín","70":"Teléfono, coco, tiro, barril, arcoíris, bala, camisa","71":"Río, sombrero, perro mediano, pantera, fusil","72":"Buey, buey viejo, ferrocarril, serrucho, lluvia, collar, cetro, relámpago","73":"Maleta, parque, navaja, manzanas, ajedrez, cigarro","74":"Papalote, coronel, militar, serpiente, cólera, tarima","75":"Cine, corbata, viento, guitarra, flores, quiosco","76":"Bailarina, humo en cantidad, caja de hierro, violín","77":"Muletas de San Lázaro, banderas, guerra, colegio, billetes de banco, ánfora","78":"Ataúd, obispo, tigre, sarcófago, rey, apetito, lunares","79":"Coche, lagarto, abogado, tren de carga, tren de viaje, dulce","80":"Médico, médico viejo, buena noticia, luna llena, paraguas, barba, desespero, trompo","81":"Teatro, barco, navaja grande, ingeniero, ingenio, dulce, cuerda, actress","82":"Madre, león, batea, pleito, estrella, muelle","83":"Tragedia, procesión, limosnero, bastón, madera","84":"Mucha sangre, ciego, sastre, bohío, banquero, cofre, marcha atrás","85":"Reloj, Madrid, águila, espejo, guano","86":"Tijera, convento, manguera, marino, ardilla, desnudarse, palma","87":"Plátano, Nueva York, baúl, paloma, fuego","88":"Espejuelos, gusano, vaso, hojas, aduanero","89":"Lotería, agua, mucha agua, casa vieja, mona vieja, cometa, melón, tesorero","90":"Viejo, espejo grande, caramelo, temporal, asesino","91":"Alpargata, comunista, bolchevique, tranvía, pájaro negro, limosnero, bolsa","92":"Puerco grande, avión, globo, globo muy alto, suicidio, Cuba, anarquista, gato, león grande","93":"Revolución, sortija de valor, Habana, general, andarín, joyas, libertad","94":"Machete, Ogún, mariposa grande, leontina, perfume, flores, Habana","95":"Guerra, perro grande, alacrán grande, corte de justicia, espada, Matanzas","96":"Zapato viejo, desafío, puta vieja, periódico, pícaro, roca, maleta vieja","97":"Mosquito, mosquito grande, grillo, mono grande, sinsonte, preso, limosnero","98":"Piano, entierro grande, traición, visita regia, fonógrafo, santo","99":"Serrucho, gallo, gallo grande, temporal, lluvia, carbonero","100":"Inodoro, excusado, carro, dios, escoba, automóvil, huevos"};
+    const charadaDiccionario = {"1":"Caballo, sol, tintero, camello, pescado chiquito","2":"Mariposa, hombre, cafetera, caracol","3":"Niño chiquito, marinero, luna, taza, ciempiés, muerto","4":"Gato, Santa Bárbara, vela, diente, boca, soldado, llave, militar, pavo real","5":"Mujer buena, monja, mar, carta, candado, periódico, fruta, lombriz","6":"Jicotea, reverbero, candela, botella, luna","7":"Mierda, culo, caracol, sueño, medias, caballero, cochino","8":"Muerto, muerto chiquito, calabaza, león, mesa, tigre","9":"Elefante, entierro, lengua, lira, cubo, esqueleto, buey","10":"Pescado grande, paseo, malla, cazuela, dinero, lancha","11":"Gallo fino, lluvia, fósforo, fosforera, taller, fábrica, caballo","12":"Puta, estrella, viaje, toallas, refrigerador, cometa, dama, perro grande","13":"Chulo, niño grande, pavo real, Santa Lucía, anafe, elefante","14":"Cementerio de noche, gato, tigre, matrimonio, enamorados, arresto, sartén","15":"Perro chiquito, niña bonita, visita, cuchara, gallo, ratón","16":"Toro, plancha, arete, mujer santa, vestido, incendio pequeño, funerales, avispa","17":"San Lázaro, luna, mujer buena, hule, camisón, armas, fumar opio","18":"Pescado chiquito, iglesia, sirena, palma, pescado, gato amarillo","19":"Lombriz, campesino, bandera, tropa, mesa grande, armadura, jutía","20":"Tibor, orinal, gato fino, cañón, camiseta, libro, mujer","21":"Majá, dinero, reloj de bolsillo, chaleco, cotorra, cigarros, gallo","22":"Sapo, estrella, lirio, chimenea, sol, jicotea","23":"Vapor, submarino, monte, escalera, barco, águila","24":"Paloma, música, carpintero, cocina, pescado grande","25":"Piedra fina, casa nueva, sol, monja, rana","26":"Anguila, calle, médico nuevo, brillante, nube de oro","27":"Avispa, campana, cuchara grande, canario, baúl, mono","28":"Chivo, bollo, carretón, bandera, político, uvas, perro chiquito","29":"Ratón, jutía, nube, venado, águila","30":"Camarón, arcoíris, pinga, almanaque, buey, cangrejo, chivo","31":"Venado, escuela, zapato nuevo, pato","32":"Puerco chiquito, enemigo, mulo, demonio, majá","33":"Tiñosa, baraja, santo, Jesucristo, bofetón, camarón","34":"Mono, familia, negro, negro chiquito, capataz, paloma","35":"Araña, araña chiquita, novia, bombillo, mosquito, mariposa","36":"Cachimba, teatro, bodega, opio, coloso, pajarito","37":"Bruja, mariposa bruja, gallina prieta, gitana, hormiga, carretera, piedra fina","38":"Dinero, mucho dinero, macao, carro, goleta, guante, barril","39":"Culebra, conejo, rayo, baile, tintorero","40":"Cura, poca sangre, bombero, muchacho, maldita, cantina, estatua","41":"Lagartija, lagartijo, prisión, pato chiquito, jubo, capuchino, clarín","42":"Pato, país lejano, carnero, España, abismo, liga","43":"Alacrán, amigo, vaca, puerta, presidiario, jorobado, tísico","44":"Año del cuero, guácara con guácara, infierno, año malo, temporal, tormenta, plancha, caldero","45":"Tiburón, presidente, traje, tranvía, escuela, estrella","46":"Guagua, humo, hambre, hurón, baile, chino","47":"Pájaro, maricón, mala noticia, mucha sangre, escolta, gallo, rosa","48":"Cucaracha, abanico, barbería, cubo","49":"Borracho, fogón, riqueza, figurín, percha, tesoro, fantasma","50":"Policía, agua, alegría, florero, alcalde, pícaro, árbol","51":"Soldado, guardia rural, sereno, sed, oro, anteojos, presillas","52":"Bicicleta, coche, borracho, abogado, libreta","53":"Luz eléctrica, prenda, tragedy, dinamita, diamante, beso, alguacil","54":"Flores, gallina blanca, sueño, timbre, cañón, rosas","55":"Cangrejo, murciélago, baile, iglesia grande, isleño, caerse, bala, sellos","56":"Gallina sacada, reina, escorpión, pato grande, merengue, piedra, camisa, cara","57":"Cama, ángeles, telegrama, puerta","58":"Adulterio, retrato, cuchillo, cangrejo, ferretero, batea","59":"Loco, fonógrafo, langosta, anillo, araña grande","60":"Payaso, sol oscuro, huevo, cómico, pájaro grande, tempestad, avecilla","61":"Caballo grande, arroz, cañonazo, piedra grande, revólver, boticario, pintor, saco","62":"Matrimonio, robo, asesinato, crimen, nieve, lámpara, visión, academia, carretilla","63":"Asesino, bandido, bandolero, cuernos, espada, caracol, policía, escalera","64":"Muerto vivo, muerto grande, escándalo, tiro de rifle, maromero, relajo, fiera","65":"Cárcel, comida, bruja, ventana, conejo, trueno","66":"Tarro, divorcio, pareja de yeguas, beso, máscara, estrella, mudanza, carnaval","67":"Puñalada, hospital, reloj, autoridad, fonda, aborto, zapato","68":"Cementerio, cementerio grande, globo, cuchillo grande, riña, templo, bolos, dinero","69":"Pozo, fiera, piano, loma, vago, polvorín","70":"Teléfono, coco, tiro, barril, arcoíris, bala, camisa","71":"Río, sombrero, perro mediano, pantera, fusil","72":"Buey, buey viejo, ferrocarril, serrucho, lluvia, collar, cetro, relámpago","73":"Maleta, parque, navaja, manzanas, ajedrez, cigarro","74":"Papalote, coronel, militar, serpiente, cólera, tarima","75":"Cine, corbata, viento, guitarra, flores, quiosco","76":"Bailarina, humo en cantidad, caja de hierro, violín","77":"Muletas de San Lázaro, banderas, guerra, colegio, billetes de banco, ánfora","78":"Ataúd, obispo, tigre, sarcófago, rey, apetito, lunares","79":"Coche, lagarto, abogado, tren de carga, tren de viaje, dulce","80":"Médico, médico viejo, buena noticia, luna llena, paraguas, barba, desespero, trompo","81":"Teatro, barco, navaja grande, ingeniero, ingenio, dulce, cuerda, actriz","82":"Madre, león, batea, pleito, estrella, muelle","83":"Tragedia, procesión, limosnero, bastón, madera","84":"Mucha sangre, ciego, sastre, bohío, banquero, cofre, marcha atrás","85":"Reloj, Madrid, águila, espejo, guano","86":"Tijera, convento, manguera, marino, ardilla, desnudarse, palma","87":"Plátano, Nueva York, baúl, paloma, fuego","88":"Espejuelos, gusano, vaso, hojas, aduanero","89":"Lotería, agua, mucha agua, casa vieja, mona vieja, cometa, melón, tesorero","90":"Viejo, espejo grande, caramelo, temporal, asesino","91":"Alpargata, comunista, bolchevique, tranvía, pájaro negro, limosnero, bolsa","92":"Puerco grande, avión, globo, globo muy alto, suicidio, Cuba, anarquista, gato, león grande","93":"Revolución, sortija de valor, Habana, general, andarín, joyas, libertad","94":"Machete, Ogún, mariposa grande, leontina, perfume, flores, Habana","95":"Guerra, perro grande, alacrán grande, corte de justicia, espada, Matanzas","96":"Zapato viejo, desafío, puta vieja, periódico, pícaro, roca, maleta vieja","97":"Mosquito, mosquito grande, grillo, mono grande, sinsonte, preso, limosnero","98":"Piano, entierro grande, traición, visita regia, fonógrafo, santo","99":"Serrucho, gallo, gallo grande, temporal, lluvia, carbonero","100":"Inodoro, excusado, carro, dios, escoba, automóvil, huevos"};
 
     function inicializarSelectores() {
         let selects = document.querySelectorAll('.cant_select');
@@ -296,19 +281,16 @@
 
     function abrirAdmin() {
         document.getElementById('view-login').style.display = 'none'; 
-        document.getElementById('view-app').style.display = 'none'; 
+        document.getElementById('view-app').style.display = 'none';
         document.getElementById('panel-admin').style.display = 'block';
-        
         const tbody = document.getElementById('tabla-usuarios'); tbody.innerHTML = "";
-        let clientesLista = Object.keys(usuariosBD).filter(u => u !== _0xAdmin);
-        document.getElementById('admin-stats').innerText = `Cupos Clientes: ${clientesLista.length} / 1000`;
-        
-        clientesLista.forEach(u => {
+        document.getElementById('admin-stats').innerText = `Cupos: ${Object.keys(usuariosBD).length} / 1000`;
+        for(let u in usuariosBD) {
             let uData = usuariosBD[u];
             let txt = uData.status === 'activo' ? 'Bloquear' : 'Permitir 1 Mes';
             let col = uData.status === 'activo' ? '#ff9800' : 'var(--neon)';
             tbody.innerHTML += `<tr><td><b>${u}</b></td><td class="${uData.status === 'activo' ? 'status-active' : 'status-pending'}">${uData.status.toUpperCase()}</td><td>30 d</td><td><button class="btn-table" style="background:${col}; color:#000;" onclick="conmutarUsuario('${u}')">${txt}</button><button class="btn-table" style="background:var(--error); color:#fff;" onclick="eliminarUsuario('${u}')">Eliminar</button></td></tr>`;
-        });
+        }
     }
 
     function conmutarUsuario(u) { if(usuariosBD[u].status === "pendiente") { usuariosBD[u].status = "activo"; } else { usuariosBD[u].status = "pendiente"; } localStorage.setItem('bolita_users_db', JSON.stringify(usuariosBD)); abrirAdmin(); }
@@ -341,54 +323,12 @@
         if(!t && !n) return alert("Escribe un fijo.");
         if(!db[fKey]) db[fKey] = {};
         
-        let flagGanador = false;
-
-        if(t) { 
-            db[fKey]['t'] = t.padStart(2, '0'); 
-            if(registrarAuditoriaReal(fKey, 't', t.padStart(2, '0'))) flagGanador = true; 
-        }
-        if(n) { 
-            db[fKey]['n'] = n.padStart(2, '0'); 
-            if(registrarAuditoriaReal(fKey, 'n', n.padStart(2, '0'))) flagGanador = true; 
-        }
+        if(t) { db[fKey]['t'] = t.padStart(2, '0'); registrarAuditoriaReal(fKey, 't', t.padStart(2, '0')); }
+        if(n) { db[fKey]['n'] = n.padStart(2, '0'); registrarAuditoriaReal(fKey, 'n', n.padStart(2, '0')); }
         
         localStorage.setItem('bolita_master_db', JSON.stringify(db));
-        
-        if(flagGanador) {
-            iniciarMatrix();
-        } else {
-            alert("Fijos guardados y auditados correctamente.");
-            location.reload();
-        }
-    }
-
-    function guardarFijosDeHoy() {
-        let t = document.getElementById('fijo_hoy_tarde').value.trim();
-        let n = document.getElementById('fijo_hoy_noche').value.trim();
-        let hoy = new Date();
-        let fKey = `${hoy.getFullYear()}-${(hoy.getMonth()+1).toString().padStart(2,'0')}-${hoy.getDate().toString().padStart(2,'0')}`;
-        if(!t && !n) return alert("Escribe un fijo.");
-        if(!db[fKey]) db[fKey] = {};
-        
-        let flagGanador = false;
-
-        if(t) { 
-            db[fKey]['t'] = t.padStart(2, '0'); 
-            if(registrarAuditoriaReal(fKey, 't', t.padStart(2, '0'))) flagGanador = true; 
-        }
-        if(n) { 
-            db[fKey]['n'] = n.padStart(2, '0'); 
-            if(registrarAuditoriaReal(fKey, 'n', n.padStart(2, '0'))) flagGanador = true; 
-        }
-        
-        localStorage.setItem('bolita_master_db', JSON.stringify(db));
-        
-        if(flagGanador) {
-            iniciarMatrix();
-        } else {
-            alert("Fijos guardados y auditados correctamente.");
-            location.reload();
-        }
+        alert("Fijos guardados y auditados correctamente.");
+        location.reload();
     }
 
     function registrarAuditoriaReal(fecha, turno, numGanador) {
@@ -405,10 +345,10 @@
             fijoAnteriorBase = turno === 'n' ? (db[fecha].t || diaPrevio.n || "46") : (diaPrevio.n || "46");
         }
 
-        // Sincronización matemática estricta con el motor de generación visual
         let setPrediccion = simularSetMatematico(fijoAnteriorBase, 50);
         let posicionEncontrada = setPrediccion.indexOf(numGanador);
         let huboAcierto = posicionEncontrada !== -1;
+        
         let posTexto = huboAcierto ? `Posición ${posicionEncontrada + 1}` : "No estaba";
 
         auditoriaBD.push({ 
@@ -442,7 +382,7 @@
         auditoriaBD.forEach((l, index) => { 
             if(l.acierto) hits++; 
             let resTxt = l.acierto ? '<span style="color:var(--neon); font-weight:bold;">★ ACERTADO</span>' : '<span style="color:#666">Fallo</span>';
-            let posEstilo = l.acierto ? 'color: var(--win); font-weight:bold;' : 'color: #555;';
+            let posEstilo = l.acierto ? 'color: var(--win); font-weight:bold;' : 'color: #666;';
             let deDondeVienePos = l.posicion || (l.acierto ? "Encontrado" : "No estaba");
 
             html += `
@@ -464,11 +404,61 @@
     }
 
     function eliminarRegistroAuditoria(index) {
-        if(confirm("¿Seguro que deseas eliminar este registro del historial?")) {
+        if(confirm("¿Seguro que deseas eliminar este registro de efectividad?")) {
             auditoriaBD.splice(index, 1);
             localStorage.setItem('bolita_aud_logs_db', JSON.stringify(auditoriaBD));
             renderTablaAuditoria();
         }
+    }
+
+    function cerrarAuditoria() { document.getElementById('modal-auditoria').style.display = 'none'; }
+
+    function entrarAApp(d) { 
+        document.getElementById('view-login').style.display = 'none'; 
+        document.getElementById('panel-admin').style.display = 'none';
+        document.getElementById('view-app').style.display = 'block'; 
+        document.getElementById('user-display').innerText = "Usuario: " + usuarioActivo; 
+        document.getElementById('expire-display').innerText = "Expira en: " + d + " días"; 
+    }
+    function cerrarSesionEfectiva() { localStorage.removeItem('bolita_logged_user'); location.reload(); }
+
+    function abrirConfig() { document.getElementById('modal-db').style.display = 'block'; renderCal(); }
+    function cerrarConfig() { document.getElementById('modal-db').style.display = 'none'; }
+    function moverMes(dir) { fechaActualCal.setMonth(fechaActualCal.getMonth() + dir); renderCal(); }
+
+    function renderCal() {
+        const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+        const y = fechaActualCal.getFullYear(); const m = fechaActualCal.getMonth();
+        document.getElementById('mes_label').innerText = `${meses[m]} ${y}`;
+        const cuerpo = document.getElementById('cuerpo_cal'); cuerpo.innerHTML = "";
+        const totalDias = new Date(y, m + 1, 0).getDate();
+        
+        for (let d = 1; d <= totalDias; d++) {
+            let k = `${y}-${(m + 1).toString().padStart(2, '0')}-${d.toString().padStart(2, '0')}`;
+            let v = db[k] || { t: '', n: '' };
+            cuerpo.innerHTML += `
+                <div class="day">
+                    <b style="color:#00ff41;">${d}</b><br>
+                    <input type="text" id="t_${k}" value="${v.t||''}" placeholder="T" maxlength="2">
+                    <input type="text" id="n_${k}" value="${v.n||''}" placeholder="N" maxlength="2">
+                </div>`;
+        }
+    }
+
+    function guardarDB() {
+        const y = fechaActualCal.getFullYear(); const m = fechaActualCal.getMonth();
+        const totalDias = new Date(y, m + 1, 0).getDate();
+        for (let d = 1; d <= totalDias; d++) {
+            let k = `${y}-${(m + 1).toString().padStart(2, '0')}-${d.toString().padStart(2, '0')}`;
+            let tVal = document.getElementById(`t_${k}`).value.trim();
+            let nVal = document.getElementById(`n_${k}`).value.trim();
+            if (tVal || nVal) {
+                if(!db[k]) db[k] = {};
+                db[k]['t'] = tVal ? tVal.padStart(2, '0') : '';
+                db[k]['n'] = nVal ? nVal.padStart(2, '0') : '';
+            } else { delete db[k]; }
+        }
+        localStorage.setItem('bolita_master_db', JSON.stringify(db)); alert("Calendario sincronizado.");
     }
 
     function procesarTextoImportado() {
@@ -479,43 +469,50 @@
                 return;
             }
             
-            // Separador ultra estable por expresión regular global para evitar bloqueos de hilos
-            const bloquesPorFecha = raw.match(/\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4}[^]*?(?=\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4}|$)/g);
+            const regexFechas = /(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{2,4})/g;
+            let mFechas = [];
+            let rMatch;
             
-            if(!bloquesPorFecha) {
-                alert("No se encontraron fechas válidas en el texto introducido.");
+            while ((rMatch = regexFechas.exec(raw)) !== null) {
+                mFechas.push({
+                    index: rMatch.index,
+                    fullMatch: rMatch[0],
+                    b1: rMatch[1],
+                    b2: rMatch[2],
+                    b3: rMatch[3]
+                });
+            }
+
+            if(mFechas.length === 0) {
+                alert("No se detectó ninguna estructura de fecha válida (Ejemplo admitido: 12/30/06).");
                 return;
             }
 
             let contadorMapeados = 0;
-            
-            bloquesPorFecha.forEach(bloque => {
-                let limpio = bloque.trim();
-                if(!limpio) return;
-                
-                const matchFecha = limpio.match(/(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{2,4})/);
-                if(!matchFecha) return;
-                
-                let b1 = matchFecha[1], b2 = matchFecha[2], b3 = matchFecha[3];
+
+            for (let i = 0; i < mFechas.length; i++) {
+                let actual = mFechas[i];
+                let arranque = actual.index;
+                let clausura = (i + 1 < mFechas.length) ? mFechas[i+1].index : raw.length;
+                let fragmentoSegmentado = raw.substring(arranque, clausura);
+
                 let año, mes, dia;
-                
-                if(b1.length === 4) { 
-                    año = b1; mes = b2; dia = b3; 
-                } else if(b3.length === 4) { 
-                    año = b3; mes = b1; dia = b2; 
+                if(actual.b1.length === 4) { 
+                    año = actual.b1; mes = actual.b2; dia = actual.b3; 
+                } else if(actual.b3.length === 4) { 
+                    año = actual.b3; mes = actual.b1; dia = actual.b2; 
                 } else {
-                    let aCorto = parseInt(b3);
-                    año = aCorto < 80 ? "20" + b3 : "19" + b3;
-                    mes = b1; dia = b2;
+                    let aCorto = parseInt(actual.b3);
+                    año = aCorto < 80 ? "20" + actual.b3 : "19" + actual.b3;
+                    mes = actual.b1; dia = actual.b2;
                 }
                 
                 let k = `${año}-${mes.padStart(2,'0')}-${dia.padStart(2,'0')}`;
                 
-                // Expresión regular simplificada y limpia que no cuelga el navegador
                 const regexEstructuraCompleta = /([mMeEtTsSnNeE])\s*([0-9])\s*-\s*([0-9])\s*-\s*([0-9])/g;
                 let matchTiro;
                 
-                while ((matchTiro = regexEstructuraCompleta.exec(limpio)) !== null) {
+                while ((matchTiro = regexEstructuraCompleta.exec(fragmentoSegmentado)) !== null) {
                     let identificadorTurno = matchTiro[1].toLowerCase();
                     let decena = matchTiro[3];
                     let unidad = matchTiro[4];
@@ -527,7 +524,7 @@
                     db[k][turnoInterno] = fijoExacto;
                     contadorMapeados++;
                 }
-            });
+            }
             
             localStorage.setItem('bolita_master_db', JSON.stringify(db));
             alert(`Operación exitosa. Se han importado e inyectado ${contadorMapeados} fijos.`);
@@ -538,24 +535,82 @@
         }
     }
 
+    // NUEVOS ALGORITMOS DE CALLE TRADICIONALES INTEGRADOS
+    function calcularCruzSanFrancisco() {
+        let hoy = new Date();
+        let d = hoy.getDate();
+        let m = hoy.getMonth() + 1;
+        
+        let c = Math.floor((d + m) % 10);
+        let sup = Math.floor((d * 2) % 10);
+        let inf = Math.floor((m * 3) % 10);
+        let izq = Math.floor((d + 5) % 10);
+        let der = Math.floor((m + 7) % 10);
 
-    // ALGORITMO MATEMÁTICO ORIGINAL PRESERVADO INTACTO
+        let f1 = ((sup * 10) + c).toString().padStart(2, '0');
+        let f2 = ((c * 10) + inf).toString().padStart(2, '0');
+        let f3 = ((izq * 10) + c).toString().padStart(2, '0');
+        let f4 = ((c * 10) + der).toString().padStart(2, '0');
+
+        return [f1, f2, f3, f4];
+    }
+
+    function calcularPiramideInversa() {
+        let hoy = new Date();
+        let dStr = hoy.getDate().toString().padStart(2, '0');
+        let mStr = (hoy.getMonth() + 1).toString().padStart(2, '0');
+        let aStr = hoy.getFullYear().toString();
+        
+        let cadenaBase = dStr + mStr + aStr; 
+        let arr = cadenaBase.split('').map(Number);
+        let laterales = [];
+
+        while (arr.length > 2) {
+            laterales.push(arr[0].toString() + arr[arr.length - 1].toString());
+            let nuevaFila = [];
+            for (let i = 0; i < arr.length - 1; i++) {
+                nuevaFila.push((arr[i] + arr[i + 1]) % 10);
+            }
+            arr = nuevaFila;
+        }
+
+        let verticeFinal = arr.join('').padStart(2, '0');
+        let picks = [verticeFinal];
+        laterales.forEach(l => {
+            let p1 = l.padStart(2, '0');
+            let p2 = l.split('').reverse().join('').padStart(2, '0');
+            if(!picks.includes(p1)) picks.push(p1);
+            if(!picks.includes(p2)) picks.push(p2);
+        });
+
+        return picks;
+    }
+
     function simularSetMatematico(fijoBase, cant_final) {
         let list = [];
         let f = fijoBase.padStart(2, '0');
         
+        // Inyectar algoritmos de calle prioritarios (Cruz y Pirámide)
+        let tirosCruz = calcularCruzSanFrancisco();
+        let tirosPiramide = calcularPiramideInversa();
+        
+        tirosCruz.forEach(n => { if(!list.includes(n) && list.length < cant_final) list.push(n); });
+        tirosPiramide.forEach(n => { if(!list.includes(n) && list.length < cant_final) list.push(n); });
+
+        // Variación inversa nativa
         let v1 = ((parseInt(f) + 1) % 100).toString().padStart(2, '0');
         let v2 = ((parseInt(f) - 1 + 100) % 100).toString().padStart(2, '0');
         let v3 = (Math.floor(parseInt(f) / 2)).toString().padStart(2, '0'); 
         
-        if(!list.includes(v1)) list.push(v1);
-        if(!list.includes(v2)) list.push(v2);
-        if(!list.includes(v3)) list.push(v3);
+        if(!list.includes(v1) && list.length < cant_final) list.push(v1);
+        if(!list.includes(v2) && list.length < cant_final) list.push(v2);
+        if(!list.includes(v3) && list.length < cant_final) list.push(v3);
 
         let invFijo = (101 - parseInt(f) % 100).toString().padStart(2, '0');
         if(f === "00") invFijo = "00"; 
-        if(!list.includes(invFijo)) list.push(invFijo);
+        if(!list.includes(invFijo) && list.length < cant_final) list.push(invFijo);
 
+        // Frecuencia consecutiva histórica
         let frecuenciasConsecutivas = {};
         let keysBD = Object.keys(db).sort((a,b) => parseInt(a.replace(/-/g,'')) - parseInt(b.replace(/-/g,'')));
         
@@ -578,6 +633,7 @@
             if(!list.includes(num) && list.length < cant_final) list.push(num); 
         });
 
+        // Relación por Charada Cubana
         let fInt = parseInt(f).toString();
         if(charadaDiccionario[fInt]) {
             let words = charadaDiccionario[fInt].toLowerCase().split(', ');
@@ -592,6 +648,7 @@
             }
         }
 
+        // Relleno seguro LCG
         let hoy = new Date();
         let kHoy = `${hoy.getFullYear()}-${(hoy.getMonth()+1).toString().padStart(2,'0')}-${hoy.getDate().toString().padStart(2,'0')}`;
         let offsetRepeticion = 0;
@@ -617,7 +674,7 @@
         if(!val) return alert("Falta el fijo base.");
 
         btn.disabled = true;
-        let pasos = ["Analizando histórico masivo...", "Cruzando secuencias tarde/noche...", "Verificando repeticiones del día...", "Sincronizando pronóstico..."];
+        let pasos = ["Analizando histórico masivo...", "Cruzando secuencias tarde/noche...", "Calculando Cruz de San Francisco...", "Construyendo Pirámide Inversa...", "Sincronizando pronóstico..."];
         let i = 0;
 
         let intervalo = setInterval(() => {
@@ -627,7 +684,7 @@
                 btn.innerText = esAdmin ? "PROCESAR JUGADA ADMIN" : "Analizar y Generar Jugada";
                 ejecutarMotorCalculo(esAdmin, pref, val);
             }
-        }, 800);
+        }, 600);
     }
 
     function ejecutarMotorCalculo(esAdmin, pref, val) {
@@ -666,51 +723,6 @@
             if(gHoy.includes(n)) { css = 'box ganador-oro'; }
             panel.innerHTML += `<div class="${css}">${n}</div>`;
         }
-    }
-
-    function iniciarMatrix() {
-        const canvas = document.getElementById('canvas-matrix');
-        const overlay = document.getElementById('matrix-overlay');
-        canvas.style.display = 'block';
-        overlay.style.display = 'block';
-
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        const letras = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZアイウエオカキクケコサシスセソタチツテト".split("");
-        const fontSize = 14;
-        const columnas = canvas.width / fontSize;
-        const gotas = [];
-
-        for (let x = 0; x < columnas; x++) gotas[x] = 1;
-
-        function dibujarMatrix() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            for (let i = 0; i < gotas.length; i++) {
-                const char = letras[Math.floor(Math.random() * letras.length)];
-                ctx.fillStyle = Math.random() > 0.85 ? '#ffeb3b' : '#00ff41';
-                ctx.font = fontSize + 'px monospace';
-                ctx.fillText(char, i * fontSize, gotas[i] * fontSize);
-
-                if (gotas[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    gotas[i] = 0;
-                }
-                gotas[i]++;
-            }
-        }
-        matrixInterval = setInterval(dibujarMatrix, 33);
-    }
-
-    // CORRECCIÓN DEL BOTÓN CONTINUAR (Detiene el flujo de eventos cruzados)
-    function detenerMatrix(event) {
-        if(event) event.stopPropagation(); // Evita el bug de congelamiento de pantalla
-        if(matrixInterval) clearInterval(matrixInterval);
-        document.getElementById('canvas-matrix').style.display = 'none';
-        document.getElementById('matrix-overlay').style.display = 'none';
-        location.reload();
     }
 
     window.addEventListener('DOMContentLoaded', () => {
